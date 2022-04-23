@@ -1,3 +1,19 @@
+## Grupo 6:
+- Barreto, Cristian
+- Brandariz, Nicolás
+- Cafiero, Sebastián
+- Galli, Patricio
+- Ruival, Julián
+- Sequeira, Raúl
+---
+
+## Enunciado
+https://docs.google.com/document/d/1JrrfGSMhQSedRqcdFXGG4duWqic4m-Tc/edit
+
+### Entrega 1: 
+https://docs.google.com/document/d/1UEdUMCm31Sfp0nceks9aOZpcRrID02CI/edit
+
+
 # 2022-ma-no-utiles-entrega1
 Útiles para entrega 1 del martes a la noche
 
