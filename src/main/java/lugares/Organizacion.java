@@ -24,4 +24,16 @@ public class Organizacion {
                 .flatMap(sector -> sector.getListaDeMiembros().stream())
                 .collect(Collectors.toList());
     }
+
+    public void agregarSector(Sector unSector) {
+            listaDeSectores.add(unSector);
+    }
+
+    public List<Sector> getListaDeSectores() {
+        return listaDeSectores;
+    }
+
+    public Integer calcularHC() {
+        return 5;
+    }
 }
