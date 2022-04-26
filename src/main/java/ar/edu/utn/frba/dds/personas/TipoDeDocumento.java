@@ -1,4 +1,4 @@
-package personas;
+package ar.edu.utn.frba.dds.personas;
 
 public enum TipoDeDocumento {
     DNI,

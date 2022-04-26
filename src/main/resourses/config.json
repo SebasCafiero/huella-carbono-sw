@@ -1,0 +1,80 @@
+{
+  "FactorEmision":[{
+      "actividad" : "Combustion Fija",
+      "tipoConsumo" : "Gas Natural" ,
+      "unidad" : "m3",
+      "valor": ""
+    },
+    {
+      "actividad" : "Combustion Fija",
+      "tipoConsumo" : "Diesel/Gasoil" ,
+      "unidad" : "lt",
+      "valor": ""
+    },
+    {
+      "actividad": "Combustion Fija",
+      "tipoConsumo": "Kerosene",
+      "unidad": "lt",
+      "valor": ""
+    },
+    {
+      "actividad" : "Combustion Fija",
+      "tipoConsumo" : "Fuel Oil" ,
+      "unidad" : "lt",
+      "valor": ""
+    },
+    {
+      "actividad" : "Combustion Fija",
+      "tipoConsumo" : "Natfa" ,
+      "unidad" : "lt",
+      "valor": ""
+    },
+    {
+      "actividad" : "Combustion Fija",
+      "tipoConsumo" : "Carbon" ,
+      "unidad" : "kg",
+      "valor": ""
+    },
+    {
+      "actividad" : "Combustion Fija",
+      "tipoConsumo" : "Carbon de Leña" ,
+      "unidad" : "kg",
+      "valor": ""
+    },
+    {
+      "actividad" : "Combustion Fija",
+      "tipoConsumo" : "Leña" ,
+      "unidad" : "kg",
+      "valor": ""
+    },
+    {
+      "actividad" : "Combustion Movil",
+      "tipoConsumo" : "Gasoil" ,
+      "unidad" : "lt",
+      "valor": ""
+    },
+    {
+      "actividad" : "Combustion Movil",
+      "tipoConsumo" : "GNC" ,
+      "unidad" : "lt",
+      "valor": ""
+    },
+    {
+      "actividad" : "Combustion Movil",
+      "tipoConsumo" : "Natfa" ,
+      "unidad" : "lt",
+      "valor": ""
+    },
+    {
+      "actividad" : "Electricidad",
+      "tipoConsumo" : "Electricidad" ,
+      "unidad" : "kwh",
+      "valor": ""
+    },
+    {
+      "actividad" : "Logistica",
+      "tipoConsumo" : "" ,
+      "unidad" : "",
+      "valor": ""
+    }]
+}

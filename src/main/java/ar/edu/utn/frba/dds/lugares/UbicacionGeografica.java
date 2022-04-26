@@ -1,7 +1,7 @@
-package lugares;
+package ar.edu.utn.frba.dds.lugares;
 
 public class UbicacionGeografica {
-    //private static String pais; //="Argentina";
+     //private static String pais; //="Argentina";
     private String provincia;
     private String barrio;
 

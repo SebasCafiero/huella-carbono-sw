@@ -1,5 +1,7 @@
-import lugares.Organizacion;
-import lugares.Sector;
+package java.ar.edu.utn.frba.dds;
+
+import ar.edu.utn.frba.dds.lugares.Organizacion;
+import ar.edu.utn.frba.dds.lugares.Sector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 //VER DE CAMBIAR EL POM POR LA JUNIT DEL SEMINARIO O PREGUNTAR AL PROFE

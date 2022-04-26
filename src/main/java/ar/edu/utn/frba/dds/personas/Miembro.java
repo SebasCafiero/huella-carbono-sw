@@ -1,7 +1,7 @@
-package personas;
+package ar.edu.utn.frba.dds.personas;
 
-import lugares.Organizacion;
-import lugares.Sector;
+import ar.edu.utn.frba.dds.lugares.Organizacion;
+import ar.edu.utn.frba.dds.lugares.Sector;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package personas;
+package ar.edu.utn.frba.dds.personas;
 
 public class Persona {
     private String nombre;

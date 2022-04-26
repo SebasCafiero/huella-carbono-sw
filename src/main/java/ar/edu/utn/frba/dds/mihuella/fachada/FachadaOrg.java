@@ -1,4 +1,4 @@
-package ar.edu.frba.utn.dds.mihuella.fachada;
+package ar.edu.utn.frba.dds.mihuella.fachada;
 
 import java.util.Collection;
 import java.util.Map;

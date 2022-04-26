@@ -1,4 +1,4 @@
-package lugares;
+package ar.edu.utn.frba.dds.lugares;
 
 public class ClasificacionDeOrganizacion { //TODO
     private String valor;

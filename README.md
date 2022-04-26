@@ -24,5 +24,5 @@ e implementarlas.
 - Los parámetros deben dejarlos tal cual
 - Un ejemplo de uso seria:
 <pre><code>
-mvn compile  exec:java -Dexec.mainClass="ar.edu.frba.utn.dds.mihuella.CalculadorHU" -Dexec.args="-p xx.props -m mediciones.csv"
+mvn compile  exec:java -Dexec.mainClass="CalculadorHU" -Dexec.args="-p xx.props -m mediciones.csv"
 </code></pre>

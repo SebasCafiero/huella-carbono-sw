@@ -1,6 +1,6 @@
-package lugares;
+package ar.edu.utn.frba.dds.lugares;
 
-import personas.Miembro;
+import ar.edu.utn.frba.dds.personas.Miembro;
 
 import java.util.ArrayList;
 import java.util.List;
