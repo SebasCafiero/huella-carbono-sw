@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.lugares;
 
-public enum TipoDeOrganizacion {
+public enum TipoDeOrganizacionEnum {
     GUBERNAMENTAL,
     ONG,
     EMPRESA,

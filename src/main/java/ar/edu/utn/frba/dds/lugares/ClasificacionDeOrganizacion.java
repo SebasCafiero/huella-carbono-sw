@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.dds.lugares;
 
 public class ClasificacionDeOrganizacion { //TODO
-    private String valor;
+    private String nombre;
 
     public ClasificacionDeOrganizacion(String clasificacion) {
-        this.valor = clasificacion;
+        this.nombre = clasificacion;
     }
 }
 
