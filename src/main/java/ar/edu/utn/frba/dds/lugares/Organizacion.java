@@ -56,13 +56,15 @@ public class Organizacion {
         }
         //TODO
         sector.agregarMiembro(miembro); //CHECK SI ESTA BIEN QUE LAS EXCEPTIONS ESTEN EN AMBOS LADOS
-        miembro.agregarSector(sector); //CHECK SI ESTA BIEN QUE LAS EXCEPTIONS ESTEN EN AMBOS LADOS
+        miembro.agregarSector(sector);
+        sector.quitarPostulante(miembro);
         //SI aceptarSolicitud y rechazarSolicitud estuvieran directo en la clase Sector,
         // la Org no sería la encargada de aceptar los vínculos como dice el enunciado
     }
 
-    public void rechazarSolicitud(Miembro miembro, Sector sector) {
-
+    public void rechazarSolicitud(Miembro miembro, Sector sector) throws Exception {
+        //TODO
+        sector.quitarPostulante(miembro);
     }
 
     public void agregarMediciones(Medible ... variasMediciones) {
@@ -75,5 +77,9 @@ public class Organizacion {
 
     public Float obtenerHC(LocalDate fechaInicial, LocalDate fechaFinal) {
         return 0.0f;
+    }
+
+    public Integer cantidadSectores() {
+        return this.sectores.size();
     }
 }

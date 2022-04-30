@@ -40,22 +40,36 @@ public class Miembro {
     }
 
     public void agregarSector(Sector sector) throws Exception {
-        if(this.sectoresDondeTrabaja.contains(sector))
+        if(this.trabajaEnSector(sector))
             throw new Exception("El miembro ya pertenece a ese sector");
         this.sectoresDondeTrabaja.add(sector);
     }
 
     public void quitarSector(Sector sector) throws Exception {
-        if(!this.sectoresDondeTrabaja.contains(sector))
+        if(!this.trabajaEnSector(sector))
             throw new Exception("El miembro no pertenece a ese sector");
         this.sectoresDondeTrabaja.remove(sector);
     }
 
-    public void solicitarIngreso(Sector sector) {
+    public void solicitarIngreso(Sector sector) throws Exception {
         //TODO
         //Tendría que agregarse a la lista de postulantes del sector y
         // cuando lo agreguen, sumar el sector a sectoresDondeTrabaja
+        if(sector.esMiembro(this))
+            throw new Exception("El miembro ya pertenece a la organizacion");
+        sector.agregarPostulante(this);
     }
 
+    public Integer cantidadDeSectoresDondeTrabaja() {
+        return this.sectoresDondeTrabaja.size();
+    }
+
+    public Integer cantidadDeOrganizacionesDondeTrabaja() {
+        return this.organizacionesDondeTrabaja().size();
+    }
+
+    public boolean trabajaEnSector(Sector unSector) {
+        return this.sectoresDondeTrabaja.contains(unSector);
+    }
 }
 

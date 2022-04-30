@@ -60,4 +60,8 @@ public class Sector {
             throw new Exception("El miembro no está postulado a este sector");
         listaDePostulantes.remove(miembro);
     }
+
+    public Integer cantidadMiembros() {
+        return this.listaDeMiembros.size();
+    }
 }
