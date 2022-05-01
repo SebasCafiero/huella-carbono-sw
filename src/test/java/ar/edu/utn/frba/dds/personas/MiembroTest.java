@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.personas;
 
+import ar.edu.utn.frba.dds.lugares.ClasificacionOrganizacion;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.lugares.Sector;
 import ar.edu.utn.frba.dds.lugares.TipoDeOrganizacionEnum;
@@ -13,7 +14,10 @@ public class MiembroTest {
     @Test
     public void vinculoMiembroConOrganizacion() throws Exception {
 
-        Organizacion unaOrg = new Organizacion("miRazonSocial", TipoDeOrganizacionEnum.EMPRESA,"miUbicacion");
+        Organizacion unaOrg = new Organizacion("miRazonSocial",
+                TipoDeOrganizacionEnum.EMPRESA,
+                ClasificacionOrganizacion.SECTORPRIMARIO,
+                "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
 
         Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
@@ -39,7 +43,10 @@ public class MiembroTest {
     @Test
     public void rechazoVinculoMiembroConOrganizacion() throws Exception {
 
-        Organizacion unaOrg = new Organizacion("miRazonSocial", TipoDeOrganizacionEnum.EMPRESA,"miUbicacion");
+        Organizacion unaOrg = new Organizacion("miRazonSocial",
+                TipoDeOrganizacionEnum.EMPRESA,
+                ClasificacionOrganizacion.SECTORSECUNDARIO,
+                "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
 
         Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
@@ -64,7 +71,10 @@ public class MiembroTest {
 
     @Test
     public void vinculoMiembroConMismoSector() throws Exception {
-        Organizacion unaOrg = new Organizacion("miRazonSocial", TipoDeOrganizacionEnum.EMPRESA,"miUbicacion");
+        Organizacion unaOrg = new Organizacion("miRazonSocial",
+                TipoDeOrganizacionEnum.EMPRESA,
+                ClasificacionOrganizacion.SECTORSECUNDARIO,
+                "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
         Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
 
@@ -77,7 +87,10 @@ public class MiembroTest {
 
     @Test
     public void vinculoVariosMiembros() throws Exception{
-        Organizacion unaOrg = new Organizacion("miRazonSocial", TipoDeOrganizacionEnum.EMPRESA,"miUbicacion");
+        Organizacion unaOrg = new Organizacion("miRazonSocial",
+                TipoDeOrganizacionEnum.EMPRESA,
+                ClasificacionOrganizacion.UNIVERSIDAD,
+                "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
         Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
         Miembro miembro2 = new Miembro("pepe", "gomez",TipoDeDocumento.DNI,54321);

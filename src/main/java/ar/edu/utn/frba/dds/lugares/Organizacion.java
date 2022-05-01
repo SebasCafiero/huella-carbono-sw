@@ -11,14 +11,18 @@ public class Organizacion {
     private String razonSocial;
     private TipoDeOrganizacionEnum tipo;
     private String ubicacion;
-    private ClasificacionDeOrganizacion clasificacionDeOrganizacion;
+    private ClasificacionOrganizacion clasificacionOrganizacion;
     private Set<Sector> sectores;
     private List<Medible> mediciones;
 
-    public Organizacion(String razonSocial, TipoDeOrganizacionEnum tipo, String ubicacion) {
+    public Organizacion(String razonSocial,
+                        TipoDeOrganizacionEnum tipo,
+                        ClasificacionOrganizacion clasificacionOrganizacion,
+                        String ubicacion) {
         this.razonSocial = razonSocial;
         this.tipo = tipo;
         this.ubicacion = ubicacion;
+        this.clasificacionOrganizacion = clasificacionOrganizacion;
         this.sectores = new HashSet<>();
         this.mediciones = new ArrayList<>();
     }

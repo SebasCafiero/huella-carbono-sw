@@ -10,7 +10,10 @@ public class OrganizacionTest {
 
     @Test
     public void unaOrganizacionNoPuedeRepetirSector() throws Exception {
-        Organizacion unaOrg = new Organizacion("Una empresa", TipoDeOrganizacionEnum.EMPRESA, "Buenos Aires");
+        Organizacion unaOrg = new Organizacion("Una empresa",
+                TipoDeOrganizacionEnum.EMPRESA,
+                ClasificacionOrganizacion.ESCUELA,
+                "Buenos Aires");
 
         Sector sistemas = new Sector("Sistemas", unaOrg);
 
@@ -21,7 +24,10 @@ public class OrganizacionTest {
 
     @Test
     public void agregarSectoresAUnaOrganizacoin() throws Exception {
-        Organizacion unaOrg = new Organizacion("miRazonSocial",ONG,"miUbicacion");
+        Organizacion unaOrg = new Organizacion("miRazonSocial",
+                ONG,
+                ClasificacionOrganizacion.UNIVERSIDAD,
+                "miUbicacion");
 
         Assertions.assertEquals(0,unaOrg.cantidadSectores());
         Sector sector1 = new Sector("sector1",unaOrg);
