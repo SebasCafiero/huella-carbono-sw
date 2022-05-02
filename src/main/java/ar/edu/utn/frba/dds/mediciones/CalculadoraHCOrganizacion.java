@@ -12,8 +12,8 @@ public class CalculadoraHCOrganizacion implements FachadaOrg {
         factorEmisionMap  = new HashMap<String, Float>();
     }
 
-    public CalculadoraHCOrganizacion(String archivo) {
-        // factorEmisionMap = ParserFE.generarMap(archivo);
+    public CalculadoraHCOrganizacion(String archivo) throws Exception{
+        factorEmisionMap = Parser.generarFE(archivo);
     }
 
     @Override
@@ -22,7 +22,13 @@ public class CalculadoraHCOrganizacion implements FachadaOrg {
     }
 
     @Override
-    public Float obtenerHU(Collection<Medible> mediciones) {
-        return 0F;
+    public Float obtenerHU(Collection<Medible> mediciones)
+    {
+        Float huTotal = 0F;
+        for(Medible medicion : mediciones){
+            String categoria = medicion.getCategoria();
+            huTotal = (this.factorEmisionMap.get(categoria) * medicion.getValor()) + huTotal;
+        }
+        return huTotal;
     }
 }

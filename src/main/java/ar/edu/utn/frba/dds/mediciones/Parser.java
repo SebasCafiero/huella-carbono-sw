@@ -4,6 +4,8 @@ import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import com.opencsv.CSVReader;
 
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,27 +32,54 @@ public class Parser {
         } else throw new Exception("There is not implemented a parser for reading " + extensionArchivo + " files");
     }
 
-    public static Map<String, Float> generarFE(String archivo) {
-        return null;
+    public static Map<String, Float> generarFE(String archivo) throws Exception {
+
+        FileReader fileDescriptor;
+        Map<String, Float> factorEmision = new HashMap<>();
+        try {
+            fileDescriptor = new FileReader(archivo);
+            CSVReader csvReader = new CSVReader(fileDescriptor);
+            String[] nextRecord;
+
+            while ((nextRecord = csvReader.readNext()) != null) {
+                String [] data = new String[4];
+                int i = 0;
+                for (String cell : nextRecord) {
+                    data[i]=cell;
+                    i++;
+                }
+                factorEmision.put(data[0]+" - "+data[1], Float.parseFloat(data[3]));
+            }
+
+        }
+        catch (Exception e) {
+            throw new Exception("El archivo no existe");
+        }
+
+        return factorEmision;
     }
 
     private static List<Medible> generarMedicionesCSV(FileReader archivo) {
+        List<Medible> mediciones = new ArrayList<>();
         try {
             CSVReader csvReader = new CSVReader(archivo);
             String[] nextRecord;
 
             // we are going to read data line by line
             while ((nextRecord = csvReader.readNext()) != null) {
+                String [] data = new String[6];
+                int i = 0;
                 for (String cell : nextRecord) {
-                    System.out.print(cell + "\t");
+                    data[i]=cell;
+                    i++;
                 }
-                System.out.println();
+                mediciones.add(new Medicion(data[0]+" - "+ data[1], data[2], Float.parseFloat(data[3])));
             }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        // TODO
-        return null;
+
+        return mediciones;
     }
 }
