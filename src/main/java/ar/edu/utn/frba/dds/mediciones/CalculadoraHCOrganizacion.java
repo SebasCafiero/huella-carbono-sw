@@ -12,8 +12,8 @@ public class CalculadoraHCOrganizacion implements FachadaOrg {
         factorEmisionMap  = new HashMap<String, Float>();
     }
 
-    public CalculadoraHCOrganizacion(String archivo) {
-        // factorEmisionMap = ParserFE.generarMap(archivo);
+    public CalculadoraHCOrganizacion(String archivo) throws Exception{
+        factorEmisionMap = Parser.generarFE(archivo);
     }
 
     @Override
