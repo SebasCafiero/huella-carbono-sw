@@ -22,7 +22,13 @@ public class CalculadoraHCOrganizacion implements FachadaOrg {
     }
 
     @Override
-    public Float obtenerHU(Collection<Medible> mediciones) {
-        return 0F;
+    public Float obtenerHU(Collection<Medible> mediciones)
+    {
+        Float huTotal = 0F;
+        for(Medible medicion : mediciones){
+            String categoria = medicion.getCategoria();
+            huTotal = (this.factorEmisionMap.get(categoria) * medicion.getValor()) + huTotal;
+        }
+        return huTotal;
     }
 }
