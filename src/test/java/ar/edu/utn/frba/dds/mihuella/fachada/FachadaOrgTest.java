@@ -15,14 +15,11 @@ public class FachadaOrgTest {
 
     @Test
     void seObtieneCorrectamenteHC() throws Exception {
-        CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion();
-        Map<String, Float> parametrosSistema = new HashMap<>();
-        parametrosSistema.put("comF_gasNatural", (float) 123.1);
+        CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion("src/test/resources/propiedades.csv");
 
         List<Medible> mediciones = new ArrayList<Medible>();
-        mediciones.add(new Medicion("comF_gasNatural", "m3", 100F));
+        mediciones.add(new Medicion("Combustion Fija - Gas Natural", "m3", 100F));
 
-        Assertions.assertEquals(50, calculadora.obtenerHU(mediciones), 1);
+        Assertions.assertEquals(100, calculadora.obtenerHU(mediciones), 1);
     }
-    // parametrosSistema.put("comM_nafta", (float) 2223.4);
 }
