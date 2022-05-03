@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Parser {
-    public static List<Medible> generarMediciones(String archivo) throws Exception {
+    public static List<Medible> generarMediciones(String archivo, String clasificacion) throws Exception {
         String extensionArchivo = "";
         int index = archivo.lastIndexOf('.');
         if (index > 0)
@@ -26,7 +26,7 @@ public class Parser {
 
         if (extensionArchivo.equals("csv")) {
             System.out.println("El archivo de mediciones es de tipo csv");
-            return generarMedicionesCSV(fileDescriptor);
+            return generarMedicionesCSV(fileDescriptor, clasificacion);
         } else if (extensionArchivo.equals("otraExtenion")) {
             return null;
         } else throw new Exception("There is not implemented a parser for reading " + extensionArchivo + " files");
@@ -59,7 +59,7 @@ public class Parser {
         return factorEmision;
     }
 
-    private static List<Medible> generarMedicionesCSV(FileReader archivo) {
+    private static List<Medible> generarMedicionesCSV(FileReader archivo, String clasificacion) {
         List<Medible> mediciones = new ArrayList<>();
         try {
             CSVReader csvReader = new CSVReader(archivo);
@@ -73,7 +73,10 @@ public class Parser {
                     data[i]=cell;
                     i++;
                 }
-                mediciones.add(new Medicion(data[0]+" - "+ data[1], data[2], Float.parseFloat(data[3])));
+                if( !data[0].equals("Reaccion nuclear") ||  data[0].equals("Reaccion nuclear") && clasificacion.matches("Atucha|Clinica")){
+                    mediciones.add(new Medicion(data[0]+" - "+ data[1], data[2], Float.parseFloat(data[3])));
+                }
+
             }
         }
         catch (Exception e) {

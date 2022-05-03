@@ -38,7 +38,7 @@ public class CalculadorHU {
         System.out.println("Archivo de parametros: " + ns.get("params"));
         // calcular huella de las actividades y el total
         CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion(ns.getString("params"));
-        List<Medible> mediciones = Parser.generarMediciones(ns.getString("mediciones"));
+        List<Medible> mediciones = Parser.generarMediciones(ns.getString("mediciones"), "Atucha");
 
         System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + calculadora.obtenerHU(mediciones));
 

@@ -1,3 +1,4 @@
 "Combustion Fija", "Gas Natural", "m3", "10", "A", "2019"
-"Combustion Movil", "Gasoil", "ls", "100", "M", "03/2021"
-"Electricidad", "Electricidad", "kwh", "10000", "M", "10/2020"
+"Combustion Movil", "Gasoil", "ls", "10", "M", "03/2021"
+"Electricidad", "Electricidad", "kwh", "10", "M", "10/2020"
+"Reaccion nuclear", "Reactivo Medicina", "ci", "10", "M", "10/2020"
