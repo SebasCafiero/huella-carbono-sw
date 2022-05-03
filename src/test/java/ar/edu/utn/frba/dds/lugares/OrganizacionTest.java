@@ -3,6 +3,8 @@ package ar.edu.utn.frba.dds.lugares;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static ar.edu.utn.frba.dds.lugares.TipoDeOrganizacionEnum.*;
 
 public class OrganizacionTest {
@@ -12,7 +14,7 @@ public class OrganizacionTest {
     public void unaOrganizacionNoPuedeRepetirSector() throws Exception {
         Organizacion unaOrg = new Organizacion("Una empresa",
                 TipoDeOrganizacionEnum.EMPRESA,
-                ClasificacionOrganizacion.ESCUELA,
+                new ClasificacionOrganizacion("Escuela", new ArrayList()),
                 "Buenos Aires");
 
         Sector sistemas = new Sector("Sistemas", unaOrg);
@@ -26,7 +28,7 @@ public class OrganizacionTest {
     public void agregarSectoresAUnaOrganizacoin() throws Exception {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 ONG,
-                ClasificacionOrganizacion.UNIVERSIDAD,
+                new ClasificacionOrganizacion("Universidad", new ArrayList()),
                 "miUbicacion");
 
         Assertions.assertEquals(0,unaOrg.cantidadSectores());

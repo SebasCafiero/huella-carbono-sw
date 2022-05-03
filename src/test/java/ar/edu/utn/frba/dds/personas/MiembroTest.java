@@ -7,6 +7,8 @@ import ar.edu.utn.frba.dds.lugares.TipoDeOrganizacionEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 public class MiembroTest {
 
 //TODO VER DE USAR @BEFORE O AGRUPAR DECLARACIONES REPETIDAS
@@ -16,7 +18,7 @@ public class MiembroTest {
 
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
-                ClasificacionOrganizacion.SECTORPRIMARIO,
+                new ClasificacionOrganizacion("Sector Primario", new ArrayList()),
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
 
@@ -45,7 +47,7 @@ public class MiembroTest {
 
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
-                ClasificacionOrganizacion.SECTORSECUNDARIO,
+                new ClasificacionOrganizacion("Sector Secundario", new ArrayList()),
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
 
@@ -73,7 +75,7 @@ public class MiembroTest {
     public void vinculoMiembroConMismoSector() throws Exception {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
-                ClasificacionOrganizacion.SECTORSECUNDARIO,
+                new ClasificacionOrganizacion("Sector Secundario", new ArrayList()),
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
         Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
@@ -89,7 +91,7 @@ public class MiembroTest {
     public void vinculoVariosMiembros() throws Exception{
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
-                ClasificacionOrganizacion.UNIVERSIDAD,
+                new ClasificacionOrganizacion("Sector Secundario", new ArrayList()),
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
         Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
