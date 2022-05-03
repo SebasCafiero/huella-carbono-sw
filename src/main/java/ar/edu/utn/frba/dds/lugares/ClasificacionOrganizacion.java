@@ -4,9 +4,9 @@ import java.util.List;
 
 public class ClasificacionOrganizacion {
     private String nombre;
-    private List<String> sectoresMinimos;
+    private String[] sectoresMinimos;
 
-    public ClasificacionOrganizacion(String nombre, List<String> sectoresMinimos) {
+    public ClasificacionOrganizacion(String nombre, String[] sectoresMinimos) {
         this.nombre = nombre;
         this.sectoresMinimos = sectoresMinimos;
     }
@@ -15,7 +15,7 @@ public class ClasificacionOrganizacion {
         return nombre;
     }
 
-    public List<String> getSectoresMinimos() {
+    public String[] getSectoresMinimos() {
         return sectoresMinimos;
     }
 }

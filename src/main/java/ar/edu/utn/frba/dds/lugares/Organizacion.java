@@ -86,4 +86,13 @@ public class Organizacion {
     public Integer cantidadSectores() {
         return this.sectores.size();
     }
+
+    public boolean esValida() {
+        String[] sectoresMinimos = this.clasificacionOrganizacion.getSectoresMinimos();
+        for(String nombreSector : sectoresMinimos) {
+            if(!this.sectores.stream().anyMatch(x-> x.getNombre().equals(sectoresMinimos)))
+                return false;
+        }
+        return true;
+    }
 }

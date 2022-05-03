@@ -14,7 +14,7 @@ public class OrganizacionTest {
     public void unaOrganizacionNoPuedeRepetirSector() throws Exception {
         Organizacion unaOrg = new Organizacion("Una empresa",
                 TipoDeOrganizacionEnum.EMPRESA,
-                new ClasificacionOrganizacion("Escuela", new ArrayList()),
+                new ClasificacionOrganizacion("Escuela", new String[]{}),
                 "Buenos Aires");
 
         Sector sistemas = new Sector("Sistemas", unaOrg);
@@ -28,7 +28,7 @@ public class OrganizacionTest {
     public void agregarSectoresAUnaOrganizacoin() throws Exception {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 ONG,
-                new ClasificacionOrganizacion("Universidad", new ArrayList()),
+                new ClasificacionOrganizacion("Universidad", new String[]{}),
                 "miUbicacion");
 
         Assertions.assertEquals(0,unaOrg.cantidadSectores());
