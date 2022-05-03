@@ -5,7 +5,8 @@ import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import java.time.LocalDate;
 
 public class Medicion implements Medible {
-    private String categoria;
+    private String actividad;
+    private String tipoDeConsumo;
     private String unidad;
     private Character periodicidad; // M o A
     private Float valor;
@@ -13,7 +14,8 @@ public class Medicion implements Medible {
     private LocalDate fecha; // AAAA-MM-DD
 
     public Medicion(String categoria, String unidad, Float valor) {
-        this.categoria = categoria;
+        this.actividad = actividad;
+        this.tipoDeConsumo = tipoDeConsumo;
         this.unidad = unidad;
         this.valor = valor;
     }
@@ -52,7 +54,11 @@ public class Medicion implements Medible {
     }
 
     @Override
-    public String getCategoria() {
-        return categoria;
+    public String getActividad() {
+        return actividad;
+    }
+    @Override
+    public String getTipoDeConsumo() {
+        return tipoDeConsumo;
     }
 }

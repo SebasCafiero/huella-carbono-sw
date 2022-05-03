@@ -14,6 +14,7 @@ public class Organizacion {
     private ClasificacionOrganizacion clasificacionOrganizacion;
     private Set<Sector> sectores;
     private List<Medible> mediciones;
+    private List<Medible> medicionesValidas;
 
     public Organizacion(String razonSocial,
                         TipoDeOrganizacionEnum tipo,
@@ -25,6 +26,7 @@ public class Organizacion {
         this.clasificacionOrganizacion = clasificacionOrganizacion;
         this.sectores = new HashSet<>();
         this.mediciones = new ArrayList<>();
+        this.medicionesValidas = new ArrayList<>();
     }
 
     // Para qué sirve ??
@@ -71,12 +73,23 @@ public class Organizacion {
         sector.quitarPostulante(miembro);
     }
 
-    public void agregarMediciones(Medible ... variasMediciones) {
-        Collections.addAll(this.mediciones, variasMediciones);
+    //public void agregarMediciones(Medible ... variasMediciones) {
+    //    Collections.addAll(this.mediciones, variasMediciones);
+    //}
+
+    public void agregarMediciones(Medible ... variasMediciones) throws Exception {
+        for(Medible medicion : this.mediciones) {
+            if(this.clasificacionOrganizacion.prohibidos.contains(medicion.getTipoDeConsumo())){
+                throw new Exception("Medicion no valida para esta clasificacion de organizacion");
+            }
+            else{
+                this.medicionesValidas.add(medicion);
+            }
+        }
     }
 
     public List<Medible> getMediciones() {
-        return this.mediciones;
+        return this.medicionesValidas;
     }
 
     public Float obtenerHC(LocalDate fechaInicial, LocalDate fechaFinal) {
