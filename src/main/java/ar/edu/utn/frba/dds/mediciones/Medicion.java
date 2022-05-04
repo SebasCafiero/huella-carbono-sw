@@ -10,7 +10,20 @@ public class Medicion implements Medible {
     private Character periodicidad; // M o A
     private Float valor;
     private String periodo; // MM/AAAA o AAAA
+
     private LocalDate fecha; // AAAA-MM-DD
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+
+
+
 
     public Medicion(String categoria, String unidad, Float valor) {
         this.categoria = categoria;
@@ -18,7 +31,7 @@ public class Medicion implements Medible {
         this.valor = valor;
     }
 
-    /* LO COMENTE PARA QUE NO MOLESTE EL TEST HASTA ESTAR TERMINADO
+     //LO COMENTE PARA QUE NO MOLESTE EL TEST HASTA ESTAR TERMINADO
 
     public Medicion(String categoria, String unidad, Float valor, String periodo) {
         this.categoria = categoria;
@@ -39,7 +52,7 @@ public class Medicion implements Medible {
 
         //Se puede usar LocalDate.of(int anio, int mes, int dia);
     }
-    */
+
 
     @Override
     public String getUnidad() {
@@ -55,4 +68,6 @@ public class Medicion implements Medible {
     public String getCategoria() {
         return categoria;
     }
+
+
 }

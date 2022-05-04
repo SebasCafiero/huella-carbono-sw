@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.lugares;
 
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.personas.Miembro;
+import ar.edu.utn.frba.dds.mediciones.Medicion;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -10,10 +11,19 @@ import java.util.stream.Collectors;
 public class Organizacion {
     private String razonSocial;
     private TipoDeOrganizacionEnum tipo;
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
     private String ubicacion;
     private ClasificacionOrganizacion clasificacionOrganizacion;
     private Set<Sector> sectores;
-    private List<Medible> mediciones;
+    private List<Medicion> mediciones;
 
     public Organizacion(String razonSocial,
                         TipoDeOrganizacionEnum tipo,
@@ -71,11 +81,11 @@ public class Organizacion {
         sector.quitarPostulante(miembro);
     }
 
-    public void agregarMediciones(Medible ... variasMediciones) {
+    public void agregarMediciones(Medicion ... variasMediciones) {
         Collections.addAll(this.mediciones, variasMediciones);
     }
 
-    public List<Medible> getMediciones() {
+    public List<Medicion> getMediciones() {
         return this.mediciones;
     }
 

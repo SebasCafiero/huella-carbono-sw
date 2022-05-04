@@ -22,7 +22,7 @@ public class CalculadoraHCOrganizacion implements FachadaOrg {
     }
 
     @Override
-    public Float obtenerHU(Collection<Medible> mediciones)
+    public Float obtenerHU(Collection<Medicion> mediciones)
     {
         Float huTotal = 0F;
         for(Medible medicion : mediciones){
