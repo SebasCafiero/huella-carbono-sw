@@ -1,9 +1,6 @@
 package ar.edu.utn.frba.dds.personas;
 
-import ar.edu.utn.frba.dds.lugares.ClasificacionOrganizacion;
-import ar.edu.utn.frba.dds.lugares.Organizacion;
-import ar.edu.utn.frba.dds.lugares.Sector;
-import ar.edu.utn.frba.dds.lugares.TipoDeOrganizacionEnum;
+import ar.edu.utn.frba.dds.lugares.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +11,7 @@ public class MiembroTest {
     @Test
     public void vinculoMiembroConOrganizacion() throws Exception {
 
-        Organizacion unaOrg = new Organizacion("miRazonSocial",
-                TipoDeOrganizacionEnum.EMPRESA,
+        Organizacion unaOrg = new Empresa("miRazonSocial",
                 ClasificacionOrganizacion.SECTORPRIMARIO,
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
@@ -43,8 +39,7 @@ public class MiembroTest {
     @Test
     public void rechazoVinculoMiembroConOrganizacion() throws Exception {
 
-        Organizacion unaOrg = new Organizacion("miRazonSocial",
-                TipoDeOrganizacionEnum.EMPRESA,
+        Organizacion unaOrg = new Empresa("miRazonSocial",
                 ClasificacionOrganizacion.SECTORSECUNDARIO,
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
@@ -71,8 +66,7 @@ public class MiembroTest {
 
     @Test
     public void vinculoMiembroConMismoSector() throws Exception {
-        Organizacion unaOrg = new Organizacion("miRazonSocial",
-                TipoDeOrganizacionEnum.EMPRESA,
+        Organizacion unaOrg = new Empresa("miRazonSocial",
                 ClasificacionOrganizacion.SECTORSECUNDARIO,
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
@@ -87,8 +81,7 @@ public class MiembroTest {
 
     @Test
     public void vinculoVariosMiembros() throws Exception{
-        Organizacion unaOrg = new Organizacion("miRazonSocial",
-                TipoDeOrganizacionEnum.EMPRESA,
+        Organizacion unaOrg = new Empresa("miRazonSocial",
                 ClasificacionOrganizacion.UNIVERSIDAD,
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);

@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.personas;
 
-import ar.edu.utn.frba.dds.lugares.Organizacion;
-import ar.edu.utn.frba.dds.lugares.Sector;
+import ar.edu.utn.frba.dds.lugares.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -70,6 +69,22 @@ public class Miembro {
 
     public boolean trabajaEnSector(Sector unSector) {
         return this.sectoresDondeTrabaja.contains(unSector);
+    }
+
+    public boolean trabajaEnTipoDeOrganizacion(TipoDeOrganizacionEnum tipo) {
+        return this.organizacionesDondeTrabaja()
+                .stream()
+                .map(unaOrg -> unaOrg.getTipo())
+                .collect(Collectors.toSet())
+                .contains(tipo);
+    }
+
+    public Integer cantidadDeTipoDeOrg(TipoDeOrganizacionEnum tipo) {
+        return this.organizacionesDondeTrabaja()
+                //.stream()
+                //.map(unaOrg -> unaOrg.getTipo())
+                //.collect(Collectors.toSet())
+                .size();
     }
 }
 

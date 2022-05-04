@@ -7,25 +7,15 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Organizacion {
-    private String razonSocial;
-    private TipoDeOrganizacionEnum tipo;
-    private String ubicacion;
-    private ClasificacionOrganizacion clasificacionOrganizacion;
-    private Set<Sector> sectores;
-    private List<Medible> mediciones;
+public abstract class Organizacion {
 
-    public Organizacion(String razonSocial,
-                        TipoDeOrganizacionEnum tipo,
-                        ClasificacionOrganizacion clasificacionOrganizacion,
-                        String ubicacion) {
-        this.razonSocial = razonSocial;
-        this.tipo = tipo;
-        this.ubicacion = ubicacion;
-        this.clasificacionOrganizacion = clasificacionOrganizacion;
-        this.sectores = new HashSet<>();
-        this.mediciones = new ArrayList<>();
-    }
+    protected String razonSocial;
+    protected TipoDeOrganizacionEnum tipo;
+    protected String ubicacion;
+    protected ClasificacionOrganizacion clasificacionOrganizacion;
+    protected Set<Sector> sectores;
+    protected List<Medible> mediciones;
+
 
     // Para qué sirve ??
     public Set<Miembro> obtenerMiembrosDeLaOrganizacion(){
@@ -58,12 +48,9 @@ public class Organizacion {
                 throw new Exception("El miembro ya pertenece a la organizacion");
             }
         }
-        //TODO
-        sector.agregarMiembro(miembro); //CHECK SI ESTA BIEN QUE LAS EXCEPTIONS ESTEN EN AMBOS LADOS
+        sector.agregarMiembro(miembro);
         miembro.agregarSector(sector);
         sector.quitarPostulante(miembro);
-        //SI aceptarSolicitud y rechazarSolicitud estuvieran directo en la clase Sector,
-        // la Org no sería la encargada de aceptar los vínculos como dice el enunciado
     }
 
     public void rechazarSolicitud(Miembro miembro, Sector sector) throws Exception {
@@ -85,5 +72,9 @@ public class Organizacion {
 
     public Integer cantidadSectores() {
         return this.sectores.size();
+    }
+
+    public TipoDeOrganizacionEnum getTipo() {
+        return tipo;
     }
 }
