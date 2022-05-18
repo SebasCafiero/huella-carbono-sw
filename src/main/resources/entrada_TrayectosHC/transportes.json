@@ -1,0 +1,29 @@
+[
+  {
+    "transporte": "NombreTransporte",
+    "parada" : 0,
+    "latitud" : 123.4,
+    "longitud" : 23123.6
+  },
+  {
+    "transporte": "NombreTransporte",
+    "parada" : 1,
+    "latitud" : 135.4,
+    "longitud" : 2323.2
+  },
+  {
+    "transporte": "NombreTransporte",
+    "paradas" : [
+      {
+        "numero" : 0,
+        "latitud" : 123.4,
+        "longitud" : 23123.6
+      },
+      {
+        "numero" : 0,
+        "latitud" : 123.4,
+        "longitud" : 23123.6
+      }
+    ]
+  }
+]

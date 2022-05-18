@@ -1,0 +1,30 @@
+[
+  {
+    "organizacion": "Nombre",
+    "sectores": [
+      {
+        "nombre": "Nombre sector",
+        "miembros": [
+          {
+            "nombre": "Nombre miembro",
+            "DNI": 23123123
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "organizacion": "Nombre",
+    "sectores": [
+      {
+        "nombre": "Nombre sector",
+        "miembros": [
+          {
+            "nombre": "Nombre miembro",
+            "DNI": 23123123
+          }
+        ]
+      }
+    ]
+  }
+]

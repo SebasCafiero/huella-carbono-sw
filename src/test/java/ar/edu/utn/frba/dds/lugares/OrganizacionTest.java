@@ -12,7 +12,7 @@ public class OrganizacionTest {
     public void unaOrganizacionNoPuedeRepetirSector() throws Exception {
         Organizacion unaOrg = new Organizacion("Una empresa",
                 TipoDeOrganizacionEnum.EMPRESA,
-                ClasificacionOrganizacion.ESCUELA,
+                new ClasificacionOrganizacion("Escuela"),
                 "Buenos Aires");
 
         Sector sistemas = new Sector("Sistemas", unaOrg);
@@ -26,7 +26,7 @@ public class OrganizacionTest {
     public void agregarSectoresAUnaOrganizacoin() throws Exception {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 ONG,
-                ClasificacionOrganizacion.UNIVERSIDAD,
+                new ClasificacionOrganizacion("GreenPeace"),
                 "miUbicacion");
 
         Assertions.assertEquals(0,unaOrg.cantidadSectores());

@@ -16,6 +16,10 @@ public class CalculadoraHCOrganizacion implements FachadaOrg {
         factorEmisionMap = Parser.generarFE(archivo);
     }
 
+    public CalculadoraHCOrganizacion(Map<String, Float> parametrosSistema) throws Exception {
+        factorEmisionMap = parametrosSistema;
+    }
+
     @Override
     public void cargarParametros(Map<String, Float> parametrosSistema) {
         factorEmisionMap.putAll(parametrosSistema);
@@ -28,7 +32,12 @@ public class CalculadoraHCOrganizacion implements FachadaOrg {
         for(Medible medicion : mediciones){
             String categoria = medicion.getCategoria();
             huTotal = (this.factorEmisionMap.get(categoria) * medicion.getValor()) + huTotal;
+            // System.out.println("Dato actividad " + categoria + ": " + medicion.getValor().toString());
         }
         return huTotal;
+    }
+
+    public void setFactorEmision(String nombreFactor, Float valor) {
+        //TODO
     }
 }

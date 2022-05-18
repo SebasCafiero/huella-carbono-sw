@@ -16,7 +16,7 @@ public class MiembroTest {
 
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
-                ClasificacionOrganizacion.SECTORPRIMARIO,
+                new ClasificacionOrganizacion("Sector Primario"),
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
 
@@ -45,7 +45,7 @@ public class MiembroTest {
 
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
-                ClasificacionOrganizacion.SECTORSECUNDARIO,
+                new ClasificacionOrganizacion("Sector secundario"),
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
 
@@ -73,7 +73,7 @@ public class MiembroTest {
     public void vinculoMiembroConMismoSector() throws Exception {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
-                ClasificacionOrganizacion.SECTORSECUNDARIO,
+                new ClasificacionOrganizacion("Sector secundario"),
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
         Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
@@ -89,7 +89,7 @@ public class MiembroTest {
     public void vinculoVariosMiembros() throws Exception{
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
-                ClasificacionOrganizacion.UNIVERSIDAD,
+                new ClasificacionOrganizacion("Organizacion"),
                 "miUbicacion");
         Sector unSector = new Sector("miSector",unaOrg);
         Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
