@@ -15,7 +15,9 @@ public class FachadaOrgTest {
 
     @Test
     void seObtieneCorrectamenteHC() throws Exception {
-        CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion("src/test/resources/propiedades.csv");
+        HashMap<String, Float> fe = new HashMap<>();
+        fe.put("Combustion Fija - Gas Natural", 1F);
+        CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion(fe);
 
         List<Medible> mediciones = new ArrayList<Medible>();
         mediciones.add(new Medicion("Combustion Fija - Gas Natural", "m3", 100F));
