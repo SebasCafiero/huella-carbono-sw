@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.lugares;
 
+import ar.edu.utn.frba.dds.excepciones.MiembroException;
+import ar.edu.utn.frba.dds.excepciones.SectorException;
 import ar.edu.utn.frba.dds.personas.Miembro;
 
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ public class Sector {
     private Set<Miembro> listaDeMiembros;
     private Set<Miembro> listaDePostulantes;
 
-    public Sector(String nombre, Organizacion organizacion) throws Exception {
+    public Sector(String nombre, Organizacion organizacion) throws SectorException {
         this.nombre = nombre;
         organizacion.agregarSector(this);
         this.organizacion = organizacion;
@@ -37,27 +39,27 @@ public class Sector {
         return this.listaDePostulantes.contains(miembro);
     }
 
-    public void agregarMiembro(Miembro miembro) throws Exception{
+    public void agregarMiembro(Miembro miembro) throws MiembroException{
         if(esMiembro(miembro))
-            throw new Exception("El miembro ya pertenece a este sector");
+            throw new MiembroException("El miembro ya pertenece a este sector");
         listaDeMiembros.add(miembro);
     }
 
-    public void quitarMiembro(Miembro miembro) throws Exception {
+    public void quitarMiembro(Miembro miembro) throws MiembroException {
         if(!esMiembro(miembro))
-            throw new Exception("El miembro no pertenece a este sector");
+            throw new MiembroException("El miembro no pertenece a este sector");
         listaDeMiembros.remove(miembro);
     }
 
-    public void agregarPostulante(Miembro miembro) throws Exception{
+    public void agregarPostulante(Miembro miembro) throws MiembroException{
         if(esPostulante(miembro))
-            throw new Exception("El miembro ya está postulado a este sector");
+            throw new MiembroException("El miembro ya está postulado a este sector");
         listaDePostulantes.add(miembro);
     }
 
-    public void quitarPostulante(Miembro miembro) throws Exception {
+    public void quitarPostulante(Miembro miembro) throws MiembroException {
         if(!esPostulante(miembro))
-            throw new Exception("El miembro no está postulado a este sector");
+            throw new MiembroException("El miembro no está postulado a este sector");
         listaDePostulantes.remove(miembro);
     }
 

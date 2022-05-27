@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.personas;
 
+import ar.edu.utn.frba.dds.excepciones.MiembroException;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.lugares.Sector;
 
@@ -39,24 +40,24 @@ public class Miembro {
         return this.nombre + " " + this.apellido;
     }
 
-    public void agregarSector(Sector sector) throws Exception {
+    public void agregarSector(Sector sector) throws MiembroException {
         if(this.trabajaEnSector(sector))
-            throw new Exception("El miembro ya pertenece a ese sector");
+            throw new MiembroException("El miembro ya pertenece a ese sector");
         this.sectoresDondeTrabaja.add(sector);
     }
 
-    public void quitarSector(Sector sector) throws Exception {
+    public void quitarSector(Sector sector) throws MiembroException {
         if(!this.trabajaEnSector(sector))
-            throw new Exception("El miembro no pertenece a ese sector");
+            throw new MiembroException("El miembro no pertenece a ese sector");
         this.sectoresDondeTrabaja.remove(sector);
     }
 
-    public void solicitarIngreso(Sector sector) throws Exception {
+    public void solicitarIngreso(Sector sector) throws MiembroException {
         //TODO
         //Tendría que agregarse a la lista de postulantes del sector y
         // cuando lo agreguen, sumar el sector a sectoresDondeTrabaja
         if(sector.esMiembro(this))
-            throw new Exception("El miembro ya pertenece a la organizacion");
+            throw new MiembroException("El miembro ya pertenece a la organizacion");
         sector.agregarPostulante(this);
     }
 

@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.lugares;
 
+import ar.edu.utn.frba.dds.excepciones.SectorException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ public class OrganizacionTest {
 
 
     @Test
-    public void unaOrganizacionNoPuedeRepetirSector() throws Exception {
+    public void unaOrganizacionNoPuedeRepetirSector() throws SectorException {
         Organizacion unaOrg = new Organizacion("Una empresa",
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Escuela"),
@@ -17,7 +18,7 @@ public class OrganizacionTest {
 
         Sector sistemas = new Sector("Sistemas", unaOrg);
 
-        Assertions.assertThrows(Exception.class, () -> {
+        Assertions.assertThrows(SectorException.class, () -> {
             unaOrg.agregarSector(sistemas);
         });
     }

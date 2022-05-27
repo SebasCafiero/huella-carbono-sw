@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.lugares;
 
+import ar.edu.utn.frba.dds.excepciones.MiembroException;
+import ar.edu.utn.frba.dds.excepciones.SectorException;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.personas.Miembro;
 
@@ -28,7 +30,7 @@ public class Organizacion {
     }
 
     // Para qué sirve ??
-    public Set<Miembro> obtenerMiembrosDeLaOrganizacion(){
+    public Set<Miembro> obtenerMiembrosDeLaOrganizacion() {
         //Hay que traer cada miembro de cada sector y que no hayan repetidos.
         return sectores
                 .stream()
@@ -36,9 +38,9 @@ public class Organizacion {
                 .collect(Collectors.toSet());
     }
 
-    public void agregarSector(Sector sector) throws Exception{
-        if(this.sectores.contains(sector)) {
-            throw new Exception("El sector ya pertenece a la organización.");
+    public void agregarSector(Sector sector) throws SectorException {
+        if (this.sectores.contains(sector)) {
+            throw new SectorException("El sector ya pertenece a la organización.");
         }
         sectores.add(sector);
     }
@@ -50,12 +52,12 @@ public class Organizacion {
         return shallowCopy;
     }
 
-    public void aceptarSolicitud(Miembro miembro, Sector sector) throws Exception {
-        if(!this.sectores.contains(sector))
-            throw new Exception("El sector no pertenece a la organizacion");
-        for(Sector unSector : this.sectores) {
+    public void aceptarSolicitud(Miembro miembro, Sector sector) throws SectorException, MiembroException {
+        if (!this.sectores.contains(sector))
+            throw new SectorException("El sector no pertenece a la organizacion");
+        for (Sector unSector : this.sectores) {
             if (unSector.esMiembro(miembro)) {
-                throw new Exception("El miembro ya pertenece a la organizacion");
+                throw new MiembroException("El miembro ya pertenece a la organizacion");
             }
         }
         //TODO
@@ -66,12 +68,12 @@ public class Organizacion {
         // la Org no sería la encargada de aceptar los vínculos como dice el enunciado
     }
 
-    public void rechazarSolicitud(Miembro miembro, Sector sector) throws Exception {
+    public void rechazarSolicitud(Miembro miembro, Sector sector) throws MiembroException {
         //TODO
         sector.quitarPostulante(miembro);
     }
 
-    public void agregarMediciones(Medible ... variasMediciones) {
+    public void agregarMediciones(Medible... variasMediciones) {
         Collections.addAll(this.mediciones, variasMediciones);
     }
 

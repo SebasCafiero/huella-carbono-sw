@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.personas;
 
+import ar.edu.utn.frba.dds.excepciones.MiembroException;
+import ar.edu.utn.frba.dds.excepciones.SectorException;
 import ar.edu.utn.frba.dds.lugares.ClasificacionOrganizacion;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.lugares.Sector;
@@ -12,7 +14,7 @@ public class MiembroTest {
 //TODO VER DE USAR @BEFORE O AGRUPAR DECLARACIONES REPETIDAS
 
     @Test
-    public void vinculoMiembroConOrganizacion() throws Exception {
+    public void vinculoMiembroConOrganizacion() throws SectorException, MiembroException {
 
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
@@ -41,7 +43,7 @@ public class MiembroTest {
     }
 
     @Test
-    public void rechazoVinculoMiembroConOrganizacion() throws Exception {
+    public void rechazoVinculoMiembroConOrganizacion() throws SectorException, MiembroException {
 
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
@@ -70,7 +72,7 @@ public class MiembroTest {
     }
 
     @Test
-    public void vinculoMiembroConMismoSector() throws Exception {
+    public void vinculoMiembroConMismoSector() throws SectorException, MiembroException {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Sector secundario"),
@@ -81,7 +83,7 @@ public class MiembroTest {
         unMiembro.solicitarIngreso(unSector);
         unaOrg.aceptarSolicitud(unMiembro,unSector);
 
-        Assertions.assertThrows(Exception.class,() -> unMiembro.solicitarIngreso(unSector));
+        Assertions.assertThrows(MiembroException.class,() -> unMiembro.solicitarIngreso(unSector));
 
     }
 
