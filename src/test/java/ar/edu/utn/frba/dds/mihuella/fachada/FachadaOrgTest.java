@@ -24,4 +24,14 @@ public class FachadaOrgTest {
 
         Assertions.assertEquals(100, calculadora.obtenerHU(mediciones), 1);
     }
+
+    @Test
+    void fallaPorCategoriaInexistente() throws Exception {
+        CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion("src/test/resources/propiedades.csv");
+
+        List<Medible> mediciones = new ArrayList<Medible>();
+        mediciones.add(new Medicion("Combustion - Gas", "m3", 100F));
+
+        Assertions.assertThrows(Exception.class,() -> calculadora.obtenerHU(mediciones));
+    }
 }

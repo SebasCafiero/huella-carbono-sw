@@ -26,13 +26,19 @@ public class CalculadoraHCOrganizacion implements FachadaOrg {
     }
 
     @Override
-    public Float obtenerHU(Collection<Medible> mediciones)
-    {
+    public Float obtenerHU(Collection<Medible> mediciones) throws Exception {
         Float huTotal = 0F;
         for(Medible medicion : mediciones){
             String categoria = medicion.getCategoria();
-            huTotal = (this.factorEmisionMap.get(categoria) * medicion.getValor()) + huTotal;
-            // System.out.println("Dato actividad " + categoria + ": " + medicion.getValor().toString());
+
+            try{
+                huTotal = (this.factorEmisionMap.get(categoria) * medicion.getValor()) + huTotal;
+                //System.out.println("Dato actividad " + categoria + ": " + medicion.getValor().toString();
+            }
+            catch (NullPointerException e){
+                throw new Exception("FE de categoria no cargada");
+            }
+
         }
         return huTotal;
     }
