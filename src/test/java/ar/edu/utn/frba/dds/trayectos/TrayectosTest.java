@@ -28,9 +28,15 @@ public class TrayectosTest {
     @Test
     public void calculoDistanciaTramosTransportePublico(){
         TransportePublico unTransportePublico = new TransportePublico(TipoTransportePublico.COLECTIVO,"26");
-        unTransportePublico.agregarParada(new Parada(new Coordenada(5F,5F),0.3F,0.6F));
+        /*unTransportePublico.agregarParada(new Parada(new Coordenada(5F,5F),0.3F,0.6F));
         unTransportePublico.agregarParada(new Parada(new Coordenada(8F,12F),0.6F,0.8F));
-        unTransportePublico.agregarParada(new Parada(new Coordenada(11F,15F),0.5F,0.3F));
+        unTransportePublico.agregarParada(new Parada(new Coordenada(11F,15F),0.5F,0.3F));*/
+
+        unTransportePublico.agregarParadas(
+                new Parada(new Coordenada(5F,5F),0.3F,0.6F),
+                new Parada(new Coordenada(8F,12F),0.6F,0.8F),
+                new Parada(new Coordenada(11F,15F),0.5F,0.3F)
+        );
 
         Trayecto unTrayecto = new Trayecto();
         Tramo tramo1 = new Tramo(unTransportePublico,new Coordenada(5F,5F),new Coordenada(8F,12F));

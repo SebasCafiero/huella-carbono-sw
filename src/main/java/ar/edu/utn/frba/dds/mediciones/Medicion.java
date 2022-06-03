@@ -18,28 +18,24 @@ public class Medicion implements Medible {
         this.valor = valor;
     }
 
-    /* LO COMENTE PARA QUE NO MOLESTE EL TEST HASTA ESTAR TERMINADO
 
-    public Medicion(String categoria, String unidad, Float valor, String periodo) {
+    public Medicion(String categoria, String unidad, Float valor, String periodicidad, String periodo) throws Exception {
         this.categoria = categoria;
         this.unidad = unidad;
         this.valor = valor;
-        this.periodo = periodo;
+        this.periodicidad = periodicidad.charAt(0);
 
-        //Si periodo MM/AAAA:
-        //this.periodicidad = 'M';
-        //String anio, mes;
-        //obtener anio=AAAA y mes=MM
-        //this.fecha = LocalDate.parse(anio + "-" + mes + "-" + "01");
-
-
-        //Si periodo AAAA:
-        //this.periodicidad = 'A';
-        //this.fecha = LocalDate.parse(periodo + "-01-01");
-
-        //Se puede usar LocalDate.of(int anio, int mes, int dia);
+        if(this.periodicidad == 'M'){
+            String[] mesYanio = periodo.split("/");
+            this.fecha = LocalDate.parse(mesYanio[1]+"-"+mesYanio[0]+"-01");
+        }
+        else if(this.periodicidad == 'A'){
+            this.fecha = LocalDate.parse(periodo + "-01-01");
+            //this.fecha = LocalDate.of(Integer.parseInt(periodo),1,1);
+        }
+        else throw new Exception("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO
     }
-    */
+
 
     @Override
     public String getUnidad() {

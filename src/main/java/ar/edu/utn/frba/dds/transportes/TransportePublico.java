@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.lugares.Coordenada;
 import ar.edu.utn.frba.dds.trayectos.Tramo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TransportePublico extends MedioDeTransporte{
     private TipoTransportePublico tipo;
@@ -18,6 +19,9 @@ public class TransportePublico extends MedioDeTransporte{
 
     public void agregarParada(Parada parada){
         this.paradas.add(parada);
+    }
+    public void agregarParadas(Parada... paradas){
+        Collections.addAll(this.paradas,paradas);
     }
 
     @Override
