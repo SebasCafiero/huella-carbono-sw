@@ -11,3 +11,12 @@ public class ClasificacionOrganizacion {
         return nombre;
     }
 }
+
+
+/* Ejemplos de uso:
+* ministerio = new ClasificacionOrganizacion("Ministerio")
+* universidad = new ClasificacionOrganizacion("Universidad")
+* escuela = new ClasificacionOrganizacion("Escuela")
+* empresaSectorPrimario = new ClasificacionOrganizacion("Empresa del Sector Primario")
+* empresaSectorSecundario = new ClasificacionOrganizacion("Empresa del Sector Secundario")
+* */

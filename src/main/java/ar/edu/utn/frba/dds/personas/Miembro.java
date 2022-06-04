@@ -3,6 +3,8 @@ package ar.edu.utn.frba.dds.personas;
 import ar.edu.utn.frba.dds.excepciones.MiembroException;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.lugares.Sector;
+import ar.edu.utn.frba.dds.trayectos.Trayecto;
+import com.sun.deploy.net.MessageHeader;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,6 +18,7 @@ public class Miembro {
     private TipoDeDocumento tipoDeDocumento;
     private int nroDocumento;
     private Set<Sector> sectoresDondeTrabaja; //Los sectores conocen las organizaciones
+    private List<Trayecto> trayectos;
 
     public Miembro(String nombre, String apellido, TipoDeDocumento tipoDeDocumento, int nroDocumento) {
         this.nombre = nombre;
@@ -71,6 +74,12 @@ public class Miembro {
 
     public boolean trabajaEnSector(Sector unSector) {
         return this.sectoresDondeTrabaja.contains(unSector);
+    }
+
+    public void registrarTrayecto(Trayecto unTrayecto) {
+        this.trayectos.add(unTrayecto);
+        //registrar en cada organizacion en la que trabaja
+        this.sectoresDondeTrabaja.iterator().next().getOrganizacion().registrarTrayecto(unTrayecto,this);
     }
 }
 

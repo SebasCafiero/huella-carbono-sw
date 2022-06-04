@@ -1,67 +1,51 @@
 package ar.edu.utn.frba.dds.trayectos;
 
-import ar.edu.utn.frba.dds.lugares.Coordenada;
-import ar.edu.utn.frba.dds.transportes.*;
+import ar.edu.utn.frba.dds.excepciones.MiembroException;
+import ar.edu.utn.frba.dds.excepciones.SectorException;
+import ar.edu.utn.frba.dds.lugares.*;
+import ar.edu.utn.frba.dds.personas.Miembro;
+import ar.edu.utn.frba.dds.personas.TipoDeDocumento;
+import ar.edu.utn.frba.dds.transportes.Parada;
+import ar.edu.utn.frba.dds.transportes.TipoTransportePublico;
+import ar.edu.utn.frba.dds.transportes.TransportePublico;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 public class TrayectosTest {
 
-    @Test
-    public void calculoDistanciaTramos(){
-        VehiculoParticular unVehiculoParticular = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.NAFTA);
+    @BeforeEach
+    public void iniciarOrgSectorMiembro() throws SectorException, MiembroException {
 
-        Trayecto unTrayecto = new Trayecto();
-        Tramo tramo1 = new Tramo(unVehiculoParticular,new Coordenada(10F,5F),new Coordenada(13F,6F));
-        Tramo tramo2 = new Tramo(unVehiculoParticular,new Coordenada(7F,7F),new Coordenada(10F,7F));
-        Tramo tramo3 = new Tramo(unVehiculoParticular,new Coordenada(3F,0F),new Coordenada(5F,4F));
-        ArrayList listaTramos = new ArrayList<>();
-        listaTramos.add(tramo1);
-        listaTramos.add(tramo2);
-        unTrayecto.agregarTramos(listaTramos);
-        unTrayecto.agregarTramo(tramo3);
-        Assertions.assertEquals(4+3+6,unTrayecto.calcularDistancia());
     }
 
     @Test
-    public void calculoDistanciaTramosTransportePublico(){
-        TransportePublico unTransportePublico = new TransportePublico(TipoTransportePublico.COLECTIVO,"26");
-        /*unTransportePublico.agregarParada(new Parada(new Coordenada(5F,5F),0.3F,0.6F));
-        unTransportePublico.agregarParada(new Parada(new Coordenada(8F,12F),0.6F,0.8F));
-        unTransportePublico.agregarParada(new Parada(new Coordenada(11F,15F),0.5F,0.3F));*/
+    public void testCargaDeTrayectosEnOrganizacion() throws SectorException, MiembroException {
+        Organizacion unaOrg = new Organizacion("utn", TipoDeOrganizacionEnum.INSTITUCION,new ClasificacionOrganizacion("Universidad"),new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+        Sector unSector = new Sector("Administracion",unaOrg);
+        Miembro unMiembro = new Miembro("Pedrito","Lopez", TipoDeDocumento.DNI,12345);
+        unMiembro.solicitarIngreso(unSector);
+        unaOrg.aceptarSolicitud(unMiembro,unSector);
 
+
+        TransportePublico unTransportePublico = new TransportePublico(TipoTransportePublico.COLECTIVO,"26");
         unTransportePublico.agregarParadas(
-                new Parada(new Coordenada(5F,5F),0.3F,0.6F),
-                new Parada(new Coordenada(8F,12F),0.6F,0.8F),
-                new Parada(new Coordenada(11F,15F),0.5F,0.3F)
+                new Parada(new Coordenada(1F,1F),0F,8F),
+                new Parada(new Coordenada(3F,7F),8F,18F),
+                new Parada(new Coordenada(15F,13F),18F,0F)
         );
 
         Trayecto unTrayecto = new Trayecto();
-        Tramo tramo1 = new Tramo(unTransportePublico,new Coordenada(5F,5F),new Coordenada(8F,12F));
-        Tramo tramo2 = new Tramo(unTransportePublico,new Coordenada(8F,12F),new Coordenada(11F,15F));
-        Tramo tramo3 = new Tramo(unTransportePublico,new Coordenada(11F,15F),new Coordenada(5F,5F));
-        ArrayList listaTramos = new ArrayList<>();
-        listaTramos.add(tramo1);
-        listaTramos.add(tramo2);
-        unTrayecto.agregarTramos(listaTramos);
-        unTrayecto.agregarTramo(tramo3);
-        Assertions.assertEquals(0.6F+0.8F+0.3F,unTrayecto.calcularDistancia());
-    }
+        Tramo tramo1 = new Tramo(unTransportePublico,new Coordenada(1F,1F),new Coordenada(3F,7F));
+        Tramo tramo2 = new Tramo(unTransportePublico,new Coordenada(3F,7F),new Coordenada(15F,13F));
+        unTrayecto.agregarTramo(tramo1);
+        unTrayecto.agregarTramo(tramo2);
 
-    @Test
-    public void calculoDistanciaTramosCombinandoTransportes(){
-        TransportePublico unSubte = new TransportePublico(TipoTransportePublico.SUBTE,"C");
-        unSubte.agregarParada(new Parada(new Coordenada(15F,13F),0.1F,0.2F));
-        unSubte.agregarParada(new Parada(new Coordenada(17F,17F),0.2F,0.3F));
-        unSubte.agregarParada(new Parada(new Coordenada(19F,21F),0.3F,0.4F));
-
-        ServicioContratado unUber = new ServicioContratado(new TipoServicio("Uber"));
-        Trayecto unTrayecto = new Trayecto();
-        unTrayecto.agregarTramo(new Tramo(unUber,new Coordenada(3F,3F), new Coordenada(17F,17F)));
-        unTrayecto.agregarTramo(new Tramo(unSubte,new Coordenada(17F,17F), new Coordenada(19F,21F)));
-        Assertions.assertEquals(28+0.3F,unTrayecto.calcularDistancia());
+        unMiembro.registrarTrayecto(unTrayecto);
+        Assertions.assertEquals(26,unTrayecto.calcularDistancia());
+        Assertions.assertEquals(26,unaOrg.obtenerDistanciaTrayecto());
     }
 
 }
