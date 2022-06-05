@@ -25,7 +25,7 @@ public class TrayectosTest {
     public void testCargaDeTrayectosEnOrganizacion() throws SectorException, MiembroException {
         Organizacion unaOrg = new Organizacion("utn", TipoDeOrganizacionEnum.INSTITUCION,new ClasificacionOrganizacion("Universidad"),new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
         Sector unSector = new Sector("Administracion",unaOrg);
-        Miembro unMiembro = new Miembro("Pedrito","Lopez", TipoDeDocumento.DNI,12345);
+        Miembro unMiembro = new Miembro("Pedrito","Lopez", TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",10F,10F));
         unMiembro.solicitarIngreso(unSector);
         unaOrg.aceptarSolicitud(unMiembro,unSector);
 

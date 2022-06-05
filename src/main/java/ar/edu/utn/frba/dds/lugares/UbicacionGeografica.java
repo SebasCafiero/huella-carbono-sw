@@ -1,16 +1,20 @@
 package ar.edu.utn.frba.dds.lugares;
 
-public class UbicacionGeografica { //TODO VER SI LO USAMOS PARA LA ORG Y LOS HOGARES (check diagrama)
-    private String lugar;
+public class UbicacionGeografica {
+    private String localidad;
     private Coordenada coordenada;
 
     public UbicacionGeografica(String lugar, Coordenada coordenada) {
-        this.lugar = lugar;
+        this.localidad = lugar;
         this.coordenada = coordenada;
     }
+    public UbicacionGeografica(String lugar, Float latitud, Float longitud){
+        this.localidad = lugar;
+        this.coordenada = new Coordenada(latitud,longitud);
+    }
 
-    public String getLugar() {
-        return lugar;
+    public String getLocalidad() {
+        return localidad;
     }
 
     public Coordenada getCoordenada() {

@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.transportes;
 
 public class ServicioContratado extends MedioDeTransporteConServicioExterno{
-    private TipoServicio tipo; //TODO SERIA UNA ABSTRACT O INTERFACE PARA TIPOSERVICIO O DIRECTAMENTE SACAMOS TIPOSERVICIO??
+    private TipoServicio tipo;
 
     public ServicioContratado(TipoServicio tipoServicio){
         tipo = tipoServicio;

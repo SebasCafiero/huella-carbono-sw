@@ -17,7 +17,7 @@ public class Organizacion {
     private ClasificacionOrganizacion clasificacionOrganizacion;
     private Set<Sector> sectores;
     private List<Medible> mediciones;
-    HashMap<Miembro,Trayecto> trayectos = new HashMap<Miembro,Trayecto>;
+    private Map<Miembro,Trayecto> trayectos; //TODO lo deberia tener organizacion o sector?
 
     public Organizacion(String razonSocial,
                         TipoDeOrganizacionEnum tipo,
@@ -29,10 +29,10 @@ public class Organizacion {
         this.clasificacionOrganizacion = clasificacionOrganizacion;
         this.sectores = new HashSet<>();
         this.mediciones = new ArrayList<>();
+        this.trayectos = new HashMap<Miembro,Trayecto>();
     }
 
-    // Para qué sirve ??
-    public Set<Miembro> obtenerMiembrosDeLaOrganizacion() {
+    public Set<Miembro> miembros() {
         //Hay que traer cada miembro de cada sector y que no hayan repetidos.
         return sectores
                 .stream()
@@ -83,19 +83,22 @@ public class Organizacion {
         return this.mediciones;
     }
 
-    public Float obtenerHC(LocalDate fechaInicial, LocalDate fechaFinal) {
-        return 0.0f;
-    }
-
     public Integer cantidadSectores() {
         return this.sectores.size();
     }
 
-    public void registrarTrayecto(Trayecto unTrayecto, Miembro unMiembro) {
+    public Float obtenerHC(LocalDate fechaInicial, LocalDate fechaFinal) {
+        return 0.0f;
+    }
+
+    public void cargarTrayecto(Trayecto unTrayecto, Miembro unMiembro) {
         this.trayectos.put(unMiembro,unTrayecto);
     }
 
     public Float obtenerDistanciaTrayecto() {
-        return this.trayectos.forEach((k,v)->v.calcularDistancia());
+        //PARA PRUEBITA, FALTA ARREGLAR TODO
+        List<Trayecto> listaTrayectos = new ArrayList<Trayecto>(this.trayectos.values());
+        return listaTrayectos.get(0).calcularDistancia();
     }
+
 }

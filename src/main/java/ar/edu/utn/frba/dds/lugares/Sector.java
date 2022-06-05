@@ -23,6 +23,8 @@ public class Sector {
         this.listaDePostulantes = new HashSet<>();
     }
 
+    public String getNombre() { return this.nombre; }
+
     public Set<Miembro> getListaDeMiembros() {
         return this.listaDeMiembros;
     }
