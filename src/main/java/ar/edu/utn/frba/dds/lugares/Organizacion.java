@@ -54,26 +54,6 @@ public class Organizacion {
         return shallowCopy;
     }
 
-    public void aceptarSolicitud(Miembro miembro, Sector sector) throws SectorException, MiembroException {
-        if (!this.sectores.contains(sector))
-            throw new SectorException("El sector no pertenece a la organizacion");
-        for (Sector unSector : this.sectores) {
-            if (unSector.esMiembro(miembro)) {
-                throw new MiembroException("El miembro ya pertenece a la organizacion");
-            }
-        }
-        //TODO
-        sector.agregarMiembro(miembro); //CHECK SI ESTA BIEN QUE LAS EXCEPTIONS ESTEN EN AMBOS LADOS
-        miembro.agregarSector(sector);
-        sector.quitarPostulante(miembro);
-        //SI aceptarSolicitud y rechazarSolicitud estuvieran directo en la clase Sector,
-        // la Org no sería la encargada de aceptar los vínculos como dice el enunciado
-    }
-
-    public void rechazarSolicitud(Miembro miembro, Sector sector) throws MiembroException {
-        //TODO
-        sector.quitarPostulante(miembro);
-    }
 
     public void agregarMediciones(Medible... variasMediciones) {
         Collections.addAll(this.mediciones, variasMediciones);

@@ -21,26 +21,16 @@ public class MiembroTest {
 
         Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",10F,20F));
 
-        miembro1.solicitarIngreso(unSector);
-
-        Assertions.assertEquals(0,miembro1.cantidadDeSectoresDondeTrabaja());
-        Assertions.assertEquals(0,miembro1.cantidadDeOrganizacionesDondeTrabaja());
-        Assertions.assertEquals(false,unSector.esMiembro(miembro1));
-        Assertions.assertEquals(true,unSector.esPostulante(miembro1));
-        Assertions.assertEquals(false,miembro1.trabajaEnSector(unSector));
-
-        unaOrg.aceptarSolicitud(miembro1,unSector);
+        miembro1.solicitarIngresoAlSector(unSector);
 
         Assertions.assertEquals(1,miembro1.cantidadDeSectoresDondeTrabaja());
         Assertions.assertEquals(1,miembro1.cantidadDeOrganizacionesDondeTrabaja());
         Assertions.assertEquals(true,unSector.esMiembro(miembro1));
-        Assertions.assertEquals(false,unSector.esPostulante(miembro1));
         Assertions.assertEquals(true,miembro1.trabajaEnSector(unSector));
-
     }
 
     @Test
-    public void rechazoVinculoMiembroConOrganizacion() throws SectorException, MiembroException {
+    public void vinculoMiembroConOrganizacionYLoQuito() throws SectorException, MiembroException {
 
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
@@ -50,22 +40,19 @@ public class MiembroTest {
 
         Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",15F,10F));
 
-        unMiembro.solicitarIngreso(unSector);
+        unMiembro.solicitarIngresoAlSector(unSector);
+
+        Assertions.assertEquals(1,unMiembro.cantidadDeSectoresDondeTrabaja());
+        Assertions.assertEquals(1,unMiembro.cantidadDeOrganizacionesDondeTrabaja());
+        Assertions.assertEquals(true,unSector.esMiembro(unMiembro));
+        Assertions.assertEquals(true,unMiembro.trabajaEnSector(unSector));
+
+        unSector.quitarMiembro(unMiembro);
 
         Assertions.assertEquals(0,unMiembro.cantidadDeSectoresDondeTrabaja());
         Assertions.assertEquals(0,unMiembro.cantidadDeOrganizacionesDondeTrabaja());
         Assertions.assertEquals(false,unSector.esMiembro(unMiembro));
-        Assertions.assertEquals(true,unSector.esPostulante(unMiembro));
         Assertions.assertEquals(false,unMiembro.trabajaEnSector(unSector));
-
-        unaOrg.rechazarSolicitud(unMiembro,unSector);
-
-        Assertions.assertEquals(0,unMiembro.cantidadDeSectoresDondeTrabaja());
-        Assertions.assertEquals(0,unMiembro.cantidadDeOrganizacionesDondeTrabaja());
-        Assertions.assertEquals(false,unSector.esMiembro(unMiembro));
-        Assertions.assertEquals(false,unSector.esPostulante(unMiembro));
-        Assertions.assertEquals(false,unMiembro.trabajaEnSector(unSector));
-
     }
 
     @Test
@@ -77,11 +64,9 @@ public class MiembroTest {
         Sector unSector = new Sector("miSector",unaOrg);
         Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",10F,10F));
 
-        unMiembro.solicitarIngreso(unSector);
-        unaOrg.aceptarSolicitud(unMiembro,unSector);
+        unMiembro.solicitarIngresoAlSector(unSector);
 
-        Assertions.assertThrows(MiembroException.class,() -> unMiembro.solicitarIngreso(unSector));
-
+        Assertions.assertThrows(MiembroException.class,() -> unMiembro.solicitarIngresoAlSector(unSector));
     }
 
     @Test
@@ -97,16 +82,11 @@ public class MiembroTest {
 
         Assertions.assertEquals(0,unSector.cantidadMiembros());
 
-        miembro1.solicitarIngreso(unSector);
-        miembro2.solicitarIngreso(unSector);
-        miembro3.solicitarIngreso(unSector);
-
-        unaOrg.aceptarSolicitud(miembro1,unSector);
-        unaOrg.aceptarSolicitud(miembro2,unSector);
-        unaOrg.aceptarSolicitud(miembro3,unSector);
+        miembro1.solicitarIngresoAlSector(unSector);
+        miembro2.solicitarIngresoAlSector(unSector);
+        miembro3.solicitarIngresoAlSector(unSector);
 
         Assertions.assertEquals(3,unSector.cantidadMiembros());
-        
     }
 
 }
