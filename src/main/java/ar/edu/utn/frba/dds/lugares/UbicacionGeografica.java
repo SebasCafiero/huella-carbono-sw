@@ -1,12 +1,24 @@
 package ar.edu.utn.frba.dds.lugares;
 
-public class UbicacionGeografica { //TODO VER SI LO USAMOS PARA LA ORG Y LOS HOGARES (check diagrama)
-     //private static String pais; //="Argentina";
-    private String provincia;
-    private String barrio;
+public class UbicacionGeografica {
+    private String localidad;
+    private Coordenada coordenada;
 
-    public UbicacionGeografica() {
-        //this.pais = "Argentina";
+    public UbicacionGeografica(String lugar, Coordenada coordenada) {
+        this.localidad = lugar;
+        this.coordenada = coordenada;
+    }
+    public UbicacionGeografica(String lugar, Float latitud, Float longitud){
+        this.localidad = lugar;
+        this.coordenada = new Coordenada(latitud,longitud);
+    }
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public Coordenada getCoordenada() {
+        return coordenada;
     }
 
 }

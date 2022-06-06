@@ -3,6 +3,9 @@ package ar.edu.utn.frba.dds.personas;
 import ar.edu.utn.frba.dds.excepciones.MiembroException;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.lugares.Sector;
+import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
+import ar.edu.utn.frba.dds.trayectos.Trayecto;
+import com.sun.deploy.net.MessageHeader;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,20 +19,24 @@ public class Miembro {
     private TipoDeDocumento tipoDeDocumento;
     private int nroDocumento;
     private Set<Sector> sectoresDondeTrabaja; //Los sectores conocen las organizaciones
+    private List<Trayecto> trayectos;
+    private UbicacionGeografica domicilio; //Podria tener varios domicilios?
 
-    public Miembro(String nombre, String apellido, TipoDeDocumento tipoDeDocumento, int nroDocumento) {
+    public Miembro(String nombre, String apellido, TipoDeDocumento tipoDeDocumento, int nroDocumento, UbicacionGeografica hogar) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.tipoDeDocumento = tipoDeDocumento;
         this.nroDocumento = nroDocumento;
         this.sectoresDondeTrabaja = new HashSet<>();
+        this.trayectos = new ArrayList<>();
+        this.domicilio = hogar;
     }
 
     public Set<Sector> getSectoresDondeTrabaja() {
         return this.sectoresDondeTrabaja;
     }
 
-    public Set<Organizacion> organizacionesDondeTrabaja() { //TODO DEBERIA SER DIRECTAMENTE ATRIBUTO DEL MIEMBRO?
+    public Set<Organizacion> organizacionesDondeTrabaja(){
         return this.sectoresDondeTrabaja
                 .stream()
                 .map(sector -> sector.getOrganizacion())
@@ -53,9 +60,7 @@ public class Miembro {
     }
 
     public void solicitarIngreso(Sector sector) throws MiembroException {
-        //TODO
-        //Tendría que agregarse a la lista de postulantes del sector y
-        // cuando lo agreguen, sumar el sector a sectoresDondeTrabaja
+        //TODO ver de corregir segun la 1ra entrega (comunicarse con sector y no con la organizacion)
         if(sector.esMiembro(this))
             throw new MiembroException("El miembro ya pertenece a la organizacion");
         sector.agregarPostulante(this);
@@ -71,6 +76,12 @@ public class Miembro {
 
     public boolean trabajaEnSector(Sector unSector) {
         return this.sectoresDondeTrabaja.contains(unSector);
+    }
+
+    public void registrarTrayecto(Trayecto unTrayecto) {
+        this.trayectos.add(unTrayecto);
+        //registrar en cada organizacion en la que trabaja
+        this.sectoresDondeTrabaja.iterator().next().getOrganizacion().cargarTrayecto(unTrayecto,this);
     }
 }
 

@@ -14,7 +14,7 @@ public class OrganizacionTest {
         Organizacion unaOrg = new Organizacion("Una empresa",
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Escuela"),
-                "Buenos Aires");
+                new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
 
         Sector sistemas = new Sector("Sistemas", unaOrg);
 
@@ -28,7 +28,7 @@ public class OrganizacionTest {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 ONG,
                 new ClasificacionOrganizacion("GreenPeace"),
-                "miUbicacion");
+                new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
 
         Assertions.assertEquals(0,unaOrg.cantidadSectores());
         Sector sector1 = new Sector("sector1",unaOrg);

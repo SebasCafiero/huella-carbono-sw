@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.trayectos;
 
+import ar.edu.utn.frba.dds.lugares.Coordenada;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,14 @@ public class Trayecto {
 
     public List<Tramo> getTramos() {
         return tramos;
+    }
+
+    public Coordenada obtenerPuntoInicial(){
+        return tramos.get(0).getCoordenadaInicial(); //PONER EXCEPCION SI LISTA VACIA
+    }
+
+    public Coordenada obtenerPuntoFinal(){
+        return tramos.get(tramos.size()-1).getCoordenadaFinal(); //PONER EXCEPCION SI LISTA VACIA
     }
 
     public Float calcularDistancia(){
