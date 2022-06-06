@@ -45,11 +45,9 @@ public class Organizacion {
         sectores.add(sector);
     }
 
-    //Para que shallow copy?
-    public List<Sector> getListaDeSectores() {
-        List<Sector> shallowCopy = new ArrayList<Sector>();
-        shallowCopy.addAll(this.sectores);
-        return shallowCopy;
+
+    public HashSet<Sector> getListaDeSectores() {
+        return (HashSet<Sector>) this.sectores;
     }
 
     public void aceptarSolicitud(Miembro miembro, Sector sector) throws SectorException, MiembroException {
