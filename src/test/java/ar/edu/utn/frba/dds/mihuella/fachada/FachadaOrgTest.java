@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.mihuella.fachada;
 
-import ar.edu.utn.frba.dds.mediciones.CalculadoraHCOrganizacion;
+import ar.edu.utn.frba.dds.mihuella.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mediciones.Medicion;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class FachadaOrgTest {
@@ -17,7 +16,7 @@ public class FachadaOrgTest {
     void seObtieneCorrectamenteHC() throws Exception {
         HashMap<String, Float> fe = new HashMap<>();
         fe.put("Combustion Fija - Gas Natural", 1F);
-        CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion(fe);
+        FachadaOrganizacion calculadora = new FachadaOrganizacion(fe);
 
         List<Medible> mediciones = new ArrayList<Medible>();
         mediciones.add(new Medicion("Combustion Fija - Gas Natural", "m3", 100F));
@@ -27,7 +26,7 @@ public class FachadaOrgTest {
 
     @Test
     void fallaPorCategoriaInexistente() throws Exception {
-        CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion("src/test/resources/propiedades.csv");
+        FachadaOrganizacion calculadora = new FachadaOrganizacion("src/test/resources/propiedades.csv");
 
         List<Medible> mediciones = new ArrayList<Medible>();
         mediciones.add(new Medicion("Combustion - Gas", "m3", 100F));

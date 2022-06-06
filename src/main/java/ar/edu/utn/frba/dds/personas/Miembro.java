@@ -7,10 +7,7 @@ import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 import ar.edu.utn.frba.dds.trayectos.Trayecto;
 import com.sun.deploy.net.MessageHeader;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Miembro {
@@ -82,6 +79,50 @@ public class Miembro {
         this.trayectos.add(unTrayecto);
         //registrar en cada organizacion en la que trabaja
         this.sectoresDondeTrabaja.iterator().next().getOrganizacion().cargarTrayecto(unTrayecto,this);
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public TipoDeDocumento getTipoDeDocumento() {
+        return tipoDeDocumento;
+    }
+
+    public void setTipoDeDocumento(TipoDeDocumento tipoDeDocumento) {
+        this.tipoDeDocumento = tipoDeDocumento;
+    }
+
+    public Integer getNroDocumento() {
+        return nroDocumento;
+    }
+
+    public void setNroDocumento(int nroDocumento) {
+        this.nroDocumento = nroDocumento;
+    }
+
+    public Optional<Trayecto> getTrayecto(Integer index) {
+        if(trayectos.size() > index) {
+            return Optional.ofNullable(trayectos.get(index));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public void agregarTrayecto(Trayecto trayecto) {
+        trayectos.add(trayecto);
     }
 }
 

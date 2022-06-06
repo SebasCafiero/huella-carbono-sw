@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Trayecto {
+
+    private Integer id;
     private List<Tramo> tramos;
 
     public Trayecto(){
@@ -34,5 +36,9 @@ public class Trayecto {
 
     public Float calcularDistancia(){
         return tramos.stream().map(tramo->tramo.calcularDistancia()).reduce(0F,(tot,dist)->tot+dist);
+    }
+
+    public Object getId() {
+        return id;
     }
 }

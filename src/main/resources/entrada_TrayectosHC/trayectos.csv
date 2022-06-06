@@ -1,2 +1,8 @@
-Miembro, LatInicial, LongInicial, LatFinal, LongInicial
-22112345, 123.4, 123.4, 135.4, 135.4
+TrayID, MiembroID,  LatIni, LongIni,    LatFin, LongIni,    Tipo,       Atrb1,      Atrb2
+1,      1,          123.4,  123.4,      135.4,  135.4,      publico,    colectivo,  47
+1,      1,          135.4,  135.4,      146.4,  146.4,      publico,    tren,       sarmiento
+
+2,      1,          146.4,  146.4,      123.4,  123.4,      contratado, combi
+1,      2,          200.4,  200.4,      205.4,  205.4,      ecologico,       ,
+1,      2,          205.4,  205.4,      300.9,  300.9       publico,    subte,      A
+1,      2,          300.9,  300.9,      310.2,  310.2,      ecologico,       ,
