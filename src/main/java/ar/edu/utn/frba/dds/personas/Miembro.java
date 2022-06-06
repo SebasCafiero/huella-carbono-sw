@@ -49,21 +49,18 @@ public class Miembro {
 
     public void agregarSector(Sector sector) throws MiembroException {
         if(this.trabajaEnSector(sector))
-            throw new MiembroException("El miembro ya pertenece a ese sector");
+            throw new MiembroException("El miembro ya trabaja en ese sector");
         this.sectoresDondeTrabaja.add(sector);
     }
 
     public void quitarSector(Sector sector) throws MiembroException {
         if(!this.trabajaEnSector(sector))
-            throw new MiembroException("El miembro no pertenece a ese sector");
+            throw new MiembroException("El miembro no trabaja en ese sector");
         this.sectoresDondeTrabaja.remove(sector);
     }
 
-    public void solicitarIngreso(Sector sector) throws MiembroException {
-        //TODO ver de corregir segun la 1ra entrega (comunicarse con sector y no con la organizacion)
-        if(sector.esMiembro(this))
-            throw new MiembroException("El miembro ya pertenece a la organizacion");
-        sector.agregarPostulante(this);
+    public void solicitarIngresoAlSector(Sector sector) throws MiembroException {
+        sector.agregarMiembro(this);
     }
 
     public Integer cantidadDeSectoresDondeTrabaja() {
