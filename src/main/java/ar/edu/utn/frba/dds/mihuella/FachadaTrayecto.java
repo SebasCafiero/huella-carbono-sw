@@ -30,7 +30,7 @@ public class FachadaTrayecto {
     }
 
     public Optional<MedioDeTransporte> getMedioDeTransporte(String nombreMedio, String atrb1, String atrb2) {
-        return repoTransportes.findMedio(nombreMedio, atrb1, atrb2);
+        return repoTransportes.findMedio(nombreMedio.toLowerCase(), atrb1.toUpperCase(), atrb2);
     }
 
     public void cargarOrganizaciones(String stringJSON) throws Exception {
@@ -138,6 +138,20 @@ public class FachadaTrayecto {
                     System.out.print("\t\tNombre: " + unMiembro.getNombre());
                     System.out.print(", apellido: " + unMiembro.getApellido());
                     System.out.print(", documento: " + unMiembro.getNroDocumento());
+                    for(Trayecto trayecto : unMiembro.getTrayectos()) {
+                        System.out.println( "\t\t\tTrayecto: ");
+                        for(Tramo tramo : trayecto.getTramos()) {
+                            System.out.println( "\t\t\t\tTramo: ");
+                            System.out.println("\t\t\t\t\tCoor inicial: " +
+                                    tramo.getCoordenadaInicial().getLatitud().toString() + "-" +
+                                    tramo.getCoordenadaInicial().getLongitud().toString()
+                            );
+                            System.out.println("\t\t\t\t\tCoor final: " +
+                                    tramo.getCoordenadaFinal().getLatitud().toString() + "-" +
+                                    tramo.getCoordenadaFinal().getLongitud().toString()
+                            );
+                        }
+                    }
                     System.out.println();
                 }
             }
@@ -161,28 +175,29 @@ public class FachadaTrayecto {
     }
 
     public void cargarTrayecto(String[] parametros) throws Exception {
-        System.out.println("Cargo nuevo trayecto");
-
-        Miembro miembro = repoOrganizaciones.findMiembro(Integer.parseInt(parametros[1].trim())).
-                orElseThrow(Exception::new);
-
-        Trayecto trayecto;
-        Optional<Trayecto> optionalTrayecto = miembro.getTrayecto(Integer.valueOf(parametros[0]));
-        if(optionalTrayecto.isPresent()) {
-            trayecto = optionalTrayecto.get();
-        } else {
-            trayecto = new Trayecto();
-            miembro.agregarTrayecto(trayecto);
-        }
-
         String [] data = new String[9];
         int i = 0;
         for (String cell : parametros) {
-            data[i]=cell;
+            if(cell != null) {
+                data[i]=cell.trim();
+            }
             i++;
         }
 
-        MedioDeTransporte medioDeTransporte = getMedioDeTransporte(data[6].trim(), data[7].trim(), data[8].trim()).
+        Miembro miembro = repoOrganizaciones.findMiembro(Integer.parseInt(data[1].trim())).
+                orElseThrow(Exception::new);
+
+        Trayecto trayecto;
+        if(data[0].equals("1")) {
+            System.out.println("Cargo nuevo trayecto");
+            trayecto = new Trayecto();
+            miembro.agregarTrayecto(trayecto);
+        } else {
+            trayecto = miembro.getTrayecto(miembro.cantidadTrayectos());
+        }
+
+        System.out.println("Cargo nuevo tramo");
+        MedioDeTransporte medioDeTransporte = getMedioDeTransporte(data[6], data[7], data[8]).
                 orElseThrow(Exception::new);
 
         Coordenada coordenadaInicial = new Coordenada(Float.parseFloat(data[2]), Float.parseFloat(data[3]));
@@ -190,4 +205,5 @@ public class FachadaTrayecto {
 
         trayecto.agregarTramo(new Tramo(medioDeTransporte, coordenadaInicial, coordenadaFinal));
     }
+
 }

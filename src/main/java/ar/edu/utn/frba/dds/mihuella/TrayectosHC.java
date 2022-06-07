@@ -59,8 +59,7 @@ public class TrayectosHC {
         FachadaTrayecto fachadaTrayecto = new FachadaTrayecto();
         fachadaTrayecto.cargarOrganizaciones(organizacionesJSON);
         fachadaTrayecto.cargarTransportes(transportesJSON);
-        fachadaTrayecto.mostrarResultadosOrganizaciones();
-        fachadaTrayecto.mostrarResultadosTransportes();
+
 //        fachadaTrayecto.mostrarResultadosTransportes();
         System.out.println("Obtener trayectos");
 
@@ -71,6 +70,9 @@ public class TrayectosHC {
         while ((nextRecord = csvReader.readNext()) != null) {
             fachadaTrayecto.cargarTrayecto(nextRecord);
         }
+
+        fachadaTrayecto.mostrarResultadosOrganizaciones();
+        fachadaTrayecto.mostrarResultadosTransportes();
 
         try {
             PrintWriter writer = new PrintWriter("resources/salida_TrayectosHC/salida1.csv", "UTF-8");

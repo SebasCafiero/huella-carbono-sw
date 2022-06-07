@@ -113,16 +113,20 @@ public class Miembro {
         this.nroDocumento = nroDocumento;
     }
 
-    public Optional<Trayecto> getTrayecto(Integer index) {
-        if(trayectos.size() > index) {
-            return Optional.ofNullable(trayectos.get(index));
-        } else {
-            return Optional.empty();
-        }
+    public Trayecto getTrayecto(Integer index) {
+        return trayectos.get(index - 1);
     }
 
     public void agregarTrayecto(Trayecto trayecto) {
         trayectos.add(trayecto);
+    }
+
+    public Integer cantidadTrayectos() {
+        return trayectos.size();
+    }
+
+    public List<Trayecto> getTrayectos() {
+        return trayectos;
     }
 }
 
