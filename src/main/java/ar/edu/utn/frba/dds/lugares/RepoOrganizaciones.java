@@ -1,8 +1,6 @@
 package ar.edu.utn.frba.dds.lugares;
 
 import ar.edu.utn.frba.dds.personas.Miembro;
-import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
-import com.sun.org.apache.xpath.internal.operations.Or;
 
 import java.util.ArrayList;
 import java.util.List;
