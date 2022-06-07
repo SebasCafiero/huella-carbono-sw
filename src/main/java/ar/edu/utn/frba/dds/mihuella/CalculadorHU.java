@@ -1,9 +1,5 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-import ar.edu.utn.frba.dds.lugares.ClasificacionOrganizacion;
-import ar.edu.utn.frba.dds.lugares.Organizacion;
-import ar.edu.utn.frba.dds.lugares.TipoDeOrganizacionEnum;
-import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 import ar.edu.utn.frba.dds.mediciones.CalculadoraHCOrganizacion;
 import ar.edu.utn.frba.dds.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mediciones.Parser;
@@ -26,14 +22,10 @@ public class CalculadorHU {
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()
                 .defaultHelp(true)
                 .description("Calculate checksum of given files.");
-        parser.addArgument("-m1", "--mediciones1").required(true)
-                .help("Archivo de mediciones");
-        parser.addArgument("-m2", "--mediciones2").required(true)
+        parser.addArgument("-m", "--mediciones").required(true)
                 .help("Archivo de mediciones");
         parser.addArgument("-p", "--params").required(true)
                 .help("Archivo con parámetros de configuración");
-        parser.addArgument("-o", "--organizaciones").required(true)
-                .help("Archivo de mediciones");
         Namespace ns = null;
         try {
             ns = parser.parseArgs(args);
@@ -42,12 +34,23 @@ public class CalculadorHU {
             System.exit(1);
         }
 
+        System.out.println("Archivo de mediciones: " + ns.get("mediciones"));
+        System.out.println("Archivo de parametros: " + ns.get("params"));
         // calcular huella de las actividades y el total
-        List<Organizacion> organizaciones = Parser.generarOrganizaciones(ns.get("organizaciones"), ns);
+        CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion(ns.getString("params"));
+        List<Medible> mediciones = Parser.generarMediciones(ns.getString("mediciones"));
 
-        for( Organizacion organizacion : organizaciones){
-            System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + organizacion.obtenerHC(ns.getString("params")));
-        }
+        System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + calculadora.obtenerHU(mediciones));
+
+        /*
+        Collection<Medible> mediciones = parserMediciones.mapearArchivo(ns.getString("mediciones"));
+        Collection<FactorEmision> factoresDeEmision = ParserJSON.mapearArchivo(ns.getString("params"));
+
+        CalculadorHU calculadora = new CalculadorHU();
+        calculadora.factoresEmision = factoresDeEmision;
+        Float huellaCarbono = calculadora.obtenerHC(mediciones);
+
+         */
 
         System.out.println("Imprimir datos de las huellas");
     }
