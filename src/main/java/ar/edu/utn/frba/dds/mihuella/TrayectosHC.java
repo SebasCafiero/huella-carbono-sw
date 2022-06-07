@@ -126,10 +126,13 @@ public class TrayectosHC {
 
             organizaciones.stream().forEach(org -> {
                 String razonSocial = org.getRazonSocial();
-                Set<Miembro> miembros = org.miembros();
+                Set<Miembro> miembros = org.getMiembros();
                 miembros.stream().forEach(miembro -> {
                     Integer documento = miembro.getNroDocumento();
-                    Float impacto = 100*org.obtenerImpactoMiembro(miembro);
+                    // Float impacto = 100*org.obtenerImpactoMiembro(miembro);
+                    Float impacto = 100 * miembro.getTrayectos().stream().map(Trayecto::calcularDistancia).
+                            reduce( 0F,(acum,x) ->acum+x) / org.obtenerHCTrayectos();
+
                     writer.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
                 });
             });
@@ -138,20 +141,22 @@ public class TrayectosHC {
             e.printStackTrace();
         }
 
+        fachada.setFactorEmision("impresiones", 1F);
         try { //SALIDA 2
             PrintWriter writer = new PrintWriter("src/main/resources/salida_TrayectosHC/salida2.csv", "UTF-8");
             writer.println("Anio, Mes, Razon Social, Sector, Impacto/Cant Miembros");
 
             Integer anio = 2022;
             Integer mes = 06;
+            Float consumoPorImpresiones = fachada.getFactorEmision("impresiones");
 
             organizaciones.stream().forEach(org -> {
                 String razonSocial = org.getRazonSocial();
                 Set<Sector> sectores = org.getSectores();
                 sectores.stream().forEach(sector -> {
-                    String nombreSector = sector.getNombre();
-                    Float impacto = org.obtenerImpactoSector(sector);
-                    writer.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto);
+                    Float impacto = sector.obtenerConsumo(consumoPorImpresiones);
+                    writer.println(anio + ", " + mes + ", " + razonSocial + ", " + sector.getNombre() + ", " +
+                            impacto/sector.cantidadMiembros());
                 });
             });
             writer.close();

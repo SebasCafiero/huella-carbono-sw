@@ -32,7 +32,7 @@ public class Organizacion {
         this.trayectos = new HashMap<Miembro,Trayecto>();
     }
 
-    public Set<Miembro> miembros() {
+    public Set<Miembro> getMiembros() {
         //Hay que traer cada miembro de cada sector y que no hayan repetidos.
         return sectores
                 .stream()

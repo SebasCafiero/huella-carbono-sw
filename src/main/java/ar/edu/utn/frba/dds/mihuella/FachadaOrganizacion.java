@@ -45,6 +45,11 @@ public class FachadaOrganizacion implements FachadaOrg {
     }
 
     public void setFactorEmision(String nombreFactor, Float valor) {
-        //TODO
+        factorEmisionMap.put(nombreFactor, valor);
     }
+
+    public Float getFactorEmision(String nombreFactor) {
+        return factorEmisionMap.get(nombreFactor);
+    }
+
 }
