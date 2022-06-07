@@ -1,7 +1,12 @@
 package ar.edu.utn.frba.dds.mediciones;
 
+import ar.edu.utn.frba.dds.lugares.ClasificacionOrganizacion;
+import ar.edu.utn.frba.dds.lugares.Organizacion;
+import ar.edu.utn.frba.dds.lugares.TipoDeOrganizacionEnum;
+import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import com.opencsv.CSVReader;
+import net.sourceforge.argparse4j.inf.Namespace;
 
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -57,6 +62,35 @@ public class Parser {
         }
 
         return factorEmision;
+    }
+    public static List<Organizacion> generarOrganizaciones(String archivo, Namespace ns) throws Exception {
+
+        FileReader fileDescriptor;
+        List<Organizacion> organizaciones = new ArrayList<>();
+        try {
+            fileDescriptor = new FileReader(archivo);
+            CSVReader csvReader = new CSVReader(fileDescriptor);
+            String[] nextRecord;
+
+            while ((nextRecord = csvReader.readNext()) != null) {
+                String [] data = new String[7];
+                int i = 0;
+                for (String cell : nextRecord) {
+                    data[i]=cell;
+                    i++;
+                }
+                Organizacion organizacion = new Organizacion(data[0], TipoDeOrganizacionEnum.valueOf(data[1]), new ClasificacionOrganizacion(data[2]), new UbicacionGeografica(data[3], Float.parseFloat(data[4]), Float.parseFloat(data[5])));
+                List<Medible> mediciones = Parser.generarMediciones(ns.getString(data[6]));
+                organizacion.agregarMediciones(mediciones);
+                organizaciones.add(organizacion);
+            }
+
+        }
+        catch (Exception e) {
+            throw new Exception("El archivo no existe");
+        }
+
+        return organizaciones;
     }
 
     private static List<Medible> generarMedicionesCSV(FileReader archivo) {

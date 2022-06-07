@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.lugares;
 
 import ar.edu.utn.frba.dds.excepciones.MiembroException;
 import ar.edu.utn.frba.dds.excepciones.SectorException;
+import ar.edu.utn.frba.dds.mediciones.CalculadoraHCOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.trayectos.Trayecto;
@@ -65,8 +66,10 @@ public class Organizacion {
         return this.sectores.size();
     }
 
-    public Float obtenerHC(LocalDate fechaInicial, LocalDate fechaFinal) {
-        return 0.0f;
+    public Float obtenerHC(/*LocalDate fechaInicial, LocalDate fechaFinal,*/ String archivo) throws Exception {
+        CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion(archivo);
+
+        return calculadora.obtenerHU(this.mediciones);
     }
 
     public void cargarTrayecto(Trayecto unTrayecto, Miembro unMiembro) {
@@ -77,6 +80,10 @@ public class Organizacion {
         //PARA PRUEBITA, FALTA ARREGLAR TODO
         List<Trayecto> listaTrayectos = new ArrayList<Trayecto>(this.trayectos.values());
         return listaTrayectos.get(0).calcularDistancia();
+    }
+
+    public void agregarMediciones(List<Medible> variasMediciones) {
+        this.mediciones = variasMediciones;
     }
 
 }
