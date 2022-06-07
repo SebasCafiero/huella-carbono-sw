@@ -8,13 +8,13 @@ public class Tramo {
     private Coordenada coordenadaInicial;
     private Coordenada coordenadaFinal;
 
-    public Tramo(MedioDeTransporte medioDeTransporte, Coordenada coordInicial, Coordenada coordFinal){
+    public Tramo(MedioDeTransporte medioDeTransporte, Coordenada coordInicial, Coordenada coordFinal) {
         this.medioDeTransporte = medioDeTransporte;
         this.coordenadaInicial = coordInicial;
         this.coordenadaFinal = coordFinal;
     }
 
-    public MedioDeTransporte getMedioDeTransporte(){
+    public MedioDeTransporte getMedioDeTransporte() {
         return medioDeTransporte;
     }
 
@@ -26,8 +26,14 @@ public class Tramo {
         return coordenadaFinal;
     }
 
-    public Float calcularDistancia(){
+    public Float calcularDistancia() {
         return medioDeTransporte.calcularDistancia(this);
+    }
+
+    public Boolean equals(Tramo tramo) {
+        return this.medioDeTransporte.equals(tramo.getMedioDeTransporte())
+                && this.coordenadaInicial.esIgualAOtraCoordenada(tramo.coordenadaInicial)
+                && this.coordenadaFinal.esIgualAOtraCoordenada(tramo.coordenadaFinal);
     }
 
 }

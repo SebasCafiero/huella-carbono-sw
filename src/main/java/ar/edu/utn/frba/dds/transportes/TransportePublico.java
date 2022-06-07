@@ -42,4 +42,15 @@ public class TransportePublico extends MedioDeTransporte{
                 .findFirst()
                 .orElse(null);
     }
+
+    public String getLinea() {
+        return linea;
+    }
+
+    public TipoTransportePublico getTipo() {
+        return tipo;
+    }
+    public Boolean equals( TransportePublico trasportePublico){
+        return this.tipo.equals(trasportePublico.getTipo()) && this.linea.equals(trasportePublico.getLinea());
+    }
 }

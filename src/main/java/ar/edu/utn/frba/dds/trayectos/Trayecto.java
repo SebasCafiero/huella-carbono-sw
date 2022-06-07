@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.lugares.Coordenada;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Trayecto {
     private List<Tramo> tramos;
@@ -34,5 +35,14 @@ public class Trayecto {
 
     public Float calcularDistancia(){
         return tramos.stream().map(tramo->tramo.calcularDistancia()).reduce(0F,(tot,dist)->tot+dist);
+    }
+
+    public Boolean tramosCompartidos( Trayecto trayecto ){
+
+        Stream<Tramo> tramosActuales = (Stream) tramos;
+        Stream<Tramo> otrosTramos = (Stream) trayecto.getTramos();
+
+        return  tramosActuales.anyMatch(t1 -> otrosTramos.anyMatch( t2 -> t2.equals(t1)));
+
     }
 }
