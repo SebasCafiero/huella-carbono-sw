@@ -107,4 +107,36 @@ public class Organizacion {
         }
         return true;
     }
+
+    public Float obtenerImpactoMiembro(Miembro miembro) {
+        //VER SI DEBERIA ESTAR EN FACHADA EN VEZ DE ACA
+        Float impacto = 0F;
+
+        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
+            if(mt.getKey().getNroDocumento().equals(miembro.getNroDocumento()))
+                impacto += mt.getValue().calcularDistancia();
+        }
+        return impacto/obtenerHCTrayectos();
+    }
+
+    public Float obtenerImpactoSector(Sector sector){
+        //VER SI DEBERIA ESTAR EN FACHADA EN VEZ DE ACA
+        Float impacto = 0F;
+
+        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
+            if(mt.getKey().trabajaEnSector(sector))
+                impacto += mt.getValue().calcularDistancia();
+        }
+        return obtenerHCTrayectos()/sector.cantidadMiembros();
+    }
+
+    public Float obtenerHCTrayectos() {
+        Float huellaTrayectos = 0F;
+
+        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
+            huellaTrayectos += mt.getValue().calcularDistancia();
+        }
+
+        return huellaTrayectos;
+    }
 }

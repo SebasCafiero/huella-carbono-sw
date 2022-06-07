@@ -13,6 +13,6 @@ public class CalculadoraDistanciasAdapter implements CalculadoraDistancias{
         Float latitudFinal = coordenadaFinal.getLatitud();
         Float longitudFinal = coordenadaFinal.getLongitud();
         //return servicioExterno.distancia(latitudInicial,longitudInicial,latitudFinal,longitudFinal); //Devuelve unidad KM
-        return latitudFinal-latitudInicial+longitudFinal-longitudInicial;
+        return Math.abs(latitudFinal-latitudInicial)+Math.abs(longitudFinal-longitudInicial);
     }
 }

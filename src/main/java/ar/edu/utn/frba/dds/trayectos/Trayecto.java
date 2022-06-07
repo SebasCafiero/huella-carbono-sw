@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.trayectos;
 import ar.edu.utn.frba.dds.lugares.Coordenada;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Trayecto {
@@ -12,6 +13,11 @@ public class Trayecto {
 
     public Trayecto(){
         tramos = new ArrayList<>();
+    }
+
+    public Trayecto(Tramo... tramos){
+        this.tramos = new ArrayList<>();
+        Collections.addAll(this.tramos,tramos);
     }
 
     public void agregarTramos(List<Tramo> tramos){
