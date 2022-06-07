@@ -1,29 +1,76 @@
 [
   {
-    "transporte": "NombreTransporte",
-    "parada" : 0,
-    "latitud" : 123.4,
-    "longitud" : 23123.6
+    "transporte": "Tachero",
+    "tipo" : "contratado",
+    "subtipo" : "TAXI"
   },
   {
-    "transporte": "NombreTransporte",
-    "parada" : 1,
-    "latitud" : 135.4,
-    "longitud" : 2323.2
-  },
-  {
-    "transporte": "NombreTransporte",
+    "transporte": "El 47",
+    "tipo" : "publico",
+    "subtipo" : "COLECTIVO",
+    "linea" : "47",
     "paradas" : [
       {
-        "numero" : 0,
         "latitud" : 123.4,
-        "longitud" : 23123.6
+        "longitud" : 123.4,
+        "distanciaAnterior" : 0.0,
+        "distanciaProxima" : 7.0
       },
       {
-        "numero" : 0,
-        "latitud" : 123.4,
-        "longitud" : 23123.6
+        "latitud" : 129.0,
+        "longitud" : 129.0,
+        "distanciaAnterior" : 7.0,
+        "distanciaProxima" : 8.0
+      },
+      {
+        "latitud" : 135.4,
+        "longitud" : 135.4,
+        "distanciaAnterior" : 8.0,
+        "distanciaProxima" : 0
       }
     ]
+  },
+  {
+    "transporte": "El tren",
+    "tipo": "publico",
+    "subtipo": "TREN",
+    "linea": "sarmiento",
+    "paradas": [
+      {
+        "latitud": 120.4,
+        "longitud": 120.4,
+        "distanciaAnterior": 0.0,
+        "distanciaProxima": 25.0
+      },
+      {
+        "latitud": 135.4,
+        "longitud": 135.4,
+        "distanciaAnterior": 25.0,
+        "distanciaProxima": 15.0
+      },
+      {
+        "latitud": 146.4,
+        "longitud": 146.4,
+        "distanciaAnterior": 15.0,
+        "distanciaProxima": 25.3
+      },
+      {
+        "latitud": 160.4,
+        "longitud": 160.4,
+        "distanciaAnterior": 25.3,
+        "distanciaProxima": 0
+      }
+    ]
+  },
+  {
+    "transporte": "El tío Alberto",
+    "tipo" : "particular",
+    "subtipo" : "AUTOMOVIL",
+    "combustible" : "GNC"
+  },
+  {
+    "transporte": "Forest Gump",
+    "tipo" : "ecologico",
+    "subtipo" : "BICICLETA"
   }
 ]

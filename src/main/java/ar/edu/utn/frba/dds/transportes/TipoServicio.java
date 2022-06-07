@@ -6,6 +6,10 @@ public class TipoServicio {
     public TipoServicio(String nombre){
         this.nombre = nombre;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
 }
 
 /* Ejemplos de uso:

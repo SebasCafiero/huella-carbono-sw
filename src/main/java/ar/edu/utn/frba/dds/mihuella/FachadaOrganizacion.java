@@ -1,22 +1,23 @@
-package ar.edu.utn.frba.dds.mediciones;
+package ar.edu.utn.frba.dds.mihuella;
 
+import ar.edu.utn.frba.dds.mediciones.Parser;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrg;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 
 import java.util.*;
 
-public class CalculadoraHCOrganizacion implements FachadaOrg {
+public class FachadaOrganizacion implements FachadaOrg {
     private static Map<String, Float> factorEmisionMap;
 
-    public CalculadoraHCOrganizacion() {
+    public FachadaOrganizacion() {
         factorEmisionMap  = new HashMap<String, Float>();
     }
 
-    public CalculadoraHCOrganizacion(String archivo) throws Exception{
+    public FachadaOrganizacion(String archivo) throws Exception{
         factorEmisionMap = Parser.generarFE(archivo);
     }
 
-    public CalculadoraHCOrganizacion(Map<String, Float> parametrosSistema) throws Exception {
+    public FachadaOrganizacion(Map<String, Float> parametrosSistema) throws Exception {
         factorEmisionMap = parametrosSistema;
     }
 

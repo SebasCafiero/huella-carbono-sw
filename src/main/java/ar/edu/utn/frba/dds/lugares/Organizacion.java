@@ -79,4 +79,32 @@ public class Organizacion {
         return listaTrayectos.get(0).calcularDistancia();
     }
 
+    public String getRazonSocial() {
+        return razonSocial;
+    }
+
+    public TipoDeOrganizacionEnum getTipo() {
+        return tipo;
+    }
+
+    public UbicacionGeografica getUbicacion() {
+        return ubicacion;
+    }
+
+    public ClasificacionOrganizacion getClasificacionOrganizacion() {
+        return clasificacionOrganizacion;
+    }
+
+    public Set<Sector> getSectores() {
+        return sectores;
+    }
+
+    public static boolean existeTipoOrganizacion(String tipo) {
+        try {
+            TipoDeOrganizacionEnum tipoDeOrganizacion = TipoDeOrganizacionEnum.valueOf(tipo);
+        } catch(IllegalArgumentException ex) {
+            return false;
+        }
+        return true;
+    }
 }

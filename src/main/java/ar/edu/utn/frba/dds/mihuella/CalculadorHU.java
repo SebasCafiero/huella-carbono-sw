@@ -1,17 +1,12 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-import ar.edu.utn.frba.dds.mediciones.CalculadoraHCOrganizacion;
-import ar.edu.utn.frba.dds.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mediciones.Parser;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
-import com.opencsv.CSVReader;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
-import java.io.FileReader;
-import java.util.Collection;
 import java.util.List;
 
 public class CalculadorHU {
@@ -37,7 +32,7 @@ public class CalculadorHU {
         System.out.println("Archivo de mediciones: " + ns.get("mediciones"));
         System.out.println("Archivo de parametros: " + ns.get("params"));
         // calcular huella de las actividades y el total
-        CalculadoraHCOrganizacion calculadora = new CalculadoraHCOrganizacion(ns.getString("params"));
+        FachadaOrganizacion calculadora = new FachadaOrganizacion(ns.getString("params"));
         List<Medible> mediciones = Parser.generarMediciones(ns.getString("mediciones"));
 
         System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + calculadora.obtenerHU(mediciones));
