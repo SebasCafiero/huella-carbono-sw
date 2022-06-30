@@ -2,25 +2,20 @@ package ar.edu.utn.frba.dds.mihuella;
 
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrg;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
+import ar.edu.utn.frba.dds.repositories.RepoFactores;
 
 import java.util.*;
 
 public class FachadaOrganizacion implements FachadaOrg {
-    private static Map<String, Float> factorEmisionMap;
+    private RepoFactores repoFactores;
 
     public FachadaOrganizacion() {
-        factorEmisionMap  = new HashMap<String, Float>();
-    }
-
-    public FachadaOrganizacion(Map<String, Float> parametrosSistema) throws Exception {
-        factorEmisionMap = parametrosSistema;
-//        factorEmisionMap = new HashMap<>();
-//        this.cargarParametros(parametrosSistema);
+        repoFactores = RepoFactores.getInstance();
     }
 
     @Override
     public void cargarParametros(Map<String, Float> parametrosSistema) {
-        factorEmisionMap.putAll(parametrosSistema);
+        this.repoFactores.putAll(parametrosSistema);
     }
 
     @Override
@@ -30,7 +25,7 @@ public class FachadaOrganizacion implements FachadaOrg {
             String categoria = medicion.getCategoria();
 
             try{
-                huTotal = (this.factorEmisionMap.get(categoria) * medicion.getValor()) + huTotal;
+                huTotal = (this.repoFactores.getValor(categoria) * medicion.getValor()) + huTotal;
                 //System.out.println("Dato actividad " + categoria + ": " + medicion.getValor().toString();
             }
             catch (NullPointerException e){
@@ -42,6 +37,6 @@ public class FachadaOrganizacion implements FachadaOrg {
     }
 
     public void setFactorEmision(String nombreFactor, Float valor) {
-        //TODO
+        this.repoFactores.setValor(nombreFactor, valor);
     }
 }

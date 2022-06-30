@@ -19,7 +19,8 @@ public class FachadaOrgTest {
     void seObtieneCorrectamenteHC() throws Exception {
         HashMap<String, Float> fe = new HashMap<>();
         fe.put("Combustion Fija - Gas Natural", 1F);
-        FachadaOrganizacion calculadora = new FachadaOrganizacion(fe);
+        FachadaOrganizacion calculadora = new FachadaOrganizacion();
+        calculadora.cargarParametros(fe);
 
         List<Medible> mediciones = new ArrayList<Medible>();
         Categoria cat = new Categoria("Combustion Fija","Gas Natural");
@@ -31,7 +32,8 @@ public class FachadaOrgTest {
     @Test
     void fallaPorCategoriaInexistente() throws Exception {
         Map<String,Float> factoresDeEmision = Parser.generarFE("src/main/resources/propiedades.csv");
-        FachadaOrganizacion calculadora = new FachadaOrganizacion(factoresDeEmision);
+        FachadaOrganizacion calculadora = new FachadaOrganizacion();
+        calculadora.cargarParametros(factoresDeEmision);
 
         List<Medible> mediciones = new ArrayList<Medible>();
         Categoria cat = new Categoria("Combustion","Gas");

@@ -73,7 +73,8 @@ public class TrayectosHC {
 
 
         Map<String,Float> factoresDeEmision = Parser.generarFE("src/main/resources/propiedades.csv");
-        FachadaOrganizacion fachada = new FachadaOrganizacion(factoresDeEmision);
+        FachadaOrganizacion fachada = new FachadaOrganizacion();
+        fachada.cargarParametros(factoresDeEmision);
 
         Float hcOrg = fachada.obtenerHU(Parser.generarMediciones("src/main/resources/mediciones.csv"));
         List<Organizacion> organizaciones = fachadaTrayecto.repoOrganizaciones.getOrganizaciones();

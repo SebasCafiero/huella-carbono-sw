@@ -34,7 +34,8 @@ public class CalculadorHU {
         // calcular huella de las actividades y el total
 
         Map<String,Float> factoresDeEmision = Parser.generarFE(ns.getString("params")); //TODO esto es lo que deciamos que tenia que estar directo en Fachada?
-        FachadaOrganizacion calculadora = new FachadaOrganizacion(factoresDeEmision);
+        FachadaOrganizacion calculadora = new FachadaOrganizacion();
+        calculadora.cargarParametros(factoresDeEmision);
         List<Medible> mediciones = Parser.generarMediciones(ns.getString("mediciones"));
         Float huellaCarbono = calculadora.obtenerHU(mediciones);
 
