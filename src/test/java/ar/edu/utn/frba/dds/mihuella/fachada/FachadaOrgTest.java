@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.mihuella.fachada;
 
+import ar.edu.utn.frba.dds.mediciones.Categoria;
+import ar.edu.utn.frba.dds.mediciones.Parser;
 import ar.edu.utn.frba.dds.mihuella.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mediciones.Medicion;
 import org.junit.jupiter.api.Assertions;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class FachadaOrgTest {
@@ -19,17 +22,20 @@ public class FachadaOrgTest {
         FachadaOrganizacion calculadora = new FachadaOrganizacion(fe);
 
         List<Medible> mediciones = new ArrayList<Medible>();
-        mediciones.add(new Medicion("Combustion Fija - Gas Natural", "m3", 100F));
+        Categoria cat = new Categoria("Combustion Fija","Gas Natural");
+        mediciones.add(new Medicion(cat, "m3", 100F));
 
         Assertions.assertEquals(100, calculadora.obtenerHU(mediciones), 1);
     }
 
     @Test
     void fallaPorCategoriaInexistente() throws Exception {
-        FachadaOrganizacion calculadora = new FachadaOrganizacion("src/test/resources/propiedades.csv");
+        Map<String,Float> factoresDeEmision = Parser.generarFE("src/main/resources/propiedades.csv");
+        FachadaOrganizacion calculadora = new FachadaOrganizacion(factoresDeEmision);
 
         List<Medible> mediciones = new ArrayList<Medible>();
-        mediciones.add(new Medicion("Combustion - Gas", "m3", 100F));
+        Categoria cat = new Categoria("Combustion","Gas");
+        mediciones.add(new Medicion(cat, "m3", 100F));
 
         Assertions.assertThrows(Exception.class,() -> calculadora.obtenerHU(mediciones));
     }

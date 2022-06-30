@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.mihuella;
 
 import ar.edu.utn.frba.dds.lugares.*;
 import ar.edu.utn.frba.dds.mediciones.Parser;
-import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.transportes.*;
@@ -14,16 +13,16 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.*;
 
 public class TrayectosHC {
+
+    private static final String SALIDA_1_PATH = "src/main/resources/salida_TrayectosHC/salida1.csv";
+    private static final String SALIDA_2_PATH = "src/main/resources/salida_TrayectosHC/salida2.csv";
 
     public static void main(String[] args) throws Exception {
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()
@@ -53,7 +52,7 @@ public class TrayectosHC {
         String transportesJSON = new JSONParser().parse(
                 new FileReader(ns.getString("transportes"))).toString();
 
-        FachadaTrayecto fachadaTrayecto = new FachadaTrayecto();
+        UtilidadesTrayecto fachadaTrayecto = new UtilidadesTrayecto();
         fachadaTrayecto.cargarOrganizaciones(organizacionesJSON);
         fachadaTrayecto.cargarTransportes(transportesJSON);
 
@@ -73,7 +72,9 @@ public class TrayectosHC {
 
 
 
-        FachadaOrganizacion fachada = new FachadaOrganizacion("src/main/resources/propiedades.csv");
+        Map<String,Float> factoresDeEmision = Parser.generarFE("src/main/resources/propiedades.csv");
+        FachadaOrganizacion fachada = new FachadaOrganizacion(factoresDeEmision);
+
         Float hcOrg = fachada.obtenerHU(Parser.generarMediciones("src/main/resources/mediciones.csv"));
         List<Organizacion> organizaciones = fachadaTrayecto.repoOrganizaciones.getOrganizaciones();
         //TODO HAY QUE ASOCIAR EL REPO TRAYECTOS CON SUS ORGANIZACIONES
@@ -116,7 +117,7 @@ public class TrayectosHC {
 
 
         try { //SALIDA 1
-            PrintWriter writer = new PrintWriter("src/main/resources/salida_TrayectosHC/salida1.csv", "UTF-8");
+            PrintWriter writer = new PrintWriter(SALIDA_1_PATH, "UTF-8");
             writer.println("Anio, Mes, Razon Social, DNI, Impacto");
 
 
@@ -139,7 +140,7 @@ public class TrayectosHC {
         }
 
         try { //SALIDA 2
-            PrintWriter writer = new PrintWriter("src/main/resources/salida_TrayectosHC/salida2.csv", "UTF-8");
+            PrintWriter writer = new PrintWriter(SALIDA_2_PATH, "UTF-8");
             writer.println("Anio, Mes, Razon Social, Sector, Impacto/Cant Miembros");
 
             Integer anio = 2022;

@@ -1,25 +1,26 @@
 package ar.edu.utn.frba.dds.mediciones;
 
+import ar.edu.utn.frba.dds.excepciones.FechaException;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 
 import java.time.LocalDate;
 
 public class Medicion implements Medible {
-    private String categoria;
+    private Categoria categoria;
     private String unidad;
     private Character periodicidad; // M o A
     private Float valor;
     private String periodo; // MM/AAAA o AAAA
     private LocalDate fecha; // AAAA-MM-DD
 
-    public Medicion(String categoria, String unidad, Float valor) {
+    public Medicion(Categoria categoria, String unidad, Float valor) {
         this.categoria = categoria;
         this.unidad = unidad;
         this.valor = valor;
     }
 
 
-    public Medicion(String categoria, String unidad, Float valor, String periodicidad, String periodo) throws Exception {
+    public Medicion(Categoria categoria, String unidad, Float valor, String periodicidad, String periodo) throws Exception {
         this.categoria = categoria;
         this.unidad = unidad;
         this.valor = valor;
@@ -33,7 +34,7 @@ public class Medicion implements Medible {
             this.fecha = LocalDate.parse(periodo + "-01-01");
             //this.fecha = LocalDate.of(Integer.parseInt(periodo),1,1);
         }
-        else throw new Exception("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO
+        else throw new FechaException("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO
     }
 
 
@@ -49,6 +50,6 @@ public class Medicion implements Medible {
 
     @Override
     public String getCategoria() {
-        return categoria;
+        return categoria.toString();
     }
 }

@@ -2,3 +2,8 @@
 "Combustion Fija", "Diesel", "ls", "2"
 "Combustion Movil", "Gasoil", "ls", "3"
 "Electricidad", "Electricidad", "kwh", "4"
+"Traslado de Miembros a la Organizacion", "Transporte Privado" - "GNC", "lts", "100"
+"Traslado de Miembros a la Organizacion", "Transporte Privado" - "NAFTA", "lts", "150"
+"Traslado de Miembros a la Organizacion", "Transporte Privado" - "ELECTRICO", "kmh", "15"
+"Traslado de Miembros a la Organizacion", "Transporte Publico" - "TREN", "kmh", "200"
+"Traslado de Miembros a la Organizacion", "Transporte Publico" - "SUBTE", "kmh", "250"

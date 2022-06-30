@@ -1,12 +1,16 @@
 package ar.edu.utn.frba.dds.trayectos;
 
 import ar.edu.utn.frba.dds.lugares.Coordenada;
+import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
 
-public class Tramo {
+import java.util.List;
+
+public class Tramo implements Medible {
     private MedioDeTransporte medioDeTransporte;
     private Coordenada coordenadaInicial;
     private Coordenada coordenadaFinal;
+    private List<Trayecto> trayectos;
 
     public Tramo(MedioDeTransporte medioDeTransporte, Coordenada coordInicial, Coordenada coordFinal){
         this.medioDeTransporte = medioDeTransporte;
@@ -30,4 +34,18 @@ public class Tramo {
         return medioDeTransporte.calcularDistancia(this);
     }
 
+    @Override
+    public String getUnidad() {
+        return null;
+    }
+
+    @Override
+    public Float getValor() {
+        return null;
+    }
+
+    @Override
+    public String getCategoria() {
+        return null;
+    }
 }

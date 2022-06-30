@@ -73,7 +73,8 @@ public class Parser {
                     data[i]=cell;
                     i++;
                 }
-                mediciones.add(new Medicion(data[0]+" - "+data[1], data[2], Float.parseFloat(data[3]), data[4],data[5]));
+                Categoria cat = new Categoria(data[0],data[1]);
+                mediciones.add(new Medicion(cat, data[2], Float.parseFloat(data[3]), data[4],data[5]));
             }
         }
         catch (Exception e) {

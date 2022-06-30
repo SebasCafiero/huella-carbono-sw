@@ -8,11 +8,11 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 import java.util.List;
+import java.util.Map;
 
 public class CalculadorHU {
 
     public static void main(String[] args) throws Exception {
-
 
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()
                 .defaultHelp(true)
@@ -32,20 +32,13 @@ public class CalculadorHU {
         System.out.println("Archivo de mediciones: " + ns.get("mediciones"));
         System.out.println("Archivo de parametros: " + ns.get("params"));
         // calcular huella de las actividades y el total
-        FachadaOrganizacion calculadora = new FachadaOrganizacion(ns.getString("params"));
+
+        Map<String,Float> factoresDeEmision = Parser.generarFE(ns.getString("params")); //TODO esto es lo que deciamos que tenia que estar directo en Fachada?
+        FachadaOrganizacion calculadora = new FachadaOrganizacion(factoresDeEmision);
         List<Medible> mediciones = Parser.generarMediciones(ns.getString("mediciones"));
+        Float huellaCarbono = calculadora.obtenerHU(mediciones);
 
-        System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + calculadora.obtenerHU(mediciones));
-
-        /*
-        Collection<Medible> mediciones = parserMediciones.mapearArchivo(ns.getString("mediciones"));
-        Collection<FactorEmision> factoresDeEmision = ParserJSON.mapearArchivo(ns.getString("params"));
-
-        CalculadorHU calculadora = new CalculadorHU();
-        calculadora.factoresEmision = factoresDeEmision;
-        Float huellaCarbono = calculadora.obtenerHC(mediciones);
-
-         */
+        System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + huellaCarbono);
 
         System.out.println("Imprimir datos de las huellas");
     }
