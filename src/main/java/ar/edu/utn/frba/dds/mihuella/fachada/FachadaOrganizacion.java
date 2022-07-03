@@ -1,5 +1,6 @@
-package ar.edu.utn.frba.dds.mihuella;
+package ar.edu.utn.frba.dds.mihuella.fachada;
 
+import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrg;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
@@ -19,17 +20,17 @@ public class FachadaOrganizacion implements FachadaOrg {
     }
 
     @Override
-    public Float obtenerHU(Collection<Medible> mediciones) throws Exception {
+    public Float obtenerHU(Collection<Medible> mediciones) throws MedicionSinFactorEmisionException {
         Float huTotal = 0F;
         for(Medible medicion : mediciones){
             String categoria = medicion.getCategoria();
 
             try{
                 huTotal = (this.repoFactores.getValor(categoria) * medicion.getValor()) + huTotal;
-                //System.out.println("Dato actividad " + categoria + ": " + medicion.getValor().toString();
+                System.out.println("Dato actividad " + categoria + ": " + medicion.getValor().toString());
             }
             catch (NullPointerException e){
-                throw new Exception("FE de categoria no cargada");
+                throw new MedicionSinFactorEmisionException(categoria);
             }
 
         }

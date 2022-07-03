@@ -29,7 +29,7 @@ public class Organizacion {
         this.clasificacionOrganizacion = clasificacionOrganizacion;
         this.sectores = new HashSet<>();
         this.mediciones = new ArrayList<>();
-        this.trayectos = new HashMap<Miembro,Trayecto>();
+//        this.trayectos = new HashMap<Miembro,Trayecto>();
     }
 
     public Set<Miembro> miembros() {

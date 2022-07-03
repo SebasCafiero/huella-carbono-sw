@@ -1,18 +1,22 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-import ar.edu.utn.frba.dds.mediciones.Parser;
+import ar.edu.utn.frba.dds.excepciones.FechaException;
+import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
+import ar.edu.utn.frba.dds.mihuella.parsers.ParserMedicionesCSV;
+import ar.edu.utn.frba.dds.mihuella.parsers.ParserParametrosCSV;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 public class CalculadorHU {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()
                 .defaultHelp(true)
@@ -31,16 +35,33 @@ public class CalculadorHU {
 
         System.out.println("Archivo de mediciones: " + ns.get("mediciones"));
         System.out.println("Archivo de parametros: " + ns.get("params"));
-        // calcular huella de las actividades y el total
 
-        Map<String,Float> factoresDeEmision = Parser.generarFE(ns.getString("params")); //TODO esto es lo que deciamos que tenia que estar directo en Fachada?
+        Map<String,Float> factoresDeEmision;
+        List<Medible> mediciones;
+        try {
+            factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
+            mediciones = new ParserMedicionesCSV().generarMediciones(ns.getString("mediciones"));
+        } catch (IOException | FechaException ex) {
+            System.out.println(ex.getMessage());
+            return;
+        }
+
         FachadaOrganizacion calculadora = new FachadaOrganizacion();
         calculadora.cargarParametros(factoresDeEmision);
-        List<Medible> mediciones = Parser.generarMediciones(ns.getString("mediciones"));
-        Float huellaCarbono = calculadora.obtenerHU(mediciones);
 
-        System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + huellaCarbono);
+//        Si quiero hacer un filtro sobre las mediciones de la organizacion, por ejemplo, por periodicidad,
+//        debo hacerlo aqui
+//        mediciones.stream().filter(x -> x.get ...).collect(Collections.toList());
 
+        Float hcOrg;
+        try {
+            hcOrg = calculadora.obtenerHU(mediciones);
+        } catch(MedicionSinFactorEmisionException ex) {
+            System.out.println("No hay factor de emision definido para la categoria '" + ex.getCategoria() + "'");
+            return;
+        }
+
+        System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + hcOrg);
         System.out.println("Imprimir datos de las huellas");
     }
 

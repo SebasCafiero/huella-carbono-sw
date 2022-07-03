@@ -20,7 +20,7 @@ public class Medicion implements Medible {
     }
 
 
-    public Medicion(Categoria categoria, String unidad, Float valor, String periodicidad, String periodo) throws Exception {
+    public Medicion(Categoria categoria, String unidad, Float valor, String periodicidad, String periodo) throws FechaException {
         this.categoria = categoria;
         this.unidad = unidad;
         this.valor = valor;
@@ -36,7 +36,6 @@ public class Medicion implements Medible {
         }
         else throw new FechaException("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO
     }
-
 
     @Override
     public String getUnidad() {
