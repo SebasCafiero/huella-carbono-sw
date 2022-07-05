@@ -59,29 +59,4 @@ public class SelectorParser {
 
         return factorEmision;
     }
-
-    private static List<Medible> generarMedicionesCSV(FileReader archivo) {
-        List<Medible> mediciones = new ArrayList<>();
-        try {
-            CSVReader csvReader = new CSVReader(archivo);
-            String[] nextRecord;
-
-            // we are going to read data line by line
-            while ((nextRecord = csvReader.readNext()) != null) {
-                String [] data = new String[6];
-                int i = 0;
-                for (String cell : nextRecord) {
-                    data[i]=cell;
-                    i++;
-                }
-                Categoria cat = new Categoria(data[0],data[1]);
-                mediciones.add(new Medicion(cat, data[2], Float.parseFloat(data[3]), data[4],data[5]));
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return mediciones;
-    }
 }

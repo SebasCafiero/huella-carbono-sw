@@ -10,7 +10,6 @@ public class Medicion implements Medible {
     private String unidad;
     private Character periodicidad; // M o A
     private Float valor;
-    private String periodo; // MM/AAAA o AAAA
     private LocalDate fecha; // AAAA-MM-DD
 
     public Medicion(Categoria categoria, String unidad, Float valor) {
@@ -19,22 +18,12 @@ public class Medicion implements Medible {
         this.valor = valor;
     }
 
-
-    public Medicion(Categoria categoria, String unidad, Float valor, String periodicidad, String periodo) throws FechaException {
+    public Medicion(Categoria categoria, String unidad, float valor, char periodicidad, LocalDate periodo) {
         this.categoria = categoria;
         this.unidad = unidad;
         this.valor = valor;
-        this.periodicidad = periodicidad.charAt(0);
-
-        if(this.periodicidad == 'M'){
-            String[] mesYanio = periodo.split("/");
-            this.fecha = LocalDate.parse(mesYanio[1]+"-"+mesYanio[0]+"-01");
-        }
-        else if(this.periodicidad == 'A'){
-            this.fecha = LocalDate.parse(periodo + "-01-01");
-            //this.fecha = LocalDate.of(Integer.parseInt(periodo),1,1);
-        }
-        else throw new FechaException("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO
+        this.periodicidad = periodicidad;
+        this.fecha = periodo;
     }
 
     @Override
