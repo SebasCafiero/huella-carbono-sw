@@ -20,8 +20,8 @@ public class UtilidadesTrayecto {
     public Map<String, Function<String[], MedioDeTransporte>> medioFactory;
 
     public UtilidadesTrayecto() {
-        repoOrganizaciones = new RepoOrganizaciones();
-        repoTransportes = new RepoTransportes();
+        repoOrganizaciones = RepoOrganizaciones.getInstance();
+        repoTransportes = RepoTransportes.getInstance();
         medioFactory = new HashMap<String, Function<String[], MedioDeTransporte>>();
         medioFactory.put("particular", VehiculoParticular::new);
 //        medioFactory.put("publico", TransportePublico::new);

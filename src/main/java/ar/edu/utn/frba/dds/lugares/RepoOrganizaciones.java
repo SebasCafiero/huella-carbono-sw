@@ -9,8 +9,16 @@ import java.util.Optional;
 public class RepoOrganizaciones {
     List<Organizacion> organizaciones;
     List<Miembro> miembros;
+    static RepoOrganizaciones instance;
 
-    public RepoOrganizaciones() {
+    public static RepoOrganizaciones getInstance() {
+        if (instance==null) {
+            instance = new RepoOrganizaciones();
+        }
+        return instance;
+    }
+
+    private RepoOrganizaciones() {
         organizaciones = new ArrayList<Organizacion>();
         miembros = new ArrayList<Miembro>();
     }
