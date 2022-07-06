@@ -22,9 +22,9 @@ public class RepoTransportes {
         return medios;
     }
 
-    public Optional<MedioDeTransporte> findMedio(String nombreMedio, String atrb1, String atrb2) {
-        return medios.stream().filter( me -> me.toString().equals(nombreMedio)
-                        && me.matchAtributo1(atrb1) && me.matchAtributo2(atrb2)
-        ).findFirst();
-    }
+//    public Optional<MedioDeTransporte> findMedio(String nombreMedio, String atrb1, String atrb2) {
+//        return medios.stream().filter( me -> me.toString().equals(nombreMedio)
+//                        && me.matchAtributo1(atrb1) && me.matchAtributo2(atrb2)
+//        ).findFirst();
+//    }
 }

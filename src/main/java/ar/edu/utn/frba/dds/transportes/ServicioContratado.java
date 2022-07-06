@@ -7,19 +7,33 @@ public class ServicioContratado extends MedioDeTransporte {
         tipo = tipoServicio;
     }
 
-    @Override
-    public boolean matchAtributo1(String atributo) {
-        return tipo.getNombre().equals(atributo);
-    }
-
-    @Override
-    public boolean matchAtributo2(String atributo) {
-        return true;
-    }
+//    @Override
+//    public boolean matchAtributo1(String atributo) {
+//        return tipo.getNombre().equals(atributo);
+//    }
+//
+//    @Override
+//    public boolean matchAtributo2(String atributo) {
+//        return true;
+//    }
 
     @Override
     public String toString() {
-        return "contratado";
+        return "contratado"  + tipo.getNombre();
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        ServicioContratado other = (ServicioContratado) obj;
+        return this.tipo.equals(other.tipo);
     }
 }
 

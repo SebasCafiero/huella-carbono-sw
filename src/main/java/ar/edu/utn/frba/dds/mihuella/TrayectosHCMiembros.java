@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.mihuella;
 import ar.edu.utn.frba.dds.excepciones.FechaException;
 import ar.edu.utn.frba.dds.lugares.*;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
+import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
@@ -15,10 +16,11 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TrayectosHCMiembros {
 
-    private static final String SALIDA_1_PATH = "src/main/resources/salida_TrayectosHC/salida1.csv";
+    private static final String SALIDA_1_PATH = /*"src/main/resources/salida_TrayectosHC/salida1.csv"*/ "salida1.csv";
 
     public static void main(String[] args) throws Exception {
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()
@@ -54,6 +56,7 @@ public class TrayectosHCMiembros {
             factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
             organizaciones = new ParserOrganizaciones().cargarOrganizaciones(ns.getString("organizaciones"));
             medios = new ParserTransportes().cargarTransportes(ns.getString("transportes"));
+            System.out.println(medios.toString());
             trayectos = new ParserTrayectos().generarTrayectos(ns.getString("trayectos"), organizaciones, medios);
         } catch (IOException | FechaException | NoExisteMedioException ex) {
             System.out.println(ex.getMessage());
@@ -75,9 +78,25 @@ public class TrayectosHCMiembros {
             organizaciones.stream().forEach(org -> {
                 String razonSocial = org.getRazonSocial();
                 Set<Miembro> miembros = org.miembros();
+                Float consumoTotalOrganizacion = 0F;
+                try {
+                    consumoTotalOrganizacion = fachada.obtenerHU(miembros.stream()
+                            .flatMap(miembro -> miembro.getTrayectos().stream()).collect(Collectors.toList()));
+                } catch (MedicionSinFactorEmisionException e) {
+                    e.printStackTrace();
+                }
+                Float finalConsumoTotalOrganizacion = consumoTotalOrganizacion;
                 miembros.stream().forEach(miembro -> {
                     Integer documento = miembro.getNroDocumento();
-                    float impacto = 100 * org.obtenerImpactoMiembro(miembro);
+//                    float impacto = 100 * org.obtenerImpactoMiembro(miembro);
+                    float impacto = 0;
+                    try {
+                        List<Medible> mediblesMiembro = miembro.getTrayectos().stream()
+                                .map(trayecto -> (Medible) trayecto).collect(Collectors.toList());
+                        impacto = 100 * fachada.obtenerHU(mediblesMiembro)/ finalConsumoTotalOrganizacion;
+                    } catch (MedicionSinFactorEmisionException e) {
+                        e.printStackTrace();
+                    }
                     writer.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
                 });
             });

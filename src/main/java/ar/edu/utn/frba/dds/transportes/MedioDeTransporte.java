@@ -9,8 +9,14 @@ public abstract class MedioDeTransporte {
         return new CalculadoraDistanciasAdapter().calcularDistancia(tramo.getCoordenadaInicial(),tramo.getCoordenadaFinal());
     }
 
-    public abstract boolean matchAtributo1(String atributo);
+    @Override
+    public abstract int hashCode();
 
-    public abstract boolean matchAtributo2(String atributo);
+    @Override
+    public abstract boolean equals(Object obj);
+
+    //    public abstract boolean matchAtributo1(String atributo);
+
+//    public abstract boolean matchAtributo2(String atributo);
 
 }

@@ -23,23 +23,17 @@ public class ParserTransportes {
             MedioDeTransporte medioDeTransporte;
             String tipoMedio = transporte.getString("tipo");
             String subtipoMedio = transporte.getString("subtipo");
+            String atr2 = "";
 
-            if(tipoMedio.equals("contratado")) {
-                medioDeTransporte = new ServicioContratado(new TipoServicio(subtipoMedio));
-            } else if(tipoMedio.equals("publico")) {
-                medioDeTransporte = new TransportePublico(
-                        TipoTransportePublico.valueOf(subtipoMedio),
-                        transporte.getString("linea")
-                );
-            } else if(tipoMedio.equals("ecologico")) {
-                medioDeTransporte = new TransporteEcologico(
-                        TipoTransporteEcologico.valueOf(subtipoMedio));
-            } else /*if(tipoMedio.equals("particular"))*/ {
-                medioDeTransporte = new VehiculoParticular(
-                        TipoVehiculo.valueOf(subtipoMedio),
-                        TipoCombustible.valueOf(transporte.getString("combustible"))
-                );
+            if(tipoMedio.equals("publico")) {
+                atr2 = transporte.getString("linea");
+            } else if(tipoMedio.equals("particular")) {
+                atr2 = transporte.getString("combustible");
+            } else if(!tipoMedio.equals("ecologico") && !tipoMedio.equals("contratado")) {
+                throw new Exception(tipoMedio);
             }
+
+            medioDeTransporte = new MedioFactory().getMedioDeTransporte(tipoMedio, subtipoMedio, atr2);
 
             if(tipoMedio.equals("publico")) {
                 JSONArray arrayParadas = transporte.getJSONArray("paradas");

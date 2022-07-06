@@ -1,12 +1,13 @@
 package ar.edu.utn.frba.dds.trayectos;
 
 import ar.edu.utn.frba.dds.lugares.Coordenada;
+import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Trayecto {
+public class Trayecto implements Medible {
 
     private Integer id;
     private List<Tramo> tramos;
@@ -46,5 +47,23 @@ public class Trayecto {
 
     public Object getId() {
         return id;
+    }
+
+    @Override
+    public String getUnidad() {
+        return null;
+        // TODO
+    }
+
+    @Override
+    public Float getValor() {
+        return null;
+        // TODO
+    }
+
+    @Override
+    public String getCategoria() {
+        return null;
+        // TODO
     }
 }

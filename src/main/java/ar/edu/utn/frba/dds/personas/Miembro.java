@@ -4,8 +4,8 @@ import ar.edu.utn.frba.dds.excepciones.MiembroException;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.lugares.Sector;
 import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
+import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.trayectos.Trayecto;
-import com.sun.deploy.net.MessageHeader;
 
 import java.util.*;
 import java.util.stream.Collectors;

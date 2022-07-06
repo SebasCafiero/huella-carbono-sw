@@ -4,14 +4,12 @@ import ar.edu.utn.frba.dds.lugares.Coordenada;
 import ar.edu.utn.frba.dds.trayectos.Tramo;
 import sun.awt.image.ImageWatched;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.*;
 
 public class TransportePublico extends MedioDeTransporte {
-    private TipoTransportePublico tipo;
-    private LinkedList<Parada> paradas;
-    private String linea;
+    private final TipoTransportePublico tipo;
+    private final LinkedList<Parada> paradas;
+    private final String linea;
 
     public TransportePublico(TipoTransportePublico tipo, String linea){
         this.tipo = tipo;
@@ -43,19 +41,34 @@ public class TransportePublico extends MedioDeTransporte {
     }
 
     @Override
-    public boolean matchAtributo1(String atributo) {
-        try {
-            TipoTransportePublico tipo = TipoTransportePublico.valueOf(atributo);
-        } catch (IllegalArgumentException ex) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        return 0;
     }
 
     @Override
-    public boolean matchAtributo2(String atributo) {
-        return atributo.equals(linea);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        TransportePublico other = (TransportePublico) obj;
+        if (!Objects.equals(tipo, other.tipo)) return false;
+        return linea.equals(other.linea);
     }
+
+//    @Override
+//    public boolean matchAtributo1(String atributo) {
+//        try {
+//            TipoTransportePublico tipo = TipoTransportePublico.valueOf(atributo.toUpperCase(Locale.ROOT));
+//        } catch (IllegalArgumentException ex) {
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean matchAtributo2(String atributo) {
+//        return atributo.equals(linea);
+//    }
 
     private Parada buscarParada(Coordenada coordenada) {
         //TODO Por el momento busca la parada que coincida, quizás debería buscar la mas cercana
@@ -67,6 +80,6 @@ public class TransportePublico extends MedioDeTransporte {
 
     @Override
     public String toString() {
-        return "publico";
+        return "publico " + tipo.toString() + " " + linea;
     }
 }
