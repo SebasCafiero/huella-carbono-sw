@@ -18,11 +18,13 @@ public class DAOMemoria<T> implements DAO<T> {
 
     @Override
     public T buscar(int id) {
-        return (T) this.entidades
-                .stream()
-                .filter(e -> e.getId() == id)
-                .findFirst()
-                .get();
+        return (T) this.entidades.get(id);
+
+     //   return (T) this.entidades
+     //           .stream()
+     //           .filter(e -> e.getId() == id)
+     //           .findFirst()
+     //           .get();
     }
 
     @Override

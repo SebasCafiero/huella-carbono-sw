@@ -139,4 +139,18 @@ public class Organizacion {
 
         return huellaTrayectos;
     }
+
+    public Organizacion() {
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+
+    @Override
+    public String toString() {
+        return "Organizacion{" +
+                "razonSocial='" + razonSocial + '\'' +
+                '}';
+    }
 }
