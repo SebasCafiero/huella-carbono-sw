@@ -39,6 +39,10 @@ public class FachadaOrganizacion implements FachadaOrg {
         return huTotal;
     }
 
+    private float calcularValor(Medible medicion){
+        return medicion.getValor();
+    }
+
     public void setFactorEmision(String nombreFactor, Float valor) {
         this.repoFactores.setValor(nombreFactor, valor);
     }

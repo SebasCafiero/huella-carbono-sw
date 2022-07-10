@@ -22,6 +22,7 @@ import org.json.simple.parser.JSONParser;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 
 public class TrayectosHCSectores {
 
-    private static final String SALIDA_2_PATH = "resources/salida2.csv";
+    private static final String SALIDA_2_PATH = "src/main/resources/salida2.csv";
 
     public static void main(String[] args) throws Exception {
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()
@@ -73,8 +74,8 @@ public class TrayectosHCSectores {
 
         System.out.println("Obtener trayectos");
 
-        FachadaOrganizacion fachadaOrg = new FachadaOrganizacion();
-        fachadaOrg.cargarParametros(factoresDeEmision);
+        FachadaOrganizacion fachada = new FachadaOrganizacion();
+        fachada.cargarParametros(factoresDeEmision);
 
         try { //SALIDA 2
             PrintWriter writer = new PrintWriter(SALIDA_2_PATH, "UTF-8");
@@ -84,21 +85,25 @@ public class TrayectosHCSectores {
             Integer mes = 06; //TODO
 
             for(Organizacion org : organizaciones){
-                Float consumoTotalOrganizacion = fachadaOrg.obtenerHU(org.miembros().stream()
-                        .flatMap(m -> m.getTrayectos().stream())
-                        .flatMap(tray -> tray.getTramos().stream())
-                        .collect(Collectors.toList()));
+                float consumoTotalOrganizacion = 0F;
+                for(Trayecto unTrayecto : org.miembros().stream()
+                        .flatMap(m -> m.getTrayectos().stream()).collect(Collectors.toList())) {
+                    consumoTotalOrganizacion += fachada.obtenerHU(new ArrayList(unTrayecto.getTramos())) / unTrayecto.cantidadDeMiembros();
+                }
 
                 String razonSocial = org.getRazonSocial();
                 Set<Sector> sectores = org.getSectores();
 
                 for(Sector sector : sectores){
                     String nombreSector = sector.getNombre();
-                    List<Medible> listaTrayectosSector = sector.getListaDeMiembros().stream()
-                            .flatMap(m->m.getTrayectos().stream())
-                            .flatMap(tray->tray.getTramos().stream())
-                            .collect(Collectors.toList());
-                    float impacto = fachadaOrg.obtenerHU(listaTrayectosSector) / consumoTotalOrganizacion;
+
+                    float impactoAbsoluto = 0F;
+                    for(Trayecto trayecto : sector.getListaDeMiembros().stream()
+                            .flatMap(miembro -> miembro.getTrayectos().stream()).collect(Collectors.toList())) {
+                        impactoAbsoluto += fachada.obtenerHU((new ArrayList<>(trayecto.getTramos()))) / trayecto.cantidadDeMiembros();
+                    }
+
+                    float impacto = impactoAbsoluto / consumoTotalOrganizacion;
                     writer.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto);
                 }
             }

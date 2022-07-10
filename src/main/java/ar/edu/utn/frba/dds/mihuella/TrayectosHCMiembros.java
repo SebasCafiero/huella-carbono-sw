@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class TrayectosHCMiembros {
 
-    private static final String SALIDA_1_PATH = "resources/salida1.csv";
+    private static final String SALIDA_1_PATH = "src/main/resources/salida1.csv";
 
     public static void main(String[] args) throws Exception {
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()
@@ -82,18 +82,23 @@ public class TrayectosHCMiembros {
                 System.out.println("Entro a organizaciones");
                 String razonSocial = org.getRazonSocial();
                 Set<Miembro> miembros = org.miembros();
-                Float consumoTotalOrganizacion = fachada.obtenerHU(miembros.stream()
-                        .flatMap(miembro -> miembro.getTrayectos().stream())
-                        .flatMap(trayecto -> trayecto.getTramos().stream())
-                        .collect(Collectors.toList()));
+                float consumoTotalOrganizacion = 0F;
+
+                for(Trayecto unTrayecto : miembros.stream()
+                        .flatMap(m -> m.getTrayectos().stream()).collect(Collectors.toList())) {
+                    consumoTotalOrganizacion += fachada.obtenerHU(new ArrayList(unTrayecto.getTramos())) / unTrayecto.cantidadDeMiembros();
+                }
 
                 System.out.println("Consumo total de la organizacion: " + consumoTotalOrganizacion);
                 for (Miembro miembro : miembros) {
                     Integer documento = miembro.getNroDocumento();
-                    List<Medible> mediblesMiembro = miembro.getTrayectos().stream()
-                            .flatMap(trayecto -> trayecto.getTramos().stream())
-                            .collect(Collectors.toList());
-                    float impactoAbsoluto = fachada.obtenerHU(mediblesMiembro);
+                    float impactoAbsoluto = 0F;
+
+                    List<Trayecto> trayectosMiembro = miembro.getTrayectos();
+                    for(Trayecto trayecto : trayectosMiembro) {
+                        impactoAbsoluto += fachada.obtenerHU((new ArrayList<>(trayecto.getTramos()))) / trayecto.cantidadDeMiembros();
+                    }
+
                     float impacto = 100 * impactoAbsoluto / consumoTotalOrganizacion;
                     System.out.println("Consumo total miembro de organizacion: " + impactoAbsoluto);
                     writer.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);

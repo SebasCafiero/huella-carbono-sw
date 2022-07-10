@@ -20,11 +20,12 @@ public class ParserTrayectos {
         FileReader fileDescriptor = new FileReader(archivo);
         CSVReader csvReader = new CSVReader(fileDescriptor);
         String[] nextRecord = csvReader.readNext();
+        int tamanioMaximo = nextRecord.length;
 
         int nroTramo = 0; // Para log de error
         while ((nextRecord = csvReader.readNext()) != null) {
             nroTramo++;
-            String [] data = new String[9];
+            String [] data = new String[tamanioMaximo];
             int i = 0;
             for (String cell : nextRecord) {
                 if(cell != null) {
@@ -44,31 +45,46 @@ public class ParserTrayectos {
             }
 
             Trayecto trayecto;
-            if(data[0].equals("1")) {
+
+            if(!data[0].equals("0")) {
                 System.out.println("Cargo nuevo trayecto");
-                trayecto = new Trayecto();
-                miembro.agregarTrayecto(trayecto);
-                trayectos.add(trayecto);
+
+                Optional<Trayecto> miTrayecto = trayectos.stream()
+                        .filter(tr -> tr.getId().equals(Integer.parseInt(data[0].trim())))
+                        .findFirst();
+
+                if(miTrayecto.isPresent()) {
+                    trayecto = miTrayecto.get();
+                } else {
+                    trayecto = new Trayecto();
+                    trayecto.setId(Integer.parseInt(data[0].trim()));
+                    trayectos.add(trayecto);
+                }
+
+                System.out.println("Cargo nuevo tramo");
+                MedioDeTransporte medioSolicitado = new MedioFactory().getMedioDeTransporte(data[7], data[8], data[9]);
+                Optional<MedioDeTransporte> medioDeTransporte = medios.stream()
+                        .filter( me -> me.equals(medioSolicitado)).findFirst();
+
+                if(!medioDeTransporte.isPresent()) {
+                    throw new NoExisteMedioException(data[7], data[8], data[9]);
+                }
+
+                Coordenada coordenadaInicial = new Coordenada(Float.parseFloat(data[3]), Float.parseFloat(data[4]));
+                Coordenada coordenadaFinal = new Coordenada(Float.parseFloat(data[5]), Float.parseFloat(data[6]));
+
+                trayecto.agregarTramo(new Tramo(medioDeTransporte.get(), coordenadaInicial, coordenadaFinal));
+
             } else {
-                trayecto = miembro.getTrayecto(miembro.cantidadTrayectos());
+                // Si da error el get es porque se intentó referenciar con un trayecto
+                // compartido a un lider de trayecto que no existe
+                trayecto = trayectos.stream()
+                        .filter(tr -> tr.getId().equals(Integer.parseInt(data[2].trim())))
+                        .findFirst().get();
             }
 
-            System.out.println("Cargo nuevo tramo");
-            MedioDeTransporte medioSolicitado = new MedioFactory().getMedioDeTransporte(data[6], data[7], data[8]);
-            Optional<MedioDeTransporte> medioDeTransporte = medios.stream()
-                    .filter( me -> me.equals(medioSolicitado)).findFirst();
-//            Optional<MedioDeTransporte> medioDeTransporte = medios.stream()
-//                    .filter( me -> me.equals(data[6]) && me.matchAtributo1(data[7].toUpperCase(Locale.ROOT)) && me.matchAtributo2(data[8]))
-//                    .findFirst();
-
-            if(!medioDeTransporte.isPresent()) {
-                throw new NoExisteMedioException(data[6], data[7], data[8]);
-            }
-
-            Coordenada coordenadaInicial = new Coordenada(Float.parseFloat(data[2]), Float.parseFloat(data[3]));
-            Coordenada coordenadaFinal = new Coordenada(Float.parseFloat(data[4]), Float.parseFloat(data[5]));
-
-            trayecto.agregarTramo(new Tramo(medioDeTransporte.get(), coordenadaInicial, coordenadaFinal));
+            miembro.agregarTrayecto(trayecto);
+            trayecto.agregarmiembro(miembro);
         }
 
         return trayectos;

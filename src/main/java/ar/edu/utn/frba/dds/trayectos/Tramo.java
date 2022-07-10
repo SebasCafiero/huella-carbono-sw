@@ -10,7 +10,8 @@ public class Tramo implements Medible {
     private MedioDeTransporte medioDeTransporte;
     private Coordenada coordenadaInicial;
     private Coordenada coordenadaFinal;
-    private List<Trayecto> trayectos; // TODO para tramos compartidos
+//    private List<Trayecto> trayectos;
+    private Trayecto trayecto;
 
     public Tramo(MedioDeTransporte medioDeTransporte, Coordenada coordInicial, Coordenada coordFinal){
         this.medioDeTransporte = medioDeTransporte;

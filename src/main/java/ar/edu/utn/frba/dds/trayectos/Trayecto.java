@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.trayectos;
 
 import ar.edu.utn.frba.dds.lugares.Coordenada;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
+import ar.edu.utn.frba.dds.personas.Miembro;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,13 +13,16 @@ public class Trayecto {
 
     private Integer id;
     private List<Tramo> tramos;
+    private List<Miembro> miembros;
 //    private LocalDate fecha;
 
     public Trayecto(){
-        tramos = new ArrayList<>();
+        this.miembros = new ArrayList<>();
+        this.tramos = new ArrayList<>();
     }
 
     public Trayecto(Tramo... tramos){
+        this.miembros = new ArrayList<>();
         this.tramos = new ArrayList<>();
         Collections.addAll(this.tramos,tramos);
     }
@@ -51,8 +55,23 @@ public class Trayecto {
         return this.calcularDistancia()/tramos.size();
     }
 
-    public Object getId() {
+    public Integer getId() {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<Miembro> getMiembros() {
+        return this.miembros;
+    }
+
+    public void agregarmiembro(Miembro miembro) {
+        this.miembros.add(miembro);
+    }
+
+    public Integer cantidadDeMiembros() {
+        return miembros.size();
+    }
 }
