@@ -24,10 +24,12 @@ public class Router {
     }
 
     private static void configure(){
-        Spark.get("/", ((request, response) -> "hola gente XD"));
         OrganizacionController organizacionController = new OrganizacionController();
-        Spark.get("/ejemplo/:id", organizacionController::ejemplo);
+        Spark.get("/", ((request, response) -> "Api HC DDS - 2022"));
+        Spark.get("/obtenerOrganizacion/:id", organizacionController::obtener);
         Spark.delete("/eliminarOrganizacion/:id", organizacionController::eliminar);
-        Spark.get("/mostrarTodos", organizacionController::mostrarTodos);
+        Spark.get("/mostrarOrganizaciones", organizacionController::mostrarTodos);
+        Spark.post("/modificarOrganizacion/:id", organizacionController::modificar);
+        Spark.put("/agregarOrganizacion/", organizacionController::agregar);
     }
 }

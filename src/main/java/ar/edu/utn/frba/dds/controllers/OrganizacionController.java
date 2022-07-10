@@ -15,14 +15,30 @@ public class OrganizacionController {
         this.repositorio = FactoryRepositorio.get(Organizacion.class);
     }
 
-    public String ejemplo(Request request, Response response){
-        return "hola " + request.queryParams("nombre") + " "
-                + request.queryParams("apellido") + " con id " + request.params("id");
+    public String obtener(Request request, Response response){
+        Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+        return organizacion.getRazonSocial();
     }
 
     public Object eliminar(Request request, Response response){
         Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
         this.repositorio.eliminar(organizacion);
+        response.redirect("/mostrarTodos");
+        return response;
+    }
+
+    public Object modificar(Request request, Response response){
+        Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+        organizacion.setRazonSocial("Prueba");
+        this.repositorio.modificar(organizacion);
+        response.redirect("/mostrarTodos");
+        return response;
+    }
+
+    public Object agregar(Request request, Response response){
+        Organizacion organizacion = new Organizacion();
+        organizacion.setRazonSocial("Prueba2");
+        this.repositorio.agregar(organizacion);
         response.redirect("/mostrarTodos");
         return response;
     }

@@ -8,8 +8,6 @@ import java.util.List;
 public class Data {
 
     public static List<EntidadPersistente> getData(Class type){
-        List<EntidadPersistente> entidades = new ArrayList<>();
-        entidades = DataOrganizacion.getList();
-        return entidades;
+        return DataOrganizacion.getList();
     }
 }
