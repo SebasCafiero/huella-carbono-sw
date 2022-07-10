@@ -17,7 +17,7 @@ public class Organizacion {
     private ClasificacionOrganizacion clasificacionOrganizacion;
     private Set<Sector> sectores;
     private List<Medible> mediciones;
-    private Map<Miembro,Trayecto> trayectos; //TODO lo deberia tener organizacion o sector?
+//    private Map<Miembro,Trayecto> trayectos; //TODO lo deberia tener organizacion o sector?
 
     public Organizacion(String razonSocial,
                         TipoDeOrganizacionEnum tipo,
@@ -69,15 +69,15 @@ public class Organizacion {
         return 0.0f;
     }
 
-    public void cargarTrayecto(Trayecto unTrayecto, Miembro unMiembro) {
-        this.trayectos.put(unMiembro,unTrayecto);
-    }
+//    public void cargarTrayecto(Trayecto unTrayecto, Miembro unMiembro) {
+//        this.trayectos.put(unMiembro,unTrayecto);
+//    }
 
-    public Float obtenerDistanciaTrayecto() {
-        //PARA PRUEBITA, FALTA ARREGLAR TODO
-        List<Trayecto> listaTrayectos = new ArrayList<Trayecto>(this.trayectos.values());
-        return listaTrayectos.get(0).calcularDistancia();
-    }
+//    public Float obtenerDistanciaTrayecto() {
+//        //PARA PRUEBITA, FALTA ARREGLAR TODO
+//        List<Trayecto> listaTrayectos = new ArrayList<Trayecto>(this.trayectos.values());
+//        return listaTrayectos.get(0).calcularDistancia();
+//    }
 
     public String getRazonSocial() {
         return razonSocial;
@@ -108,35 +108,35 @@ public class Organizacion {
         return true;
     }
 
-    public Float obtenerImpactoMiembro(Miembro miembro) {
-        //VER SI DEBERIA ESTAR EN FACHADA EN VEZ DE ACA
-        Float impacto = 0F;
+//    public Float obtenerImpactoMiembro(Miembro miembro) {
+//        //VER SI DEBERIA ESTAR EN FACHADA EN VEZ DE ACA
+//        Float impacto = 0F;
+//
+//        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
+//            if(mt.getKey().getNroDocumento().equals(miembro.getNroDocumento()))
+//                impacto += mt.getValue().calcularDistancia();
+//        }
+//        return impacto/obtenerHCTrayectos();
+//    }
 
-        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
-            if(mt.getKey().getNroDocumento().equals(miembro.getNroDocumento()))
-                impacto += mt.getValue().calcularDistancia();
-        }
-        return impacto/obtenerHCTrayectos();
-    }
+//    public Float obtenerImpactoSector(Sector sector){
+//        //VER SI DEBERIA ESTAR EN FACHADA EN VEZ DE ACA
+//        Float impacto = 0F;
+//
+//        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
+//            if(mt.getKey().trabajaEnSector(sector))
+//                impacto += mt.getValue().calcularDistancia();
+//        }
+//        return obtenerHCTrayectos()/sector.cantidadMiembros();
+//    }
 
-    public Float obtenerImpactoSector(Sector sector){
-        //VER SI DEBERIA ESTAR EN FACHADA EN VEZ DE ACA
-        Float impacto = 0F;
-
-        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
-            if(mt.getKey().trabajaEnSector(sector))
-                impacto += mt.getValue().calcularDistancia();
-        }
-        return obtenerHCTrayectos()/sector.cantidadMiembros();
-    }
-
-    public Float obtenerHCTrayectos() {
-        Float huellaTrayectos = 0F;
-
-        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
-            huellaTrayectos += mt.getValue().calcularDistancia();
-        }
-
-        return huellaTrayectos;
-    }
+//    public Float obtenerHCTrayectos() {
+//        Float huellaTrayectos = 0F;
+//
+//        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
+//            huellaTrayectos += mt.getValue().calcularDistancia();
+//        }
+//
+//        return huellaTrayectos;
+//    }
 }

@@ -9,19 +9,14 @@ public class TransporteEcologico extends MedioDeTransporte {
         this.tipo = tipo;
     }
 
-//    @Override
-//    public boolean matchAtributo1(String atributo) {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean matchAtributo2(String atributo) {
-//        return true;
-//    }
-
     @Override
     public String toString() {
         return "ecologico";
+    }
+
+    @Override
+    public String getCategoria() {
+        return "Ecologico";
     }
 
     @Override

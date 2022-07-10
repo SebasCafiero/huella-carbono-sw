@@ -43,7 +43,7 @@ public class TrayectosTest {
 
         unMiembro.registrarTrayecto(unTrayecto);
         Assertions.assertEquals(26,unTrayecto.calcularDistancia());
-        Assertions.assertEquals(26,unaOrg.obtenerDistanciaTrayecto());
+//        Assertions.assertEquals(26,unaOrg.obtenerDistanciaTrayecto());
     }
 
 }

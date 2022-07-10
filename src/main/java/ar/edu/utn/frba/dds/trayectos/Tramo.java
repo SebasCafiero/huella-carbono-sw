@@ -10,7 +10,7 @@ public class Tramo implements Medible {
     private MedioDeTransporte medioDeTransporte;
     private Coordenada coordenadaInicial;
     private Coordenada coordenadaFinal;
-    private List<Trayecto> trayectos;
+    private List<Trayecto> trayectos; // TODO para tramos compartidos
 
     public Tramo(MedioDeTransporte medioDeTransporte, Coordenada coordInicial, Coordenada coordFinal){
         this.medioDeTransporte = medioDeTransporte;
@@ -36,16 +36,16 @@ public class Tramo implements Medible {
 
     @Override
     public String getUnidad() {
-        return null;
+        return "km";
     }
 
     @Override
     public Float getValor() {
-        return null;
+        return this.calcularDistancia();
     }
 
     @Override
     public String getCategoria() {
-        return null;
+        return "Traslado de Miembros - " + medioDeTransporte.getCategoria();
     }
 }

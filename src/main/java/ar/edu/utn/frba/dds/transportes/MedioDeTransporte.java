@@ -15,8 +15,8 @@ public abstract class MedioDeTransporte {
     @Override
     public abstract boolean equals(Object obj);
 
-    //    public abstract boolean matchAtributo1(String atributo);
+    @Override
+    public abstract String toString();
 
-//    public abstract boolean matchAtributo2(String atributo);
-
+    public abstract String getCategoria();
 }

@@ -16,26 +16,6 @@ public class VehiculoParticular extends MedioDeTransporte {
         this.combustible = combustible;
     }
 
-//    @Override
-//    public boolean matchAtributo1(String atributo) {
-//        try {
-//            TipoVehiculo tipo = TipoVehiculo.valueOf(atributo);
-//        } catch (IllegalArgumentException ex) {
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean matchAtributo2(String atributo) {
-//        try {
-//            TipoCombustible tipo = TipoCombustible.valueOf(atributo);
-//        } catch (IllegalArgumentException ex) {
-//            return false;
-//        }
-//        return true;
-//    }
-
     @Override
     public String toString() {
         return "particular " + this.tipo.toString() + " " + this.combustible.toString();
@@ -54,5 +34,10 @@ public class VehiculoParticular extends MedioDeTransporte {
         VehiculoParticular other = (VehiculoParticular) obj;
         if (!Objects.equals(tipo, other.tipo)) return false;
         return Objects.equals(combustible, other.combustible);
+    }
+
+    @Override
+    public String getCategoria() {
+        return "Particular - " + combustible.toString();
     }
 }

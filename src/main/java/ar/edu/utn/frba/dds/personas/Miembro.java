@@ -75,7 +75,7 @@ public class Miembro {
     public void registrarTrayecto(Trayecto unTrayecto) {
         this.trayectos.add(unTrayecto);
         //registrar en cada organizacion en la que trabaja
-        this.sectoresDondeTrabaja.iterator().next().getOrganizacion().cargarTrayecto(unTrayecto,this);
+//        this.sectoresDondeTrabaja.iterator().next().getOrganizacion().cargarTrayecto(unTrayecto,this);
     }
 
     public String getNombre() {

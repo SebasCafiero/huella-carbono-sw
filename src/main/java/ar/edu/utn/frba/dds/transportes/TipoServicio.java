@@ -24,8 +24,6 @@ public class TipoServicio {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         TipoServicio other = (TipoServicio) obj;
-        String hola = Objects.equals(nombre, other.nombre) ? "SIII" : "NOO";
-        System.out.println(nombre + "vs." + other.nombre + " => resultado: " + hola);
         return Objects.equals(nombre, other.nombre);
     }
 }

@@ -24,6 +24,8 @@ public class FachadaOrganizacion implements FachadaOrg {
         Float huTotal = 0F;
         for(Medible medicion : mediciones){
             String categoria = medicion.getCategoria();
+            System.out.println("Categoria: " + categoria + ", valor: " + medicion.getValor().toString());
+            System.out.println("Valor fe: " + this.repoFactores.getValor(categoria));
 
             try{
                 huTotal = (this.repoFactores.getValor(categoria) * medicion.getValor()) + huTotal;

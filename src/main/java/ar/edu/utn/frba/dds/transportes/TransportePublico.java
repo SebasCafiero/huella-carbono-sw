@@ -82,4 +82,9 @@ public class TransportePublico extends MedioDeTransporte {
     public String toString() {
         return "publico " + tipo.toString() + " " + linea;
     }
+
+    @Override
+    public String getCategoria() {
+        return "Publico - " + tipo.toString();
+    }
 }

@@ -7,19 +7,14 @@ public class ServicioContratado extends MedioDeTransporte {
         tipo = tipoServicio;
     }
 
-//    @Override
-//    public boolean matchAtributo1(String atributo) {
-//        return tipo.getNombre().equals(atributo);
-//    }
-//
-//    @Override
-//    public boolean matchAtributo2(String atributo) {
-//        return true;
-//    }
-
     @Override
     public String toString() {
         return "contratado"  + tipo.getNombre();
+    }
+
+    @Override
+    public String getCategoria() {
+        return "Contratado";
     }
 
     @Override

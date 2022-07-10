@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class TrayectosHCMiembros {
 
-    private static final String SALIDA_1_PATH = /*"src/main/resources/salida_TrayectosHC/salida1.csv"*/ "salida1.csv";
+    private static final String SALIDA_1_PATH = "resources/salida1.csv";
 
     public static void main(String[] args) throws Exception {
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()
@@ -68,42 +68,42 @@ public class TrayectosHCMiembros {
         FachadaOrganizacion fachada = new FachadaOrganizacion();
         fachada.cargarParametros(factoresDeEmision);
 
+        System.out.println("Cargue parametros");
+
         try { //SALIDA 1
             PrintWriter writer = new PrintWriter(SALIDA_1_PATH, "UTF-8");
             writer.println("Anio, Mes, Razon Social, DNI, Impacto");
+            System.out.println("Anio, Mes, Razon Social, DNI, Impacto");
 
             Integer anio = 2022;
-            int mes = 06;
+            int mes = 06; //TODO
 
-            organizaciones.stream().forEach(org -> {
+            for(Organizacion org : organizaciones) {
+                System.out.println("Entro a organizaciones");
                 String razonSocial = org.getRazonSocial();
                 Set<Miembro> miembros = org.miembros();
-                Float consumoTotalOrganizacion = 0F;
-                try {
-                    consumoTotalOrganizacion = fachada.obtenerHU(miembros.stream()
-                            .flatMap(miembro -> miembro.getTrayectos().stream()).collect(Collectors.toList()));
-                } catch (MedicionSinFactorEmisionException e) {
-                    e.printStackTrace();
-                }
-                Float finalConsumoTotalOrganizacion = consumoTotalOrganizacion;
-                miembros.stream().forEach(miembro -> {
-                    Integer documento = miembro.getNroDocumento();
-//                    float impacto = 100 * org.obtenerImpactoMiembro(miembro);
-                    float impacto = 0;
-                    try {
-                        List<Medible> mediblesMiembro = miembro.getTrayectos().stream()
-                                .map(trayecto -> (Medible) trayecto).collect(Collectors.toList());
-                        impacto = 100 * fachada.obtenerHU(mediblesMiembro)/ finalConsumoTotalOrganizacion;
-                    } catch (MedicionSinFactorEmisionException e) {
-                        e.printStackTrace();
-                    }
-                    writer.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
-                });
-            });
-            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+                Float consumoTotalOrganizacion = fachada.obtenerHU(miembros.stream()
+                        .flatMap(miembro -> miembro.getTrayectos().stream())
+                        .flatMap(trayecto -> trayecto.getTramos().stream())
+                        .collect(Collectors.toList()));
 
+                System.out.println("Consumo total de la organizacion: " + consumoTotalOrganizacion);
+                for (Miembro miembro : miembros) {
+                    Integer documento = miembro.getNroDocumento();
+                    List<Medible> mediblesMiembro = miembro.getTrayectos().stream()
+                            .flatMap(trayecto -> trayecto.getTramos().stream())
+                            .collect(Collectors.toList());
+                    float impactoAbsoluto = fachada.obtenerHU(mediblesMiembro);
+                    float impacto = 100 * impactoAbsoluto / consumoTotalOrganizacion;
+                    System.out.println("Consumo total miembro de organizacion: " + impactoAbsoluto);
+                    writer.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
+                    System.out.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
+                }
+            }
+            writer.close();
+        } catch (Exception | MedicionSinFactorEmisionException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
 }

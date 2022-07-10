@@ -5,12 +5,14 @@ import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
-public class Trayecto implements Medible {
+public class Trayecto {
 
     private Integer id;
     private List<Tramo> tramos;
+//    private LocalDate fecha;
 
     public Trayecto(){
         tramos = new ArrayList<>();
@@ -45,25 +47,12 @@ public class Trayecto implements Medible {
         return tramos.stream().map(tramo->tramo.calcularDistancia()).reduce(0F,(tot,dist)->tot+dist);
     }
 
+    public Float calcularDistanciaMedia(){
+        return this.calcularDistancia()/tramos.size();
+    }
+
     public Object getId() {
         return id;
     }
 
-    @Override
-    public String getUnidad() {
-        return null;
-        // TODO
-    }
-
-    @Override
-    public Float getValor() {
-        return null;
-        // TODO
-    }
-
-    @Override
-    public String getCategoria() {
-        return null;
-        // TODO
-    }
 }
