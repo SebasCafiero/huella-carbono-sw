@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.mihuella.fachada;
 import ar.edu.utn.frba.dds.mediciones.Categoria;
 //import ar.edu.utn.frba.dds.mediciones.Parser;
 import ar.edu.utn.frba.dds.mediciones.Medicion;
+import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +38,6 @@ public class FachadaOrgTest {
         Categoria cat = new Categoria("Combustion","Gas");
         mediciones.add(new Medicion(cat, "m3", 100F));
 
-        Assertions.assertThrows(Exception.class,() -> calculadora.obtenerHU(mediciones));
+        Assertions.assertThrows(MedicionSinFactorEmisionException.class,() -> calculadora.obtenerHU(mediciones));
     }
 }
