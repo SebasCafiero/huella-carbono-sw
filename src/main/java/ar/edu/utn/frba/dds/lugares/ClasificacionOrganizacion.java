@@ -10,6 +10,7 @@ public class ClasificacionOrganizacion {
     public String getNombre() {
         return nombre;
     }
+
 }
 
 

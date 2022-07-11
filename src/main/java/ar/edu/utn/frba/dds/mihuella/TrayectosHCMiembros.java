@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class TrayectosHCMiembros {
 
-    private static final String SALIDA_1_PATH = "src/main/resources/salida1.csv";
+    private static final String SALIDA_1_PATH = "resources/salida1.csv"/*"src/main/resources/salida1.csv"*/;
 
     public static void main(String[] args) throws Exception {
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()

@@ -46,4 +46,6 @@ public class FachadaOrganizacion implements FachadaOrg {
     public void setFactorEmision(String nombreFactor, Float valor) {
         this.repoFactores.setValor(nombreFactor, valor);
     }
+
+//    public List<Medible> obtenerMediblesOrganizacion
 }

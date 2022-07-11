@@ -4,6 +4,8 @@ import ar.edu.utn.frba.dds.excepciones.SectorException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static ar.edu.utn.frba.dds.lugares.TipoDeOrganizacionEnum.*;
 
 public class OrganizacionTest {
@@ -29,6 +31,7 @@ public class OrganizacionTest {
                 ONG,
                 new ClasificacionOrganizacion("GreenPeace"),
                 new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+
 
         Assertions.assertEquals(0,unaOrg.cantidadSectores());
         Sector sector1 = new Sector("sector1",unaOrg);

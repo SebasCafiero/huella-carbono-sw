@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.lugares;
 
 import ar.edu.utn.frba.dds.excepciones.MiembroException;
 import ar.edu.utn.frba.dds.excepciones.SectorException;
+import ar.edu.utn.frba.dds.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.trayectos.Trayecto;
@@ -9,6 +10,7 @@ import ar.edu.utn.frba.dds.trayectos.Trayecto;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Organizacion {
     private String razonSocial;
@@ -16,8 +18,9 @@ public class Organizacion {
     private UbicacionGeografica ubicacion;
     private ClasificacionOrganizacion clasificacionOrganizacion;
     private Set<Sector> sectores;
-    private List<Medible> mediciones;
-//    private Map<Miembro,Trayecto> trayectos; //TODO lo deberia tener organizacion o sector?
+    private List<Medicion> mediciones;
+    private List<String> contactosMail;
+    private List<Integer> contactosTelefono;
 
     public Organizacion(String razonSocial,
                         TipoDeOrganizacionEnum tipo,
@@ -29,7 +32,8 @@ public class Organizacion {
         this.clasificacionOrganizacion = clasificacionOrganizacion;
         this.sectores = new HashSet<>();
         this.mediciones = new ArrayList<>();
-//        this.trayectos = new HashMap<Miembro,Trayecto>();
+        this.contactosMail = new ArrayList<>();
+        this.contactosTelefono = new ArrayList<>();
     }
 
     public Set<Miembro> miembros() {
@@ -47,17 +51,15 @@ public class Organizacion {
         sectores.add(sector);
     }
 
-
     public HashSet<Sector> getListaDeSectores() {
         return (HashSet<Sector>) this.sectores;
     }
 
-
-    public void agregarMediciones(Medible... variasMediciones) {
+    public void agregarMediciones(Medicion... variasMediciones) {
         Collections.addAll(this.mediciones, variasMediciones);
     }
 
-    public List<Medible> getMediciones() {
+    public List<Medicion> getMediciones() {
         return this.mediciones;
     }
 
@@ -68,16 +70,6 @@ public class Organizacion {
     public Float obtenerHC(LocalDate fechaInicial, LocalDate fechaFinal) {
         return 0.0f;
     }
-
-//    public void cargarTrayecto(Trayecto unTrayecto, Miembro unMiembro) {
-//        this.trayectos.put(unMiembro,unTrayecto);
-//    }
-
-//    public Float obtenerDistanciaTrayecto() {
-//        //PARA PRUEBITA, FALTA ARREGLAR TODO
-//        List<Trayecto> listaTrayectos = new ArrayList<Trayecto>(this.trayectos.values());
-//        return listaTrayectos.get(0).calcularDistancia();
-//    }
 
     public String getRazonSocial() {
         return razonSocial;
@@ -108,35 +100,19 @@ public class Organizacion {
         return true;
     }
 
-//    public Float obtenerImpactoMiembro(Miembro miembro) {
-//        //VER SI DEBERIA ESTAR EN FACHADA EN VEZ DE ACA
-//        Float impacto = 0F;
-//
-//        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
-//            if(mt.getKey().getNroDocumento().equals(miembro.getNroDocumento()))
-//                impacto += mt.getValue().calcularDistancia();
-//        }
-//        return impacto/obtenerHCTrayectos();
-//    }
+    public List<String> getContactosMail() {
+        return contactosMail;
+    }
 
-//    public Float obtenerImpactoSector(Sector sector){
-//        //VER SI DEBERIA ESTAR EN FACHADA EN VEZ DE ACA
-//        Float impacto = 0F;
-//
-//        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
-//            if(mt.getKey().trabajaEnSector(sector))
-//                impacto += mt.getValue().calcularDistancia();
-//        }
-//        return obtenerHCTrayectos()/sector.cantidadMiembros();
-//    }
+    public List<Integer> getContactosTelefono() {
+        return contactosTelefono;
+    }
 
-//    public Float obtenerHCTrayectos() {
-//        Float huellaTrayectos = 0F;
-//
-//        for(Map.Entry<Miembro,Trayecto> mt : this.trayectos.entrySet()){
-//            huellaTrayectos += mt.getValue().calcularDistancia();
-//        }
-//
-//        return huellaTrayectos;
-//    }
+    public void agregarContactoMail(String contacto) {
+        this.contactosMail.add(contacto);
+    }
+
+    public void agregarContactoTelefono(Integer contacto) {
+        this.contactosTelefono.add(contacto);
+    }
 }

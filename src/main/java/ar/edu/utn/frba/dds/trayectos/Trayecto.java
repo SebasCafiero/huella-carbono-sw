@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.lugares.Coordenada;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.personas.Miembro;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -14,9 +15,12 @@ public class Trayecto {
     private Integer id;
     private List<Tramo> tramos;
     private List<Miembro> miembros;
-//    private LocalDate fecha;
+    private LocalDate fecha;
+    private Character periodicidad;
 
-    public Trayecto(){
+    public Trayecto(LocalDate fecha, Character periodicidad) {
+        this.fecha = fecha;
+        this.periodicidad = periodicidad;
         this.miembros = new ArrayList<>();
         this.tramos = new ArrayList<>();
     }
@@ -73,5 +77,21 @@ public class Trayecto {
 
     public Integer cantidadDeMiembros() {
         return miembros.size();
+    }
+
+    public Character getPeriodicidad(){
+        return periodicidad;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public Integer getMes(){
+        return fecha.getMonthValue();
+    }
+
+    public Integer getAnio() {
+        return fecha.getYear();
     }
 }

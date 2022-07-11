@@ -6,6 +6,8 @@ import ar.edu.utn.frba.dds.lugares.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 public class MiembroTest {
 
 //TODO VER DE USAR @BEFORE O AGRUPAR DECLARACIONES REPETIDAS
@@ -17,6 +19,7 @@ public class MiembroTest {
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Sector Primario"),
                 new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+
         Sector unSector = new Sector("miSector",unaOrg);
 
         Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",10F,20F));
@@ -36,6 +39,7 @@ public class MiembroTest {
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Sector secundario"),
                 new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+
         Sector unSector = new Sector("miSector",unaOrg);
 
         Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",15F,10F));
@@ -61,6 +65,7 @@ public class MiembroTest {
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Sector secundario"),
                 new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+
         Sector unSector = new Sector("miSector",unaOrg);
         Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",10F,10F));
 
@@ -75,6 +80,7 @@ public class MiembroTest {
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Organizacion"),
                 new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+
         Sector unSector = new Sector("miSector",unaOrg);
         Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",11F,12F));
         Miembro miembro2 = new Miembro("pepe", "gomez",TipoDeDocumento.DNI,54321,new UbicacionGeografica("Buenos Aires",15F,10F));

@@ -26,6 +26,22 @@ public class Medicion implements Medible {
         this.fecha = periodo;
     }
 
+    public Character getPeriodicidad() {
+        return periodicidad;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public Integer getAnio(){
+        return fecha.getYear();
+    }
+
+    public Integer getMes(){
+        return fecha.getMonthValue();
+    }
+
     @Override
     public String getUnidad() {
         return unidad;
