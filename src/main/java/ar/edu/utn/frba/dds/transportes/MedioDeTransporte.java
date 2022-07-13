@@ -1,12 +1,17 @@
 package ar.edu.utn.frba.dds.transportes;
 
-import ar.edu.utn.frba.dds.trayectos.CalculadoraDistanciasAdapter;
+import ar.edu.utn.frba.dds.trayectos.servicios.AdaptadorServicioDDSTPA;
 import ar.edu.utn.frba.dds.trayectos.Tramo;
+import ar.edu.utn.frba.dds.trayectos.servicios.CalculadoraDistancias;
+import ar.edu.utn.frba.dds.trayectos.servicios.ServicioSimulado;
 
 public abstract class MedioDeTransporte {
 
     public Float calcularDistancia(Tramo tramo) {
-        return new CalculadoraDistanciasAdapter().calcularDistancia(tramo.getCoordenadaInicial(),tramo.getCoordenadaFinal());
+//        CalculadoraDistancias servicioContratado = new AdaptadorServicioDDSTPA();
+        CalculadoraDistancias servicioContratado = new ServicioSimulado();
+
+        return servicioContratado.calcularDistancia(tramo.getCoordenadaInicial(),tramo.getCoordenadaFinal());
     }
 
     @Override
