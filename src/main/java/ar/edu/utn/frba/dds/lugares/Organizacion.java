@@ -115,4 +115,8 @@ public class Organizacion {
     public void agregarContactoTelefono(Integer contacto) {
         this.contactosTelefono.add(contacto);
     }
+
+    public List<Trayecto> trayectosDeMiembros() {
+        return miembros().stream().flatMap(m -> m.getTrayectos().stream()).collect(Collectors.toList());
+    }
 }

@@ -73,34 +73,19 @@ public class TrayectosHCMiembros {
         try { //SALIDA 1
             PrintWriter writer = new PrintWriter(SALIDA_1_PATH, "UTF-8");
             writer.println("Anio, Mes, Razon Social, DNI, Impacto");
-            System.out.println("Anio, Mes, Razon Social, DNI, Impacto");
+//            System.out.println("Anio, Mes, Razon Social, DNI, Impacto");
 
             Integer anio = 2022;
             int mes = 06; //TODO
 
             for(Organizacion org : organizaciones) {
-                System.out.println("Entro a organizaciones");
                 String razonSocial = org.getRazonSocial();
                 Set<Miembro> miembros = org.miembros();
-                float consumoTotalOrganizacion = 0F;
-
-                for(Trayecto unTrayecto : miembros.stream()
-                        .flatMap(m -> m.getTrayectos().stream()).collect(Collectors.toList())) {
-                    consumoTotalOrganizacion += fachada.obtenerHU(new ArrayList(unTrayecto.getTramos())) / unTrayecto.cantidadDeMiembros();
-                }
-
-                System.out.println("Consumo total de la organizacion: " + consumoTotalOrganizacion);
+//                Float consumoTotalOrganizacion = fachada.obtenerConsumoTotalTrayectosOrganizacion(org);
+//                System.out.println("Consumo total de la organizacion: " + consumoTotalOrganizacion);
                 for (Miembro miembro : miembros) {
                     Integer documento = miembro.getNroDocumento();
-                    float impactoAbsoluto = 0F;
-
-                    List<Trayecto> trayectosMiembro = miembro.getTrayectos();
-                    for(Trayecto trayecto : trayectosMiembro) {
-                        impactoAbsoluto += fachada.obtenerHU((new ArrayList<>(trayecto.getTramos()))) / trayecto.cantidadDeMiembros();
-                    }
-
-                    float impacto = 100 * impactoAbsoluto / consumoTotalOrganizacion;
-                    System.out.println("Consumo total miembro de organizacion: " + impactoAbsoluto);
+                    Float impacto = 100 * fachada.obtenerImpactoMiembroEnTrayectos(org, miembro);
                     writer.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
                     System.out.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
                 }

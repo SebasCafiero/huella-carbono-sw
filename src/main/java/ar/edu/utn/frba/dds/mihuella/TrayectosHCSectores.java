@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 public class TrayectosHCSectores {
 
-    private static final String SALIDA_2_PATH = "src/main/resources/salida2.csv";
+    private static final String SALIDA_2_PATH = "resources/salida2.csv";
 
     public static void main(String[] args) throws Exception {
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()
@@ -85,25 +85,12 @@ public class TrayectosHCSectores {
             Integer mes = 06; //TODO
 
             for(Organizacion org : organizaciones){
-                float consumoTotalOrganizacion = 0F;
-                for(Trayecto unTrayecto : org.miembros().stream()
-                        .flatMap(m -> m.getTrayectos().stream()).collect(Collectors.toList())) {
-                    consumoTotalOrganizacion += fachada.obtenerHU(new ArrayList(unTrayecto.getTramos())) / unTrayecto.cantidadDeMiembros();
-                }
-
                 String razonSocial = org.getRazonSocial();
                 Set<Sector> sectores = org.getSectores();
 
                 for(Sector sector : sectores){
                     String nombreSector = sector.getNombre();
-
-                    float impactoAbsoluto = 0F;
-                    for(Trayecto trayecto : sector.getListaDeMiembros().stream()
-                            .flatMap(miembro -> miembro.getTrayectos().stream()).collect(Collectors.toList())) {
-                        impactoAbsoluto += fachada.obtenerHU((new ArrayList<>(trayecto.getTramos()))) / trayecto.cantidadDeMiembros();
-                    }
-
-                    float impacto = impactoAbsoluto / consumoTotalOrganizacion;
+                    Float impacto = fachada.obtenerImpactoSector(org,sector);
                     writer.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto);
                 }
             }

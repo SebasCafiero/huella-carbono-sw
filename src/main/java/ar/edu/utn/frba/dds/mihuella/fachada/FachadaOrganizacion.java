@@ -1,9 +1,13 @@
 package ar.edu.utn.frba.dds.mihuella.fachada;
 
+import ar.edu.utn.frba.dds.lugares.Organizacion;
+import ar.edu.utn.frba.dds.lugares.Sector;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrg;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
+import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
+import ar.edu.utn.frba.dds.trayectos.Trayecto;
 
 import java.util.*;
 
@@ -38,6 +42,32 @@ public class FachadaOrganizacion implements FachadaOrg {
         }
         return huTotal;
     }
+
+    //TODO la fachada deberia ser para una organizacion especifica, deberia ser atributo
+    public Float obtenerConsumoTotalTrayectosOrganizacion(Organizacion unaOrg) throws MedicionSinFactorEmisionException {
+        Float consumo = 0F;
+        for(Trayecto unTrayecto : unaOrg.trayectosDeMiembros()) {
+            consumo += obtenerHU(new ArrayList<>(unTrayecto.getTramos())) / unTrayecto.cantidadDeMiembros();
+        }
+        return consumo;
+    }
+
+    public Float obtenerImpactoMiembroEnTrayectos(Organizacion unaOrg, Miembro unMiembro) throws MedicionSinFactorEmisionException {
+        Float consumoMiembro = 0F;
+        for(Trayecto unTrayecto : unMiembro.getTrayectos()){
+            consumoMiembro += obtenerHU(new ArrayList<>(unTrayecto.getTramos())) / unTrayecto.cantidadDeMiembros();
+        }
+        return consumoMiembro / obtenerConsumoTotalTrayectosOrganizacion(unaOrg);
+    }
+
+    public Float obtenerImpactoSector(Organizacion unaOrg, Sector unSector) throws MedicionSinFactorEmisionException {
+        Float impactoMiembro = 0F;
+        for(Miembro unMiembro : unSector.getListaDeMiembros()){
+            impactoMiembro += obtenerImpactoMiembroEnTrayectos(unaOrg,unMiembro);
+        }
+        return impactoMiembro;
+    }
+
 
     private float calcularValor(Medible medicion){
         return medicion.getValor();
