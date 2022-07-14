@@ -1,9 +1,11 @@
 package ar.edu.utn.frba.dds.trayectos.servicios;
 
 import ar.edu.utn.frba.dds.lugares.Coordenada;
+import ar.edu.utn.frba.dds.trayectos.servicios.ddstpa.Provincia;
 import ar.edu.utn.frba.dds.trayectos.servicios.ddstpa.ServicioDDSTPA;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
     //SERIA EL ROL ADAPTADOR DEL PATRON ADAPTER PARA EL SERVICIO DDSTPA
@@ -34,9 +36,17 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
             System.out.println("ERROR API");
             e.printStackTrace();
         }
-        System.out.println("DistanciaConAPI: " + miDistancia); // LA API DEVUELVE DISTANCIAS RANDOM...
+        System.out.println("DistanciaConAPI: " + miDistancia); // TODO LA API DEVUELVE DISTANCIAS RANDOM...
 
         //return servicioExterno.distancia(latitudInicial,longitudInicial,latitudFinal,longitudFinal); //Devuelve unidad KM
         return miDistancia;
+    }
+
+    public List<Provincia> obtenerProvincias() throws IOException {
+        List<Provincia> provincias = servicioExterno.provincias();
+        for(Provincia unaProv: provincias){
+            System.out.println(unaProv.id + "| " + unaProv.nombre);
+        }
+        return servicioExterno.provincias();
     }
 }

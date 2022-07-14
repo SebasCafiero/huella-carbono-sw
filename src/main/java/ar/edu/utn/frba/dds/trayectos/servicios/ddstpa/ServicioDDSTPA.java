@@ -10,14 +10,15 @@ import java.util.List;
 
 public class ServicioDDSTPA {
     //SERIA EL ROL ADAPTABLE DEL PATRON ADAPTER PARA EL SERVICIO DDSTPA
-    private static final String URLabs = "https://ddstpa.com.ar/api/";
+    private static final String URL_ABS = "https://ddstpa.com.ar/api/";
+private static final String TOKEN = "Bearer moiMXLBahQOFzlNXcvEQVbkX6vOkHQOWuIx4sXdEEIE=";
 
     private static ServicioDDSTPA instancia = null;
     private Retrofit retrofit;
 
     private ServicioDDSTPA(){
         this.retrofit = new Retrofit.Builder()
-                .baseUrl(URLabs)
+                .baseUrl(URL_ABS)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
@@ -31,6 +32,7 @@ public class ServicioDDSTPA {
 
         OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
         Call<Distancia> requestDistancia = operacionesDDSTPA.distancia(
+                TOKEN,
                 idLocalidadOrigen,
                 calleOrigen,
                 alturaOrigen,
@@ -46,7 +48,7 @@ public class ServicioDDSTPA {
 
     public List<Provincia> provincias() throws IOException {
         OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
-        Call<List<Provincia>> requestProvincias = operacionesDDSTPA.provincias();
+        Call<List<Provincia>> requestProvincias = operacionesDDSTPA.provincias(TOKEN);
         Response<List<Provincia>> responseProvincias = requestProvincias.execute();
         return responseProvincias.body();
     }

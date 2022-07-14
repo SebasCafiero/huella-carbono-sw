@@ -8,7 +8,7 @@ import ar.edu.utn.frba.dds.trayectos.servicios.ServicioSimulado;
 public abstract class MedioDeTransporte {
 
     public Float calcularDistancia(Tramo tramo) {
-//        CalculadoraDistancias servicioContratado = new AdaptadorServicioDDSTPA();
+//        CalculadoraDistancias servicioContratado = new AdaptadorServicioDDSTPA(); // TODO LA API DEVUELVE DISTANCIAS RANDOM...
         CalculadoraDistancias servicioContratado = new ServicioSimulado();
 
         return servicioContratado.calcularDistancia(tramo.getCoordenadaInicial(),tramo.getCoordenadaFinal());
