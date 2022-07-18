@@ -27,13 +27,13 @@ public class Router {
     private static void configure(){
         Spark.get("/", ((request, response) -> "Api HC DDS - 2022"));
         OrganizacionController organizacionController = new OrganizacionController();
-        Spark.get("/obtenerOrganizacion/:id", organizacionController::obtener);
-        Spark.delete("/eliminarOrganizacion/:id", organizacionController::eliminar);
-        Spark.get("/mostrarOrganizaciones", organizacionController::mostrarTodos);
-        Spark.put("/modificarOrganizacion/:id", organizacionController::modificar);
-        Spark.post("/agregarOrganizacion", organizacionController::agregar);
+        Spark.get("/organizacion/:id", organizacionController::obtener);
+        Spark.delete("/organizacion/:id", organizacionController::eliminar);
+        Spark.get("/organizacion", organizacionController::mostrarTodos);
+        Spark.put("/organizacion/:id", organizacionController::modificar);
+        Spark.post("/organizacion", organizacionController::agregar);
         MedicionController medicionController = new MedicionController();
-        Spark.get("/obtenerMedicion/:id", medicionController::obtener);
-        Spark.get("/mostrarMediciones", medicionController::mostrarTodos);
+        Spark.get("/medicion/:id", medicionController::obtener);
+        Spark.get("/medicion", medicionController::mostrarTodos);
     }
 }
