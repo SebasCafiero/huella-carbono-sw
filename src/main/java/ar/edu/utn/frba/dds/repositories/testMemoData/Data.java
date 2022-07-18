@@ -8,6 +8,6 @@ import java.util.List;
 public class Data {
 
     public static List<EntidadPersistente> getData(Class type){
-        return DataOrganizacion.getList();
+        return DataMedicion.getList();
     }
 }

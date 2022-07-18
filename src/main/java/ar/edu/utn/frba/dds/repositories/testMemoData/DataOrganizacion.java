@@ -1,10 +1,7 @@
 package ar.edu.utn.frba.dds.repositories.testMemoData;
 
-
 import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
-import ar.edu.utn.frba.dds.repositories.Repositorio;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 
 import java.util.ArrayList;
 import java.util.Collections;

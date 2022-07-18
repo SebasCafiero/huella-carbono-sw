@@ -37,6 +37,10 @@ public class Medicion implements Medible {
         else throw new FechaException("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO
     }
 
+    public Medicion() {
+
+    }
+
 
     @Override
     public String getUnidad() {
@@ -51,5 +55,14 @@ public class Medicion implements Medible {
     @Override
     public String getCategoria() {
         return categoria.toString();
+    }
+
+    public void setValor (Float valor) { this.valor = valor;}
+
+    @Override
+    public String toString() {
+        return "Medicion{" +
+                "valor='" + valor.toString() + '\'' +
+                '}';
     }
 }

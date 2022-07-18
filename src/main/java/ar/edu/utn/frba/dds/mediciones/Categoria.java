@@ -11,7 +11,15 @@ public class Categoria {
     }
 
     @Override
-    public String toString() {
-        return actividad + " - " + tipoConsumo;
-    }
+    public String toString() { return actividad + " - " + tipoConsumo;}
+
+    public Integer getId() {return id;}
+
+    public void setId(Integer id) {this.id = id;}
+
+    public String getActividad() {return actividad;}
+
+    public void setActividad(String actividad) {this.actividad = actividad;}
+
+    public String getTipoConsumo() {return tipoConsumo;}
 }
