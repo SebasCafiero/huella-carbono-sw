@@ -87,6 +87,12 @@ public class Organizacion {
         return tipo;
     }
 
+    public void setTipo(TipoDeOrganizacionEnum tipo) {this.tipo = tipo;}
+
+    public void setClasificacionOrganizacion(ClasificacionOrganizacion clasificacionOrganizacion) {this.clasificacionOrganizacion = clasificacionOrganizacion;}
+
+    public void setUbicacion(UbicacionGeografica ubicacion) {this.ubicacion = ubicacion;}
+
     public UbicacionGeografica getUbicacion() {
         return ubicacion;
     }

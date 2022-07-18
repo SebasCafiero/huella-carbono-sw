@@ -1,8 +1,10 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.lugares.Organizacion;
+import ar.edu.utn.frba.dds.mapping.OrganizacionMapper;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 
@@ -34,8 +36,9 @@ public class OrganizacionController {
     }
 
     public Object agregar(Request request, Response response){
+        JSONObject jsonObject = new JSONObject(request.body());
         Organizacion organizacion = new Organizacion();
-        organizacion.setRazonSocial("Prueba2");
+        OrganizacionMapper.map(jsonObject, organizacion);
         this.repositorio.agregar(organizacion);
         return response;
     }
