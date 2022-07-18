@@ -30,8 +30,8 @@ public class Router {
         Spark.get("/obtenerOrganizacion/:id", organizacionController::obtener);
         Spark.delete("/eliminarOrganizacion/:id", organizacionController::eliminar);
         Spark.get("/mostrarOrganizaciones", organizacionController::mostrarTodos);
-        Spark.post("/modificarOrganizacion/:id", organizacionController::modificar);
-        Spark.put("/agregarOrganizacion/", organizacionController::agregar);
+        Spark.put("/modificarOrganizacion/:id", organizacionController::modificar);
+        Spark.post("/agregarOrganizacion", organizacionController::agregar);
         MedicionController medicionController = new MedicionController();
         Spark.get("/obtenerMedicion/:id", medicionController::obtener);
         Spark.get("/mostrarMediciones", medicionController::mostrarTodos);
