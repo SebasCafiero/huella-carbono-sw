@@ -23,7 +23,6 @@ public class OrganizacionController {
     public Object eliminar(Request request, Response response){
         Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
         this.repositorio.eliminar(organizacion);
-        response.redirect("/mostrarTodos");
         return response;
     }
 
@@ -31,7 +30,6 @@ public class OrganizacionController {
         Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
         organizacion.setRazonSocial("Prueba");
         this.repositorio.modificar(organizacion);
-        response.redirect("/mostrarTodos");
         return response;
     }
 
@@ -39,7 +37,6 @@ public class OrganizacionController {
         Organizacion organizacion = new Organizacion();
         organizacion.setRazonSocial("Prueba2");
         this.repositorio.agregar(organizacion);
-        response.redirect("/mostrarTodos");
         return response;
     }
 
