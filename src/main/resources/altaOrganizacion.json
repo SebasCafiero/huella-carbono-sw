@@ -1,0 +1,47 @@
+{
+  "razonSocial": "Una organizacion",
+  "tipoOrganizacion": "EMPRESA",
+  "ubicacionGeografica":{
+    "localidad": "Ituzaingo",
+    "coordenada": {
+      "latitud": 1,
+      "longitud": 1
+    }
+  },
+  "clasificacionOrganizacion":"unaClasificacionOrganizacion",
+  "sectores": [{
+    "nombre": "",
+    "organizacion": {},
+    "miembros": [{
+      "nombre": "pepe",
+      "apellido": "argento",
+      "tipoDocumento": "DNI",
+      "numeroDocumento": 0,
+      "sectoresDondeTrabaja": [],
+      "trayectos": [{
+        "id": 1,
+        "tramos":[{
+          "medioTransporte": {},
+          "coordenadaInicial": {
+            "latitud": 1,
+            "longitud": 1
+          },
+          "coordenadaFinal": {
+            "latitud": 1,
+            "longitud": 1
+          },
+          "trayectos":[]
+        }]
+      }],
+      "domicilio":{
+        "localidad": "Ituzaingo",
+        "coordenada": {
+          "latitud": 2,
+          "longitud": 2
+        }
+      }
+    }]
+  }],
+  "mediciones":[],
+  "trayectos":[]
+}
