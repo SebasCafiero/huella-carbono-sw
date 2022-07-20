@@ -18,10 +18,10 @@ public class MedicionMapper {
 
 
         medicion.setCategoria(categoria);
-        medicion.setUnidad(medicionDTO.getString("unidad"));
-        //medicion.setPeriodicidad(medicionDTO.get); ---> como hacer con el Character?
-        medicion.setValor(medicionDTO.getFloat("valor"));
-        medicion.setPeriodo(medicionDTO.getString("periodo"));
-        //medicion.setFecha(medicionDTO.get); --->como hacer con el LocalDate?
+        medicion.setUnidad(medicionDTO.optString("unidad"));
+        //medicion.setPeriodicidad(medicionDTO.opt); ---> como hacer con el Character?
+        medicion.setValor(medicionDTO.optFloat("valor"));
+        medicion.setPeriodo(medicionDTO.optString("periodo"));
+        //medicion.setFecha(medicionDTO.opt); --->como hacer con el LocalDate?
     }
 }
