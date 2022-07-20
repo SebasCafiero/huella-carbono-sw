@@ -25,4 +25,7 @@ public class MedicionController {
         List<Medicion> mediciones = this.repositorio.buscarTodos();
         return mediciones.toString();
     }
+
+    //faltan hacer los fiiltros --> por ej : mostrar todos las mediciones con "x" unidad
 }
+

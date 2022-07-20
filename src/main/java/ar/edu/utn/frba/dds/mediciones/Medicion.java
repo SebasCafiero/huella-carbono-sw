@@ -40,24 +40,38 @@ public class Medicion implements Medible {
     public Medicion() {
 
     }
-
+    @Override
+    public String getCategoria() {
+        return categoria.toString();
+    }
+    public void setCategoria (Categoria categoria) { this.categoria = categoria;}
 
     @Override
     public String getUnidad() {
         return unidad;
     }
+    public void setUnidad (String unidad) { this.unidad = unidad;}
 
     @Override
     public Float getValor() {
         return valor;
     }
-
-    @Override
-    public String getCategoria() {
-        return categoria.toString();
-    }
-
     public void setValor (Float valor) { this.valor = valor;}
+
+    public Character getPeriodicidad() {
+        return periodicidad;
+    }
+    public void setPeriodicidad(Character periodicidad) {this.periodicidad = periodicidad;}
+
+    public String getPeriodo() {
+        return periodo;
+    }
+    public void setPeriodo(String periodo) {this.periodo = periodo;}
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+    public void setFecha(LocalDate fecha) {this.fecha = fecha;}
 
     @Override
     public String toString() {
