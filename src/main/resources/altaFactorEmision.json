@@ -1,0 +1,9 @@
+{
+  "categoria": {
+    "id": 1,
+    "actividad": "unaActividad",
+    "tipoConsumo": "unTipoConsumo"
+  },
+  "unidad": "unaUnidad",
+  "valor": 123.4
+}

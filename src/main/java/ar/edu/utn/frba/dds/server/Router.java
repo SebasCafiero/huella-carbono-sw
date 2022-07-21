@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.server;
 
+import ar.edu.utn.frba.dds.controllers.BatchMedicionController;
+import ar.edu.utn.frba.dds.controllers.FactorEmisionController;
 import ar.edu.utn.frba.dds.controllers.MedicionController;
 import ar.edu.utn.frba.dds.controllers.OrganizacionController;
 import ar.edu.utn.frba.dds.spark.utils.BooleanHelper;
@@ -35,5 +37,14 @@ public class Router {
         MedicionController medicionController = new MedicionController();
         Spark.get("/medicion/:id", medicionController::obtener);
         Spark.get("/medicion", medicionController::mostrarTodos);
+        //ver filtros
+        BatchMedicionController batchMedicionController = new BatchMedicionController();
+        Spark.get("/batchMedicion/:id", batchMedicionController::obtener);
+        Spark.delete("/batchMedicion/:id", batchMedicionController::eliminar);
+        Spark.get("/batchMedicion", batchMedicionController::mostrarTodos);
+        Spark.put("/batchMedicion/:id", batchMedicionController::modificar);
+        Spark.post("/batchMedicion", batchMedicionController::agregar);
+        FactorEmisionController factorEmisionController = new FactorEmisionController();
+        Spark.put("/factorEmision/:id", factorEmisionController :: modificar);
     }
 }

@@ -1,9 +1,7 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.mapping.BatchMedicionMapper;
 import ar.edu.utn.frba.dds.mediciones.BatchMedicion;
-import ar.edu.utn.frba.dds.mediciones.Medicion;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
@@ -48,28 +46,3 @@ public class BatchMedicionController {
     }
 
 }
-/*
-public String obtener(Request request, Response response){
-        Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        return organizacion.getRazonSocial();
-    }
-
-    public Object eliminar(Request request, Response response){
-        Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        this.repositorio.eliminar(organizacion);
-        return response;
-    }
-
-    public Object agregar(Request request, Response response){
-        JSONObject jsonObject = new JSONObject(request.body());
-        Organizacion organizacion = new Organizacion();
-        OrganizacionMapper.map(jsonObject, organizacion);
-        this.repositorio.agregar(organizacion);
-        return response;
-    }
-
-    public String mostrarTodos(Request request, Response response){
-        List<Organizacion> organizaciones = this.repositorio.buscarTodos();
-        return organizaciones.toString();
-    }
- */

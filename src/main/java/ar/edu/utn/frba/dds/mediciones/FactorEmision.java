@@ -14,16 +14,19 @@ public class FactorEmision {
     public String getCategoria() {
         return this.categoria.toString();
     }
+    public void setCategoria(Categoria categoria) {this.categoria = categoria;}
 
     public String getUnidad() {
         return unidad;
     }
+    public void setUnidad(String unidad) {this.unidad = unidad;}
 
     public Float getValor() {
         return valor;
     }
-
     public void setValor(Float valor) {
         this.valor = valor;
     }
+
+
 }

@@ -1,24 +1,28 @@
 {
-  "categoria" : {
-    "id" : 1,
-    "actividad" : "unaActividad",
-    "tipoConsumo" : "unTipoConsumo"
+  "id": 0,
+  "mediciones": [{
+  "categoria": {
+      "id": 1,
+      "actividad": "unaActividad",
+      "tipoConsumo": "unTipoConsumo"
+    },
+    "unidad": "unaUnidad",
+    "periodiciad": "M",
+    "valor": 123.4,
+    "periodo": "unPeriodo",
+    "fecha": "2020-07-19"
   },
-  "unidad" : "unaUnidad",
-  "periodiciad" : "M",
-  "valor" : 123.4,
-  "periodo" : "unPeriodo",
-  "fecha" : "2020-07-19"
-},
-{
-  "categoria" : {
-    "id" : 2,
-    "actividad" : "otraActividad",
-    "tipoConsumo" : "otroTipoConsumo"
-  },
-  "unidad" : "otraUnidad",
-  "periodiciad" : "A",
-  "valor" : 567.8,
-  "periodo" : "otroPeriodo",
-  "fecha" : "2022-07-19"
+  {
+    "categoria": {
+      "id": 2,
+      "actividad": "otraActividad",
+      "tipoConsumo": "otroTipoConsumo"
+    },
+    "unidad": "otraUnidad",
+    "periodiciad": "A",
+    "valor": 567.8,
+    "periodo": "otroPeriodo",
+    "fecha": "2022-07-19"
+  }],
+  "fecha": "2022-07-21"
 }
