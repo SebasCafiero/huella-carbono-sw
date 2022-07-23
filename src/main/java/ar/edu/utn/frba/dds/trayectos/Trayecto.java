@@ -44,6 +44,14 @@ public class Trayecto {
         return tramos.stream().map(tramo->tramo.calcularDistancia()).reduce(0F,(tot,dist)->tot+dist);
     }
 
+    public void setTramos(List<Tramo> tramos) {
+        this.tramos = tramos;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Object getId() {
         return id;
     }
