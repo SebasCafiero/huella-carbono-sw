@@ -10,8 +10,10 @@
   },
   "clasificacionOrganizacion":"unaClasificacionOrganizacion",
   "sectores": [{
-    "nombre": "",
-    "organizacion": {},
+    "nombre": "Un sector",
+    "organizacion": {
+      "razonSocial": "Mercado Libre"
+    },
     "miembros": [{
       "nombre": "pepe",
       "apellido": "argento",
@@ -21,7 +23,11 @@
       "trayectos": [{
         "id": 1,
         "tramos":[{
-          "medioTransporte": {},
+          "medioTransporte": {
+            "tipo": 0,//"Vehiculo Paricular"
+            "transporte" : "AUTOMOVIL",
+            "combustible": "NAFTA"
+          },
           "coordenadaInicial": {
             "latitud": 1,
             "longitud": 1

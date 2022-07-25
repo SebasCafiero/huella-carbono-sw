@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.transportes.TipoCombustible;
 import ar.edu.utn.frba.dds.transportes.TipoVehiculo;
 import ar.edu.utn.frba.dds.transportes.VehiculoParticular;
 import ar.edu.utn.frba.dds.trayectos.Tramo;
-import ar.edu.utn.frba.dds.trayectos.Trayecto;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,9 +13,9 @@ import java.util.List;
 public class TramosMapper {
 
     private static <T> T getMedioTransporte(JSONObject jsonObject) {
-        switch (jsonObject.optInt("transporte")) {
+        switch (jsonObject.optInt("tipo")) {
             case 0:
-                return (T) new VehiculoParticular(TipoVehiculo.valueOf(jsonObject.optString("tipo")), TipoCombustible.valueOf(jsonObject.optString("combustible")));
+                return (T) new VehiculoParticular(TipoVehiculo.valueOf(jsonObject.optString("transporte")), TipoCombustible.valueOf(jsonObject.optString("combustible")));
            // case 1:
            //     return (T) Double.valueOf(value);
            // case 2:
