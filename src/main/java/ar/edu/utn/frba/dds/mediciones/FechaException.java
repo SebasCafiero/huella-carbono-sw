@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.excepciones;
+package ar.edu.utn.frba.dds.mediciones;
 
 public class FechaException extends Exception{
     public FechaException(){}

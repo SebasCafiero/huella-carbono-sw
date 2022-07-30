@@ -1,10 +1,7 @@
 package ar.edu.utn.frba.dds.lugares;
 
-import ar.edu.utn.frba.dds.excepciones.SectorException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static ar.edu.utn.frba.dds.lugares.TipoDeOrganizacionEnum.*;
 

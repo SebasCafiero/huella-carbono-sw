@@ -4,35 +4,28 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UbicacionGeografica {
-    public Set<Organizacion> organizaciones;
-    private String localidad;
+    private AreaSectorial sector;
     private Coordenada coordenada;
+    private Direccion direccion;
 
     public UbicacionGeografica(String lugar, Coordenada coordenada) {
-        this.localidad = lugar;
+        this.sector = new AreaSectorial(lugar);
         this.coordenada = coordenada;
-        this.organizaciones = new HashSet<>();
+        this.direccion = new Direccion(coordenada);
     }
 
     public UbicacionGeografica(String lugar, Float latitud, Float longitud){
-        this.localidad = lugar;
+        this.sector = new AreaSectorial(lugar);
         this.coordenada = new Coordenada(latitud,longitud);
-        this.organizaciones = new HashSet<>();
+        this.direccion = new Direccion(this.coordenada);
     }
 
-    public String getLocalidad() {
-        return localidad;
+    public AreaSectorial getSector() {
+        return sector;
     }
 
     public Coordenada getCoordenada() {
         return coordenada;
     }
 
-    public void agregarOrganizacion(Organizacion organizacion) {
-        this.organizaciones.add(organizacion);
-    }
-
-    public Set<Organizacion> getOrganizaciones() {
-        return organizaciones;
-    }
 }

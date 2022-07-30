@@ -1,9 +1,8 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-import ar.edu.utn.frba.dds.excepciones.FechaException;
+import ar.edu.utn.frba.dds.mediciones.FechaException;
 import ar.edu.utn.frba.dds.lugares.*;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
-import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
@@ -16,7 +15,6 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TrayectosHCMiembros {
 

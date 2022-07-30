@@ -1,32 +1,22 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-import ar.edu.utn.frba.dds.excepciones.FechaException;
+import ar.edu.utn.frba.dds.mediciones.FechaException;
 import ar.edu.utn.frba.dds.lugares.*;
 //import ar.edu.utn.frba.dds.mediciones.Parser;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
-import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
-import ar.edu.utn.frba.dds.personas.Miembro;
-import ar.edu.utn.frba.dds.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.transportes.*;
-import ar.edu.utn.frba.dds.trayectos.Tramo;
 import ar.edu.utn.frba.dds.trayectos.Trayecto;
-import com.opencsv.CSVReader;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
-import org.json.simple.parser.JSONParser;
-
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class TrayectosHCSectores {
 

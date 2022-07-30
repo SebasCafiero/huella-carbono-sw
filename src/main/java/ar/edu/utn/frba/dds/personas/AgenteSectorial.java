@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.personas;
 
+import ar.edu.utn.frba.dds.lugares.AreaSectorial;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 import ar.edu.utn.frba.dds.mediciones.Medicion;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AgenteSectorial {
-    private UbicacionGeografica ubicacion;
+    private AreaSectorial area;
     private String mail;
     private String telefono;
     private Integer periodo;
@@ -28,7 +29,7 @@ public class AgenteSectorial {
         FachadaOrganizacion fachada = new FachadaOrganizacion();
         HashMap<Organizacion,Float> resultados = new HashMap<>();
 
-        for(Organizacion organizacion : ubicacion.getOrganizaciones()) {
+        for(Organizacion organizacion : area.getOrganizaciones()) {
             List<Medible> mediciones = organizacion.getMediciones().stream()
                     .filter(me -> perteneceAPeriodo(me, anio, mes))
                     .collect(Collectors.toList());
@@ -47,7 +48,7 @@ public class AgenteSectorial {
 
     public Reporte crearReporte(Integer anio, Integer mes) throws MedicionSinFactorEmisionException {
 //        LocalDate fecha = LocalDate.now();
-        return new Reporte(ubicacion.getOrganizaciones(), this.obtenerHcxOrg(anio, mes), ubicacion, this.obtenerHC(anio,mes));
+        return new Reporte(area.getOrganizaciones(), this.obtenerHcxOrg(anio, mes), area, this.obtenerHC(anio,mes));
     }
 
     public void enviarReporte(){

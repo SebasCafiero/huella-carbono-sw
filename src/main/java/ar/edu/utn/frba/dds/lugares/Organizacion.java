@@ -1,16 +1,12 @@
 package ar.edu.utn.frba.dds.lugares;
 
-import ar.edu.utn.frba.dds.excepciones.MiembroException;
-import ar.edu.utn.frba.dds.excepciones.SectorException;
 import ar.edu.utn.frba.dds.mediciones.Medicion;
-import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.trayectos.Trayecto;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Organizacion {
     private String razonSocial;

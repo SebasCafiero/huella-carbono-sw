@@ -41,6 +41,7 @@ public class ParserTransportes {
                     JSONObject parada = arrayParadas.getJSONObject(paradaIndex);
 
                     ((TransportePublico) medioDeTransporte).agregarParada(new Parada(
+                            "BsAs", //TODO
                             new Coordenada(parada.getFloat("latitud"), parada.getFloat("longitud")),
                             parada.getFloat("distanciaAnterior"),
                             parada.getFloat("distanciaAnterior"))

@@ -1,22 +1,28 @@
 package ar.edu.utn.frba.dds.transportes;
 
 import ar.edu.utn.frba.dds.lugares.Coordenada;
+import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 
 public class Parada {
-    private Coordenada coordenada;
+    private UbicacionGeografica ubicacion;
     private Float distanciaAnterior;
     private Float distanciaProxima;
-//TODO VER SI NO CONVIENE CONOCER DIRECTAMENTE LA PARADA ANTERIOR Y PROXIMA?
 //La distanciaProxima de una parada deberia ser igual a la distanciaAnterior de la parada siguiente (VALIDAR)
 
-    public Parada(Coordenada coordenada, Float distanciaAnterior, Float distanciaProxima){
-        this.coordenada = coordenada;
+    public Parada(String lugar, Coordenada coordenada, Float distanciaAnterior, Float distanciaProxima){
+        this.ubicacion = new UbicacionGeografica(lugar, coordenada);
+        this.distanciaAnterior = distanciaAnterior;
+        this.distanciaProxima = distanciaProxima;
+    }
+
+    public Parada(UbicacionGeografica ubicacion, Float distanciaAnterior, Float distanciaProxima){
+        this.ubicacion = ubicacion;
         this.distanciaAnterior = distanciaAnterior;
         this.distanciaProxima = distanciaProxima;
     }
 
     public Coordenada getCoordenada() {
-        return coordenada;
+        return ubicacion.getCoordenada();
     }
 
     public Float getDistanciaAnterior() {

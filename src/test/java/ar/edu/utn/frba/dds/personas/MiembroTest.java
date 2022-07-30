@@ -1,12 +1,9 @@
 package ar.edu.utn.frba.dds.personas;
 
-import ar.edu.utn.frba.dds.excepciones.MiembroException;
-import ar.edu.utn.frba.dds.excepciones.SectorException;
+import ar.edu.utn.frba.dds.lugares.SectorException;
 import ar.edu.utn.frba.dds.lugares.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 public class MiembroTest {
 

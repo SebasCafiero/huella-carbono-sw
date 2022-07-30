@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
-import ar.edu.utn.frba.dds.excepciones.FechaException;
+import ar.edu.utn.frba.dds.mediciones.FechaException;
 import ar.edu.utn.frba.dds.mediciones.Categoria;
 import ar.edu.utn.frba.dds.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;

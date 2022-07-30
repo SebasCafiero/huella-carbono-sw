@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.mediciones;
 
-import ar.edu.utn.frba.dds.excepciones.FechaException;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 
 import java.time.LocalDate;

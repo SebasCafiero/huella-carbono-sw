@@ -10,8 +10,8 @@ import java.util.List;
 
 public class ServicioDDSTPA {
     //SERIA EL ROL ADAPTABLE DEL PATRON ADAPTER PARA EL SERVICIO DDSTPA
-    private static final String URL_ABS = "https://ddstpa.com.ar/api/";
-private static final String TOKEN = "Bearer moiMXLBahQOFzlNXcvEQVbkX6vOkHQOWuIx4sXdEEIE=";
+    private static final String URL_ABS = "https://ddstpa.com.ar/api/"; //https://app.swaggerhub.com/apis-docs/ezequieloscarescobar/geodds/1.0.0
+    private static final String TOKEN = "Bearer moiMXLBahQOFzlNXcvEQVbkX6vOkHQOWuIx4sXdEEIE=";
 
     private static ServicioDDSTPA instancia = null;
     private Retrofit retrofit;

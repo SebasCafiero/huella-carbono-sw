@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.mediciones;
 
+import ar.edu.utn.frba.dds.lugares.AreaSectorial;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 
@@ -10,15 +11,15 @@ import java.util.stream.Collectors;
 public class Reporte {
     private Set<Organizacion> organizaciones;
     private Map<Organizacion,Float> hcOrganizaciones;
-    private UbicacionGeografica ubicacion;
+    private AreaSectorial area;
     private Float hcTotal;
     private LocalDate fecha;
 
     public Reporte(Set<Organizacion> organizaciones, Map<Organizacion, Float> hcOrganizaciones,
-                   UbicacionGeografica ubicacion, Float hcTotal) {
+                   AreaSectorial area, Float hcTotal) {
         this.organizaciones = organizaciones;
         this.hcOrganizaciones = hcOrganizaciones;
-        this.ubicacion = ubicacion;
+        this.area = area;
         this.hcTotal = hcTotal;
         this.fecha = LocalDate.now();
     }
@@ -42,8 +43,8 @@ public class Reporte {
         return hcTotal;
     }
 
-    public UbicacionGeografica getUbicacion() {
-        return ubicacion;
+    public AreaSectorial getArea() {
+        return area;
     }
 
     public LocalDate getFecha() {

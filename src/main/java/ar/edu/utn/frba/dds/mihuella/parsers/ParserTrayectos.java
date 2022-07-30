@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.mihuella.parsers;
 
 import ar.edu.utn.frba.dds.lugares.Coordenada;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
+import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.transportes.MedioFactory;
@@ -73,7 +74,10 @@ public class ParserTrayectos {
                 Coordenada coordenadaInicial = new Coordenada(Float.parseFloat(data[3]), Float.parseFloat(data[4]));
                 Coordenada coordenadaFinal = new Coordenada(Float.parseFloat(data[5]), Float.parseFloat(data[6]));
 
-                trayecto.agregarTramo(new Tramo(medioDeTransporte.get(), coordenadaInicial, coordenadaFinal));
+                String lugar = "BsAs"; //TODO
+                UbicacionGeografica ubicacionInicial = new UbicacionGeografica(lugar, coordenadaInicial);
+                UbicacionGeografica ubicacionFinal = new UbicacionGeografica(lugar, coordenadaFinal);
+                trayecto.agregarTramo(new Tramo(medioDeTransporte.get(), ubicacionInicial, ubicacionFinal));
 
             } else {
                 // Si da error el get es porque se intentó referenciar con un trayecto

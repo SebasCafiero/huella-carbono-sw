@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.trayectos;
 
 import ar.edu.utn.frba.dds.lugares.Coordenada;
+import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
 
@@ -8,15 +9,27 @@ import java.util.List;
 
 public class Tramo implements Medible {
     private MedioDeTransporte medioDeTransporte;
-    private Coordenada coordenadaInicial;
-    private Coordenada coordenadaFinal;
+    private UbicacionGeografica ubicacionInicial;
+    private UbicacionGeografica ubicacionFinal;
 //    private List<Trayecto> trayectos;
     private Trayecto trayecto;
 
-    public Tramo(MedioDeTransporte medioDeTransporte, Coordenada coordInicial, Coordenada coordFinal){
+    public Tramo(MedioDeTransporte medioDeTransporte, String lugarInicial, Coordenada coordInicial, String lugarFinal, Coordenada coordFinal){
         this.medioDeTransporte = medioDeTransporte;
-        this.coordenadaInicial = coordInicial;
-        this.coordenadaFinal = coordFinal;
+        this.ubicacionInicial = new UbicacionGeografica(lugarInicial, coordInicial);
+        this.ubicacionFinal = new UbicacionGeografica(lugarFinal, coordFinal);
+    }
+
+    public Tramo(MedioDeTransporte medioDeTransporte, Coordenada coordInicial, Coordenada coordFinal){ //TODO
+        this.medioDeTransporte = medioDeTransporte;
+        this.ubicacionInicial = new UbicacionGeografica("BsAs", coordInicial);
+        this.ubicacionFinal = new UbicacionGeografica("BsAs", coordFinal);
+    }
+
+    public Tramo(MedioDeTransporte medioDeTransporte, UbicacionGeografica ubicacionInicial, UbicacionGeografica ubicacionFinal){
+        this.medioDeTransporte = medioDeTransporte;
+        this.ubicacionInicial = ubicacionInicial;
+        this.ubicacionFinal = ubicacionFinal;
     }
 
     public MedioDeTransporte getMedioDeTransporte(){
@@ -24,11 +37,11 @@ public class Tramo implements Medible {
     }
 
     public Coordenada getCoordenadaInicial() {
-        return coordenadaInicial;
+        return ubicacionInicial.getCoordenada();
     }
 
     public Coordenada getCoordenadaFinal() {
-        return coordenadaFinal;
+        return ubicacionFinal.getCoordenada();
     }
 
     public Float calcularDistancia(){

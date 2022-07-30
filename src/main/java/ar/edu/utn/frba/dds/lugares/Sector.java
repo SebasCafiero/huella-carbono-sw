@@ -1,12 +1,9 @@
 package ar.edu.utn.frba.dds.lugares;
 
-import ar.edu.utn.frba.dds.excepciones.MiembroException;
-import ar.edu.utn.frba.dds.excepciones.SectorException;
+import ar.edu.utn.frba.dds.personas.MiembroException;
 import ar.edu.utn.frba.dds.personas.Miembro;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Sector {

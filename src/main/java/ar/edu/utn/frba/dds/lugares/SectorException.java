@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.excepciones;
+package ar.edu.utn.frba.dds.lugares;
 
 public class SectorException extends Exception{
 
