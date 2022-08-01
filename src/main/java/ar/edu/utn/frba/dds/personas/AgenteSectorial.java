@@ -2,24 +2,29 @@ package ar.edu.utn.frba.dds.personas;
 
 import ar.edu.utn.frba.dds.lugares.AreaSectorial;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
-import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 import ar.edu.utn.frba.dds.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mediciones.Reporte;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
+import ar.edu.utn.frba.dds.servicios.reportes.NotificadorReportes;
 import ar.edu.utn.frba.dds.trayectos.Trayecto;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AgenteSectorial {
     private AreaSectorial area;
-    private String mail;
+    private ContactoMail contactoMail;
     private String telefono;
-    private Integer periodo;
     private List<Reporte> reportes;
+
+    public AgenteSectorial(AreaSectorial areaSectorial) {
+        this.reportes = new ArrayList<>();
+        this.area = areaSectorial;
+    }
 
     public Float obtenerHC(Integer anio, Integer mes) throws MedicionSinFactorEmisionException {
         return obtenerHcxOrg(anio, mes).values().stream().reduce(0F, Float::sum);
@@ -51,8 +56,10 @@ public class AgenteSectorial {
         return new Reporte(area.getOrganizaciones(), this.obtenerHcxOrg(anio, mes), area, this.obtenerHC(anio,mes));
     }
 
-    public void enviarReporte(){
-
+    public void hacerReporte(NotificadorReportes notificador, Integer anio, Integer mes) throws MedicionSinFactorEmisionException {
+        notificador.setAgente(this)
+                .setInformacionReporte(this.crearReporte(anio, mes))
+                .notificarReporte();
     }
 
     private boolean perteneceAPeriodo(Medicion medicion, Integer anio, Integer mes) {
@@ -71,5 +78,25 @@ public class AgenteSectorial {
             return trayecto.getAnio().equals(anio) && trayecto.getMes().equals(mes);
         }
         return false;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public List<Reporte> getReportes() {
+        return reportes;
+    }
+
+    public ContactoMail getContactoMail() {
+        return contactoMail;
+    }
+
+    public void setContactoMail(ContactoMail contactoMail) {
+        this.contactoMail = contactoMail;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 }

@@ -48,7 +48,7 @@ public class ParserTrayectos {
             Trayecto trayecto;
 
             if(!data[0].equals("0")) {
-                System.out.println("Cargo nuevo trayecto");
+                System.out.println("No es trayecto compartido pasivo");
 
                 Optional<Trayecto> miTrayecto = trayectos.stream()
                         .filter(tr -> tr.getId().equals(Integer.parseInt(data[0].trim())))

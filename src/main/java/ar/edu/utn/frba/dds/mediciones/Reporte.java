@@ -24,13 +24,6 @@ public class Reporte {
         this.fecha = LocalDate.now();
     }
 
-    public void notificar() {
-        List<String> destinatarios = this.organizaciones.stream()
-                .flatMap(org -> org.getContactosMail().stream()).collect(Collectors.toList());
-        //System.out.println();
-        // TODO enviar mails a contactos
-    }
-
     public Set<Organizacion> getOrganizaciones() {
         return organizaciones;
     }
