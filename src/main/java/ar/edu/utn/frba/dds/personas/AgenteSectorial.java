@@ -63,18 +63,18 @@ public class AgenteSectorial {
     }
 
     private boolean perteneceAPeriodo(Medicion medicion, Integer anio, Integer mes) {
-        if(medicion.getPeriodicidad().equals("A")) {
+        if(medicion.getPeriodicidad().equals('A')) {
             return medicion.getAnio().equals(anio);
-        } else if(medicion.getPeriodicidad().equals("M")) {
+        } else if(medicion.getPeriodicidad().equals('M')) {
             return medicion.getAnio().equals(anio) && medicion.getMes().equals(mes);
         }
         return false;
     }
 
     private boolean perteneceAPeriodo(Trayecto trayecto, Integer anio, Integer mes) {
-        if(trayecto.getPeriodicidad().equals("A")) {
+        if(trayecto.getPeriodicidad().equals('A')) {
             return trayecto.getAnio().equals(anio);
-        } else if(trayecto.getPeriodicidad().equals("M")) {
+        } else if(trayecto.getPeriodicidad().equals('M')) {
             return trayecto.getAnio().equals(anio) && trayecto.getMes().equals(mes);
         }
         return false;

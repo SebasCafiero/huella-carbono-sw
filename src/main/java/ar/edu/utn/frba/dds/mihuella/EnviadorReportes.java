@@ -64,8 +64,8 @@ public class EnviadorReportes {
             return;
         }
 
-        Integer anio = 1;
-        Integer mes = 1;
+        Integer anio = 2020;
+        Integer mes = 10;
 
         FachadaOrganizacion fachada = new FachadaOrganizacion();
         fachada.cargarParametros(factoresDeEmision);

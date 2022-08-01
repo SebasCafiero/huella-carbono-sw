@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.mihuella.parsers;
 import ar.edu.utn.frba.dds.lugares.Coordenada;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
+import ar.edu.utn.frba.dds.mediciones.FechaException;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.transportes.MedioFactory;
@@ -11,6 +12,7 @@ import ar.edu.utn.frba.dds.trayectos.Trayecto;
 import com.opencsv.CSVReader;
 
 import java.io.FileReader;
+import java.time.LocalDate;
 import java.util.*;
 
 public class ParserTrayectos {
@@ -57,7 +59,19 @@ public class ParserTrayectos {
                 if(miTrayecto.isPresent()) {
                     trayecto = miTrayecto.get();
                 } else {
-                    trayecto = new Trayecto();
+                    char periodicidad = data[10].charAt(0);
+                    LocalDate periodo;
+
+                    if(periodicidad == 'M'){
+                        String[] mesYanio = data[11].split("/");
+                        periodo = LocalDate.parse(mesYanio[1]+"-"+mesYanio[0]+"-01");
+                    }
+                    else if(periodicidad == 'A'){
+                        periodo = LocalDate.parse(data[11] + "-01-01");
+                    }
+                    else throw new FechaException("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO
+
+                    trayecto = new Trayecto(periodo, periodicidad);
                     trayecto.setId(Integer.parseInt(data[0].trim()));
                     trayectos.add(trayecto);
                 }

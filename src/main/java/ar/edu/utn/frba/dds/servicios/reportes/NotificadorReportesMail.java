@@ -51,8 +51,6 @@ public class NotificadorReportesMail implements NotificadorReportes {
         String remitente = agente.getContactoMail().getDireccionEMail();
         String contra = agente.getContactoMail().getPasssword();
 
-        System.out.println("Remitente: " + remitente + ". Contra:" + contra);
-
         Properties props = System.getProperties();
         props.put("mail.smtp.host", "smtp.gmail.com");  //El servidor SMTP de Google
         props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
