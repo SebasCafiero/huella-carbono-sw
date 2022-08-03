@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.lugares;
 
+import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.mediciones.Medicion;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.trayectos.Trayecto;

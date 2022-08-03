@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.personas;
 
 import ar.edu.utn.frba.dds.lugares.SectorException;
 import ar.edu.utn.frba.dds.lugares.*;
+import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +17,11 @@ public class MiembroTest {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Sector Primario"),
-                new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+                new UbicacionGeografica(new Coordenada(10F,5F)));
 
         Sector unSector = new Sector("miSector",unaOrg);
 
-        Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",10F,20F));
+        Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(10F,20F)));
 
         miembro1.solicitarIngresoAlSector(unSector);
 
@@ -35,11 +37,11 @@ public class MiembroTest {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Sector secundario"),
-                new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+                new UbicacionGeografica(new Coordenada(10F,5F)));
 
         Sector unSector = new Sector("miSector",unaOrg);
 
-        Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",15F,10F));
+        Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(15F,10F)));
 
         unMiembro.solicitarIngresoAlSector(unSector);
 
@@ -61,10 +63,10 @@ public class MiembroTest {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Sector secundario"),
-                new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+                new UbicacionGeografica(new Coordenada(10F,5F)));
 
         Sector unSector = new Sector("miSector",unaOrg);
-        Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",10F,10F));
+        Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(10F,10F)));
 
         unMiembro.solicitarIngresoAlSector(unSector);
 
@@ -76,12 +78,12 @@ public class MiembroTest {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Organizacion"),
-                new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+                new UbicacionGeografica(new Coordenada(10F,5F)));
 
         Sector unSector = new Sector("miSector",unaOrg);
-        Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",11F,12F));
-        Miembro miembro2 = new Miembro("pepe", "gomez",TipoDeDocumento.DNI,54321,new UbicacionGeografica("Buenos Aires",15F,10F));
-        Miembro miembro3 = new Miembro("mario", "lopez",TipoDeDocumento.DNI,11111,new UbicacionGeografica("Buenos Aires",5F,6F));
+        Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(11F,12F)));
+        Miembro miembro2 = new Miembro("pepe", "gomez",TipoDeDocumento.DNI,54321,new UbicacionGeografica(new Coordenada(15F,10F)));
+        Miembro miembro3 = new Miembro("mario", "lopez",TipoDeDocumento.DNI,11111,new UbicacionGeografica(new Coordenada(5F,6F)));
 
         Assertions.assertEquals(0,unSector.cantidadMiembros());
 

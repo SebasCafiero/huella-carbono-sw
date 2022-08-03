@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
-import ar.edu.utn.frba.dds.lugares.Coordenada;
+import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.transportes.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,7 +41,6 @@ public class ParserTransportes {
                     JSONObject parada = arrayParadas.getJSONObject(paradaIndex);
 
                     ((TransportePublico) medioDeTransporte).agregarParada(new Parada(
-                            "BsAs", //TODO
                             new Coordenada(parada.getFloat("latitud"), parada.getFloat("longitud")),
                             parada.getFloat("distanciaAnterior"),
                             parada.getFloat("distanciaAnterior"))

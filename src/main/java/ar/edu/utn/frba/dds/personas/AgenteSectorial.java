@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.personas;
 
-import ar.edu.utn.frba.dds.lugares.AreaSectorial;
+import ar.edu.utn.frba.dds.lugares.geografia.AreaSectorial;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mediciones.Reporte;

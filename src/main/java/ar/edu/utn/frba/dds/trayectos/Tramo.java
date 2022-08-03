@@ -1,7 +1,8 @@
 package ar.edu.utn.frba.dds.trayectos;
 
-import ar.edu.utn.frba.dds.lugares.Coordenada;
-import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
+import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.lugares.geografia.Direccion;
+import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
 
@@ -13,16 +14,16 @@ public class Tramo implements Medible {
 //    private List<Trayecto> trayectos;
     private Trayecto trayecto;
 
-    public Tramo(MedioDeTransporte medioDeTransporte, String lugarInicial, Coordenada coordInicial, String lugarFinal, Coordenada coordFinal){
+    public Tramo(MedioDeTransporte medioDeTransporte, Direccion direccionInicial, Coordenada coordInicial, Direccion direccionFinal, Coordenada coordFinal){
         this.medioDeTransporte = medioDeTransporte;
-        this.ubicacionInicial = new UbicacionGeografica(lugarInicial, coordInicial);
-        this.ubicacionFinal = new UbicacionGeografica(lugarFinal, coordFinal);
+        this.ubicacionInicial = new UbicacionGeografica(direccionInicial, coordInicial);
+        this.ubicacionFinal = new UbicacionGeografica(direccionFinal, coordFinal);
     }
 
-    public Tramo(MedioDeTransporte medioDeTransporte, Coordenada coordInicial, Coordenada coordFinal){ //TODO
+    public Tramo(MedioDeTransporte medioDeTransporte, Coordenada coordInicial, Coordenada coordFinal){
         this.medioDeTransporte = medioDeTransporte;
-        this.ubicacionInicial = new UbicacionGeografica("BsAs", coordInicial);
-        this.ubicacionFinal = new UbicacionGeografica("BsAs", coordFinal);
+        this.ubicacionInicial = new UbicacionGeografica(coordInicial);
+        this.ubicacionFinal = new UbicacionGeografica(coordFinal);
     }
 
     public Tramo(MedioDeTransporte medioDeTransporte, UbicacionGeografica ubicacionInicial, UbicacionGeografica ubicacionFinal){

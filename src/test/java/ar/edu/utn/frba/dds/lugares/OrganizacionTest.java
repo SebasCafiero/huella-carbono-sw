@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.lugares;
 
+import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +15,7 @@ public class OrganizacionTest {
         Organizacion unaOrg = new Organizacion("Una empresa",
                 TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Escuela"),
-                new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+                new UbicacionGeografica(new Coordenada(10F,5F)));
 
         Sector sistemas = new Sector("Sistemas", unaOrg);
 
@@ -27,7 +29,7 @@ public class OrganizacionTest {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 ONG,
                 new ClasificacionOrganizacion("GreenPeace"),
-                new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+                new UbicacionGeografica(new Coordenada(10F,5F)));
 
 
         Assertions.assertEquals(0,unaOrg.cantidadSectores());

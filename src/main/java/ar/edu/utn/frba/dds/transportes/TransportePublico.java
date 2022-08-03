@@ -1,8 +1,7 @@
 package ar.edu.utn.frba.dds.transportes;
 
-import ar.edu.utn.frba.dds.lugares.Coordenada;
+import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.trayectos.Tramo;
-import sun.awt.image.ImageWatched;
 
 import java.util.*;
 

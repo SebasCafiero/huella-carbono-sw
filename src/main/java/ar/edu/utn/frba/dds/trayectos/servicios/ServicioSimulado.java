@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.trayectos.servicios;
 
-import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
-import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica2;
+import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 
 public class ServicioSimulado implements CalculadoraDistancias {
 

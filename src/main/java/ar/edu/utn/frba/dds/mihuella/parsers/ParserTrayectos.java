@@ -1,8 +1,9 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
-import ar.edu.utn.frba.dds.lugares.Coordenada;
+import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
-import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
+import ar.edu.utn.frba.dds.lugares.geografia.Direccion;
+import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.mediciones.FechaException;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
@@ -88,9 +89,9 @@ public class ParserTrayectos {
                 Coordenada coordenadaInicial = new Coordenada(Float.parseFloat(data[3]), Float.parseFloat(data[4]));
                 Coordenada coordenadaFinal = new Coordenada(Float.parseFloat(data[5]), Float.parseFloat(data[6]));
 
-                String lugar = "BsAs"; //TODO
-                UbicacionGeografica ubicacionInicial = new UbicacionGeografica(lugar, coordenadaInicial);
-                UbicacionGeografica ubicacionFinal = new UbicacionGeografica(lugar, coordenadaFinal);
+
+                UbicacionGeografica ubicacionInicial = new UbicacionGeografica(coordenadaInicial);
+                UbicacionGeografica ubicacionFinal = new UbicacionGeografica(coordenadaFinal);
                 trayecto.agregarTramo(new Tramo(medioDeTransporte.get(), ubicacionInicial, ubicacionFinal));
 
             } else {

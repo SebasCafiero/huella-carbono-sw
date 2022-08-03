@@ -5,24 +5,25 @@ public class Direccion2 {
     private Integer numero;
     private String calle;
     private String localidad;
-    private String municipio;
-    private String provincia;
-    private String pais;
+    private Municipio municipio;
 
 
-    public Direccion2(String pais, String provincia, String municipio, String localidad, String calle, Integer numero) {
-        this.pais = pais;
-        this.provincia = provincia;
+    public Direccion2(Municipio municipio, String localidad, String calle, Integer numero) {
         this.municipio = municipio;
         this.localidad = localidad;
         this.calle = calle;
         this.numero = numero;
     }
 
+    public Direccion2(String pais, String provincia, String municipio, String localidad, String calle, Integer numero) {
+        this.municipio = new Municipio(municipio, provincia, pais);
+        this.localidad = localidad;
+        this.calle = calle;
+        this.numero = numero;
+    }
+
     public Direccion2(String localidad, String calle, Integer numero) {
-        this.pais = "Argentina";
-        this.provincia = "Buenos Aires";
-        this.municipio = "Avellaneda";
+        this.municipio = new Municipio("Avellaneda", "Buenos Aires", "Argentina");
         this.localidad = localidad;
         this.calle = calle;
         this.numero = numero;
@@ -40,15 +41,7 @@ public class Direccion2 {
         return localidad;
     }
 
-    public String getMunicipio() {
+    public Municipio getMunicipio() {
         return municipio;
-    }
-
-    public String getProvincia() {
-        return provincia;
-    }
-
-    public String getPais() {
-        return pais;
     }
 }

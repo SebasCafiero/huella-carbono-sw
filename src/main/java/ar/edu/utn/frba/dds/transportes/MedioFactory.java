@@ -1,9 +1,5 @@
 package ar.edu.utn.frba.dds.transportes;
 
-import ar.edu.utn.frba.dds.lugares.Coordenada;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 public class MedioFactory {
 
     public MedioDeTransporte getMedioDeTransporte(String tipo, String subtipo, String atr2) throws Exception {

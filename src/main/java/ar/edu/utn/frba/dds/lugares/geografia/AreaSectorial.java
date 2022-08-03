@@ -1,4 +1,7 @@
-package ar.edu.utn.frba.dds.lugares;
+package ar.edu.utn.frba.dds.lugares.geografia;
+
+import ar.edu.utn.frba.dds.lugares.Organizacion;
+import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 
 import java.util.HashSet;
 import java.util.Set;

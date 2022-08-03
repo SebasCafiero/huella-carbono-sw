@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.personas;
 
 import ar.edu.utn.frba.dds.lugares.Organizacion;
 import ar.edu.utn.frba.dds.lugares.Sector;
-import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
+import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.trayectos.Trayecto;
 
 import java.util.*;

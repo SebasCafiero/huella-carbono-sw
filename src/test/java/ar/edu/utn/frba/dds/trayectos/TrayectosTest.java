@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.trayectos;
 
+import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.personas.MiembroException;
 import ar.edu.utn.frba.dds.lugares.SectorException;
 import ar.edu.utn.frba.dds.lugares.*;
@@ -25,16 +27,16 @@ public class TrayectosTest {
 
     @Test
     public void testCargaDeTrayectosEnOrganizacion() throws SectorException, MiembroException {
-        Organizacion unaOrg = new Organizacion("utn", TipoDeOrganizacionEnum.INSTITUCION,new ClasificacionOrganizacion("Universidad"),new UbicacionGeografica("Buenos Aires",new Coordenada(10F,5F)));
+        Organizacion unaOrg = new Organizacion("utn", TipoDeOrganizacionEnum.INSTITUCION,new ClasificacionOrganizacion("Universidad"),new UbicacionGeografica(new Coordenada(10F,5F)));
         Sector unSector = new Sector("Administracion",unaOrg);
-        Miembro unMiembro = new Miembro("Pedrito","Lopez", TipoDeDocumento.DNI,12345,new UbicacionGeografica("Buenos Aires",10F,10F));
+        Miembro unMiembro = new Miembro("Pedrito","Lopez", TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(10F,10F)));
         unMiembro.solicitarIngresoAlSector(unSector);
 
         TransportePublico unTransportePublico = new TransportePublico(TipoTransportePublico.COLECTIVO,"26");
         unTransportePublico.agregarParadas(
-                new Parada("BsAs", new Coordenada(1F,1F),0F,8F),
-                new Parada("BsAs", new Coordenada(3F,7F),8F,18F),
-                new Parada("BsAs", new Coordenada(15F,13F),18F,0F)
+                new Parada(new Coordenada(1F,1F),0F,8F),
+                new Parada(new Coordenada(3F,7F),8F,18F),
+                new Parada(new Coordenada(15F,13F),18F,0F)
         );
 
         Trayecto unTrayecto = new Trayecto();
@@ -50,7 +52,7 @@ public class TrayectosTest {
 
     @Test
     public void testCargaDeTrayectosCompartidos() throws MedicionSinFactorEmisionException {
-        UbicacionGeografica ubicacionHogar = new UbicacionGeografica("Buenos Aires",0F,0F);
+        UbicacionGeografica ubicacionHogar = new UbicacionGeografica(new Coordenada(0F,0F));
 //        UbicacionGeografica ubicacionOrg = new UbicacionGeografica("Buenos Aires",10F,15F);
 //        Organizacion unaOrg = new Organizacion("utn",TipoDeOrganizacionEnum.INSTITUCION, new ClasificacionOrganizacion("Universidad"),ubicacionOrg);
 
@@ -59,10 +61,10 @@ public class TrayectosTest {
         Miembro miembro3 = new Miembro("m3","m3",TipoDeDocumento.DNI,3,ubicacionHogar);
 
         TransportePublico unTransportePublico = new TransportePublico(TipoTransportePublico.TREN,"Mitre");
-        unTransportePublico.agregarParada(new Parada("BsAs", new Coordenada(8F,15F),22F,13F)); //Parada de mas
-        unTransportePublico.agregarParada(new Parada("BsAs", new Coordenada(5F,5F),13F,20F));
-        unTransportePublico.agregarParada(new Parada("BsAs", new Coordenada(20F,10F),20F,30F));
-        unTransportePublico.agregarParada(new Parada("BsAs", new Coordenada(30F,30F),30F,26F)); //Parada de mas
+        unTransportePublico.agregarParada(new Parada(new Coordenada(8F,15F),22F,13F)); //Parada de mas
+        unTransportePublico.agregarParada(new Parada(new Coordenada(5F,5F),13F,20F));
+        unTransportePublico.agregarParada(new Parada(new Coordenada(20F,10F),20F,30F));
+        unTransportePublico.agregarParada(new Parada(new Coordenada(30F,30F),30F,26F)); //Parada de mas
         TransporteEcologico unaCaminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
         ServicioContratado unServicioContratado = new ServicioContratado(new TipoServicio("Taxi"));
 

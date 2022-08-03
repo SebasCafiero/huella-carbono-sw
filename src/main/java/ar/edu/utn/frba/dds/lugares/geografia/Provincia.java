@@ -12,4 +12,7 @@ public class Provincia extends SectorTerritorial {
         this.organizaciones = new HashSet<>();
     }
 
+    public String getNombrePais() {
+        return nombrePais;
+    }
 }

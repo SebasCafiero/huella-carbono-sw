@@ -1,12 +1,10 @@
 package ar.edu.utn.frba.dds.mediciones;
 
-import ar.edu.utn.frba.dds.lugares.AreaSectorial;
+import ar.edu.utn.frba.dds.lugares.geografia.AreaSectorial;
 import ar.edu.utn.frba.dds.lugares.Organizacion;
-import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Reporte {
     private Set<Organizacion> organizaciones;

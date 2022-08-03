@@ -12,4 +12,7 @@ public class Municipio extends SectorTerritorial {
         this.organizaciones = new HashSet<>();
     }
 
+    public Provincia getProvincia() {
+        return provincia;
+    }
 }

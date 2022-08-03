@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.trayectos;
 
-import ar.edu.utn.frba.dds.lugares.Coordenada;
+import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.transportes.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,9 +33,9 @@ public class DistanciasTest {
         unTransportePublico.agregarParada(new Parada(new Coordenada(11F,15F),0.5F,0.3F));*/
 
         unTransportePublico.agregarParadas(
-                new Parada("BsAs", new Coordenada(5F,5F),0.3F,0.6F),
-                new Parada("BsAs", new Coordenada(8F,12F),0.6F,0.8F),
-                new Parada("BsAs", new Coordenada(11F,15F),0.5F,0.3F)
+                new Parada(new Coordenada(5F,5F),0.3F,0.6F),
+                new Parada(new Coordenada(8F,12F),0.6F,0.8F),
+                new Parada(new Coordenada(11F,15F),0.5F,0.3F)
         );
 
         Trayecto unTrayecto = new Trayecto();
@@ -53,9 +53,9 @@ public class DistanciasTest {
     @Test
     public void testCalculoDistanciaTramosCombinandoTransportes(){
         TransportePublico unSubte = new TransportePublico(TipoTransportePublico.SUBTE,"C");
-        unSubte.agregarParada(new Parada("BsAs", new Coordenada(15F,13F),0.1F,0.2F));
-        unSubte.agregarParada(new Parada("BsAs", new Coordenada(17F,17F),0.2F,0.3F));
-        unSubte.agregarParada(new Parada("BsAs", new Coordenada(19F,21F),0.3F,0.4F));
+        unSubte.agregarParada(new Parada(new Coordenada(15F,13F),0.1F,0.2F));
+        unSubte.agregarParada(new Parada(new Coordenada(17F,17F),0.2F,0.3F));
+        unSubte.agregarParada(new Parada(new Coordenada(19F,21F),0.3F,0.4F));
 
         ServicioContratado unUber = new ServicioContratado(new TipoServicio("Uber"));
         Trayecto unTrayecto = new Trayecto();

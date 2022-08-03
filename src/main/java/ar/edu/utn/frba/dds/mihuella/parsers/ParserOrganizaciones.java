@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
 import ar.edu.utn.frba.dds.lugares.*;
+import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.personas.Miembro;
 import ar.edu.utn.frba.dds.personas.TipoDeDocumento;
 import org.json.JSONArray;
@@ -29,7 +31,8 @@ public class ParserOrganizaciones {
                 throw new Exception("Error en el tipo de la organizacion. No existe el tipo " + org.getString("tipo"));
 
             TipoDeOrganizacionEnum tipoDeOrganizacion = TipoDeOrganizacionEnum.valueOf(org.getString("tipo"));
-            UbicacionGeografica ubicacionOrg = new UbicacionGeografica(org.getString("ubicacion"), org.getFloat("latitud"), org.getFloat("longitud"));
+//            UbicacionGeografica ubicacionOrg = new UbicacionGeografica(org.getString("ubicacion"), org.getFloat("latitud"), org.getFloat("longitud"));
+            UbicacionGeografica ubicacionOrg = new UbicacionGeografica(new Coordenada(org.getFloat("latitud"), org.getFloat("longitud"))); //TODO VER DE PARSEAR DIRECCION
 
             Organizacion nuevaOrg = new Organizacion(razonSocial, tipoDeOrganizacion, clasificacion, ubicacionOrg);
             organizaciones.add(nuevaOrg);
@@ -50,7 +53,8 @@ public class ParserOrganizaciones {
                     TipoDeDocumento tipoDeDocumento = TipoDeDocumento.valueOf(miembro.getString("tipoDocumento"));
                     int documento = miembro.getInt("documento");
 
-                    UbicacionGeografica ubicacionMiembro = new UbicacionGeografica(org.getString("ubicacion"), org.getFloat("latitud"), org.getFloat("longitud"));
+//                    UbicacionGeografica ubicacionMiembro = new UbicacionGeografica(org.getString("ubicacion"), org.getFloat("latitud"), org.getFloat("longitud"));
+                    UbicacionGeografica ubicacionMiembro = new UbicacionGeografica(new Coordenada(org.getFloat("latitud"), org.getFloat("longitud"))); //TODO VER DE PARSEAR DIRECCION
                     Miembro nuevoMiembro = new Miembro(nombreMiembro, apellido, tipoDeDocumento, documento, ubicacionMiembro);
 
                     nuevoSector.agregarMiembro(nuevoMiembro);

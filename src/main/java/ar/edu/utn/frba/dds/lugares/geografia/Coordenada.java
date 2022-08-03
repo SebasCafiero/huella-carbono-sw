@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.lugares;
+package ar.edu.utn.frba.dds.lugares.geografia;
 
 public class Coordenada {
     private Float latitud;

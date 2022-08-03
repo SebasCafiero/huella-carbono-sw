@@ -1,13 +1,11 @@
 package ar.edu.utn.frba.dds.trayectos;
 
-import ar.edu.utn.frba.dds.lugares.Coordenada;
-import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
+import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.personas.Miembro;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class Trayecto {

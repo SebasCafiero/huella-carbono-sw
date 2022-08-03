@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.mihuella;
 
 
 import ar.edu.utn.frba.dds.lugares.*;
+import ar.edu.utn.frba.dds.lugares.geografia.AreaSectorial;
 import ar.edu.utn.frba.dds.mediciones.FechaException;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
