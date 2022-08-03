@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UbicacionGeografica {
-    private AreaSectorial sector;
+    private AreaSectorial sector; //municipio o provincia
     private Coordenada coordenada;
     private Direccion direccion;
 
@@ -22,6 +22,10 @@ public class UbicacionGeografica {
 
     public AreaSectorial getSector() {
         return sector;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
     }
 
     public Coordenada getCoordenada() {

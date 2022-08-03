@@ -44,11 +44,12 @@ public class Trayecto {
     }
 
     public Coordenada obtenerPuntoInicial(){
-        return tramos.get(0).getCoordenadaInicial(); //PONER EXCEPCION SI LISTA VACIA
+        return tramos.get(0).getUbicacionInicial().getCoordenada(); //PONER EXCEPCION SI LISTA VACIA O USAR OPTIONAL
+//        return tramos.stream().findFirst().map(t -> t.getUbicacionInicial().getCoordenada()).orElse();
     }
 
     public Coordenada obtenerPuntoFinal(){
-        return tramos.get(tramos.size()-1).getCoordenadaFinal(); //PONER EXCEPCION SI LISTA VACIA
+        return tramos.get(tramos.size()-1).getUbicacionFinal().getCoordenada(); //PONER EXCEPCION SI LISTA VACIA O USAR OPTIONAL
     }
 
     public Float calcularDistancia(){

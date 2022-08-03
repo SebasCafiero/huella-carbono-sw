@@ -20,6 +20,19 @@ public interface OperacionesDDSTPA {
                               @Query("calleDestino") String calleDestino,
                               @Query("alturaDestino") int alturaDestino);
 
-    @GET("provincias?offset=1&paisId=9")
-    Call<List<Provincia>> provincias(@Header("Authorization") String token);
+    @GET("provincias?offset=1")
+    Call<List<ProvinciaGson>> provincias(@Header("Authorization") String token,
+                                         @Query("paisId") int paisId);
+
+    @GET("paises?offset=1")
+    Call<List<PaisGson>> paises(@Header("Authorization") String token);
+
+    @GET("municipios")
+    Call<List<MunicipioGson>> municipios(@Header("Authorization") String token,
+                                         @Query("offset") int pagina,
+                                         @Query("provinciaId") int provinciaId);
+
+    @GET("localidades?offset=1")
+    Call<List<LocalidadGson>> localidades(@Header("Authorization") String token,
+                                          @Query("municipioId") int municipioId);
 }

@@ -14,6 +14,14 @@ public class Direccion {
         this.numero = obtenerNumero(coordenada);
     }
 
+    public Integer getNumero() {
+        return numero;
+    }
+
+    public String getCalle() {
+        return calle;
+    }
+
     //TODO
     public String obtenerCalle(Coordenada unaCoordenada) {
         return "";

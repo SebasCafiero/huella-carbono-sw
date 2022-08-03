@@ -31,7 +31,7 @@ public class TransportePublico extends MedioDeTransporte {
 
     @Override
     public Float calcularDistancia(Tramo tramo) { //Quizas una interface que haga el calculo, ver calculadoraDistancias_Objetivo del diagrama
-        Parada paradaInicial = buscarParada(tramo.getCoordenadaInicial());
+        Parada paradaInicial = buscarParada(tramo.getUbicacionInicial().getCoordenada());
         if (paradaInicial == null)
             System.out.println("ERROR DE COORDENADAS"); //TODO VER DE USAR EXCEPCIONES
         //Parada paradaFinal = buscarParada(tramo.getCoordenadaFinal());

@@ -46,11 +46,32 @@ public class ServicioDDSTPA {
 
     }
 
-    public List<Provincia> provincias() throws IOException {
+    public List<ProvinciaGson> provincias(int idPais) throws IOException {
         OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
-        Call<List<Provincia>> requestProvincias = operacionesDDSTPA.provincias(TOKEN);
-        Response<List<Provincia>> responseProvincias = requestProvincias.execute();
+        Call<List<ProvinciaGson>> requestProvincias = operacionesDDSTPA.provincias(TOKEN, idPais);
+        Response<List<ProvinciaGson>> responseProvincias = requestProvincias.execute();
         return responseProvincias.body();
+    }
+
+    public List<MunicipioGson> municipios(int idProvincia) throws IOException {
+        OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
+        Call<List<MunicipioGson>> requestMunicipios = operacionesDDSTPA.municipios(TOKEN, 1, idProvincia);
+        Response<List<MunicipioGson>> responseMunicipios = requestMunicipios.execute();
+        return responseMunicipios.body();
+    }
+
+    public List<LocalidadGson> localidades(int idMunicipio) throws IOException {
+        OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
+        Call<List<LocalidadGson>> requestLocalidades = operacionesDDSTPA.localidades(TOKEN,idMunicipio);
+        Response<List<LocalidadGson>> responseLocalidades = requestLocalidades.execute();
+        return responseLocalidades.body();
+    }
+
+    public List<PaisGson> paises() throws IOException {
+        OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
+        Call<List<PaisGson>> requestPaises = operacionesDDSTPA.paises(TOKEN);
+        Response<List<PaisGson>> responsePaises = requestPaises.execute();
+        return responsePaises.body();
     }
 
 }

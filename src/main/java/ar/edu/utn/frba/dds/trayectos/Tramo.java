@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.lugares.UbicacionGeografica;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
 
-import java.util.List;
 
 public class Tramo implements Medible {
     private MedioDeTransporte medioDeTransporte;
@@ -36,12 +35,12 @@ public class Tramo implements Medible {
         return medioDeTransporte;
     }
 
-    public Coordenada getCoordenadaInicial() {
-        return ubicacionInicial.getCoordenada();
+    public UbicacionGeografica getUbicacionInicial() {
+        return ubicacionInicial;
     }
 
-    public Coordenada getCoordenadaFinal() {
-        return ubicacionFinal.getCoordenada();
+    public UbicacionGeografica getUbicacionFinal() {
+        return ubicacionFinal;
     }
 
     public Float calcularDistancia(){

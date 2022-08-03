@@ -11,7 +11,7 @@ public abstract class MedioDeTransporte {
 //        CalculadoraDistancias servicioContratado = new AdaptadorServicioDDSTPA(); // TODO LA API DEVUELVE DISTANCIAS RANDOM...
         CalculadoraDistancias servicioContratado = new ServicioSimulado();
 
-        return servicioContratado.calcularDistancia(tramo.getCoordenadaInicial(),tramo.getCoordenadaFinal());
+        return servicioContratado.calcularDistancia(tramo.getUbicacionInicial(),tramo.getUbicacionFinal());
     }
 
     @Override
