@@ -55,7 +55,7 @@ public class ServicioDDSTPA {
 
     public List<MunicipioGson> municipios(int idProvincia) throws IOException {
         OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
-        Call<List<MunicipioGson>> requestMunicipios = operacionesDDSTPA.municipios(TOKEN, 1, idProvincia);
+        Call<List<MunicipioGson>> requestMunicipios = operacionesDDSTPA.municipios(TOKEN, 1, idProvincia); //TODO RECORRER TODAS LAS PAGINAS
         Response<List<MunicipioGson>> responseMunicipios = requestMunicipios.execute();
         return responseMunicipios.body();
     }

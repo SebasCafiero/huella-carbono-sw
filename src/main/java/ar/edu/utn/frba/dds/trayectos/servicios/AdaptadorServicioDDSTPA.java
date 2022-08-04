@@ -97,7 +97,7 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
     }
 
     public int obtenerIdPais(Direccion direccion) throws IOException {
-        String nombrePais = direccion.getPais();
+        String nombrePais = direccion.getMunicipio().getProvincia().getNombrePais();
         PaisGson pais = obtenerPaises().stream().filter(p->p.nombre.equals(nombrePais.toUpperCase())).findFirst().get();
         System.out.println("PAIS ENCONTRADO: " + pais.id + "| " + pais.nombre);
         return pais.id;
@@ -105,7 +105,7 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
     }
 
     public int obtenerIdProvincia(Direccion direccion) throws IOException {
-        String nombreProvincia = direccion.getProvincia();
+        String nombreProvincia = direccion.getMunicipio().getProvincia().getNombre();
         ProvinciaGson provincia = obtenerProvincias(obtenerIdPais(direccion)).stream().filter(p->p.nombre.equals(nombreProvincia.toUpperCase())).findFirst().get();
         System.out.println("PROVINCIA ENCONTRADA: " + provincia.id + "| " + provincia.nombre);
         return provincia.id;
@@ -113,7 +113,7 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
     }
 
     public int obtenerIdMunicipio(Direccion direccion) throws IOException {
-        String nombreMunicipio = direccion.getMunicipio();
+        String nombreMunicipio = direccion.getMunicipio().getNombre();
         MunicipioGson municipio = obtenerMunicipios(obtenerIdProvincia(direccion)).stream().filter(p->p.nombre.equals(nombreMunicipio.toUpperCase())).findFirst().get();
         System.out.println("MUNICIPIO ENCONTRADO: " + municipio.id + "| " + municipio.nombre);
         return municipio.id;

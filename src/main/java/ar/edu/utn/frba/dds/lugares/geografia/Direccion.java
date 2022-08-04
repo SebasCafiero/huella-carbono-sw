@@ -5,33 +5,32 @@ public class Direccion {
     private Integer numero;
     private String calle;
     private String localidad;
-    private String municipio;
-    private String provincia;
-    private String pais;
+    private Municipio municipio;
 
 
-    public Direccion(String pais, String provincia, String municipio, String localidad, String calle, Integer numero) {
-        this.pais = pais;
-        this.provincia = provincia;
+    public Direccion(Municipio municipio, String localidad, String calle, Integer numero) {
         this.municipio = municipio;
         this.localidad = localidad;
         this.calle = calle;
         this.numero = numero;
     }
 
-    public Direccion(String localidad, String calle, Integer numero) { //TODO defecto
-        this.pais = "Argentina";
-        this.provincia = "Buenos Aires";
-        this.municipio = "Avellaneda";
+    public Direccion(String pais, String provincia, String municipio, String localidad, String calle, Integer numero) {
+        this.municipio = new Municipio(municipio, provincia, pais);
         this.localidad = localidad;
         this.calle = calle;
         this.numero = numero;
     }
 
-    public Direccion() { //TODO defecto
-        this.pais = "Argentina";
-        this.provincia = "Ciudad de Buenos Aires";
-        this.municipio = "Ciudad de Buenos Aires";
+    public Direccion(String barrio, String calle, Integer numero) { //TODO direccion por defecto
+        this.municipio = new Municipio("Ciudad de Buenos Aires", "Ciudad de Buenos Aires", "Argentina");
+        this.localidad = barrio;
+        this.calle = calle;
+        this.numero = numero;
+    }
+
+    public Direccion() { //TODO direccion por defecto
+        this.municipio = new Municipio("Ciudad de Buenos Aires", "Ciudad de Buenos Aires", "Argentina");
         this.localidad = "La Boca";
         this.calle = "Brandsen";
         this.numero = 805;
@@ -49,15 +48,7 @@ public class Direccion {
         return localidad;
     }
 
-    public String getMunicipio() {
+    public Municipio getMunicipio() {
         return municipio;
-    }
-
-    public String getProvincia() {
-        return provincia;
-    }
-
-    public String getPais() {
-        return pais;
     }
 }

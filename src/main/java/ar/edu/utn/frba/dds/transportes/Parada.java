@@ -10,8 +10,8 @@ public class Parada {
     private Float distanciaProxima;
 //La distanciaProxima de una parada deberia ser igual a la distanciaAnterior de la parada siguiente (VALIDAR)
 
-    public Parada(Direccion lugar, Coordenada coordenada, Float distanciaAnterior, Float distanciaProxima){
-        this.ubicacion = new UbicacionGeografica(lugar, coordenada);
+    public Parada(Direccion direccion, Coordenada coordenada, Float distanciaAnterior, Float distanciaProxima){
+        this.ubicacion = new UbicacionGeografica(direccion, coordenada);
         this.distanciaAnterior = distanciaAnterior;
         this.distanciaProxima = distanciaProxima;
     }

@@ -4,6 +4,6 @@ import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
 
 public interface CalculadoraDistancias {
     //SERIA EL ROL OBJETIVO DEL PATRON ADAPTER
-    public Float calcularDistancia(UbicacionGeografica ubicacionInicial, UbicacionGeografica ubicacionFinal);
+    Float calcularDistancia(UbicacionGeografica ubicacionInicial, UbicacionGeografica ubicacionFinal);
 
 }

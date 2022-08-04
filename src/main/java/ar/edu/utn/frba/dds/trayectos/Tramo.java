@@ -44,7 +44,7 @@ public class Tramo implements Medible {
         return ubicacionFinal;
     }
 
-    public Float calcularDistancia(){
+    private Float calcularDistancia(){
         return medioDeTransporte.calcularDistancia(this);
     }
 

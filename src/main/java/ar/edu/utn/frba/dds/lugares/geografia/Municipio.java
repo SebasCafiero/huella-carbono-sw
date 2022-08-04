@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.lugares.geografia;
 
 import java.util.HashSet;
 
-public class Municipio extends SectorTerritorial {
+public class Municipio extends AreaSectorial {
 
     private Provincia provincia;
 

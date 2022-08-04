@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.mihuella;
 
 import ar.edu.utn.frba.dds.lugares.*;
 import ar.edu.utn.frba.dds.lugares.geografia.AreaSectorial;
+import ar.edu.utn.frba.dds.lugares.geografia.Municipio;
 import ar.edu.utn.frba.dds.mediciones.FechaException;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
@@ -75,7 +76,9 @@ public class EnviadorReportes {
             System.out.println(categoria + " -> " + factoresDeEmision.get(categoria));
         }
 
-        AreaSectorial areaReporte = new AreaSectorial("Mataderios");
+//        AreaSectorial areaReporte = new AreaSectorial("Mataderios");
+//        AreaSectorial areaReporte = new Municipio("Avellaneda","Buenos Aires", "Argentina");
+        AreaSectorial areaReporte = new Municipio("Ciudad de Buenos Aires","Ciudad de Buenos Aires", "Argentina");
         organizaciones.get(0).agregarContactoMail("cuentaejemplodds2@gmail.com");
         organizaciones.get(1).agregarContactoMail("rumplestilskink@gmail.com");
 

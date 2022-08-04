@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.mihuella;
 
 import ar.edu.utn.frba.dds.lugares.geografia.Direccion;
 import ar.edu.utn.frba.dds.trayectos.servicios.AdaptadorServicioDDSTPA;
-import ar.edu.utn.frba.dds.trayectos.servicios.ddstpa.ServicioDDSTPA;
 
 import java.io.IOException;
 
@@ -39,7 +38,8 @@ public class consumoAPI {
 
         try {
             System.out.println("\n\nOBTENER ID LOCALIDAD DockSud (es 3319)");
-            System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion("Dock Sud","callecita",5))); //Por defecto Avellaneda
+//            System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion("Dock Sud","callecita",5))); //TODO PROBAR AL MANDAR VALOR INCORRECTO
+            System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion("Argentina", "Buenos Aires", "Avellaneda", "Dock Sud","callecita",5)));
         } catch (IOException e) {
             e.printStackTrace();
         }
