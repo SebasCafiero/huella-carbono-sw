@@ -28,12 +28,13 @@ public class FachadaOrganizacion implements FachadaOrg {
         Float huTotal = 0F;
         for(Medible medicion : mediciones){
             String categoria = medicion.getCategoria();
-            System.out.println("Categoria: " + categoria + ", valor: " + medicion.getValor().toString());
+            System.out.println("\nCategoria: " + categoria + ", valor: " + medicion.getValor().toString());
             System.out.println("Valor fe: " + this.repoFactores.getValor(categoria));
 
             try{
                 huTotal = (this.repoFactores.getValor(categoria) * medicion.getValor()) + huTotal;
-                System.out.println("Dato actividad " + categoria + ": " + medicion.getValor().toString());
+//                System.out.println("Dato actividad " + categoria + ": " + medicion.getValor().toString());
+                System.out.println("DAxFE: " + medicion.getValor() + " x " + this.repoFactores.getValor(categoria) + " = " + huTotal);
             }
             catch (NullPointerException e){
                 throw new MedicionSinFactorEmisionException(categoria);
@@ -48,7 +49,9 @@ public class FachadaOrganizacion implements FachadaOrg {
         Float consumo = 0F;
         for(Trayecto unTrayecto : unaOrg.trayectosDeMiembros()) {
             consumo += obtenerHU(new ArrayList<>(unTrayecto.getTramos())) / unTrayecto.cantidadDeMiembros();
+            System.out.println("CONSUMO CADA TRAYECTO DE ORG: " + consumo);
         }
+        System.out.println("CONSUMO TRAYECTOS TOTAL DE ORG: " + consumo);
         return consumo;
     }
 
@@ -56,7 +59,9 @@ public class FachadaOrganizacion implements FachadaOrg {
         Float consumoMiembro = 0F;
         for(Trayecto unTrayecto : unMiembro.getTrayectos()){
             consumoMiembro += obtenerHU(new ArrayList<>(unTrayecto.getTramos())) / unTrayecto.cantidadDeMiembros();
+            System.out.println("Consumo Miembro " + unMiembro.getNroDocumento() + " Cada Trayecto: " + consumoMiembro);
         }
+        System.out.println("Consumo Miembro " + unMiembro.getNroDocumento() + " Total: " + consumoMiembro);
         return consumoMiembro / obtenerConsumoTotalTrayectosOrganizacion(unaOrg);
     }
 

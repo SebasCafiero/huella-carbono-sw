@@ -83,6 +83,7 @@ public class TrayectosHCMiembros {
 //                System.out.println("Consumo total de la organizacion: " + consumoTotalOrganizacion);
                 for (Miembro miembro : miembros) {
                     Integer documento = miembro.getNroDocumento();
+                    System.out.println("\nMiembroID: " + documento);
                     Float impacto = 100 * fachada.obtenerImpactoMiembroEnTrayectos(org, miembro);
                     writer.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
                     System.out.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
