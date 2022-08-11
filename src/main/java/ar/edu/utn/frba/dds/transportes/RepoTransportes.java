@@ -9,8 +9,16 @@ import java.util.stream.Collectors;
 
 public class RepoTransportes {
     List<MedioDeTransporte> medios;
+    public static RepoTransportes instance;
 
-    public RepoTransportes() {
+    public static RepoTransportes getInstance(){
+        if (instance==null){
+            instance = new RepoTransportes();
+        }
+        return instance;
+    }
+
+    private RepoTransportes() {
         medios = new ArrayList<MedioDeTransporte>();
     }
 

@@ -76,6 +76,12 @@ public class Organizacion {
         return tipo;
     }
 
+    public void setTipo(TipoDeOrganizacionEnum tipo) {this.tipo = tipo;}
+
+    public void setClasificacionOrganizacion(ClasificacionOrganizacion clasificacionOrganizacion) {this.clasificacionOrganizacion = clasificacionOrganizacion;}
+
+    public void setUbicacion(UbicacionGeografica ubicacion) {this.ubicacion = ubicacion;}
+
     public UbicacionGeografica getUbicacion() {
         return ubicacion;
     }
@@ -115,5 +121,19 @@ public class Organizacion {
 
     public List<Trayecto> trayectosDeMiembros() {
         return miembros().stream().flatMap(m -> m.getTrayectos().stream()).collect(Collectors.toList());
+    }
+
+    public Organizacion() {
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+
+    @Override
+    public String toString() {
+        return "Organizacion{" +
+                "razonSocial='" + razonSocial + '\'' +
+                '}';
     }
 }

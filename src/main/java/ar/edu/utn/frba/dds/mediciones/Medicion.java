@@ -17,6 +17,10 @@ public class Medicion implements Medible {
         this.valor = valor;
     }
 
+    public Medicion() {
+
+    }
+
     public Medicion(Categoria categoria, String unidad, float valor, char periodicidad, LocalDate periodo) {
         this.categoria = categoria;
         this.unidad = unidad;
@@ -45,14 +49,48 @@ public class Medicion implements Medible {
     public String getUnidad() {
         return unidad;
     }
+    public void setUnidad (String unidad) { this.unidad = unidad;}
 
     @Override
     public Float getValor() {
         return valor;
     }
+    public void setValor (Float valor) { this.valor = valor;}
+
+    public Character getPeriodicidad() {
+        return periodicidad;
+    }
+    public void setPeriodicidad(Character periodicidad) {this.periodicidad = periodicidad;}
+
+    public String getPeriodo() {
+        return periodo;
+    }
+    public void setPeriodo(String periodo) {this.periodo = periodo;}
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+    public void setFecha(LocalDate fecha) {this.fecha = fecha;}
 
     @Override
     public String getCategoria() {
         return categoria.toString();
     }
+
+    public void setCategoria (Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    @Override
+    public String toString() {
+        return "Medicion{" +
+                "valor='" + valor.toString() + '\'' +
+                '}';
+    }
+
+    public void setPeriodicidad(String periodicidad) {
+    }//---> ver como completar
+
+    public void setFecha(int fecha) {
+    }//---> ver como completar
 }

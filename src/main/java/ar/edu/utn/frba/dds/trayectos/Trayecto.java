@@ -58,6 +58,10 @@ public class Trayecto {
         return this.calcularDistancia()/tramos.size();
     }
 
+    public void setTramos(List<Tramo> tramos) {
+        this.tramos = tramos;
+    }
+
     public Integer getId() {
         return id;
     }
