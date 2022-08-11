@@ -20,5 +20,8 @@ public class BatchMedicion {
 
     public LocalDate getFecha() {return fecha;}
     public void setFecha(LocalDate fecha) {this.fecha = fecha;}
+
+    public void setFecha(int fecha) {
+    }//---> ver como completar
 }
 

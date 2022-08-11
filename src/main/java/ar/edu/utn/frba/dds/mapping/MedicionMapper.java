@@ -6,12 +6,14 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONString;
 
+import java.util.List;
+
 
 public class MedicionMapper {
     public static void map(JSONObject medicionDTO, Medicion medicion){
         JSONObject categoriaDTO = medicionDTO.optJSONObject("categoria");
         Categoria categoria = new Categoria(
-                //categoriaDTO.optInt("id"), --> como hacer con el integer?
+                categoriaDTO.optInt("id"),
                 categoriaDTO.optString("actividad"),
                 categoriaDTO.optString("tipoConsumo")
         );
@@ -19,9 +21,19 @@ public class MedicionMapper {
 
         medicion.setCategoria(categoria);
         medicion.setUnidad(medicionDTO.optString("unidad"));
-        //medicion.setPeriodicidad(medicionDTO.opt); ---> como hacer con el Character?
+        medicion.setPeriodicidad(medicionDTO.optString("periodicidad"));
         medicion.setValor(medicionDTO.optFloat("valor"));
         medicion.setPeriodo(medicionDTO.optString("periodo"));
-        //medicion.setFecha(medicionDTO.opt); --->como hacer con el LocalDate?
+        medicion.setFecha(medicionDTO.optInt("fecha"));
+    }
+
+    public static void map(JSONArray medicionesDTO, List<Medicion> mediciones) {
+        medicionesDTO.forEach(itemMedicion -> {
+            JSONObject medicionDTO = (JSONObject) itemMedicion;
+
+            Medicion medicion = new Medicion();
+            MedicionMapper.map(medicionDTO,medicion);
+            mediciones.add(medicion);
+    });
     }
 }

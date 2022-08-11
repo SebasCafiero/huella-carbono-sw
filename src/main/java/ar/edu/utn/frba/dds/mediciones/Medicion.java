@@ -79,4 +79,10 @@ public class Medicion implements Medible {
                 "valor='" + valor.toString() + '\'' +
                 '}';
     }
+
+    public void setPeriodicidad(String periodicidad) {
+    }//---> ver como completar
+
+    public void setFecha(int fecha) {
+    }//---> ver como completar
 }

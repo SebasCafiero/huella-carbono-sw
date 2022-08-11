@@ -10,6 +10,12 @@ public class Categoria {
         this.tipoConsumo = tipoConsumo;
     }
 
+    public Categoria(int id, String actividad, String tipoConsumo) {
+        this.actividad = actividad;
+        this.tipoConsumo = tipoConsumo;
+        this.id = id;
+    }
+
     @Override
     public String toString() { return actividad + " - " + tipoConsumo;}
 
