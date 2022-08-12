@@ -19,9 +19,7 @@ import java.util.List;
 public class ParserOrganizaciones {
     public List<Organizacion> cargarOrganizaciones(String archivo) throws Exception {
         String organizacionesJSON = new JSONParser().parse(new FileReader(archivo)).toString();
-        System.out.println("Carga de Organizaciones:\n" + organizacionesJSON);
-
-        List<Organizacion> organizaciones = new ArrayList<Organizacion>();
+        List<Organizacion> organizaciones = new ArrayList<>();
 
         JSONArray arrayOrg = new JSONArray(organizacionesJSON);
         for (int orgIndex = 0; orgIndex < arrayOrg.length(); orgIndex++) {

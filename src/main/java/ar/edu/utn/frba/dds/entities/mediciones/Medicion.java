@@ -7,9 +7,10 @@ import java.time.LocalDate;
 public class Medicion implements Medible {
     private Categoria categoria;
     private String unidad;
-    private Character periodicidad; // M o A
     private Float valor;
+    private Character periodicidad; // M o A
     private LocalDate fecha; // AAAA-MM-DD
+    private Periodo periodo;
 
     public Medicion(Categoria categoria, String unidad, Float valor) {
         this.categoria = categoria;
@@ -26,6 +27,14 @@ public class Medicion implements Medible {
         this.periodicidad = periodicidad;
         this.fecha = periodo;
     }
+
+    public Medicion(Categoria categoria, String unidad, float valor, Periodo periodo) {
+        this.categoria = categoria;
+        this.unidad = unidad;
+        this.valor = valor;
+        this.periodo = periodo;
+    }
+
 
     public Character getPeriodicidad() {
         return periodicidad;

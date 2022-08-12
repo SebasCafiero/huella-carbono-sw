@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -29,6 +30,8 @@ public class ParserParametrosCSV implements ParserParametros {
 
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException("El archivo " + archivo + " no existe");
+        } catch (CsvValidationException e) {
+            e.printStackTrace();
         }
 
         return factorEmision;
