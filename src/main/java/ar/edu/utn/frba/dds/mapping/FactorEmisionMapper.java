@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.mapping;
 
-import ar.edu.utn.frba.dds.mediciones.Categoria;
-import ar.edu.utn.frba.dds.mediciones.FactorEmision;
+import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
+import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import org.json.JSONObject;
 
 

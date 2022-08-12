@@ -1,14 +1,14 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
-import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.lugares.Organizacion;
-import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
-import ar.edu.utn.frba.dds.mediciones.FechaException;
-import ar.edu.utn.frba.dds.personas.Miembro;
-import ar.edu.utn.frba.dds.transportes.MedioDeTransporte;
-import ar.edu.utn.frba.dds.transportes.MedioFactory;
-import ar.edu.utn.frba.dds.trayectos.Tramo;
-import ar.edu.utn.frba.dds.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
+import ar.edu.utn.frba.dds.entities.transportes.MedioFactory;
+import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
+import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import com.opencsv.CSVReader;
 
 import java.io.FileReader;

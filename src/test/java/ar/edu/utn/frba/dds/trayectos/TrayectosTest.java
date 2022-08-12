@@ -1,16 +1,17 @@
 package ar.edu.utn.frba.dds.trayectos;
 
-import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
-import ar.edu.utn.frba.dds.personas.MiembroException;
-import ar.edu.utn.frba.dds.lugares.SectorException;
-import ar.edu.utn.frba.dds.lugares.*;
+import ar.edu.utn.frba.dds.entities.lugares.*;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.personas.MiembroException;
+import ar.edu.utn.frba.dds.entities.transportes.*;
+import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
+import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
-import ar.edu.utn.frba.dds.personas.Miembro;
-import ar.edu.utn.frba.dds.personas.TipoDeDocumento;
-import ar.edu.utn.frba.dds.transportes.*;
+import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

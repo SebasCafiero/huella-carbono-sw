@@ -1,10 +1,13 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
-import ar.edu.utn.frba.dds.lugares.*;
-import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
-import ar.edu.utn.frba.dds.personas.Miembro;
-import ar.edu.utn.frba.dds.personas.TipoDeDocumento;
+import ar.edu.utn.frba.dds.entities.lugares.ClasificacionOrganizacion;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+import ar.edu.utn.frba.dds.entities.lugares.Sector;
+import ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;

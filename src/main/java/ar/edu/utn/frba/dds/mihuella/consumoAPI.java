@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-import ar.edu.utn.frba.dds.lugares.geografia.Direccion;
-import ar.edu.utn.frba.dds.trayectos.servicios.AdaptadorServicioDDSTPA;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.AdaptadorServicioDDSTPA;
 
 import java.io.IOException;
 

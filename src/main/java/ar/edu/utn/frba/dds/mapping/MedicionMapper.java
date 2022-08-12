@@ -1,16 +1,17 @@
 package ar.edu.utn.frba.dds.mapping;
 
-import ar.edu.utn.frba.dds.mediciones.Categoria;
-import ar.edu.utn.frba.dds.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
+import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import org.json.JSONObject;
 import org.json.JSONArray;
-import org.json.JSONString;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-
 public class MedicionMapper {
-    public static void map(JSONObject medicionDTO, Medicion medicion){
+    public static Medicion toEntity(JSONObject medicionDTO) {
+        Medicion medicion = new Medicion();
         JSONObject categoriaDTO = medicionDTO.optJSONObject("categoria");
         Categoria categoria = new Categoria(
                 categoriaDTO.optInt("id"),
@@ -18,22 +19,22 @@ public class MedicionMapper {
                 categoriaDTO.optString("tipoConsumo")
         );
 
-
         medicion.setCategoria(categoria);
         medicion.setUnidad(medicionDTO.optString("unidad"));
-        medicion.setPeriodicidad(medicionDTO.optString("periodicidad"));
+        medicion.setPeriodicidad(medicionDTO.optString("periodicidad").trim().charAt(0));
         medicion.setValor(medicionDTO.optFloat("valor"));
-        medicion.setPeriodo(medicionDTO.optString("periodo"));
-        medicion.setFecha(medicionDTO.optInt("fecha"));
+        medicion.setFecha(LocalDate.parse(medicionDTO.optString("fecha")));
+
+        return medicion;
     }
 
-    public static void map(JSONArray medicionesDTO, List<Medicion> mediciones) {
+    public static List<Medicion> toListOfEntity(JSONArray medicionesDTO) {
+        List<Medicion> mediciones = new ArrayList<>();
         medicionesDTO.forEach(itemMedicion -> {
             JSONObject medicionDTO = (JSONObject) itemMedicion;
+            mediciones.add(MedicionMapper.toEntity(medicionDTO));
+        });
 
-            Medicion medicion = new Medicion();
-            MedicionMapper.map(medicionDTO,medicion);
-            mediciones.add(medicion);
-    });
+        return mediciones;
     }
 }

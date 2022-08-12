@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
-import ar.edu.utn.frba.dds.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 
 import java.io.IOException;

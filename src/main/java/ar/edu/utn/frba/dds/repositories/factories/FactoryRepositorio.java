@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.repositories.factories;
 
-import ar.edu.utn.frba.dds.lugares.Organizacion;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.testMemoData.Data;

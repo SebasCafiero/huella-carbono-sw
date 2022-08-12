@@ -1,12 +1,12 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-import ar.edu.utn.frba.dds.mediciones.FechaException;
-import ar.edu.utn.frba.dds.lugares.*;
-//import ar.edu.utn.frba.dds.mediciones.Parser;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+import ar.edu.utn.frba.dds.entities.lugares.Sector;
+import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
-import ar.edu.utn.frba.dds.transportes.*;
-import ar.edu.utn.frba.dds.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;

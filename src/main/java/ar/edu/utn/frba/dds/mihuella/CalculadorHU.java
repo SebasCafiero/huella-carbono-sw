@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-import ar.edu.utn.frba.dds.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserMedicionesCSV;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserParametrosCSV;

@@ -1,7 +1,11 @@
 package ar.edu.utn.frba.dds.mapping;
 
-import ar.edu.utn.frba.dds.lugares.*;
-import ar.edu.utn.frba.dds.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.lugares.ClasificacionOrganizacion;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+import ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,7 +23,7 @@ public class OrganizacionMapper {
         List<Trayecto> trayectos = new ArrayList<>();
 
         UbicacionGeografica ubicacionGeografica = new UbicacionGeografica(
-                ubicacionGeograficaDTO.optString("localidad"),
+//                ubicacionGeograficaDTO.optString("localidad"),
                 new Coordenada(coodenadaDTO.optFloat("latitud"), coodenadaDTO.optFloat("longitud"))
         );
 

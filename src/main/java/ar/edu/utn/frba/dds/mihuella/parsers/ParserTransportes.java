@@ -1,7 +1,10 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
-import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.transportes.*;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
+import ar.edu.utn.frba.dds.entities.transportes.MedioFactory;
+import ar.edu.utn.frba.dds.entities.transportes.Parada;
+import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;

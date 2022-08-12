@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.mihuella.fachada;
 
-import ar.edu.utn.frba.dds.mediciones.Categoria;
+import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 //import ar.edu.utn.frba.dds.mediciones.Parser;
-import ar.edu.utn.frba.dds.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

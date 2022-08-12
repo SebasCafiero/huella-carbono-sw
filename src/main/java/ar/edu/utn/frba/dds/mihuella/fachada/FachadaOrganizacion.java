@@ -1,13 +1,11 @@
 package ar.edu.utn.frba.dds.mihuella.fachada;
 
-import ar.edu.utn.frba.dds.lugares.Organizacion;
-import ar.edu.utn.frba.dds.lugares.Sector;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
-import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrg;
-import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
-import ar.edu.utn.frba.dds.personas.Miembro;
+import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
-import ar.edu.utn.frba.dds.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
 import java.util.*;
 

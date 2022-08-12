@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.servicios.reportes;
 
-import ar.edu.utn.frba.dds.lugares.Organizacion;
-import ar.edu.utn.frba.dds.mediciones.Reporte;
-import ar.edu.utn.frba.dds.personas.AgenteSectorial;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+import ar.edu.utn.frba.dds.entities.mediciones.Reporte;
+import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;

@@ -1,11 +1,12 @@
 package ar.edu.utn.frba.dds.lugares;
 
-import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.lugares.*;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static ar.edu.utn.frba.dds.lugares.TipoDeOrganizacionEnum.*;
+import static ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum.*;
 
 public class OrganizacionTest {
 

@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.servicios.reportes;
 
-import ar.edu.utn.frba.dds.mediciones.Reporte;
-import ar.edu.utn.frba.dds.personas.AgenteSectorial;
+import ar.edu.utn.frba.dds.entities.mediciones.Reporte;
+import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 
 public interface NotificadorReportes {
 

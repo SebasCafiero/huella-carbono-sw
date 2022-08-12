@@ -1,9 +1,11 @@
 package ar.edu.utn.frba.dds.personas;
 
-import ar.edu.utn.frba.dds.lugares.SectorException;
-import ar.edu.utn.frba.dds.lugares.*;
-import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.lugares.*;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.entities.personas.MiembroException;
+import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +23,7 @@ public class MiembroTest {
 
         Sector unSector = new Sector("miSector",unaOrg);
 
-        Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(10F,20F)));
+        Miembro miembro1 = new Miembro("jose", "pepito", TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(10F,20F)));
 
         miembro1.solicitarIngresoAlSector(unSector);
 

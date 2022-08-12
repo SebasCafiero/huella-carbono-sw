@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import spark.Request;
@@ -19,7 +19,6 @@ public class MedicionController {
         Medicion medicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
         return medicion.getValor().toString();//que deberia devolver?
     }
-
 
     public String mostrarTodos(Request request, Response response){
         List<Medicion> mediciones = this.repositorio.buscarTodos();

@@ -1,8 +1,7 @@
 package ar.edu.utn.frba.dds.mapping;
 
-import ar.edu.utn.frba.dds.lugares.*;
-import ar.edu.utn.frba.dds.trayectos.Tramo;
-import ar.edu.utn.frba.dds.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
+import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

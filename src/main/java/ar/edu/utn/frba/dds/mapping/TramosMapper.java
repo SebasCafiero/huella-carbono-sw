@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.dds.mapping;
 
-import ar.edu.utn.frba.dds.lugares.Coordenada;
-import ar.edu.utn.frba.dds.transportes.TipoCombustible;
-import ar.edu.utn.frba.dds.transportes.TipoVehiculo;
-import ar.edu.utn.frba.dds.transportes.VehiculoParticular;
-import ar.edu.utn.frba.dds.trayectos.Tramo;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.transportes.TipoCombustible;
+import ar.edu.utn.frba.dds.entities.transportes.TipoVehiculo;
+import ar.edu.utn.frba.dds.entities.transportes.VehiculoParticular;
+import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -1,11 +1,14 @@
 package ar.edu.utn.frba.dds.trayectos;
 
-import ar.edu.utn.frba.dds.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.transportes.*;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.transportes.*;
+import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
+import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DistanciasTest {
 
@@ -17,7 +20,7 @@ public class DistanciasTest {
         Tramo tramo1 = new Tramo(unVehiculoParticular,new Coordenada(10F,5F),new Coordenada(13F,6F));
         Tramo tramo2 = new Tramo(unVehiculoParticular,new Coordenada(7F,7F),new Coordenada(10F,7F));
         Tramo tramo3 = new Tramo(unVehiculoParticular,new Coordenada(3F,0F),new Coordenada(5F,4F));
-        ArrayList listaTramos = new ArrayList<>();
+        List<Tramo> listaTramos = new ArrayList<>();
         listaTramos.add(tramo1);
         listaTramos.add(tramo2);
         unTrayecto.agregarTramos(listaTramos);

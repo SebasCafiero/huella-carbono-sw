@@ -1,8 +1,7 @@
 package ar.edu.utn.frba.dds.mapping;
 
-import ar.edu.utn.frba.dds.lugares.*;
+import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.Set;
 
