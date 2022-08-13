@@ -10,6 +10,7 @@ import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.transportes.MedioFactory;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.mapping.PeriodoMapper;
 import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.NuevoTrayectoDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
@@ -150,7 +151,7 @@ public class ParserTrayectos {
         if(estadoTrayecto.isPresent()) {
             trayecto = estadoTrayecto.get();
         } else {
-            LocalDate periodo = toLocalDate(periodicidad, periodoDTO);
+            LocalDate periodo = PeriodoMapper.toLocalDate(periodicidad, periodoDTO);
 
             trayecto = new Trayecto(periodo, periodicidad);
             trayecto.setId(Math.toIntExact(trayectoDTO.getTrayectoId()));
@@ -209,19 +210,6 @@ public class ParserTrayectos {
 
         trayecto.agregarmiembro(miembro.get());
         miembro.get().agregarTrayecto(trayecto);
-    }
-
-    private LocalDate toLocalDate(Character periodicidad, String periodoDTO) {
-        if(periodicidad == 'M'){
-            String[] mesYanio = periodoDTO.split("/");
-            return LocalDate.parse(mesYanio[1]+"-"+mesYanio[0]+"-01");
-        }
-        else if(periodicidad == 'A'){
-            return LocalDate.parse(periodoDTO + "-01-01");
-        }
-        else {
-            throw new FechaException("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO
-        }
     }
 
     public List<TramoCSVDTO> capturarEntradas(String archivo) throws FileNotFoundException {

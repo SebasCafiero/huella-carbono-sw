@@ -11,7 +11,6 @@ public class Medicion extends EntidadPersistente implements Medible {
     private Float valor;
     private Character periodicidad; // M o A
     private LocalDate fecha; // AAAA-MM-DD
-    private Periodo periodo;
 
     public Medicion(Categoria categoria, String unidad, Float valor) {
         this.categoria = categoria;
@@ -28,14 +27,6 @@ public class Medicion extends EntidadPersistente implements Medible {
         this.periodicidad = periodicidad;
         this.fecha = periodo;
     }
-
-    public Medicion(Categoria categoria, String unidad, float valor, Periodo periodo) {
-        this.categoria = categoria;
-        this.unidad = unidad;
-        this.valor = valor;
-        this.periodo = periodo;
-    }
-
 
     public Character getPeriodicidad() {
         return periodicidad;
@@ -57,13 +48,19 @@ public class Medicion extends EntidadPersistente implements Medible {
     public String getUnidad() {
         return unidad;
     }
-    public void setUnidad (String unidad) { this.unidad = unidad;}
+
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
+    }
 
     @Override
     public Float getValor() {
         return valor;
     }
-    public void setValor (Float valor) { this.valor = valor;}
+
+    public void setValor(Float valor) {
+        this.valor = valor;
+    }
 
     public void setPeriodicidad(Character periodicidad) {this.periodicidad = periodicidad;}
 

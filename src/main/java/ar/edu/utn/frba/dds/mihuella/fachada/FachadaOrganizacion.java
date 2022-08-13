@@ -29,7 +29,7 @@ public class FachadaOrganizacion implements FachadaOrg {
     public Float obtenerHU(Collection<Medible> mediciones) {
         return (float) mediciones.stream().mapToDouble(medible -> {
             Optional<FactorEmision> factorEmision = this.repoFactores.buscarTodos().stream()
-                    .filter(factor -> ((FactorEmision) factor).getCategoria().equals(medible.getCategoria()))
+                    .filter(factor -> factor.getCategoria().equals(medible.getCategoria()))
                     .findFirst();
 
             if(!factorEmision.isPresent()) {
@@ -72,8 +72,6 @@ public class FachadaOrganizacion implements FachadaOrg {
     public void cargarParametro(String nombreFactor, Float valor) {
         String[] categoriaString = nombreFactor.split(":");
         String[] subCategoria = categoriaString[0].split("->");
-
-        System.out.println("Cargo parametro: " + nombreFactor);
 
         Optional<FactorEmision> factorAnterior = this.repoFactores.buscarTodos().stream()
                 .filter(factor -> factor.getCategoria().equals(categoriaString[0]))

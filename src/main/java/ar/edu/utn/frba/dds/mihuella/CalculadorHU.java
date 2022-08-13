@@ -14,6 +14,7 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,7 @@ public class CalculadorHU {
         List<Medible> mediciones;
         try {
             factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
-            mediciones = new ParserMedicionesCSV().generarMediciones(ns.getString("mediciones"));
+            mediciones = new ArrayList<>(new ParserMedicionesCSV().generarMediciones(ns.getString("mediciones")));
         } catch (IOException | FechaException ex) {
             System.out.println(ex.getMessage());
             return;
@@ -61,7 +62,6 @@ public class CalculadorHU {
         }
 
         System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + hcOrg);
-        System.out.println("Imprimir datos de las huellas");
     }
 
 }
