@@ -2,11 +2,15 @@ package ar.edu.utn.frba.dds.mihuella;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.mapping.TrayectosMapper;
+import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -48,6 +52,7 @@ public class TrayectosHCMiembros {
         Map<String,Float> factoresDeEmision;
         List<Organizacion> organizaciones;
         List<Trayecto> trayectos;
+        List<TramoCSVDTO> tramosCSV;
         List<MedioDeTransporte> medios;
 
         try {
@@ -55,7 +60,20 @@ public class TrayectosHCMiembros {
             organizaciones = new ParserOrganizaciones().cargarOrganizaciones(ns.getString("organizaciones"));
             medios = new ParserTransportes().cargarTransportes(ns.getString("transportes"));
             System.out.println(medios.toString());
-            trayectos = new ParserTrayectos().generarTrayectos(ns.getString("trayectos"), organizaciones, medios);
+//            trayectos = new ParserTrayectos().generarTrayectos(ns.getString("trayectos"), organizaciones, medios);
+            tramosCSV = new ParserTrayectos().capturarEntradas(ns.getString("trayectos"));
+
+            FactoryRepositorio.get(Miembro.class).buscarTodos().forEach(System.out::println);
+
+            tramosCSV.forEach(tr -> {
+                boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");
+                System.out.println("Cargo nuevo tramo " + esCompartidoPasivo);
+                if(!esCompartidoPasivo) {
+                    new ParserTrayectos().cargarTrayectoActivo(TrayectosMapper.toNuevoTrayectoDTO(tr), tr.getPeriodicidad().trim().charAt(0), tr.getFecha().trim());
+                } else {
+                    new ParserTrayectos().cargarTrayectoPasivo(TrayectosMapper.toTrayectoCompartidoDTO(tr));
+                }
+            });
         } catch (IOException | FechaException | NoExisteMedioException ex) {
             System.out.println(ex.getMessage());
             return;
@@ -90,7 +108,7 @@ public class TrayectosHCMiembros {
                 }
             }
             writer.close();
-        } catch (Exception | MedicionSinFactorEmisionException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 

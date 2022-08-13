@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
-import ar.edu.utn.frba.dds.mihuella.MedicionCSVDTO;
+import ar.edu.utn.frba.dds.mapping.MedicionMapper;
+import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
-import ar.edu.utn.frba.dds.mihuella.utils.MedicionCSVMapper;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.FileReader;
@@ -18,7 +18,7 @@ public class ParserMedicionesCSV implements ParserMediciones {
                 .build()
                 .parse();
 
-        return mediciones.stream().map(MedicionCSVMapper::toEntity).collect(Collectors.toList());
+        return mediciones.stream().map(MedicionMapper::toEntity).collect(Collectors.toList());
     }
 }
 

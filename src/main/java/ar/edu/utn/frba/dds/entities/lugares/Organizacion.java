@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.entities.lugares;
 
+import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Organizacion {
+public class Organizacion extends EntidadPersistente {
     private String razonSocial;
     private TipoDeOrganizacionEnum tipo;
     private UbicacionGeografica ubicacion;

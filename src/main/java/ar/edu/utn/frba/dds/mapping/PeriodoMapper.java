@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.mihuella.utils;
+package ar.edu.utn.frba.dds.mapping;
 
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;

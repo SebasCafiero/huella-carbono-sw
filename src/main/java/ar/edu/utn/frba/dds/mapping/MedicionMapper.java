@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.mapping;
 
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
+import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
@@ -24,6 +26,18 @@ public class MedicionMapper {
         medicion.setPeriodicidad(medicionDTO.optString("periodicidad").trim().charAt(0));
         medicion.setValor(medicionDTO.optFloat("valor"));
         medicion.setFecha(LocalDate.parse(medicionDTO.optString("fecha")));
+
+        return medicion;
+    }
+
+    public static Medicion toEntity(MedicionCSVDTO medicionCSVDTO) {
+        Categoria categoria = new Categoria(medicionCSVDTO.getActividad().trim(), medicionCSVDTO.getTipoConsumo().trim());
+        Periodo periodo = PeriodoMapper.toEntity(medicionCSVDTO.getPeriodicidad().trim().charAt(0),
+                medicionCSVDTO.getPeriodo().trim());
+
+        Medicion medicion = new Medicion(categoria, medicionCSVDTO.getUnidad().trim(),
+                Float.parseFloat(medicionCSVDTO.getDatoActividad().trim()),
+                periodo);
 
         return medicion;
     }

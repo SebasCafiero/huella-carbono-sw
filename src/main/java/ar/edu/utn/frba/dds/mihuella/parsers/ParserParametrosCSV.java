@@ -25,7 +25,7 @@ public class ParserParametrosCSV implements ParserParametros {
                     data[i]=cell;
                     i++;
                 }
-                factorEmision.put(data[0]+" - "+data[1], Float.parseFloat(data[3]));
+                factorEmision.put(data[0] + " -> " + data[1] + " : " + data[2], Float.parseFloat(data[3]));
             }
 
         } catch (FileNotFoundException e) {

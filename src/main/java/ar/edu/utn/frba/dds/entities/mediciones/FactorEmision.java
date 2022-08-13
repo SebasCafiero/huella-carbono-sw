@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
-public class FactorEmision {
+import ar.edu.utn.frba.dds.entities.EntidadPersistente;
+
+public class FactorEmision extends EntidadPersistente {
     private Categoria categoria;
     private String unidad;
     private Float valor;

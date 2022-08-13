@@ -85,7 +85,7 @@ public class TrayectosHCSectores {
                 }
             }
             writer.close();
-        } catch (Exception | MedicionSinFactorEmisionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -2,44 +2,41 @@ package ar.edu.utn.frba.dds.mihuella.fachada;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
+import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
+import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 
 import java.util.*;
 
 public class FachadaOrganizacion implements FachadaOrg {
-    private RepoFactores repoFactores;
+    private final Repositorio<FactorEmision> repoFactores;
 
     public FachadaOrganizacion() {
-        repoFactores = RepoFactores.getInstance();
+        repoFactores = FactoryRepositorio.get(FactorEmision.class);
     }
 
     @Override
     public void cargarParametros(Map<String, Float> parametrosSistema) {
-        this.repoFactores.putAll(parametrosSistema);
+        parametrosSistema.forEach(this::cargarParametro);
     }
 
     @Override
-    public Float obtenerHU(Collection<Medible> mediciones) throws MedicionSinFactorEmisionException {
-        Float huTotal = 0F;
-        for(Medible medicion : mediciones){
-            String categoria = medicion.getCategoria();
-            System.out.println("\nCategoria: " + categoria + ", valor: " + medicion.getValor().toString());
-            System.out.println("Valor fe: " + this.repoFactores.getValor(categoria));
+    public Float obtenerHU(Collection<Medible> mediciones) {
+        return (float) mediciones.stream().mapToDouble(medible -> {
+            Optional<FactorEmision> factorEmision = this.repoFactores.buscarTodos().stream()
+                    .filter(factor -> ((FactorEmision) factor).getCategoria().equals(medible.getCategoria()))
+                    .findFirst();
 
-            try{
-                huTotal = (this.repoFactores.getValor(categoria) * medicion.getValor()) + huTotal;
-//                System.out.println("Dato actividad " + categoria + ": " + medicion.getValor().toString());
-                System.out.println("DAxFE: " + medicion.getValor() + " x " + this.repoFactores.getValor(categoria) + " = " + huTotal);
-            }
-            catch (NullPointerException e){
-                throw new MedicionSinFactorEmisionException(categoria);
+            if(!factorEmision.isPresent()) {
+                throw new MedicionSinFactorEmisionException(medible.getCategoria());
             }
 
-        }
-        return huTotal;
+            return factorEmision.get().getValor() * medible.getValor();
+        }).reduce(0, Double::sum);
     }
 
     //TODO la fachada deberia ser para una organizacion especifica, deberia ser atributo
@@ -71,14 +68,21 @@ public class FachadaOrganizacion implements FachadaOrg {
         return impactoMiembro;
     }
 
+    public void cargarParametro(String nombreFactor, Float valor) {
+        String[] categoriaString = nombreFactor.split(":");
+        String[] subCategoria = categoriaString[0].split("->");
 
-    private float calcularValor(Medible medicion){
-        return medicion.getValor();
+        System.out.println("Cargo parametro: " + nombreFactor);
+
+        Optional<FactorEmision> factorAnterior = this.repoFactores.buscarTodos().stream()
+                .filter(factor -> factor.getCategoria().equals(categoriaString[0]))
+                .findFirst();
+        if(factorAnterior.isPresent()) {
+            factorAnterior.get().setValor(valor);
+        } else {
+            this.repoFactores.agregar(
+                    new FactorEmision(new Categoria(subCategoria[0].trim(), subCategoria[1].trim()),
+                            categoriaString[1].trim(), valor));
+        }
     }
-
-    public void setFactorEmision(String nombreFactor, Float valor) {
-        this.repoFactores.setValor(nombreFactor, valor);
-    }
-
-//    public List<Medible> obtenerMediblesOrganizacion
 }

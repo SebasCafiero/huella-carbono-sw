@@ -8,6 +8,9 @@ import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,6 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParserOrganizaciones {
+    private final Repositorio<Miembro> repoMiembros;
+    private final Repositorio<Organizacion> repoOrganizaciones;
+
+    public ParserOrganizaciones() {
+        this.repoMiembros = FactoryRepositorio.get(Miembro.class);
+        this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
+    }
+
     public List<Organizacion> cargarOrganizaciones(String archivo) throws Exception {
         String organizacionesJSON = new JSONParser().parse(new FileReader(archivo)).toString();
         List<Organizacion> organizaciones = new ArrayList<>();
@@ -37,6 +48,7 @@ public class ParserOrganizaciones {
 
             Organizacion nuevaOrg = new Organizacion(razonSocial, tipoDeOrganizacion, clasificacion, ubicacionOrg);
             organizaciones.add(nuevaOrg);
+            repoOrganizaciones.agregar(nuevaOrg);
 
             JSONArray arraySectores = org.getJSONArray("sectores");
             for (int sectorIndex = 0; sectorIndex < arraySectores.length(); sectorIndex++) {
@@ -59,6 +71,7 @@ public class ParserOrganizaciones {
                     Miembro nuevoMiembro = new Miembro(nombreMiembro, apellido, tipoDeDocumento, documento, ubicacionMiembro);
 
                     nuevoSector.agregarMiembro(nuevoMiembro);
+                    repoMiembros.agregar(nuevoMiembro);
                 }
             }
         }

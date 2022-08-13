@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.entities.trayectos;
 
+import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
@@ -8,9 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Trayecto {
-
-    private Integer id;
+public class Trayecto extends EntidadPersistente {
     private List<Tramo> tramos;
     private List<Miembro> miembros;
     private LocalDate fecha;
@@ -51,7 +50,7 @@ public class Trayecto {
     }
 
     public Float calcularDistancia(){
-        return tramos.stream().map(tramo->tramo.getValor()).reduce(0F,(tot,dist)->tot+dist);
+        return tramos.stream().map(tramo -> tramo.getValor()).reduce(0F, (tot, dist) -> tot + dist);
     }
 
     public Float calcularDistanciaMedia(){
@@ -60,14 +59,6 @@ public class Trayecto {
 
     public void setTramos(List<Tramo> tramos) {
         this.tramos = tramos;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public List<Miembro> getMiembros() {

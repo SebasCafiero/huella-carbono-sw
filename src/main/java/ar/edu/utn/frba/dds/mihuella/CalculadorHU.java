@@ -1,10 +1,13 @@
 package ar.edu.utn.frba.dds.mihuella;
 
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserMedicionesCSV;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserParametrosCSV;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -48,10 +51,6 @@ public class CalculadorHU {
 
         FachadaOrganizacion calculadora = new FachadaOrganizacion();
         calculadora.cargarParametros(factoresDeEmision);
-
-//        Si quiero hacer un filtro sobre las mediciones de la organizacion, por ejemplo, por periodicidad,
-//        debo hacerlo aqui
-//        mediciones.stream().filter(x -> x.get ...).collect(Collections.toList());
 
         Float hcOrg;
         try {
