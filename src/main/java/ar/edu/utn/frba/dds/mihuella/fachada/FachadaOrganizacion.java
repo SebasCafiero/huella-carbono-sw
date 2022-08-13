@@ -11,6 +11,7 @@ import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class FachadaOrganizacion implements FachadaOrg {
     private final Repositorio<FactorEmision> repoFactores;
@@ -84,5 +85,63 @@ public class FachadaOrganizacion implements FachadaOrg {
                     new FactorEmision(new Categoria(subCategoria[0].trim(), subCategoria[1].trim()),
                             categoriaString[1].trim(), valor));
         }
+    }
+
+    public Float getImpactoOrganizacion(Organizacion org, Integer anio, Integer mes) {
+        return getImpactoMedicionesOrganizacion(org, anio, mes) + getImpactoTrayectosOrganizacion(org, anio, mes);
+    }
+
+    public Float getImpactoMedicionesOrganizacion(Organizacion org, Integer anio, Integer mes) {
+        return obtenerHU(org.getMediciones().stream()
+                .filter(me -> me.perteneceAPeriodo(anio, mes)).collect(Collectors.toList()));
+    }
+
+    public Float getImpactoTrayectosOrganizacion(Organizacion org, Integer anio, Integer mes) {
+        return (float) org.getSectores().stream()
+                .mapToDouble(sector -> getImpactoSector(sector, anio, mes))
+                .reduce(Double::sum).orElse(0);
+    }
+
+    public Float getTrayectosDeMiembro(Miembro miembro, Integer anio, Integer mes) {
+        return (float) miembro.getTrayectos().stream()
+                .filter(tr -> tr.perteneceAPeriodo(anio, mes))
+                .mapToDouble(tr -> obtenerHU(new ArrayList<>(tr.getTramos())) / tr.cantidadDeMiembros())
+                .reduce(Double::sum).orElse(0);
+    }
+
+    public Float getImpactoSector(Sector unSector, Integer anio, Integer mes) {
+        return (float) unSector.getListaDeMiembros().stream()
+                .mapToDouble(mi -> getImpactoMiembroEnPeriodo(mi, anio, mes)
+                        / mi.cantidadDeOrganizacionesDondeTrabaja())
+                .reduce(Double::sum).orElse(0);
+    }
+
+    public Float getImpactoMiembroEnPeriodo(Miembro miembro, Integer anio, Integer mes) {
+        return (float) miembro.getTrayectos().stream()
+                .filter(tr -> tr.perteneceAPeriodo(anio, mes))
+                .mapToDouble(tr -> obtenerHU(new ArrayList<>(tr.getTramos()))
+                        / tr.cantidadDeMiembros())
+                .reduce(Double::sum).orElse(0);
+    }
+
+    public List<Medible> getMediblesDePeriodo(Organizacion organizacion, Integer anio, Integer mes) {
+        List<Medible> mediciones = getMedicionesDePeriodo(organizacion, anio, mes);
+        mediciones.addAll(getTramosDePeriodo(organizacion, anio, mes));
+
+        return mediciones;
+    }
+
+    private List<Medible> getMedicionesDePeriodo(Organizacion organizacion, Integer anio, Integer mes) {
+        return organizacion.getMediciones().stream()
+                .filter(me -> me.perteneceAPeriodo(anio, mes))
+                .collect(Collectors.toList());
+    }
+
+    private List<Medible> getTramosDePeriodo(Organizacion organizacion, Integer anio, Integer mes) {
+        return organizacion.getMiembros().stream()
+                .flatMap(mi -> mi.getTrayectos().stream())
+                .filter(tr -> tr.perteneceAPeriodo(anio, mes))
+                .flatMap(tr -> tr.getTramos().stream())
+                .collect(Collectors.toList());
     }
 }

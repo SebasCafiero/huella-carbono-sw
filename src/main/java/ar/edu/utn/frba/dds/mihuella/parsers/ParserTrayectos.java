@@ -60,7 +60,7 @@ public class ParserTrayectos {
             Miembro miembro;
             try {
                 miembro = organizaciones.stream()
-                        .flatMap(organizacion -> organizacion.miembros().stream())
+                        .flatMap(organizacion -> organizacion.getMiembros().stream())
                         .filter(unMiembro -> unMiembro.getNroDocumento().equals(Integer.parseInt(data[1].trim())))
                         .findFirst().get();
             } catch (NoSuchElementException e) {

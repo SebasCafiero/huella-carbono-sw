@@ -51,7 +51,6 @@ public class TrayectosHCMiembros {
 
         Map<String,Float> factoresDeEmision;
         List<Organizacion> organizaciones;
-        List<Trayecto> trayectos;
         List<TramoCSVDTO> tramosCSV;
         List<MedioDeTransporte> medios;
 
@@ -60,14 +59,9 @@ public class TrayectosHCMiembros {
             organizaciones = new ParserOrganizaciones().cargarOrganizaciones(ns.getString("organizaciones"));
             medios = new ParserTransportes().cargarTransportes(ns.getString("transportes"));
             System.out.println(medios.toString());
-//            trayectos = new ParserTrayectos().generarTrayectos(ns.getString("trayectos"), organizaciones, medios);
             tramosCSV = new ParserTrayectos().capturarEntradas(ns.getString("trayectos"));
-
-            FactoryRepositorio.get(Miembro.class).buscarTodos().forEach(System.out::println);
-
             tramosCSV.forEach(tr -> {
                 boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");
-                System.out.println("Cargo nuevo tramo " + esCompartidoPasivo);
                 if(!esCompartidoPasivo) {
                     new ParserTrayectos().cargarTrayectoActivo(TrayectosMapper.toNuevoTrayectoDTO(tr), tr.getPeriodicidad().trim().charAt(0), tr.getFecha().trim());
                 } else {
@@ -86,31 +80,27 @@ public class TrayectosHCMiembros {
 
         System.out.println("Cargue parametros");
 
-        try { //SALIDA 1
-            PrintWriter writer = new PrintWriter(SALIDA_1_PATH, "UTF-8");
-            writer.println("Anio, Mes, Razon Social, DNI, Impacto");
-//            System.out.println("Anio, Mes, Razon Social, DNI, Impacto");
+        //SALIDA 1
+        PrintWriter writer = new PrintWriter(SALIDA_1_PATH, "UTF-8");
+        writer.println("Anio, Mes, Razon Social, DNI, Impacto");
 
-            Integer anio = 2022;
-            int mes = 06; //TODO
+        Integer anio = 2020;
+        int mes = 10; //TODO
 
-            for(Organizacion org : organizaciones) {
-                String razonSocial = org.getRazonSocial();
-                Set<Miembro> miembros = org.miembros();
-//                Float consumoTotalOrganizacion = fachada.obtenerConsumoTotalTrayectosOrganizacion(org);
+        for(Organizacion org : organizaciones) {
+            String razonSocial = org.getRazonSocial();
+            Set<Miembro> miembros = org.getMiembros();
+            Float consumoTotalOrganizacion = fachada.getImpactoTrayectosOrganizacion(org, anio, mes);
 //                System.out.println("Consumo total de la organizacion: " + consumoTotalOrganizacion);
-                for (Miembro miembro : miembros) {
-                    Integer documento = miembro.getNroDocumento();
-                    System.out.println("\nMiembroID: " + documento);
-                    Float impacto = 100 * fachada.obtenerImpactoMiembroEnTrayectos(org, miembro);
-                    writer.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
-                    System.out.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
-                }
+            for (Miembro miembro : miembros) {
+                Integer documento = miembro.getNroDocumento();
+                System.out.println("\nMiembroID: " + documento);
+                float impacto = 100 * fachada.getTrayectosDeMiembro(miembro, anio, mes) / consumoTotalOrganizacion;
+                writer.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
+                System.out.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
             }
-            writer.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
+        writer.close();
 
     }
 }

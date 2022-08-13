@@ -84,4 +84,13 @@ public class Medicion extends EntidadPersistente implements Medible {
                 "valor='" + valor.toString() + '\'' +
                 '}';
     }
+
+    public boolean perteneceAPeriodo(Integer anio, Integer mes) {
+        if(getPeriodicidad().equals('A')) {
+            return getAnio().equals(anio);
+        } else if(getPeriodicidad().equals('M')) {
+            return getAnio().equals(anio) && getMes().equals(mes);
+        }
+        return false;
+    }
 }
