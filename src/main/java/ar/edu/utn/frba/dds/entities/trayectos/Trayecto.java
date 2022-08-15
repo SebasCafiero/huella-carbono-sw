@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.entities.trayectos;
 
 import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import java.time.LocalDate;
@@ -12,10 +13,17 @@ import java.util.List;
 public class Trayecto extends EntidadPersistente {
     private List<Tramo> tramos;
     private List<Miembro> miembros;
-    private LocalDate fecha;
+    private Periodo fecha;
     private Character periodicidad;
 
-    public Trayecto(LocalDate fecha, Character periodicidad) {
+    /*public Trayecto(LocalDate fecha, Character periodicidad) {
+        this.fecha = fecha;
+        this.periodicidad = periodicidad;
+        this.miembros = new ArrayList<>();
+        this.tramos = new ArrayList<>();
+    }*/
+
+    public Trayecto(Periodo fecha, Character periodicidad) {
         this.fecha = fecha;
         this.periodicidad = periodicidad;
         this.miembros = new ArrayList<>();
@@ -77,7 +85,7 @@ public class Trayecto extends EntidadPersistente {
         return periodicidad;
     }
 
-    public LocalDate getFecha() {
+    /*public LocalDate getFecha() {
         return fecha;
     }
 
@@ -87,6 +95,18 @@ public class Trayecto extends EntidadPersistente {
 
     public Integer getAnio() {
         return fecha.getYear();
+    }*/
+
+    public Periodo getFecha() {
+        return fecha;
+    }
+
+    public Integer getMes() {
+        return fecha.getMes();
+    }
+
+    public Integer getAnio() {
+        return fecha.getAnio();
     }
 
     public boolean perteneceAPeriodo(Integer anio, Integer mes) {

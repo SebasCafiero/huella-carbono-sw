@@ -9,39 +9,50 @@ public class Medicion extends EntidadPersistente implements Medible {
     private Categoria categoria;
     private String unidad;
     private Float valor;
-    private Character periodicidad; // M o A
-    private LocalDate fecha; // AAAA-MM-DD
+//    private Character periodicidad; // M o A
+//    private LocalDate fecha; // AAAA-MM-DD
+    private Periodo periodo;
 
     public Medicion(Categoria categoria, String unidad, Float valor) {
         this.categoria = categoria;
         this.unidad = unidad;
         this.valor = valor;
+        //TODO
     }
 
-    public Medicion() {}
+    public Medicion() {} //TODO
 
-    public Medicion(Categoria categoria, String unidad, float valor, char periodicidad, LocalDate periodo) {
+    public Medicion(Categoria categoria, String unidad, float valor, Periodo periodo) {
         this.categoria = categoria;
         this.unidad = unidad;
         this.valor = valor;
-        this.periodicidad = periodicidad;
-        this.fecha = periodo;
+        this.periodo = periodo;
     }
 
     public Character getPeriodicidad() {
-        return periodicidad;
+        return this.periodo.getPeriodicidad();
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+//    public LocalDate getFecha() {
+//        return fecha;
+//    }
+
+//    public Integer getAnio(){
+//        return fecha.getYear();
+//    }
+//
+//    public Integer getMes(){
+//        return fecha.getMonthValue();
+//    }
+
+    public Integer getAnio() {
+//        return this.periodo.obtenerAnio();
+        return periodo.getAnio();
     }
 
-    public Integer getAnio(){
-        return fecha.getYear();
-    }
-
-    public Integer getMes(){
-        return fecha.getMonthValue();
+    public Integer getMes() {
+//        return this.periodo.obtenerMes();
+        return periodo.getMes();
     }
 
     @Override
@@ -62,9 +73,18 @@ public class Medicion extends EntidadPersistente implements Medible {
         this.valor = valor;
     }
 
-    public void setPeriodicidad(Character periodicidad) {this.periodicidad = periodicidad;}
+    public void setPeriodicidad(Character periodicidad) {
+        this.periodo.setPeriodicidad(periodicidad);
+    }
 
-    public void setFecha(LocalDate fecha) {this.fecha = fecha;}
+//    public void setFecha(LocalDate fecha) {
+//        this.fecha = fecha;
+//    }
+
+    public void setFecha(Periodo fecha) {
+        this.periodo = fecha;
+    }
+
 
     @Override
     public String getCategoria() {

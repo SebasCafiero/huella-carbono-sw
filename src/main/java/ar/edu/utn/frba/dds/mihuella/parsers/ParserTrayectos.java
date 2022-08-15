@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
@@ -81,16 +82,17 @@ public class ParserTrayectos {
                     trayecto = miTrayecto.get();
                 } else {
                     char periodicidad = data[10].charAt(0);
-                    LocalDate periodo;
+//                    LocalDate periodo;
+                    Periodo periodo = PeriodoMapper.toEntity(periodicidad, data[11]);
 
-                    if(periodicidad == 'M'){
+                    /*if(periodicidad == 'M'){
                         String[] mesYanio = data[11].split("/");
                         periodo = LocalDate.parse(mesYanio[1]+"-"+mesYanio[0]+"-01");
                     }
                     else if(periodicidad == 'A'){
                         periodo = LocalDate.parse(data[11] + "-01-01");
                     }
-                    else throw new FechaException("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO
+                    else throw new FechaException("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO*/
 
                     trayecto = new Trayecto(periodo, periodicidad);
                     trayecto.setId(Integer.parseInt(data[0].trim()));
@@ -151,8 +153,8 @@ public class ParserTrayectos {
         if(estadoTrayecto.isPresent()) {
             trayecto = estadoTrayecto.get();
         } else {
-            LocalDate periodo = PeriodoMapper.toLocalDate(periodicidad, periodoDTO);
-
+//            LocalDate periodo = PeriodoMapper.toLocalDate(periodicidad, periodoDTO);
+            Periodo periodo = PeriodoMapper.toEntity(periodicidad, periodoDTO);
             trayecto = new Trayecto(periodo, periodicidad);
             trayecto.setId(Math.toIntExact(trayectoDTO.getTrayectoId()));
             repoTrayectos.agregar(trayecto);
