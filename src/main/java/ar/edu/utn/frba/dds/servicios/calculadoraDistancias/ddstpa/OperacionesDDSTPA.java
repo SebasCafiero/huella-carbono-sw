@@ -12,13 +12,13 @@ public interface OperacionesDDSTPA {
 
 //    @Headers({"Authorization: Bearer moiMXLBahQOFzlNXcvEQVbkX6vOkHQOWuIx4sXdEEIE="})
     @GET("distancia")
-    Call<Distancia> distancia(@Header("Authorization") String token,
-                              @Query("localidadOrigenId") int localidadOrigenId,
-                              @Query("calleOrigen") String calleOrigen,
-                              @Query("alturaOrigen") int alturaOrigen,
-                              @Query("localidadDestinoId") int localidadDestinoId,
-                              @Query("calleDestino") String calleDestino,
-                              @Query("alturaDestino") int alturaDestino);
+    Call<DistanciaGson> distancia(@Header("Authorization") String token,
+                                  @Query("localidadOrigenId") int localidadOrigenId,
+                                  @Query("calleOrigen") String calleOrigen,
+                                  @Query("alturaOrigen") int alturaOrigen,
+                                  @Query("localidadDestinoId") int localidadDestinoId,
+                                  @Query("calleDestino") String calleDestino,
+                                  @Query("alturaDestino") int alturaDestino);
 
     @GET("provincias?offset=1")
     Call<List<ProvinciaGson>> provincias(@Header("Authorization") String token,

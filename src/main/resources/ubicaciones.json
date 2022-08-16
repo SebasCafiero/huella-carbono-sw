@@ -1,0 +1,26 @@
+[
+  {
+    "pais" : "Argentina",
+    "provincia" : "Buenos Aires",
+    "municipio" : "Avellaneda",
+    "localidad" : "Dock Sud"
+  },
+  {
+    "pais" : "Argentina",
+    "provincia" : "Ciudad Autonoma de Buenos Aires",
+    "municipio" : "Ciudad Autonoma de Buenos Aires",
+    "localidad" : "La Boca"
+  },
+  {
+    "pais" : "Argentina",
+    "provincia" : "Ciudad Autonoma de Buenos Aires",
+    "municipio" : "Ciudad Autonoma de Buenos Aires",
+    "localidad" : "Villa Lugano"
+  },
+  {
+    "pais" : "Argentina",
+    "provincia" : "Cordoba",
+    "municipio" : "Ciudad de Cordoba",
+    "localidad" : "Ciudad Universitaria"
+  }
+]

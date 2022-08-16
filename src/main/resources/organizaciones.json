@@ -1,10 +1,17 @@
 [
   {
     "organizacion": "UTN",
-    "ubicacion" : "Buenos Aires",
+    "ubicacion" : {
+      "pais" : "Argentina",
+      "provincia" : "CABA",
+      "municipio" : "CABA",
+      "localidad" : "Villa Lugano",
+      "calle" : "Mozart",
+      "numero" : 2300,
+      "latitud" : 146.4,
+      "longitud" : 146.4
+    },
     "clasificacion" : "Universidad",
-    "latitud" : 146.4,
-    "longitud" : 146.4,
     "tipo" : "INSTITUCION",
     "sectores": [
       {
@@ -15,18 +22,24 @@
             "apellido" : "Pérez",
             "tipoDocumento" : "DNI",
             "documento" : 1,
-            "ubicacion" : "Cordoba",
-            "latitud" : 312.4,
-            "longitud" : 43.4
+            "ubicacion" : {
+              "pais" : "Argentina",
+              "provincia" : "Cordoba",
+              "latitud" : 312.4,
+              "longitud" : 43.4
+            }
           },
           {
             "nombre" : "Fernando",
             "apellido" : "Cópola",
             "tipoDocumento" : "PASAPORTE",
             "documento" : 2,
-            "ubicacion" : "Cordoba",
-            "latitud" : 312.4,
-            "longitud" : 43.4
+            "ubicacion" : {
+              "pais" : "Argentina",
+              "provincia" : "Cordoba",
+              "latitud" : 312.4,
+              "longitud" : 43.4
+            }
           }
         ]
       },
@@ -38,18 +51,24 @@
             "apellido" : "Sosa",
             "tipoDocumento" : "DNI",
             "documento" : 3,
-            "ubicacion" : "Cordoba",
-            "latitud" : 312.4,
-            "longitud" : 43.4
+            "ubicacion" : {
+              "pais" : "Argentina",
+              "provincia" : "Cordoba",
+              "latitud" : 312.4,
+              "longitud" : 43.4
+            }
           },
           {
             "nombre" : "Martín",
             "apellido" : "Tagliafico",
             "tipoDocumento" : "DNI",
             "documento" : 4,
-            "ubicacion" : "Cordoba",
-            "latitud" : 312.4,
-            "longitud" : 43.4
+            "ubicacion" : {
+              "pais" : "Argentina",
+              "provincia" : "Cordoba",
+              "latitud" : 312.4,
+              "longitud" : 43.4
+            }
           }
         ]
       }
@@ -57,10 +76,17 @@
   },
   {
     "organizacion" : "Coca Cola",
-    "ubicacion" : "Cordoba",
+    "ubicacion" : {
+      "pais" : "Argentina",
+      "provincia" : "Cordoba",
+      "municipio" : "Ciudad de Cordoba",
+      "localidad" : "Ciudad Universitaria",
+      "calle" : "Maestro Marcelo Lopez",
+      "numero" : 0,
+      "latitud" : 201.4,
+      "longitud" : 201.4
+    },
     "clasificacion" : "Empresa",
-    "latitud" : 201.4,
-    "longitud" : 201.4,
     "tipo" : "EMPRESA",
     "sectores" : [
       {
@@ -71,18 +97,24 @@
             "apellido" : "Weigandt",
             "tipoDocumento" : "DNI",
             "documento" : 5,
-            "ubicacion" : "Cordoba",
-            "latitud" : 312.4,
-            "longitud" : 43.4
+            "ubicacion" : {
+              "pais" : "Argentina",
+              "provincia" : "Cordoba",
+              "latitud" : 312.4,
+              "longitud" : 43.4
+            }
           },
           {
             "nombre" : "Guido",
             "apellido" : "Óbolo",
             "tipoDocumento" : "DNI",
             "documento" : 6,
-            "ubicacion" : "Mendoza",
-            "latitud" : 32.4,
-            "longitud" : 543.4
+            "ubicacion" : {
+              "pais" : "Argentina",
+              "provincia" : "Mendoza",
+              "latitud" : 32.4,
+              "longitud" : 543.4
+            }
           }
         ]
       },
@@ -94,18 +126,24 @@
             "apellido" : "Pérez",
             "tipoDocumento" : "DNI",
             "documento" : 7,
-            "ubicacion" : "Santa Fe",
-            "latitud" : 243.4,
-            "longitud" : 455.4
+            "ubicacion" : {
+              "pais" : "Argentina",
+              "provincia" : "Santa Fe",
+              "latitud" : 243.4,
+              "longitud" : 455.4
+            }
           },
           {
             "nombre" : "Ramsés",
             "apellido" : "Abadallah",
             "tipoDocumento" : "PASAPORTE",
             "documento" : 8,
-            "ubicacion" : "Cordoba",
-            "latitud" : 123.4,
-            "longitud" : 321.4
+            "ubicacion" : {
+              "pais" : "Argentina",
+              "provincia" : "Cordoba",
+              "latitud" : 123.4,
+              "longitud" : 321.4
+            }
           }
         ]
       }

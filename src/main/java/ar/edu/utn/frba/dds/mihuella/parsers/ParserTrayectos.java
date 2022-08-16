@@ -110,7 +110,7 @@ public class ParserTrayectos {
 
                 Coordenada coordenadaInicial = new Coordenada(Float.parseFloat(data[3]), Float.parseFloat(data[4]));
                 Coordenada coordenadaFinal = new Coordenada(Float.parseFloat(data[5]), Float.parseFloat(data[6]));
-
+                //TODO pero ver de hacerlo con CSV builder
 
                 UbicacionGeografica ubicacionInicial = new UbicacionGeografica(coordenadaInicial);
                 UbicacionGeografica ubicacionFinal = new UbicacionGeografica(coordenadaFinal);
