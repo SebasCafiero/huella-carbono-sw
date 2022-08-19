@@ -13,11 +13,11 @@ public class Data {
         return DataMedicion.getList();
     }*/
 
-    public static List<EntidadPersistente> getDataMedicion(){
+    public static <T extends EntidadPersistente> List<T> getDataMedicion(){
         return DataMedicion.getList();
     }
 
-    public static List<EntidadPersistente> getDataOrganizacion(){
+    public static <T extends EntidadPersistente> List<T> getDataOrganizacion(){
         return DataOrganizacion.getList();
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 public class DataMedicion {
     private static List<Medicion> mediciones = new ArrayList<>();
 
-    public static List<EntidadPersistente> getList(){
+    public static <T extends EntidadPersistente> List<T> getList(){
         if(mediciones.size() == 0) {
 
             Medicion m1 = new Medicion();
@@ -21,7 +21,7 @@ public class DataMedicion {
 
             addAll(m1, m2);
         }
-        return (List<EntidadPersistente>)(List<?>) mediciones;
+        return (List<T>)(List<?>) mediciones;
     }
 
     private static void addAll(Medicion ... mediciones){

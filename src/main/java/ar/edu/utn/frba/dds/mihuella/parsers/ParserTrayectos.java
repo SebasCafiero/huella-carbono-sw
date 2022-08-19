@@ -5,27 +5,23 @@ import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.transportes.MedioFactory;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mapping.PeriodoMapper;
-import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.NuevoTrayectoDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.TrayectoCompartidoDTO;
-import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ParserTrayectos {
     private final Repositorio<Miembro> repoMiembros;

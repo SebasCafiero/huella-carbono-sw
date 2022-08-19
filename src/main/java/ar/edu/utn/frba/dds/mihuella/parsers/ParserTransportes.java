@@ -5,7 +5,7 @@ import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.transportes.MedioFactory;
 import ar.edu.utn.frba.dds.entities.transportes.Parada;
 import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
-import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import org.json.JSONArray;
 import org.json.JSONObject;

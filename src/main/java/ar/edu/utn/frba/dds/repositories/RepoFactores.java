@@ -1,36 +1,14 @@
 package ar.edu.utn.frba.dds.repositories;
 
-import java.util.HashMap;
-import java.util.Map;
+import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
-public class RepoFactores {
-    private static RepoFactores instance = null;
-    private final Map<String, Float> factorEmisionMap;
+import java.util.List;
+import java.util.Optional;
 
-    public RepoFactores() {
-        this.factorEmisionMap = new HashMap<>();
-    }
+public interface RepoFactores extends Repositorio<FactorEmision> {
 
-    public static RepoFactores getInstance() {
-        if(instance == null) {
-            instance = new RepoFactores();
-        }
-        return instance;
-    }
+    List<FactorEmision> findByCategoria(String categoria);
+    Optional<FactorEmision> findByCategoriaAndUnidad(String categoria, String unidad);
 
-    public boolean existe(String categoria) {
-        return factorEmisionMap.containsKey(categoria);
-    }
-
-    public Float getValor(String categoria) {
-        return factorEmisionMap.get(categoria);
-    }
-
-    public void setValor(String categoria, Float valor) {
-        this.factorEmisionMap.put(categoria, valor);
-    }
-
-    public void putAll(Map<String, Float> parametrosSistema) {
-        this.factorEmisionMap.putAll(parametrosSistema);
-    }
 }

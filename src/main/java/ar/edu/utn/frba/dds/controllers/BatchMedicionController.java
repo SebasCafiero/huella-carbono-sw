@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 import java.util.List;
-import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 
 public class BatchMedicionController {

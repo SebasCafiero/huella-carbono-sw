@@ -1,19 +1,16 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
+import ar.edu.utn.frba.dds.entities.EntidadPersistente;
+
 import java.time.LocalDate;
 import java.util.List;
 
-public class BatchMedicion {
-    private int id;
+public class BatchMedicion extends EntidadPersistente {
     private List<Medicion> mediciones;
     private LocalDate fecha;
 
-
     public BatchMedicion() {
     }
-
-    public int getId() {return id;}
-    public void setId(int id) {this.id = id;}
 
     public List<Medicion> getMediciones() {return mediciones;}
     public void setMediciones(List<Medicion> mediciones) {this.mediciones = mediciones;}

@@ -10,7 +10,7 @@ import java.util.List;
 public class DataOrganizacion {
     private static List<Organizacion> organizaciones = new ArrayList<>();
 
-    public static List<EntidadPersistente> getList(){
+    public static <T extends EntidadPersistente> List<T> getList(){
         if(organizaciones.size() == 0) {
 
             Organizacion o1 = new Organizacion();
@@ -28,7 +28,7 @@ public class DataOrganizacion {
 
             addAll(o1, o2, o3, o4);
         }
-        return (List<EntidadPersistente>)(List<?>) organizaciones;
+        return (List<T>)(List<?>) organizaciones;
     }
 
     private static void addAll(Organizacion ... organizaciones){
