@@ -33,9 +33,9 @@ public class DAOMemoria<T> implements DAO<T> {
     }
 
     @Override
-    public void modificar(Object unObjeto) {
-        eliminar(unObjeto);
-        agregar(unObjeto);
+    public void modificar(Object unObjeto1, Object unObjeto2) {
+        eliminar(unObjeto1);
+        agregar(unObjeto2);
     }
 
     @Override

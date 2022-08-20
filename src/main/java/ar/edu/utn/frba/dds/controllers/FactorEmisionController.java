@@ -15,7 +15,8 @@ public class FactorEmisionController {
 
     public Object modificar(Request request, Response response){
         FactorEmision factorEmision = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        this.repositorio.modificar(factorEmision);
+        //TODO ver el refactor
+        //this.repositorio.modificar(factorEmision);
         return response;
     }
 

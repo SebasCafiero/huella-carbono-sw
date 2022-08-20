@@ -36,7 +36,8 @@ public class BatchMedicionController {
 
     public Object modificar(Request request, Response response){
         BatchMedicion batchMedicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        this.repositorio.modificar(batchMedicion);
+        //TODO ver el refactor
+        //this.repositorio.modificar(batchMedicion);
         return response;
     }
 

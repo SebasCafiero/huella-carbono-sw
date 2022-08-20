@@ -20,8 +20,8 @@ public class Repositorio<T> {
         this.dao.agregar(unObjeto);
     }
 
-    public void modificar(Object unObjeto){
-        this.dao.modificar(unObjeto);
+    public void modificar(Object unObjeto1, Object unObjeto2){
+        this.dao.modificar(unObjeto1, unObjeto2);
     }
 
     public void eliminar(Object unObjeto){
