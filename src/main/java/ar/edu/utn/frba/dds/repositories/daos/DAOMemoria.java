@@ -29,7 +29,7 @@ public class DAOMemoria<T> implements DAO<T> {
 
     @Override
     public void agregar(Object unObjeto) {
-        this.entidades.add((EntidadPersistente) unObjeto);
+        this.entidades.add(EntidadPersistente.class.cast(unObjeto));
     }
 
     @Override
