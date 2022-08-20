@@ -15,7 +15,7 @@ public class Organizacion extends EntidadPersistente {
     private TipoDeOrganizacionEnum tipo;
     private UbicacionGeografica ubicacion;
     private ClasificacionOrganizacion clasificacionOrganizacion;
-    private Set<Sector> sectores;
+    private Set<Sector> sectores = new HashSet<>();
     private List<Medicion> mediciones;
     private List<String> contactosMail;
     private List<Integer> contactosTelefono;
@@ -95,6 +95,8 @@ public class Organizacion extends EntidadPersistente {
         return sectores;
     }
 
+    public void setSectores(Set<Sector> sectores) {this.sectores = sectores;}
+
     public static boolean existeTipoOrganizacion(String tipo) {
         try {
             TipoDeOrganizacionEnum tipoDeOrganizacion = TipoDeOrganizacionEnum.valueOf(tipo);
@@ -135,6 +137,7 @@ public class Organizacion extends EntidadPersistente {
     public String toString() {
         return "Organizacion{" +
                 "razonSocial='" + razonSocial + '\'' +
+                ", sectores=" + sectores +
                 '}';
     }
 }

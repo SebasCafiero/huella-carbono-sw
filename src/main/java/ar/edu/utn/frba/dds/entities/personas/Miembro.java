@@ -27,6 +27,9 @@ public class Miembro {
         this.domicilio = hogar;
     }
 
+    public Miembro() {
+    }
+
     public Set<Sector> getSectoresDondeTrabaja() {
         return this.sectoresDondeTrabaja;
     }
@@ -122,6 +125,13 @@ public class Miembro {
 
     public List<Trayecto> getTrayectos() {
         return trayectos;
+    }
+
+    @Override
+    public String toString() {
+        return "Miembro{" +
+                "nombre='" + nombre + '\'' +
+                '}';
     }
 }
 

@@ -18,6 +18,14 @@ public class Sector {
         this.miembros = new HashSet<>();
     }
 
+    public Sector(String nombre, Organizacion organizacion, Set<Miembro> miembros) {
+        this.nombre = nombre;
+        this.organizacion = organizacion;
+        this.miembros = miembros;
+    }
+
+    public Sector() {}
+
     public String getNombre() { return this.nombre; }
 
     public Set<Miembro> getListaDeMiembros() {
@@ -48,5 +56,14 @@ public class Sector {
 
     public Integer cantidadMiembros() {
         return this.miembros.size();
+    }
+
+    @Override
+    public String toString() {
+        return "Sector{" +
+                "nombre='" + nombre + '\'' +
+                ", organizacion=" + organizacion.toString() +
+                ", miembros=" + miembros.toString() +
+                '}';
     }
 }

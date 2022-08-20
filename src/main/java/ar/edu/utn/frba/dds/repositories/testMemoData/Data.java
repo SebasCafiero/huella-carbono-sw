@@ -17,7 +17,7 @@ public class Data {
         return DataMedicion.getList();
     }
 
-    public static List<EntidadPersistente> getDataOrganizacion(){
-        return DataOrganizacion.getList();
-    }
+    public static List<EntidadPersistente> getDataOrganizacion(){return DataOrganizacion.getList();}
+
+    public static List<EntidadPersistente> getDataMiembro(){return DataMiembro.getList();}
 }
