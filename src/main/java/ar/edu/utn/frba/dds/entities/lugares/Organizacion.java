@@ -135,9 +135,9 @@ public class Organizacion extends EntidadPersistente {
 
     @Override
     public String toString() {
-        return "Organizacion{" +
-                "razonSocial='" + razonSocial + '\'' +
+        return "Organizacion{ <br>" +
+                "&nbsp;&nbsp;&nbsp;&nbsp;razonSocial='" + razonSocial + '\'' +
                 ", sectores=" + sectores +
-                '}';
+                "}<br>";
     }
 }

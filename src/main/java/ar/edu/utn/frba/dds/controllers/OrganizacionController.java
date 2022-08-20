@@ -30,7 +30,6 @@ public class OrganizacionController {
 
     public Object modificar(Request request, Response response){
         Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        organizacion.setRazonSocial("Prueba");
         this.repositorio.modificar(organizacion);
         return response;
     }

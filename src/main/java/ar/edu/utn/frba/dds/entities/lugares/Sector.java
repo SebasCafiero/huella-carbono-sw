@@ -60,10 +60,10 @@ public class Sector {
 
     @Override
     public String toString() {
-        return "Sector{" +
-                "nombre='" + nombre + '\'' +
-                ", organizacion=" + organizacion.toString() +
-                ", miembros=" + miembros.toString() +
-                '}';
+        return "<br>&nbsp;&nbsp;&nbsp;&nbsp;Sector{<br>" +
+                "&nbsp;&nbsp;&nbsp;&nbsp;nombre='" + nombre + '\'' +
+                ", organizacion=<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + organizacion.toString() +
+                ",<br>&nbsp;&nbsp;&nbsp;&nbsp;miembros=" + miembros.toString() +
+                "}<br>";
     }
 }

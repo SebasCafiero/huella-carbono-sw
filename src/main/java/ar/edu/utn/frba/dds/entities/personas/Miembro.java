@@ -129,9 +129,9 @@ public class Miembro {
 
     @Override
     public String toString() {
-        return "Miembro{" +
-                "nombre='" + nombre + '\'' +
-                '}';
+        return "Miembro{<br>" +
+                "&nbsp;&nbsp;&nbsp;&nbsp;nombre='" + nombre + '\'' +
+                "}<br>";
     }
 }
 
