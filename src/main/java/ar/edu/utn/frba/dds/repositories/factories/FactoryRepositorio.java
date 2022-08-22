@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.factories;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
@@ -14,6 +13,7 @@ import ar.edu.utn.frba.dds.repositories.testMemoData.Data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class FactoryRepositorio {
     private static HashMap<String, Repositorio> repos;
@@ -22,7 +22,7 @@ public class FactoryRepositorio {
         repos = new HashMap<>();
     }
 
-    public static <T extends EntidadPersistente> Repositorio<T> get(Class<T> type){
+    public static <T> Repositorio<T> get(Class<T> type){
         Repositorio<T> repo;
         if(repos.containsKey(type.getName())){
             repo = (Repositorio<T>) repos.get(type.getName());
@@ -30,13 +30,13 @@ public class FactoryRepositorio {
         else{
             if(!isJPA()) {
                 if(type.equals(Organizacion.class)) {
-                    repo = new RepositorioMemoria<>(new DAOMemoria<>(Data.getDataOrganizacion()));
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, (List<T>) Data.getDataOrganizacion()));
                 } else if(type.equals(Medicion.class)) {
-                    repo = new RepositorioMemoria<>(new DAOMemoria<>(Data.getDataMedicion()));
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, (List<T>) Data.getDataMedicion()));
                 } else if(type.equals(FactorEmision.class)) {
-                    repo = (Repositorio<T>) new RepoFactoresMemoria(new DAOMemoria<>(new ArrayList<>()));
+                    repo = new RepoFactoresMemoria(new DAOMemoria<>(type, (List<T>) Data.getDataFactores()));
                 } else {
-                    repo = new RepositorioMemoria<>(new DAOMemoria<>(new ArrayList<>()));
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
                 }
             } else {
                 repo = new RepositorioPersistente<>(new DAOJPA<>(new ArrayList<>()));

@@ -4,7 +4,7 @@ import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 
 import java.util.List;
 
-public class DAOJPA<T extends EntidadPersistente> implements DAO<T> {
+public class DAOJPA<T> implements DAO<T> {
     private final List<T> entidades;
 
     public DAOJPA(List<T> entidades){
@@ -18,11 +18,12 @@ public class DAOJPA<T extends EntidadPersistente> implements DAO<T> {
 
     @Override
     public T buscar(int id) {
-        return (T) this.entidades
-                .stream()
-                .filter(e -> e.getId() == id)
-                .findFirst()
-                .get();
+//        return (T) this.entidades
+//                .stream()
+//                .filter(e -> e.getId() == id)
+//                .findFirst()
+//                .get();
+        throw new RuntimeException();
     }
 
     @Override

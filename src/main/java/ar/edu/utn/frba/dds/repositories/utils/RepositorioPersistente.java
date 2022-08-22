@@ -6,7 +6,7 @@ import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
 import java.util.List;
 
-public class RepositorioPersistente<T extends EntidadPersistente> implements Repositorio<T> {
+public class RepositorioPersistente<T> implements Repositorio<T> {
     private final DAOJPA<T> dao;
 
     public RepositorioPersistente(DAOJPA<T> dao) {

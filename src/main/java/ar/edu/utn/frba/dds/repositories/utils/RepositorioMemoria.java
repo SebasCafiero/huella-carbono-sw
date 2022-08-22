@@ -1,11 +1,10 @@
 package ar.edu.utn.frba.dds.repositories.utils;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 
 import java.util.List;
 
-public class RepositorioMemoria<T extends EntidadPersistente> implements Repositorio<T> {
+public class RepositorioMemoria<T> implements Repositorio<T> {
     private final DAOMemoria<T> dao;
 
     public RepositorioMemoria(DAOMemoria<T> dao) {

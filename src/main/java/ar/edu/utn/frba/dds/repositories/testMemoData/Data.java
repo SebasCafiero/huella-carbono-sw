@@ -20,4 +20,8 @@ public class Data {
     public static <T extends EntidadPersistente> List<T> getDataOrganizacion(){
         return DataOrganizacion.getList();
     }
+
+    public static <T extends EntidadPersistente> List<T> getDataFactores() {
+        return new ArrayList<T>();
+    }
 }

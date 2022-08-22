@@ -1,10 +1,14 @@
 package ar.edu.utn.frba.dds.mihuella;
 
+import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserMedicionesCSV;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserParametrosCSV;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
+import ar.edu.utn.frba.dds.repositories.RepoFactores;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -50,6 +54,8 @@ public class CalculadorHU {
         FachadaOrganizacion calculadora = new FachadaOrganizacion();
         calculadora.cargarParametros(factoresDeEmision);
 
+
+
         Float hcOrg;
         try {
             hcOrg = calculadora.obtenerHU(mediciones);
@@ -59,6 +65,10 @@ public class CalculadorHU {
         }
 
         System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + hcOrg);
+
+        RepoFactores repoFactores = (RepoFactores) FactoryRepositorio.get(FactorEmision.class);
+        FactorEmision factor = repoFactores.buscar(2);
+        System.out.println(factor);
     }
 
 }

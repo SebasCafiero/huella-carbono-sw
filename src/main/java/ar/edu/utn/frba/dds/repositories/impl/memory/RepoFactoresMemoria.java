@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class RepoFactoresMemoria extends RepositorioMemoria<FactorEmision> implements RepoFactores {
+public class RepoFactoresMemoria<T> extends RepositorioMemoria<FactorEmision> implements RepoFactores {
 
     public RepoFactoresMemoria(DAOMemoria<FactorEmision> dao) {
         super(dao);
