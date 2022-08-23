@@ -1,11 +1,11 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 
 import java.time.LocalDate;
 
-public class Medicion extends EntidadPersistente implements Medible {
+public class Medicion implements Medible {
+    private Integer id;
     private Categoria categoria;
     private String unidad;
     private Float valor;
@@ -26,6 +26,14 @@ public class Medicion extends EntidadPersistente implements Medible {
         this.valor = valor;
         this.periodicidad = periodicidad;
         this.fecha = periodo;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Character getPeriodicidad() {

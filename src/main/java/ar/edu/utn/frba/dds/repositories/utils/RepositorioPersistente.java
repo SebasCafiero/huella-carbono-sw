@@ -1,8 +1,6 @@
 package ar.edu.utn.frba.dds.repositories.utils;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.repositories.daos.DAOJPA;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
 import java.util.List;
 

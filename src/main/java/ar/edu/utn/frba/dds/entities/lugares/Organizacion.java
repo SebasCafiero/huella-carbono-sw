@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.entities.lugares;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
@@ -10,7 +9,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Organizacion extends EntidadPersistente {
+public class Organizacion {
+    private Integer id;
     private String razonSocial;
     private TipoDeOrganizacionEnum tipo;
     private UbicacionGeografica ubicacion;
@@ -19,6 +19,9 @@ public class Organizacion extends EntidadPersistente {
     private List<Medicion> mediciones;
     private List<String> contactosMail;
     private List<Integer> contactosTelefono;
+
+    public Organizacion() {
+    }
 
     public Organizacion(String razonSocial,
                         TipoDeOrganizacionEnum tipo,
@@ -32,6 +35,14 @@ public class Organizacion extends EntidadPersistente {
         this.mediciones = new ArrayList<>();
         this.contactosMail = new ArrayList<>();
         this.contactosTelefono = new ArrayList<>();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Set<Miembro> getMiembros() {
@@ -124,17 +135,8 @@ public class Organizacion extends EntidadPersistente {
         return getMiembros().stream().flatMap(m -> m.getTrayectos().stream()).collect(Collectors.toList());
     }
 
-    public Organizacion() {
-    }
-
     public void setRazonSocial(String razonSocial) {
         this.razonSocial = razonSocial;
     }
 
-    @Override
-    public String toString() {
-        return "Organizacion{" +
-                "razonSocial='" + razonSocial + '\'' +
-                '}';
-    }
 }

@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.testMemoData;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.List;
 public class DataMedicion {
     private static List<Medicion> mediciones = new ArrayList<>();
 
-    public static <T extends EntidadPersistente> List<T> getList(){
+    public static <T> List<T> getList(){
         if(mediciones.size() == 0) {
 
             Medicion m1 = new Medicion();
@@ -21,7 +20,7 @@ public class DataMedicion {
 
             addAll(m1, m2);
         }
-        return (List<T>)(List<?>) mediciones;
+        return (List<T>) mediciones;
     }
 
     private static void addAll(Medicion ... mediciones){

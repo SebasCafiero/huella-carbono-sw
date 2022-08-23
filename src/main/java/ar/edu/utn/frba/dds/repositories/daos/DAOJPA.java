@@ -1,7 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.daos;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
-
 import java.util.List;
 
 public class DAOJPA<T> implements DAO<T> {

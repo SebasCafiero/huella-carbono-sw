@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.testMemoData;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.List;
 public class DataOrganizacion {
     private static List<Organizacion> organizaciones = new ArrayList<>();
 
-    public static <T extends EntidadPersistente> List<T> getList(){
+    public static <T> List<T> getList(){
         if(organizaciones.size() == 0) {
 
             Organizacion o1 = new Organizacion();
@@ -28,7 +27,7 @@ public class DataOrganizacion {
 
             addAll(o1, o2, o3, o4);
         }
-        return (List<T>)(List<?>) organizaciones;
+        return (List<T>) organizaciones;
     }
 
     private static void addAll(Organizacion ... organizaciones){

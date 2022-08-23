@@ -1,10 +1,7 @@
 package ar.edu.utn.frba.dds.repositories.daos;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;

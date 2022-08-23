@@ -1,7 +1,5 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
-
 public class FactorEmision {
     private Integer id;
     private Categoria categoria;
