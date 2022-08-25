@@ -54,7 +54,7 @@ public class ParserTransportes {
                     ((TransportePublico) medioDeTransporte).agregarParada(new Parada(
                             new Coordenada(parada.getFloat("latitud"), parada.getFloat("longitud")),
                             parada.getFloat("distanciaAnterior"),
-                            parada.getFloat("distanciaAnterior"))
+                            parada.getFloat("distanciaProxima"))
                     );
 
                 }

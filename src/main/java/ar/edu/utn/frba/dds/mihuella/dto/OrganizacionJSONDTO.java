@@ -11,7 +11,6 @@ public class OrganizacionJSONDTO {
 
     public class SectorJSONDTO {
         public String nombre;
-//        public List<MiembroJSONDTO> miembros;
-        public List<Integer> m;
+        public List<MiembroJSONDTO> miembros;
     }
 }

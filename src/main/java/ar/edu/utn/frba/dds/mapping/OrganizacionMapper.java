@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.MiembroException;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.mihuella.dto.MiembroJSONDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.OrganizacionJSONDTO;
 import com.google.gson.Gson;
 import org.json.JSONArray;
@@ -39,6 +40,36 @@ public class OrganizacionMapper {
     }
 
 
+    public static Organizacion toEntity(OrganizacionJSONDTO orgDTO) {
+        Organizacion unaOrg = new Organizacion(
+                orgDTO.organizacion,
+                TipoDeOrganizacionEnum.valueOf(orgDTO.tipo), //case sensitive!
+                new ClasificacionOrganizacion(orgDTO.clasificacion),
+                UbicacionMapper.toEntity(orgDTO.ubicacion)
+        );
+        for(OrganizacionJSONDTO.SectorJSONDTO sectorDTO : orgDTO.sectores) {
+            Sector unSector;
+            try {
+                unSector = new Sector(sectorDTO.nombre, unaOrg);
+                for(MiembroJSONDTO unMiembro : sectorDTO.miembros){
+                    unSector.agregarMiembro(new Miembro(
+                            unMiembro.nombre,
+                            unMiembro.apellido,
+                            TipoDeDocumento.valueOf(unMiembro.tipoDocumento), //case sensitive!
+                            unMiembro.documento
+                    ));
+                }
+            } catch (SectorException e) {
+                e.printStackTrace();
+            } catch (MiembroException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println(unaOrg.toString());
+        return unaOrg;
+    }
+
     public static Organizacion toEntity(JSONObject organizacionDTO) {
         OrganizacionJSONDTO orgDTO = new Gson().fromJson(organizacionDTO.toString(), OrganizacionJSONDTO.class);
         Organizacion unaOrg = new Organizacion(
@@ -52,8 +83,14 @@ public class OrganizacionMapper {
             Sector unSector;
             try {
                 unSector = new Sector(sectorDTO.nombre, unaOrg);
-                unSector.agregarMiembro(new Miembro("","", TipoDeDocumento.DNI,1));
-                unSector.agregarMiembro(new Miembro("","", TipoDeDocumento.DNI,2));
+                for(MiembroJSONDTO unMiembro : sectorDTO.miembros){
+                    unSector.agregarMiembro(new Miembro(
+                            unMiembro.nombre,
+                            unMiembro.apellido,
+                            TipoDeDocumento.valueOf(unMiembro.tipoDocumento), //case sensitive!
+                            unMiembro.documento
+                    ));
+                }
             } catch (SectorException e) {
                 e.printStackTrace();
             } catch (MiembroException e) {
