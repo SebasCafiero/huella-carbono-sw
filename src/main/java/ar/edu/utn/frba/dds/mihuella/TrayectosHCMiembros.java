@@ -57,6 +57,7 @@ public class TrayectosHCMiembros {
         try {
             factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
             organizaciones = new ParserOrganizaciones().cargarOrganizaciones(ns.getString("organizaciones"));
+//            organizaciones = ParserOrganizacionesJSON.generarOrganizaciones(ns.getString("organizaciones"));
             medios = new ParserTransportes().cargarTransportes(ns.getString("transportes"));
             System.out.println(medios.toString());
             tramosCSV = new ParserTrayectos().capturarEntradas(ns.getString("trayectos"));

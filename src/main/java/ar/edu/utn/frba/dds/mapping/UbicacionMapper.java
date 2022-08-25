@@ -5,20 +5,44 @@ import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Municipio;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.mihuella.dto.UbicacionCSVDTO;
+import ar.edu.utn.frba.dds.mihuella.dto.UbicacionJSONDTO;
+import com.google.gson.Gson;
 import org.json.JSONObject;
 
 public class UbicacionMapper {
 
     public static UbicacionGeografica toEntity(JSONObject ubicacionDTO) {
-        return new UbicacionGeografica(
-                ubicacionDTO.optString("pais"),
-                ubicacionDTO.optString("provincia"),
-                ubicacionDTO.optString("municipio"),
-                ubicacionDTO.optString("localidad"),
-                ubicacionDTO.optString("calle"),
-                ubicacionDTO.optInt("numero"),
-                new Coordenada(ubicacionDTO.optFloat("latitud"), ubicacionDTO.optFloat("longitud"))
-        );
+        //org.json.JSONObject -> com.google.gson.JsonObject (serializo y parseo con string)
+        return toEntity(new Gson().fromJson(ubicacionDTO.toString(), UbicacionJSONDTO.class));
+    }
+
+    public static UbicacionGeografica toEntity(UbicacionJSONDTO ubicacionDTO) {
+        Direccion direccion;
+        Coordenada coordenadas;
+        if(ubicacionDTO.direccion == null) {
+            throw new RuntimeException("FUCKING DIRECCION"); //TODO
+        } else {
+            direccion = new Direccion(
+                    ubicacionDTO.direccion.pais,
+                    ubicacionDTO.direccion.provincia,
+                    ubicacionDTO.direccion.municipio,
+                    ubicacionDTO.direccion.localidad,
+                    ubicacionDTO.direccion.calle,
+                    ubicacionDTO.direccion.numero
+            );
+        }
+        if(ubicacionDTO.coordenadas == null) {
+            throw new RuntimeException("FUCKING COORDENADAS"); //TODO
+        } else {
+            coordenadas = new Coordenada(
+                    ubicacionDTO.coordenadas.latitud,
+                    ubicacionDTO.coordenadas.longitud
+            );
+        }
+
+        System.out.println("DIR: " + direccion);
+        System.out.println("COR: " + coordenadas);
+        return new UbicacionGeografica(direccion, coordenadas);
     }
 
     public static UbicacionGeografica toEntity(UbicacionCSVDTO ubicacionDTO) {
@@ -42,7 +66,7 @@ public class UbicacionMapper {
         return new UbicacionGeografica(direccionDTO, mapCoordenada(direccionDTO));
     }
 
-    public static Direccion mapDireccion(Coordenada unaCoordenada) {
+    public static Direccion mapDireccion(Coordenada unaCoordenada) { //TODO
         String nombrePais = "Argentina";
         String nombreProvincia = "Buenos Aires";
         String nombreMunicipio = "Avellaneda";
@@ -55,7 +79,7 @@ public class UbicacionMapper {
 
     }
 
-    public static Coordenada mapCoordenada(Direccion unaDireccion) {
+    public static Coordenada mapCoordenada(Direccion unaDireccion) { //TODO
         Float latitud = 10F;
         Float longitud = 15F;
 

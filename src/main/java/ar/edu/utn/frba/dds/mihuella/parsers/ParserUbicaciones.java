@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ParserUbicaciones {
+public class ParserUbicaciones { //si usaramos un archivo para matchear ubicaciones y coordenadas
     public List<UbicacionGeografica> generarUbicaciones(String arch) throws IOException {
         List<UbicacionCSVDTO> ubicacionesCSVDTO = new CsvToBeanBuilder(new FileReader(arch))
                 .withType(UbicacionCSVDTO.class)

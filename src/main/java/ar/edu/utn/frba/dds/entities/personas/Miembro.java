@@ -16,16 +16,14 @@ public class Miembro extends EntidadPersistente {
     private int nroDocumento;
     private Set<Sector> sectoresDondeTrabaja; //Los sectores conocen las organizaciones
     private List<Trayecto> trayectos;
-    private UbicacionGeografica domicilio; //Podria tener varios domicilios?
 
-    public Miembro(String nombre, String apellido, TipoDeDocumento tipoDeDocumento, int nroDocumento, UbicacionGeografica hogar) {
+    public Miembro(String nombre, String apellido, TipoDeDocumento tipoDeDocumento, int nroDocumento) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.tipoDeDocumento = tipoDeDocumento;
         this.nroDocumento = nroDocumento;
         this.sectoresDondeTrabaja = new HashSet<>();
         this.trayectos = new ArrayList<>();
-        this.domicilio = hogar;
     }
 
     public Set<Sector> getSectoresDondeTrabaja() {
@@ -134,7 +132,6 @@ public class Miembro extends EntidadPersistente {
                 ", nroDocumento=" + nroDocumento +
                 ", sectoresDondeTrabaja=" + sectoresDondeTrabaja +
                 ", trayectos=" + trayectos +
-                ", domicilio=" + domicilio +
                 '}';
     }
 }

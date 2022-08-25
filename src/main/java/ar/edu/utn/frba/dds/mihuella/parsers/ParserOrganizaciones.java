@@ -44,8 +44,6 @@ public class ParserOrganizaciones {
                 throw new Exception("Error en el tipo de la organizacion. No existe el tipo " + org.getString("tipo"));
 
             TipoDeOrganizacionEnum tipoDeOrganizacion = TipoDeOrganizacionEnum.valueOf(org.getString("tipo"));
-//            UbicacionGeografica ubicacionOrg = new UbicacionGeografica(org.getString("ubicacion"), org.getFloat("latitud"), org.getFloat("longitud"));
-//            UbicacionGeografica ubicacionOrg = new UbicacionGeografica(new Coordenada(org.getFloat("latitud"), org.getFloat("longitud"))); //TODO VER DE PARSEAR DIRECCION
             UbicacionGeografica ubicacionOrg = UbicacionMapper.toEntity(org.optJSONObject("ubicacion"));
 
             Organizacion nuevaOrg = new Organizacion(razonSocial, tipoDeOrganizacion, clasificacion, ubicacionOrg);
@@ -70,10 +68,10 @@ public class ParserOrganizaciones {
 
 //                    UbicacionGeografica ubicacionMiembro = new UbicacionGeografica(miembro.getString("ubicacion"), miembro.getFloat("latitud"), miembro.getFloat("longitud"));
 //                    UbicacionGeografica ubicacionMiembro = new UbicacionGeografica(new Coordenada(miembro.getFloat("latitud"), miembro.getFloat("longitud"))); //TODO VER DE PARSEAR DIRECCION
-                    UbicacionGeografica ubicacionMiembro = UbicacionMapper.toEntity(miembro.optJSONObject("ubicacion"));
+//                    UbicacionGeografica ubicacionMiembro = UbicacionMapper.toEntity(miembro.optJSONObject("ubicacion"));
 
 
-                    Miembro nuevoMiembro = new Miembro(nombreMiembro, apellido, tipoDeDocumento, documento, ubicacionMiembro);
+                    Miembro nuevoMiembro = new Miembro(nombreMiembro, apellido, tipoDeDocumento, documento);
 
                     nuevoSector.agregarMiembro(nuevoMiembro);
                     repoMiembros.agregar(nuevoMiembro);

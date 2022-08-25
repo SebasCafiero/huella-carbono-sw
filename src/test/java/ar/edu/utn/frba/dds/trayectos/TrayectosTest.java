@@ -30,7 +30,7 @@ public class TrayectosTest {
     public void testCargaDeTrayectosEnOrganizacion() throws SectorException, MiembroException {
         Organizacion unaOrg = new Organizacion("utn", TipoDeOrganizacionEnum.INSTITUCION,new ClasificacionOrganizacion("Universidad"),new UbicacionGeografica(new Coordenada(10F,5F)));
         Sector unSector = new Sector("Administracion",unaOrg);
-        Miembro unMiembro = new Miembro("Pedrito","Lopez", TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(10F,10F)));
+        Miembro unMiembro = new Miembro("Pedrito","Lopez", TipoDeDocumento.DNI,12345);
         unMiembro.solicitarIngresoAlSector(unSector);
 
         TransportePublico unTransportePublico = new TransportePublico(TipoTransportePublico.COLECTIVO,"26");
@@ -57,9 +57,9 @@ public class TrayectosTest {
 //        UbicacionGeografica ubicacionOrg = new UbicacionGeografica("Buenos Aires",10F,15F);
 //        Organizacion unaOrg = new Organizacion("utn",TipoDeOrganizacionEnum.INSTITUCION, new ClasificacionOrganizacion("Universidad"),ubicacionOrg);
 
-        Miembro miembro1 = new Miembro("m1","m1",TipoDeDocumento.DNI,1,ubicacionHogar);
-        Miembro miembro2 = new Miembro("m2","m2",TipoDeDocumento.DNI,2,ubicacionHogar);
-        Miembro miembro3 = new Miembro("m3","m3",TipoDeDocumento.DNI,3,ubicacionHogar);
+        Miembro miembro1 = new Miembro("m1","m1",TipoDeDocumento.DNI,1);
+        Miembro miembro2 = new Miembro("m2","m2",TipoDeDocumento.DNI,2);
+        Miembro miembro3 = new Miembro("m3","m3",TipoDeDocumento.DNI,3);
 
         TransportePublico unTransportePublico = new TransportePublico(TipoTransportePublico.TREN,"Mitre");
         unTransportePublico.agregarParada(new Parada(new Coordenada(8F,15F),22F,13F)); //Parada de mas
