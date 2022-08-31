@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.mapping;
 
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
+import ar.edu.utn.frba.dds.mihuella.parsers.ParserTrayectos;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
@@ -21,11 +23,32 @@ public class MedicionMapper {
 
         medicion.setCategoria(categoria);
         medicion.setUnidad(medicionDTO.optString("unidad"));
-        medicion.setPeriodicidad(medicionDTO.optString("periodicidad").trim().charAt(0));
+        Character periodicidad = medicionDTO.optString("periodicidad").trim().charAt(0);
+        medicion.setPeriodicidad(periodicidad);
         medicion.setValor(medicionDTO.optFloat("valor"));
-        medicion.setFecha(LocalDate.parse(medicionDTO.optString("fecha")));
+//        medicion.setFecha(LocalDate.parse(medicionDTO.optString("fecha")));
+        medicion.setFecha(PeriodoMapper.toEntity(periodicidad, medicionDTO.optString("fecha")));
 
         return medicion;
+    }
+
+    public static Medicion toEntity(MedicionCSVDTO medicionCSVDTO) {
+        Categoria categoria = new Categoria(medicionCSVDTO.getActividad().trim(), medicionCSVDTO.getTipoConsumo().trim());
+        /*Medicion medicion = new Medicion(categoria, medicionCSVDTO.getUnidad().trim(),
+                Float.parseFloat(medicionCSVDTO.getDatoActividad().trim()),
+                medicionCSVDTO.getPeriodicidad().trim().charAt(0),
+                PeriodoMapper.toLocalDate(
+                        medicionCSVDTO.getPeriodicidad().trim().charAt(0),
+                        medicionCSVDTO.getPeriodo().trim()));*/
+        return new Medicion(
+                categoria,
+                medicionCSVDTO.getUnidad().trim(),
+                Float.parseFloat(medicionCSVDTO.getDatoActividad().trim()),
+                PeriodoMapper.toEntity(
+                        medicionCSVDTO.getPeriodicidad().trim().charAt(0),
+                        medicionCSVDTO.getPeriodo().trim()
+                )
+        );
     }
 
     public static List<Medicion> toListOfEntity(JSONArray medicionesDTO) {

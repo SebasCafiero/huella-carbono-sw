@@ -23,7 +23,7 @@ public class MiembroTest {
 
         Sector unSector = new Sector("miSector",unaOrg);
 
-        Miembro miembro1 = new Miembro("jose", "pepito", TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(10F,20F)));
+        Miembro miembro1 = new Miembro("jose", "pepito", TipoDeDocumento.DNI,12345);
 
         miembro1.solicitarIngresoAlSector(unSector);
 
@@ -43,7 +43,7 @@ public class MiembroTest {
 
         Sector unSector = new Sector("miSector",unaOrg);
 
-        Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(15F,10F)));
+        Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
 
         unMiembro.solicitarIngresoAlSector(unSector);
 
@@ -68,7 +68,7 @@ public class MiembroTest {
                 new UbicacionGeografica(new Coordenada(10F,5F)));
 
         Sector unSector = new Sector("miSector",unaOrg);
-        Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(10F,10F)));
+        Miembro unMiembro = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
 
         unMiembro.solicitarIngresoAlSector(unSector);
 
@@ -83,9 +83,9 @@ public class MiembroTest {
                 new UbicacionGeografica(new Coordenada(10F,5F)));
 
         Sector unSector = new Sector("miSector",unaOrg);
-        Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345,new UbicacionGeografica(new Coordenada(11F,12F)));
-        Miembro miembro2 = new Miembro("pepe", "gomez",TipoDeDocumento.DNI,54321,new UbicacionGeografica(new Coordenada(15F,10F)));
-        Miembro miembro3 = new Miembro("mario", "lopez",TipoDeDocumento.DNI,11111,new UbicacionGeografica(new Coordenada(5F,6F)));
+        Miembro miembro1 = new Miembro("jose", "pepito",TipoDeDocumento.DNI,12345);
+        Miembro miembro2 = new Miembro("pepe", "gomez",TipoDeDocumento.DNI,54321);
+        Miembro miembro3 = new Miembro("mario", "lopez",TipoDeDocumento.DNI,11111);
 
         Assertions.assertEquals(0,unSector.cantidadMiembros());
 

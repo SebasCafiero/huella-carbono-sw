@@ -33,4 +33,11 @@ public class UbicacionGeografica {
         return coordenada;
     }
 
+    @Override
+    public String toString() {
+        return "UbicacionGeografica{" +
+                "coordenada=" + coordenada +
+                ", direccion=" + direccion +
+                '}';
+    }
 }

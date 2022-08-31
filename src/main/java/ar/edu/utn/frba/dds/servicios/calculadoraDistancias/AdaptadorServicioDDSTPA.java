@@ -27,7 +27,7 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
             String calleDestino = ubicacionFinal.getDireccion().getCalle();//"O'Higgins";
             int alturaDestino = ubicacionFinal.getDireccion().getNumero();//200;
 
-            Distancia distancia = servicioExterno.distancia(idLocalidadOrigen,
+            DistanciaGson distancia = servicioExterno.distancia(idLocalidadOrigen,
                     calleOrigen,
                     alturaOrigen,
                     idLocalidadDestino,

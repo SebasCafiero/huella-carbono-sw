@@ -1,11 +1,15 @@
 package ar.edu.utn.frba.dds.mapping;
 
-import ar.edu.utn.frba.dds.entities.lugares.ClasificacionOrganizacion;
-import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum;
+import ar.edu.utn.frba.dds.entities.lugares.*;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.entities.personas.MiembroException;
+import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.mihuella.dto.MiembroJSONDTO;
+import ar.edu.utn.frba.dds.mihuella.dto.OrganizacionJSONDTO;
+import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -33,5 +37,69 @@ public class OrganizacionMapper {
         organizacion.setTipo(TipoDeOrganizacionEnum.valueOf(organizacionDTO.optString("tipoOrganizacion")));
         organizacion.setUbicacion(ubicacionGeografica);
         organizacion.setClasificacionOrganizacion( new ClasificacionOrganizacion(organizacionDTO.optString("clasificacionOrganizacion")));
+    }
+
+
+    public static Organizacion toEntity(OrganizacionJSONDTO orgDTO) {
+        Organizacion unaOrg = new Organizacion(
+                orgDTO.organizacion,
+                TipoDeOrganizacionEnum.valueOf(orgDTO.tipo), //case sensitive!
+                new ClasificacionOrganizacion(orgDTO.clasificacion),
+                UbicacionMapper.toEntity(orgDTO.ubicacion)
+        );
+        for(OrganizacionJSONDTO.SectorJSONDTO sectorDTO : orgDTO.sectores) {
+            Sector unSector;
+            try {
+                unSector = new Sector(sectorDTO.nombre, unaOrg);
+                for(MiembroJSONDTO unMiembro : sectorDTO.miembros){
+                    unSector.agregarMiembro(new Miembro(
+                            unMiembro.nombre,
+                            unMiembro.apellido,
+                            TipoDeDocumento.valueOf(unMiembro.tipoDocumento), //case sensitive!
+                            unMiembro.documento
+                    ));
+                }
+            } catch (SectorException e) {
+                e.printStackTrace();
+            } catch (MiembroException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println(unaOrg.toString());
+        return unaOrg;
+    }
+
+    public static Organizacion toEntity(JSONObject organizacionDTO) {
+        OrganizacionJSONDTO orgDTO = new Gson().fromJson(organizacionDTO.toString(), OrganizacionJSONDTO.class);
+        Organizacion unaOrg = new Organizacion(
+                orgDTO.organizacion,
+                TipoDeOrganizacionEnum.valueOf(orgDTO.tipo), //case sensitive!
+                new ClasificacionOrganizacion(orgDTO.clasificacion),
+                UbicacionMapper.toEntity(orgDTO.ubicacion)
+        );
+
+        for(OrganizacionJSONDTO.SectorJSONDTO sectorDTO : orgDTO.sectores) {
+            Sector unSector;
+            try {
+                unSector = new Sector(sectorDTO.nombre, unaOrg);
+                for(MiembroJSONDTO unMiembro : sectorDTO.miembros){
+                    unSector.agregarMiembro(new Miembro(
+                            unMiembro.nombre,
+                            unMiembro.apellido,
+                            TipoDeDocumento.valueOf(unMiembro.tipoDocumento), //case sensitive!
+                            unMiembro.documento
+                    ));
+                }
+            } catch (SectorException e) {
+                e.printStackTrace();
+            } catch (MiembroException e) {
+                e.printStackTrace();
+            }
+
+        }
+        
+        System.out.println(unaOrg.toString());
+        return unaOrg;
     }
 }

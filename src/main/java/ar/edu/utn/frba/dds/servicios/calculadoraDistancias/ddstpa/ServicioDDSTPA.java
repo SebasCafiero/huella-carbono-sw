@@ -28,10 +28,10 @@ public class ServicioDDSTPA {
         return instancia;
     }
 
-    public Distancia distancia(int idLocalidadOrigen, String calleOrigen, int alturaOrigen, int idLocalidadDestino, String calleDestino, int alturaDestino) throws IOException {
+    public DistanciaGson distancia(int idLocalidadOrigen, String calleOrigen, int alturaOrigen, int idLocalidadDestino, String calleDestino, int alturaDestino) throws IOException {
 
         OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
-        Call<Distancia> requestDistancia = operacionesDDSTPA.distancia(
+        Call<DistanciaGson> requestDistancia = operacionesDDSTPA.distancia(
                 TOKEN,
                 idLocalidadOrigen,
                 calleOrigen,
@@ -40,7 +40,7 @@ public class ServicioDDSTPA {
                 calleDestino,
                 alturaDestino);
 
-        Response<Distancia> responseDistancia = requestDistancia.execute();
+        Response<DistanciaGson> responseDistancia = requestDistancia.execute();
 
         return responseDistancia.body();
 

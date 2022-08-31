@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.entities.trayectos;
 
+import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import java.time.LocalDate;
@@ -8,17 +10,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Trayecto {
-
-    private Integer id;
+public class Trayecto extends EntidadPersistente {
     private List<Tramo> tramos;
     private List<Miembro> miembros;
-    private LocalDate fecha;
-    private Character periodicidad;
+    private Periodo fecha;
 
-    public Trayecto(LocalDate fecha, Character periodicidad) {
+    /*public Trayecto(LocalDate fecha, Character periodicidad) {
         this.fecha = fecha;
         this.periodicidad = periodicidad;
+        this.miembros = new ArrayList<>();
+        this.tramos = new ArrayList<>();
+    }*/
+
+    public Trayecto(Periodo fecha) {
+        this.fecha = fecha;
         this.miembros = new ArrayList<>();
         this.tramos = new ArrayList<>();
     }
@@ -51,7 +56,7 @@ public class Trayecto {
     }
 
     public Float calcularDistancia(){
-        return tramos.stream().map(tramo->tramo.getValor()).reduce(0F,(tot,dist)->tot+dist);
+        return tramos.stream().map(tramo -> tramo.getValor()).reduce(0F, (tot, dist) -> tot + dist);
     }
 
     public Float calcularDistanciaMedia(){
@@ -60,14 +65,6 @@ public class Trayecto {
 
     public void setTramos(List<Tramo> tramos) {
         this.tramos = tramos;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public List<Miembro> getMiembros() {
@@ -83,10 +80,10 @@ public class Trayecto {
     }
 
     public Character getPeriodicidad(){
-        return periodicidad;
+        return fecha.getPeriodicidad();
     }
 
-    public LocalDate getFecha() {
+    /*public LocalDate getFecha() {
         return fecha;
     }
 
@@ -96,5 +93,35 @@ public class Trayecto {
 
     public Integer getAnio() {
         return fecha.getYear();
+    }*/
+
+    public Periodo getFecha() {
+        return fecha;
+    }
+
+    public Integer getMes() {
+        return fecha.getMes();
+    }
+
+    public Integer getAnio() {
+        return fecha.getAnio();
+    }
+
+    public boolean perteneceAPeriodo(Integer anio, Integer mes) {
+        if(getPeriodicidad().equals('A')) {
+            return getAnio().equals(anio);
+        } else if(getPeriodicidad().equals('M')) {
+            return getAnio().equals(anio) && getMes().equals(mes);
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Trayecto{" +
+                "tramos=" + tramos +
+                ", miembros=" + miembros +
+                ", fecha=" + fecha +
+                "} " + super.toString();
     }
 }

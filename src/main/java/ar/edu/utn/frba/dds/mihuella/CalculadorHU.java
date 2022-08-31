@@ -1,16 +1,20 @@
 package ar.edu.utn.frba.dds.mihuella;
 
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserMedicionesCSV;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserParametrosCSV;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +44,7 @@ public class CalculadorHU {
         List<Medible> mediciones;
         try {
             factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
-            mediciones = new ParserMedicionesCSV().generarMediciones(ns.getString("mediciones"));
+            mediciones = new ArrayList<>(new ParserMedicionesCSV().generarMediciones(ns.getString("mediciones")));
         } catch (IOException | FechaException ex) {
             System.out.println(ex.getMessage());
             return;
@@ -48,10 +52,6 @@ public class CalculadorHU {
 
         FachadaOrganizacion calculadora = new FachadaOrganizacion();
         calculadora.cargarParametros(factoresDeEmision);
-
-//        Si quiero hacer un filtro sobre las mediciones de la organizacion, por ejemplo, por periodicidad,
-//        debo hacerlo aqui
-//        mediciones.stream().filter(x -> x.get ...).collect(Collections.toList());
 
         Float hcOrg;
         try {
@@ -62,7 +62,6 @@ public class CalculadorHU {
         }
 
         System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + hcOrg);
-        System.out.println("Imprimir datos de las huellas");
     }
 
 }

@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-public class MedicionSinFactorEmisionException extends Throwable {
+public class MedicionSinFactorEmisionException extends RuntimeException {
 
     private final String categoria;
 

@@ -51,4 +51,14 @@ public class Direccion {
     public Municipio getMunicipio() {
         return municipio;
     }
+
+    @Override
+    public String toString() {
+        return "Direccion{" +
+                "numero=" + numero +
+                ", calle='" + calle + '\'' +
+                ", localidad='" + localidad + '\'' +
+                ", municipio=" + municipio +
+                '}';
+    }
 }

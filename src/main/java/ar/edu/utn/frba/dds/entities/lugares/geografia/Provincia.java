@@ -22,4 +22,12 @@ public class Provincia extends AreaSectorial {
     public void agregarMunicipio(Municipio unMunicipio) {
         this.municipios.add(unMunicipio);
     }
+
+    @Override
+    public String toString() {
+        return "Provincia{" +
+                "nombre='" + nombre + '\'' +
+                ", nombrePais='" + nombrePais + '\'' +
+                "}";
+    }
 }

@@ -2,44 +2,42 @@ package ar.edu.utn.frba.dds.mihuella.fachada;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
+import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
+import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class FachadaOrganizacion implements FachadaOrg {
-    private RepoFactores repoFactores;
+    private final Repositorio<FactorEmision> repoFactores;
 
     public FachadaOrganizacion() {
-        repoFactores = RepoFactores.getInstance();
+        repoFactores = FactoryRepositorio.get(FactorEmision.class);
     }
 
     @Override
     public void cargarParametros(Map<String, Float> parametrosSistema) {
-        this.repoFactores.putAll(parametrosSistema);
+        parametrosSistema.forEach(this::cargarParametro);
     }
 
     @Override
-    public Float obtenerHU(Collection<Medible> mediciones) throws MedicionSinFactorEmisionException {
-        Float huTotal = 0F;
-        for(Medible medicion : mediciones){
-            String categoria = medicion.getCategoria();
-            System.out.println("\nCategoria: " + categoria + ", valor: " + medicion.getValor().toString());
-            System.out.println("Valor fe: " + this.repoFactores.getValor(categoria));
+    public Float obtenerHU(Collection<Medible> mediciones) {
+        return (float) mediciones.stream().mapToDouble(medible -> {
+            Optional<FactorEmision> factorEmision = this.repoFactores.buscarTodos().stream()
+                    .filter(factor -> factor.getCategoria().equals(medible.getCategoria()))
+                    .findFirst();
 
-            try{
-                huTotal = (this.repoFactores.getValor(categoria) * medicion.getValor()) + huTotal;
-//                System.out.println("Dato actividad " + categoria + ": " + medicion.getValor().toString());
-                System.out.println("DAxFE: " + medicion.getValor() + " x " + this.repoFactores.getValor(categoria) + " = " + huTotal);
-            }
-            catch (NullPointerException e){
-                throw new MedicionSinFactorEmisionException(categoria);
+            if(!factorEmision.isPresent()) {
+                throw new MedicionSinFactorEmisionException(medible.getCategoria());
             }
 
-        }
-        return huTotal;
+            return factorEmision.get().getValor() * medible.getValor();
+        }).reduce(0, Double::sum);
     }
 
     //TODO la fachada deberia ser para una organizacion especifica, deberia ser atributo
@@ -71,14 +69,77 @@ public class FachadaOrganizacion implements FachadaOrg {
         return impactoMiembro;
     }
 
+    public void cargarParametro(String nombreFactor, Float valor) {
+        String[] categoriaString = nombreFactor.split(":");
+        String[] subCategoria = categoriaString[0].split("->");
 
-    private float calcularValor(Medible medicion){
-        return medicion.getValor();
+        Optional<FactorEmision> factorAnterior = this.repoFactores.buscarTodos().stream()
+                .filter(factor -> factor.getCategoria().equals(categoriaString[0]))
+                .findFirst();
+        if(factorAnterior.isPresent()) {
+            factorAnterior.get().setValor(valor);
+        } else {
+            this.repoFactores.agregar(
+                    new FactorEmision(new Categoria(subCategoria[0].trim(), subCategoria[1].trim()),
+                            categoriaString[1].trim(), valor));
+        }
     }
 
-    public void setFactorEmision(String nombreFactor, Float valor) {
-        this.repoFactores.setValor(nombreFactor, valor);
+    public Float getImpactoOrganizacion(Organizacion org, Integer anio, Integer mes) {
+        return getImpactoMedicionesOrganizacion(org, anio, mes) + getImpactoTrayectosOrganizacion(org, anio, mes);
     }
 
-//    public List<Medible> obtenerMediblesOrganizacion
+    public Float getImpactoMedicionesOrganizacion(Organizacion org, Integer anio, Integer mes) {
+        return obtenerHU(org.getMediciones().stream()
+                .filter(me -> me.perteneceAPeriodo(anio, mes)).collect(Collectors.toList()));
+    }
+
+    public Float getImpactoTrayectosOrganizacion(Organizacion org, Integer anio, Integer mes) {
+        return (float) org.getSectores().stream()
+                .mapToDouble(sector -> getImpactoSector(sector, anio, mes))
+                .reduce(Double::sum).orElse(0);
+    }
+
+    public Float getTrayectosDeMiembro(Miembro miembro, Integer anio, Integer mes) {
+        return (float) miembro.getTrayectos().stream()
+                .filter(tr -> tr.perteneceAPeriodo(anio, mes))
+                .mapToDouble(tr -> obtenerHU(new ArrayList<>(tr.getTramos())) / tr.cantidadDeMiembros())
+                .reduce(Double::sum).orElse(0);
+    }
+
+    public Float getImpactoSector(Sector unSector, Integer anio, Integer mes) {
+        return (float) unSector.getListaDeMiembros().stream()
+                .mapToDouble(mi -> getImpactoMiembroEnPeriodo(mi, anio, mes)
+                        / mi.cantidadDeOrganizacionesDondeTrabaja())
+                .reduce(Double::sum).orElse(0);
+    }
+
+    public Float getImpactoMiembroEnPeriodo(Miembro miembro, Integer anio, Integer mes) {
+        return (float) miembro.getTrayectos().stream()
+                .filter(tr -> tr.perteneceAPeriodo(anio, mes))
+                .mapToDouble(tr -> obtenerHU(new ArrayList<>(tr.getTramos()))
+                        / tr.cantidadDeMiembros())
+                .reduce(Double::sum).orElse(0);
+    }
+
+    public List<Medible> getMediblesDePeriodo(Organizacion organizacion, Integer anio, Integer mes) {
+        List<Medible> mediciones = getMedicionesDePeriodo(organizacion, anio, mes);
+        mediciones.addAll(getTramosDePeriodo(organizacion, anio, mes));
+
+        return mediciones;
+    }
+
+    private List<Medible> getMedicionesDePeriodo(Organizacion organizacion, Integer anio, Integer mes) {
+        return organizacion.getMediciones().stream()
+                .filter(me -> me.perteneceAPeriodo(anio, mes))
+                .collect(Collectors.toList());
+    }
+
+    private List<Medible> getTramosDePeriodo(Organizacion organizacion, Integer anio, Integer mes) {
+        return organizacion.getMiembros().stream()
+                .flatMap(mi -> mi.getTrayectos().stream())
+                .filter(tr -> tr.perteneceAPeriodo(anio, mes))
+                .flatMap(tr -> tr.getTramos().stream())
+                .collect(Collectors.toList());
+    }
 }
