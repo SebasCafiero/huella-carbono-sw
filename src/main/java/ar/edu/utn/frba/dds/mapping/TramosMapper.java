@@ -1,14 +1,18 @@
 package ar.edu.utn.frba.dds.mapping;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.transportes.TipoCombustible;
-import ar.edu.utn.frba.dds.entities.transportes.TipoVehiculo;
-import ar.edu.utn.frba.dds.entities.transportes.VehiculoParticular;
+import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
+import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO2;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TramosMapper {
 
@@ -41,5 +45,40 @@ public class TramosMapper {
 
             tramos.add(tramo);
         });
+    }
+
+    public static Tramo toEntity(TramoCSVDTO2 tramoDTO) {
+        Repositorio<MedioDeTransporte> repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
+        MedioDeTransporte medioSolicitado = new MedioFactory().getMedioDeTransporte(tramoDTO.tipoTransporte, tramoDTO.subtipoTransporte, tramoDTO.info);
+        Optional<MedioDeTransporte> posibleTransporte = repoMedios.buscarTodos().stream().filter(m -> m.equals(medioSolicitado)).findFirst();
+        if(!posibleTransporte.isPresent()) throw new RuntimeException("Medio de Transporte Inexistente");
+
+        return new Tramo(
+                posibleTransporte.get(),
+                new Coordenada(tramoDTO.latInicial, tramoDTO.longInicial),
+                new Coordenada(tramoDTO.latFinal, tramoDTO.longFinal)
+        );
+    }
+
+    public static Trayecto modelarTrayecto(List<TramoCSVDTO2> tramosDTODeUnTrayecto) {
+        if(!tramosDTODeUnTrayecto.stream().findFirst().isPresent()) throw new RuntimeException("Error al parsear tramo"); //Nunca deberia obtenerse del CSV un trayecto que no tenga un tramoDTO...
+        TramoCSVDTO2 unTramo = tramosDTODeUnTrayecto.stream().findFirst().get();
+        Trayecto unTrayecto = new Trayecto(PeriodoMapper.toEntity(unTramo.periodicidad, unTramo.fecha));
+
+        Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
+        Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == unTramo.idMiembro).findFirst();
+        if(!posibleMiembro.isPresent()) throw new RuntimeException("Miembro Inexistente");
+        unTrayecto.agregarmiembro(posibleMiembro.get());
+        return unTrayecto;
+    }
+
+    public static void mapTrayectoCompartido(List<Trayecto> trayectos, TramoCSVDTO2 tramoDTOCompartido) {
+        Trayecto trayectoCompartido = new Trayecto(); //TODO VER SI AGREGAR ID TRAYECTO COMO ATRIBUTO O MAPEAR AL MISMO TIEMPO DE GENERADA CADA ENTRY EN EL PARSER
+
+        Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
+        Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == tramoDTOCompartido.idMiembro).findFirst();
+        if(!posibleMiembro.isPresent()) throw new RuntimeException("Miembro Inexistente");
+        trayectoCompartido.agregarmiembro(posibleMiembro.get());
+
     }
 }

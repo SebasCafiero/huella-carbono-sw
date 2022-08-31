@@ -14,7 +14,6 @@ public class Trayecto extends EntidadPersistente {
     private List<Tramo> tramos;
     private List<Miembro> miembros;
     private Periodo fecha;
-    private Character periodicidad;
 
     /*public Trayecto(LocalDate fecha, Character periodicidad) {
         this.fecha = fecha;
@@ -23,9 +22,8 @@ public class Trayecto extends EntidadPersistente {
         this.tramos = new ArrayList<>();
     }*/
 
-    public Trayecto(Periodo fecha, Character periodicidad) {
+    public Trayecto(Periodo fecha) {
         this.fecha = fecha;
-        this.periodicidad = periodicidad;
         this.miembros = new ArrayList<>();
         this.tramos = new ArrayList<>();
     }
@@ -82,7 +80,7 @@ public class Trayecto extends EntidadPersistente {
     }
 
     public Character getPeriodicidad(){
-        return periodicidad;
+        return fecha.getPeriodicidad();
     }
 
     /*public LocalDate getFecha() {
@@ -116,5 +114,14 @@ public class Trayecto extends EntidadPersistente {
             return getAnio().equals(anio) && getMes().equals(mes);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Trayecto{" +
+                "tramos=" + tramos +
+                ", miembros=" + miembros +
+                ", fecha=" + fecha +
+                "} " + super.toString();
     }
 }

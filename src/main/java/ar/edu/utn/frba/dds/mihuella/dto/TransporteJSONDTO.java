@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.mihuella.dto;
 
 import java.util.List;
 
-public class TransporteDTO {
+public class TransporteJSONDTO {
     public String transporte; //todos
     public String tipo; //todos
     public String subtipo; //todos

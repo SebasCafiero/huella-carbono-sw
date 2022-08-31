@@ -65,4 +65,15 @@ public class Tramo implements Medible {
     public String getCategoria() {
         return "Traslado de Miembros - " + medioDeTransporte.getCategoria();
     }
+
+    @Override
+    public String toString() {
+        return "Tramo{" +
+                "medioDeTransporte=" + medioDeTransporte +
+                ", ubicacionInicial=" + ubicacionInicial +
+                ", ubicacionFinal=" + ubicacionFinal +
+                ", trayecto=" + trayecto +
+                ", valor=" + valor +
+                '}';
+    }
 }

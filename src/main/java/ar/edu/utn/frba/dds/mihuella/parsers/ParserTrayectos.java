@@ -12,10 +12,8 @@ import ar.edu.utn.frba.dds.entities.transportes.MedioFactory;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mapping.PeriodoMapper;
-import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
-import ar.edu.utn.frba.dds.mihuella.dto.NuevoTrayectoDTO;
-import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
-import ar.edu.utn.frba.dds.mihuella.dto.TrayectoCompartidoDTO;
+import ar.edu.utn.frba.dds.mapping.TramosMapper;
+import ar.edu.utn.frba.dds.mihuella.dto.*;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import com.opencsv.CSVReader;
@@ -94,7 +92,7 @@ public class ParserTrayectos {
                     }
                     else throw new FechaException("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO*/
 
-                    trayecto = new Trayecto(periodo, periodicidad);
+                    trayecto = new Trayecto(periodo);
                     trayecto.setId(Integer.parseInt(data[0].trim()));
                     trayectos.add(trayecto);
                 }
@@ -155,7 +153,7 @@ public class ParserTrayectos {
         } else {
 //            LocalDate periodo = PeriodoMapper.toLocalDate(periodicidad, periodoDTO);
             Periodo periodo = PeriodoMapper.toEntity(periodicidad, periodoDTO);
-            trayecto = new Trayecto(periodo, periodicidad);
+            trayecto = new Trayecto(periodo);
             trayecto.setId(Math.toIntExact(trayectoDTO.getTrayectoId()));
             repoTrayectos.agregar(trayecto);
             miembro.get().agregarTrayecto(trayecto);
@@ -223,5 +221,58 @@ public class ParserTrayectos {
         tramos.forEach(System.out::println);
 
         return tramos;
+    }
+
+    public static List<Trayecto> generarTrayectos2(String archivo) throws FileNotFoundException {
+        List<TramoCSVDTO2> tramosDTO = new CsvToBeanBuilder(new FileReader(archivo))
+                .withOrderedResults(false)
+                .withType(TramoCSVDTO2.class)
+                .build()
+                .parse();
+        for(TramoCSVDTO2 tramoDTO : tramosDTO) {
+            System.out.println(tramoDTO);
+        }
+
+        //TODO VER DE EVITAR EL TrayectoId=0 EN QUE FOR
+
+        Map<Integer, List<TramoCSVDTO2>> tramosSegunIdTrayecto = new HashMap<>();
+        for(TramoCSVDTO2 tramoDTO : tramosDTO) {
+            List<TramoCSVDTO2> tramosDTODeUnTrayecto = tramosSegunIdTrayecto.get(tramoDTO.idTrayecto);
+            if(tramosDTODeUnTrayecto == null) tramosDTODeUnTrayecto = new ArrayList<>(); //TODO EL GET DEL MAP DA NULL SI NO EXISTE
+            tramosDTODeUnTrayecto.add(tramoDTO);
+            tramosSegunIdTrayecto.put(tramoDTO.idTrayecto, tramosDTODeUnTrayecto);
+        }
+
+        List<Trayecto> trayectos = new ArrayList<>();
+
+        for(Map.Entry<Integer, List<TramoCSVDTO2>> entryTramosPorTrayecto : tramosSegunIdTrayecto.entrySet()) {
+//            System.out.println("Empieza For - ID: " + entryTramosPorTrayecto.getKey());
+//            System.out.println(entryTramosPorTrayecto.getValue());
+        if(entryTramosPorTrayecto.getKey()!=0) {
+            List<TramoCSVDTO2> tramosDTODeUnTrayecto = entryTramosPorTrayecto.getValue();
+
+            //Creo el trayecto con el miembro ppal, periodicidad y fecha (puedo usar los datos de cualquier tramo)
+            Trayecto unTrayecto = TramosMapper.modelarTrayecto(tramosDTODeUnTrayecto);
+
+            //Creo cada unos de los tramos del trayecto y luego los agrego al trayecto creado
+            List<Tramo> tramosDeUnTrayecto = tramosDTODeUnTrayecto
+                    .stream()
+                    .map(TramosMapper::toEntity)
+                    .collect(Collectors.toList());
+            unTrayecto.agregarTramos(tramosDeUnTrayecto);
+
+            trayectos.add(unTrayecto);
+        }
+            //TODO AGREGAR TRAYECTOS A TODOS LOS MIEMBROS (ESTAN EN LOS TRAYECTOS SOLAMENTE)
+        }
+
+
+
+
+
+        System.out.println(trayectos);
+
+
+        return trayectos;
     }
 }

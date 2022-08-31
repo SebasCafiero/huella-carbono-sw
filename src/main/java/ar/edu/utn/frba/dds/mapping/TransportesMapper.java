@@ -2,10 +2,10 @@ package ar.edu.utn.frba.dds.mapping;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.transportes.*;
-import ar.edu.utn.frba.dds.mihuella.dto.TransporteDTO;
+import ar.edu.utn.frba.dds.mihuella.dto.TransporteJSONDTO;
 
 public class TransportesMapper {
-    public static MedioDeTransporte toEntity(TransporteDTO transporteDTO) {
+    public static MedioDeTransporte toEntity(TransporteJSONDTO transporteDTO) {
         MedioDeTransporte transporte;
 
         String tipoTransporte = transporteDTO.tipo;
@@ -14,7 +14,7 @@ public class TransportesMapper {
                     TipoTransportePublico.valueOf(transporteDTO.subtipo),
                     transporteDTO.linea
             );
-            for(TransporteDTO.ParadaDTO paradaDTO : transporteDTO.paradas) {
+            for(TransporteJSONDTO.ParadaDTO paradaDTO : transporteDTO.paradas) {
                 transportePublico.agregarParada(new Parada(
                         new Coordenada(paradaDTO.latitud, paradaDTO.longitud),
                         paradaDTO.distanciaAnterior,

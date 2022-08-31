@@ -53,7 +53,7 @@ public class TrayectosHCMiembros {
         List<Organizacion> organizaciones;
         List<TramoCSVDTO> tramosCSV;
         List<MedioDeTransporte> medios;
-
+        ParserTrayectos.generarTrayectos2("resources/trayectos2.csv");
         try {
             factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
             organizaciones = new ParserOrganizaciones().cargarOrganizaciones(ns.getString("organizaciones"));
