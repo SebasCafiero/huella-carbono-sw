@@ -37,7 +37,8 @@ public class Router {
         MedicionController medicionController = new MedicionController();
         Spark.get("/medicion/:id", medicionController::obtener);
         Spark.get("/medicion", medicionController::mostrarTodos);
-        //ver filtros
+        Spark.get("/medicion/unidad/:unidad",medicionController::filtrarUnidad);
+        Spark.get("/medicion/valor/:valor",medicionController::filtrarValor);
         BatchMedicionController batchMedicionController = new BatchMedicionController();
         Spark.get("/batchMedicion/:id", batchMedicionController::obtener);
         Spark.delete("/batchMedicion/:id", batchMedicionController::eliminar);

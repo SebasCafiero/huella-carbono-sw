@@ -14,12 +14,23 @@ public class DataMedicion {
         if(mediciones.size() == 0) {
 
             Medicion m1 = new Medicion();
-            m1.setValor(0f);
+            m1.setValor(10f);
+            m1.setUnidad("m3");
 
             Medicion m2 = new Medicion();
             m2.setValor(322434.34f);
+            m2.setUnidad("m3");
 
-            addAll(m1, m2);
+            Medicion m3 = new Medicion();
+            m3.setValor(300f);
+            m3.setUnidad("lt");
+
+            Medicion m4 = new Medicion();
+            m4.setValor(10f);
+            m4.setUnidad("kg");
+
+
+            addAll(m1, m2,m3,m4);
         }
         return (List<EntidadPersistente>)(List<?>) mediciones;
     }

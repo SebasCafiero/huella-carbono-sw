@@ -5,11 +5,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class BatchMedicionMapper {
-    public static void map(JSONObject batchmedicionDTO, BatchMedicion batchMedicion){
+    public static BatchMedicion toEntity(JSONObject batchmedicionDTO){
+        BatchMedicion batchMedicion = new BatchMedicion();
         JSONArray medicionesDTO = batchmedicionDTO.getJSONArray("mediciones");
 
         batchMedicion.setMediciones(MedicionMapper.toListOfEntity(medicionesDTO));
         batchMedicion.setId(batchmedicionDTO.optInt("id"));
         batchMedicion.setFecha(batchmedicionDTO.optInt("fecha"));
+
+        return batchMedicion;
     }
 }

@@ -28,8 +28,7 @@ public class BatchMedicionController {
 
     public Object agregar(Request request, Response response){
         JSONObject jsonObject = new JSONObject(request.body());
-        BatchMedicion batchMedicion = new BatchMedicion();
-        BatchMedicionMapper.map(jsonObject, batchMedicion);
+        BatchMedicion batchMedicion = BatchMedicionMapper.toEntity(jsonObject);
         this.repositorio.agregar(batchMedicion);
         return response;
     }

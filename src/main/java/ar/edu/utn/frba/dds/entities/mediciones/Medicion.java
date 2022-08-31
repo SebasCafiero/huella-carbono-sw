@@ -71,7 +71,8 @@ public class Medicion implements Medible {
     @Override
     public String toString() {
         return "Medicion{" +
-                "valor='" + valor.toString() + '\'' +
+                "valor = " + valor.toString() + '\'' +
+                "unidad = " + unidad + '\'' +
                 '}';
     }
 }

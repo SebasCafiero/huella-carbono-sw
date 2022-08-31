@@ -7,6 +7,8 @@ import spark.Request;
 import spark.Response;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MedicionController {
     private Repositorio<Medicion> repositorio;
@@ -17,7 +19,7 @@ public class MedicionController {
 
     public String obtener(Request request, Response response){
         Medicion medicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        return medicion.getValor().toString();//que deberia devolver?
+        return medicion.toString();//que deberia devolver?
     }
 
     public String mostrarTodos(Request request, Response response){
@@ -25,6 +27,22 @@ public class MedicionController {
         return mediciones.toString();
     }
 
-    //faltan hacer los fiiltros --> por ej : mostrar todos las mediciones con "x" unidad
+    public String filtrarUnidad(Request request, Response response) {
+        List<Medicion> mediciones = this.repositorio.buscarTodos();
+        return  mediciones
+                .stream()
+                .filter(m -> Objects.equals(m.getUnidad(), String.valueOf(request.params("unidad"))))
+                .collect(Collectors.toList())
+                .toString();
+    }
+
+    public String filtrarValor(Request request, Response response) {
+        List<Medicion> mediciones = this.repositorio.buscarTodos();
+        return  mediciones
+                .stream()
+                .filter(m -> Objects.equals(m.getValor(), Float.valueOf(request.params("valor"))))
+                .collect(Collectors.toList())
+                .toString();
+    }
 }
 

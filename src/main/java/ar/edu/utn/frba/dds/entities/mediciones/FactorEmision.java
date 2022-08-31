@@ -11,6 +11,8 @@ public class FactorEmision {
         this.valor = valor;
     }
 
+    public FactorEmision() {}
+
     public String getCategoria() {
         return this.categoria.toString();
     }

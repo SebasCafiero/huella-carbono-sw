@@ -6,7 +6,8 @@ import org.json.JSONObject;
 
 
 public class FactorEmisionMapper {
-    public static void map(JSONObject factorEmisionDTO, FactorEmision factorEmision){
+    public static FactorEmision toEntity(JSONObject factorEmisionDTO){
+        FactorEmision factorEmision = new FactorEmision();
         JSONObject categoriaDTO = factorEmisionDTO.optJSONObject("categoria");
         Categoria categoria = new Categoria(
                 categoriaDTO.optInt("Id"),
@@ -17,5 +18,7 @@ public class FactorEmisionMapper {
         factorEmision.setCategoria(categoria);
         factorEmision.setUnidad(factorEmisionDTO.optString("unidad"));
         factorEmision.setValor(factorEmisionDTO.optFloat("valor"));
+
+        return factorEmision;
     }
 }
