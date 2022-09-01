@@ -21,7 +21,14 @@ public class BatchMedicion {
     public LocalDate getFecha() {return fecha;}
     public void setFecha(LocalDate fecha) {this.fecha = fecha;}
 
-    public void setFecha(int fecha) {
-    }//---> ver como completar
+    public void setFecha(String fecha) {this.fecha = LocalDate.parse(fecha);}
+
+    @Override
+    public String toString() {
+        return '\n' + "BatchMedicion { " + '\n' +
+                "  Mediciones = " + mediciones.toString() + '\n' +
+                "fecha = " + fecha.toString()  +
+                '}';
+    }
 }
 

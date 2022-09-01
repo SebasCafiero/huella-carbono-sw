@@ -11,7 +11,7 @@ public class BatchMedicionMapper {
 
         batchMedicion.setMediciones(MedicionMapper.toListOfEntity(medicionesDTO));
         batchMedicion.setId(batchmedicionDTO.optInt("id"));
-        batchMedicion.setFecha(batchmedicionDTO.optInt("fecha"));
+        batchMedicion.setFecha(batchmedicionDTO.optString("fecha"));
 
         return batchMedicion;
     }

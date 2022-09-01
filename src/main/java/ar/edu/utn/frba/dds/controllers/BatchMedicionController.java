@@ -26,7 +26,7 @@ public class BatchMedicionController {
 
     public String obtener(Request request, Response response){
         BatchMedicion batchMedicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        return batchMedicion.getFecha().toString();
+        return batchMedicion.toString();
     }
 
     public Object agregar(Request request, Response response){

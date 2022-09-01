@@ -86,6 +86,8 @@ public class Medicion extends EntidadPersistente implements Medible {
     }
 
 
+
+
     @Override
     public String getCategoria() {
         return categoria.toString();
@@ -97,10 +99,7 @@ public class Medicion extends EntidadPersistente implements Medible {
 
     @Override
     public String toString() {
-        return "Medicion{" +
-                "valor = " + valor.toString() + '\'' +
-                "unidad = " + unidad + '\'' +
-                '}';
+        return  '\n' + "Medicion { " + "valor = " + valor.toString() + ", unidad = " + unidad + " }";
     }
 
     public boolean perteneceAPeriodo(Integer anio, Integer mes) {
