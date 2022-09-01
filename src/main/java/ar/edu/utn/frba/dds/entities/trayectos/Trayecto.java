@@ -120,7 +120,6 @@ public class Trayecto extends EntidadPersistente {
     public String toString() {
         return "Trayecto{" +
                 "tramos=" + tramos +
-                ", miembros=" + miembros +
                 ", fecha=" + fecha +
                 "} " + super.toString();
     }
