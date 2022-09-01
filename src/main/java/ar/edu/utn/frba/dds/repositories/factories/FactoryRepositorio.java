@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.testMemoData.Data;
+import ar.edu.utn.frba.dds.repositories.testMemoData.DataMedicion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,13 +27,12 @@ public class FactoryRepositorio {
             if(type.equals(Organizacion.class)) {
                 repo = new Repositorio<>(new DAOMemoria<>(Data.getDataOrganizacion()));
             } else if(type.equals(Medicion.class)) {
+                repo = new Repositorio<>(new DAOMemoria<>(Data.getDataMedicion()));
             }
             else if(type.equals(Miembro.class)){
                 repo = new Repositorio<>(new DAOMemoria<>(Data.getDataMiembro()));
             }
             else {
-                repo = new Repositorio<>(new DAOMemoria<>(Data.getDataMedicion()));
-            } else {
                 repo = new Repositorio<>(new DAOMemoria<>(new ArrayList<>()));
             }
             // Esta linea es la posta ==> repo = new Repositorio<>(new DAOMemoria<>(Data.getData(type)));
