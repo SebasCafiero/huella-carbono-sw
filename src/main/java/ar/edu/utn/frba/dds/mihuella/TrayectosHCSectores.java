@@ -4,6 +4,8 @@ import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
+import ar.edu.utn.frba.dds.mapping.TrayectosMapper;
+import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
@@ -49,14 +51,23 @@ public class TrayectosHCSectores {
 
         Map<String,Float> factoresDeEmision;
         List<Organizacion> organizaciones;
-        List<Trayecto> trayectos;
+        List<TramoCSVDTO> tramosCSV;
         List<MedioDeTransporte> medios;
 
         try {
             factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
             organizaciones = new ParserOrganizaciones().cargarOrganizaciones(ns.getString("organizaciones"));
             medios = new ParserTransportes().cargarTransportes(ns.getString("transportes"));
-            trayectos = new ParserTrayectos().generarTrayectos(ns.getString("trayectos"), organizaciones, medios);
+            System.out.println(medios.toString());
+            tramosCSV = new ParserTrayectos().capturarEntradas(ns.getString("trayectos"));
+            tramosCSV.forEach(tr -> {
+                boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");
+                if(!esCompartidoPasivo) {
+                    new ParserTrayectos().cargarTrayectoActivo(TrayectosMapper.toNuevoTrayectoDTO(tr), tr.getPeriodicidad().trim().charAt(0), tr.getFecha().trim());
+                } else {
+                    new ParserTrayectos().cargarTrayectoPasivo(TrayectosMapper.toTrayectoCompartidoDTO(tr));
+                }
+            });
         } catch (IOException | FechaException | NoExisteMedioException ex) {
             System.out.println(ex.getMessage());
             return;
@@ -67,27 +78,27 @@ public class TrayectosHCSectores {
         FachadaOrganizacion fachada = new FachadaOrganizacion();
         fachada.cargarParametros(factoresDeEmision);
 
-        try { //SALIDA 2
-            PrintWriter writer = new PrintWriter(SALIDA_2_PATH, "UTF-8");
-            writer.println("Anio, Mes, Razon Social, Sector, Impacto/Cant Miembros");
+        System.out.println("Cargue parametros");
 
-            Integer anio = 2022;
-            Integer mes = 06; //TODO
+        //SALIDA 2
+        PrintWriter writer = new PrintWriter(SALIDA_2_PATH, "UTF-8");
+        writer.println("Anio, Mes, Razon Social, Sector, Impacto/Cant Miembros");
 
-            for(Organizacion org : organizaciones){
-                String razonSocial = org.getRazonSocial();
-                Set<Sector> sectores = org.getSectores();
+        Integer anio = 2020;
+        Integer mes = 10;
 
-                for(Sector sector : sectores){
-                    String nombreSector = sector.getNombre();
-                    Float impacto = fachada.obtenerImpactoSector(org,sector);
-                    writer.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto);
-                }
+        for(Organizacion org : organizaciones){
+            String razonSocial = org.getRazonSocial();
+            Set<Sector> sectores = org.getSectores();
+            Float consumoTotalOrganizacion = fachada.getImpactoTrayectosOrganizacion(org, anio, mes);
+
+            for(Sector sector : sectores){
+                String nombreSector = sector.getNombre();
+                float impacto = fachada.getImpactoSector(sector, anio, mes) / consumoTotalOrganizacion;
+                writer.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto);
             }
-            writer.close();
-        } catch (Exception | MedicionSinFactorEmisionException e) {
-            e.printStackTrace();
         }
+        writer.close();
     }
 
 }

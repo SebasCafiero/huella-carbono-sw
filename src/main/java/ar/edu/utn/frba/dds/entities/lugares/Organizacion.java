@@ -34,7 +34,7 @@ public class Organizacion extends EntidadPersistente {
         this.contactosTelefono = new ArrayList<>();
     }
 
-    public Set<Miembro> miembros() {
+    public Set<Miembro> getMiembros() {
         //Hay que traer cada miembro de cada sector y que no hayan repetidos.
         return sectores
                 .stream()
@@ -123,7 +123,7 @@ public class Organizacion extends EntidadPersistente {
     }
 
     public List<Trayecto> trayectosDeMiembros() {
-        return miembros().stream().flatMap(m -> m.getTrayectos().stream()).collect(Collectors.toList());
+        return getMiembros().stream().flatMap(m -> m.getTrayectos().stream()).collect(Collectors.toList());
     }
 
     public Organizacion() {

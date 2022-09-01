@@ -5,6 +5,8 @@ import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.transportes.MedioFactory;
 import ar.edu.utn.frba.dds.entities.transportes.Parada;
 import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,6 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParserTransportes {
+    private final Repositorio<MedioDeTransporte> repoMedios;
+
+    public ParserTransportes() {
+        this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
+    }
+
     public List<MedioDeTransporte> cargarTransportes(String archivo) throws Exception {
         String transportesJSON = new JSONParser().parse(new FileReader(archivo)).toString();
         System.out.println("Carga de Transportes:\n" + transportesJSON);
@@ -46,12 +54,13 @@ public class ParserTransportes {
                     ((TransportePublico) medioDeTransporte).agregarParada(new Parada(
                             new Coordenada(parada.getFloat("latitud"), parada.getFloat("longitud")),
                             parada.getFloat("distanciaAnterior"),
-                            parada.getFloat("distanciaAnterior"))
+                            parada.getFloat("distanciaProxima"))
                     );
 
                 }
             }
             medios.add(medioDeTransporte);
+            repoMedios.agregar(medioDeTransporte);
         }
         return medios;
     }

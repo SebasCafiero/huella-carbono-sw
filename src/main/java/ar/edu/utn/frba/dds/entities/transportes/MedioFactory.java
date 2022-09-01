@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.entities.transportes;
 
 public class MedioFactory {
 
-    public MedioDeTransporte getMedioDeTransporte(String tipo, String subtipo, String atr2) throws Exception {
+    public MedioDeTransporte getMedioDeTransporte(String tipo, String subtipo, String atr2) {
         MedioDeTransporte medio;
         if(tipo.equals("contratado")) {
             medio = new ServicioContratado(new TipoServicio(subtipo.toUpperCase()));
@@ -13,7 +13,7 @@ public class MedioFactory {
         } else if(tipo.equals("particular")) {
             medio = new VehiculoParticular(TipoVehiculo.valueOf(subtipo.toUpperCase()), TipoCombustible.valueOf(atr2));
         } else {
-            throw new Exception();
+            throw new RuntimeException();
         }
         return medio;
 //        if(tipo.equals("publico")) {

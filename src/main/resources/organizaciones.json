@@ -1,10 +1,21 @@
 [
   {
     "organizacion": "UTN",
-    "ubicacion" : "Buenos Aires",
+    "ubicacion" : {
+      "direccion" : {
+        "pais" : "Argentina",
+        "provincia" : "CABA",
+        "municipio" : "CABA",
+        "localidad" : "Villa Lugano",
+        "calle" : "Mozart",
+        "numero" : 2300
+      },
+      "coordenadas" : {
+        "latitud" : 146.4,
+        "longitud" : 146.4
+      }
+    },
     "clasificacion" : "Universidad",
-    "latitud" : 146.4,
-    "longitud" : 146.4,
     "tipo" : "INSTITUCION",
     "sectores": [
       {
@@ -14,19 +25,13 @@
             "nombre" : "Juan",
             "apellido" : "Pérez",
             "tipoDocumento" : "DNI",
-            "documento" : 1,
-            "ubicacion" : "Cordoba",
-            "latitud" : 312.4,
-            "longitud" : 43.4
+            "documento" : 1
           },
           {
             "nombre" : "Fernando",
             "apellido" : "Cópola",
             "tipoDocumento" : "PASAPORTE",
-            "documento" : 2,
-            "ubicacion" : "Cordoba",
-            "latitud" : 312.4,
-            "longitud" : 43.4
+            "documento" : 2
           }
         ]
       },
@@ -37,19 +42,13 @@
             "nombre" : "Sebastián",
             "apellido" : "Sosa",
             "tipoDocumento" : "DNI",
-            "documento" : 3,
-            "ubicacion" : "Cordoba",
-            "latitud" : 312.4,
-            "longitud" : 43.4
+            "documento" : 3
           },
           {
             "nombre" : "Martín",
             "apellido" : "Tagliafico",
             "tipoDocumento" : "DNI",
-            "documento" : 4,
-            "ubicacion" : "Cordoba",
-            "latitud" : 312.4,
-            "longitud" : 43.4
+            "documento" : 4
           }
         ]
       }
@@ -57,10 +56,21 @@
   },
   {
     "organizacion" : "Coca Cola",
-    "ubicacion" : "Cordoba",
+    "ubicacion" : {
+      "direccion" : {
+        "pais" : "Argentina",
+        "provincia" : "Cordoba",
+        "municipio" : "Ciudad de Cordoba",
+        "localidad" : "Ciudad Universitaria",
+        "calle" : "Maestro Marcelo Lopez",
+        "numero" : 0
+      },
+      "coordenadas" : {
+        "latitud" : 201.4,
+        "longitud" : 201.4
+      }
+    },
     "clasificacion" : "Empresa",
-    "latitud" : 201.4,
-    "longitud" : 201.4,
     "tipo" : "EMPRESA",
     "sectores" : [
       {
@@ -70,19 +80,13 @@
             "nombre" : "Damián",
             "apellido" : "Weigandt",
             "tipoDocumento" : "DNI",
-            "documento" : 5,
-            "ubicacion" : "Cordoba",
-            "latitud" : 312.4,
-            "longitud" : 43.4
+            "documento" : 5
           },
           {
             "nombre" : "Guido",
             "apellido" : "Óbolo",
             "tipoDocumento" : "DNI",
-            "documento" : 6,
-            "ubicacion" : "Mendoza",
-            "latitud" : 32.4,
-            "longitud" : 543.4
+            "documento" : 6
           }
         ]
       },
@@ -93,19 +97,13 @@
             "nombre" : "Juan",
             "apellido" : "Pérez",
             "tipoDocumento" : "DNI",
-            "documento" : 7,
-            "ubicacion" : "Santa Fe",
-            "latitud" : 243.4,
-            "longitud" : 455.4
+            "documento" : 7
           },
           {
             "nombre" : "Ramsés",
             "apellido" : "Abadallah",
             "tipoDocumento" : "PASAPORTE",
-            "documento" : 8,
-            "ubicacion" : "Cordoba",
-            "latitud" : 123.4,
-            "longitud" : 321.4
+            "documento" : 8
           }
         ]
       }

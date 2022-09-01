@@ -38,7 +38,7 @@ public class AgenteSectorial {
             List<Medible> mediciones = organizacion.getMediciones().stream()
                     .filter(me -> perteneceAPeriodo(me, anio, mes))
                     .collect(Collectors.toList());
-            List<Medible> tramos = organizacion.miembros().stream()
+            List<Medible> tramos = organizacion.getMiembros().stream()
                     .flatMap(mi -> mi.getTrayectos().stream())
                     .filter(tr -> perteneceAPeriodo(tr, anio, mes))
                     .flatMap(tr -> tr.getTramos().stream())

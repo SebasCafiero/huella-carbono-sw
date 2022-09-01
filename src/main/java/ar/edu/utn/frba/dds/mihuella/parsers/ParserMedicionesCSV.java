@@ -1,59 +1,24 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
-import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
-import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
-import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
-import com.opencsv.CSVReader;
+import ar.edu.utn.frba.dds.mapping.MedicionMapper;
+import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
+import com.opencsv.bean.CsvToBeanBuilder;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ParserMedicionesCSV implements ParserMediciones {
     @Override
-    public List<Medible> generarMediciones(String archivo) throws FechaException, IOException {
-        List<Medible> mediciones = new ArrayList<>();
-        try {
-            CSVReader csvReader = new CSVReader(new FileReader(archivo));
-            String[] nextRecord;
+    public List<Medicion> generarMediciones(String archivo) throws IOException {
+        List<MedicionCSVDTO> mediciones = new CsvToBeanBuilder(new FileReader(archivo))
+                .withType(MedicionCSVDTO.class)
+                .build()
+                .parse();
 
-            while ((nextRecord = csvReader.readNext()) != null) {
-                String [] data = new String[6];
-                int i = 0;
-                for (String cell : nextRecord) {
-                    data[i]=cell;
-                    i++;
-                }
-                Categoria cat = new Categoria(data[0],data[1]);
-
-                char periodicidad = data[4].charAt(0);
-                LocalDate periodo;
-
-                if(periodicidad == 'M'){
-                    String[] mesYanio = data[5].split("/");
-                    periodo = LocalDate.parse(mesYanio[1]+"-"+mesYanio[0]+"-01");
-                }
-                else if(periodicidad == 'A'){
-                    periodo = LocalDate.parse(data[5] + "-01-01");
-                }
-                else throw new FechaException("Periodicidad Erronea"); //TODO FALTARIA VALIDAR TMB QUE LA FECHA ESTE BIEN EN FORMATO
-
-                mediciones.add(new Medicion(cat, data[2], Float.parseFloat(data[3]), periodicidad, periodo));
-            }
-        }
-        catch (FileNotFoundException e) {
-            throw new FileNotFoundException("El archivo " + archivo + " no existe");
-        } catch (FechaException e) {
-            throw new FechaException("El formato de la fecha es incorrecto");
-        } catch (IOException e) {
-            throw new IOException();
-        }
-
-        return mediciones;
+        return mediciones.stream().map(MedicionMapper::toEntity).collect(Collectors.toList());
     }
 }
 

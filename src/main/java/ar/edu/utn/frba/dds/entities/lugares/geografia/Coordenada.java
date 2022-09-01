@@ -21,4 +21,12 @@ public class Coordenada {
         return otraCoordenada.getLatitud().equals(this.latitud)
                 && otraCoordenada.getLongitud().equals(this.longitud);
     }
+
+    @Override
+    public String toString() {
+        return "Coordenada{" +
+                "latitud=" + latitud +
+                ", longitud=" + longitud +
+                '}';
+    }
 }

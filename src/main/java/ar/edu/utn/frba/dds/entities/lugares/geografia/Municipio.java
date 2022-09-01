@@ -15,4 +15,12 @@ public class Municipio extends AreaSectorial {
     public Provincia getProvincia() {
         return provincia;
     }
+
+    @Override
+    public String toString() {
+        return "Municipio{" +
+                "nombre='" + nombre + '\'' +
+                ", provincia=" + provincia +
+                "}";
+    }
 }
