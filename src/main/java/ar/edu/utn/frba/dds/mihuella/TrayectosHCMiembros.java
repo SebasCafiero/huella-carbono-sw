@@ -53,7 +53,7 @@ public class TrayectosHCMiembros {
         List<Organizacion> organizaciones;
         List<TramoCSVDTO> tramosCSV;
         List<MedioDeTransporte> medios;
-        ParserTrayectos.generarTrayectos2("resources/trayectos2.csv");
+
         try {
             factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
             organizaciones = new ParserOrganizaciones().cargarOrganizaciones(ns.getString("organizaciones"));
@@ -61,6 +61,7 @@ public class TrayectosHCMiembros {
             medios = new ParserTransportes().cargarTransportes(ns.getString("transportes"));
 //            medios = ParserTransportesJSON.generarTransportes(ns.getString("transportes"));
             System.out.println(medios.toString());
+//            ParserTrayectos.generarTrayectos2(ns.getString("trayectos"));
             tramosCSV = new ParserTrayectos().capturarEntradas(ns.getString("trayectos"));
             tramosCSV.forEach(tr -> {
                 boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");
@@ -106,3 +107,40 @@ public class TrayectosHCMiembros {
 
     }
 }
+
+/*
+Con el parser csv sin pojo
+Anio, Mes, Razon Social, DNI, Impacto
+2020, 10, UTN, 2, 60.638298
+2020, 10, UTN, 1, 26.910055
+2020, 10, UTN, 3, 12.451645
+2020, 10, UTN, 4, 0.0
+2020, 10, Coca Cola, 5, NaN
+2020, 10, Coca Cola, 6, NaN
+2020, 10, Coca Cola, 7, NaN
+2020, 10, Coca Cola, 8, NaN
+
+
+Con el parser CSV con pojo, sin compartidos
+Anio, Mes, Razon Social, DNI, Impacto
+2020, 10, UTN, 2, 53.985302
+2020, 10, UTN, 1, 31.458445
+2020, 10, UTN, 3, 14.556247
+2020, 10, UTN, 4, 0.0
+2020, 10, Coca Cola, 5, NaN
+2020, 10, Coca Cola, 6, NaN
+2020, 10, Coca Cola, 7, NaN
+2020, 10, Coca Cola, 8, NaN
+
+Con el parser CSV con pojo y compartidos (COINCIDE CON LO CALCULADO MANUAL)
+Anio, Mes, Razon Social, DNI, Impacto
+2020, 10, UTN, 2, 62.436405
+2020, 10, UTN, 1, 23.007345
+2020, 10, UTN, 3, 14.556247
+2020, 10, UTN, 4, 0.0
+2020, 10, Coca Cola, 5, NaN
+2020, 10, Coca Cola, 6, NaN
+2020, 10, Coca Cola, 7, NaN
+2020, 10, Coca Cola, 8, NaN
+
+* */

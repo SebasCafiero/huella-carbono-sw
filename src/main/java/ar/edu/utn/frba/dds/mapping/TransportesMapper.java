@@ -11,7 +11,7 @@ public class TransportesMapper {
         String tipoTransporte = transporteDTO.tipo;
         if(tipoTransporte.equals("publico")) {
             TransportePublico transportePublico = new TransportePublico(
-                    TipoTransportePublico.valueOf(transporteDTO.subtipo),
+                    TipoTransportePublico.valueOf(transporteDTO.subtipo.toUpperCase()),
                     transporteDTO.linea
             );
             for(TransporteJSONDTO.ParadaDTO paradaDTO : transporteDTO.paradas) {
@@ -25,15 +25,15 @@ public class TransportesMapper {
         } else {
             if(tipoTransporte.equals("particular")) {
                 transporte = new VehiculoParticular(
-                        TipoVehiculo.valueOf(transporteDTO.subtipo),
+                        TipoVehiculo.valueOf(transporteDTO.subtipo.toUpperCase()),
                         TipoCombustible.valueOf(transporteDTO.combustible)
                 );
             } else {
                 if(tipoTransporte.equals("ecologico")) {
-                    transporte = new TransporteEcologico(TipoTransporteEcologico.valueOf(transporteDTO.subtipo));
+                    transporte = new TransporteEcologico(TipoTransporteEcologico.valueOf(transporteDTO.subtipo.toUpperCase()));
                 } else {
                     if(tipoTransporte.equals("contratado")) {
-                        transporte = new ServicioContratado(new TipoServicio(transporteDTO.subtipo));
+                        transporte = new ServicioContratado(new TipoServicio(transporteDTO.subtipo.toUpperCase()));
                     } else {
                         throw new RuntimeException("FUCKING TIPO DE TRANSPORTE");
                     }

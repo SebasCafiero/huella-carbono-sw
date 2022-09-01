@@ -43,7 +43,7 @@ public class OrganizacionMapper {
     public static Organizacion toEntity(OrganizacionJSONDTO orgDTO) {
         Organizacion unaOrg = new Organizacion(
                 orgDTO.organizacion,
-                TipoDeOrganizacionEnum.valueOf(orgDTO.tipo), //case sensitive!
+                TipoDeOrganizacionEnum.valueOf(orgDTO.tipo.toUpperCase()),
                 new ClasificacionOrganizacion(orgDTO.clasificacion),
                 UbicacionMapper.toEntity(orgDTO.ubicacion)
         );
@@ -55,7 +55,7 @@ public class OrganizacionMapper {
                     unSector.agregarMiembro(new Miembro(
                             unMiembro.nombre,
                             unMiembro.apellido,
-                            TipoDeDocumento.valueOf(unMiembro.tipoDocumento), //case sensitive!
+                            TipoDeDocumento.valueOf(unMiembro.tipoDocumento.toUpperCase()),
                             unMiembro.documento
                     ));
                 }
@@ -74,7 +74,7 @@ public class OrganizacionMapper {
         OrganizacionJSONDTO orgDTO = new Gson().fromJson(organizacionDTO.toString(), OrganizacionJSONDTO.class);
         Organizacion unaOrg = new Organizacion(
                 orgDTO.organizacion,
-                TipoDeOrganizacionEnum.valueOf(orgDTO.tipo), //case sensitive!
+                TipoDeOrganizacionEnum.valueOf(orgDTO.tipo.toUpperCase()),
                 new ClasificacionOrganizacion(orgDTO.clasificacion),
                 UbicacionMapper.toEntity(orgDTO.ubicacion)
         );
@@ -87,7 +87,7 @@ public class OrganizacionMapper {
                     unSector.agregarMiembro(new Miembro(
                             unMiembro.nombre,
                             unMiembro.apellido,
-                            TipoDeDocumento.valueOf(unMiembro.tipoDocumento), //case sensitive!
+                            TipoDeDocumento.valueOf(unMiembro.tipoDocumento.toUpperCase()),
                             unMiembro.documento
                     ));
                 }

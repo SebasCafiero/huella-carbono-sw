@@ -156,8 +156,9 @@ public class ParserTrayectos {
             trayecto = new Trayecto(periodo);
             trayecto.setId(Math.toIntExact(trayectoDTO.getTrayectoId()));
             repoTrayectos.agregar(trayecto);
-            miembro.get().agregarTrayecto(trayecto);
+//            miembro.get().agregarTrayecto(trayecto);
         }
+        miembro.get().agregarTrayecto(trayecto);
         trayecto.agregarmiembro(miembro.get());
 
         MedioDeTransporte medioSolicitado = new MedioFactory().getMedioDeTransporte(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
@@ -243,36 +244,43 @@ public class ParserTrayectos {
             tramosSegunIdTrayecto.put(tramoDTO.idTrayecto, tramosDTODeUnTrayecto);
         }
 
-        List<Trayecto> trayectos = new ArrayList<>();
+//        List<Trayecto> trayectos = new ArrayList<>();
+        Map<Integer, Trayecto> trayectosSegunId = new HashMap<>();
 
         for(Map.Entry<Integer, List<TramoCSVDTO2>> entryTramosPorTrayecto : tramosSegunIdTrayecto.entrySet()) {
-//            System.out.println("Empieza For - ID: " + entryTramosPorTrayecto.getKey());
-//            System.out.println(entryTramosPorTrayecto.getValue());
-        if(entryTramosPorTrayecto.getKey()!=0) {
-            List<TramoCSVDTO2> tramosDTODeUnTrayecto = entryTramosPorTrayecto.getValue();
+            if(entryTramosPorTrayecto.getKey()!=0) {
+                List<TramoCSVDTO2> tramosDTODeUnTrayecto = entryTramosPorTrayecto.getValue();
 
-            //Creo el trayecto con el miembro ppal, periodicidad y fecha (puedo usar los datos de cualquier tramo)
-            Trayecto unTrayecto = TramosMapper.modelarTrayecto(tramosDTODeUnTrayecto);
+                //Creo el trayecto con el miembro ppal, periodicidad y fecha (puedo usar los datos de cualquier tramo)
+                Map.Entry<Integer, Trayecto> trayectoSegunId = TramosMapper.modelarTrayecto(tramosDTODeUnTrayecto);
+                Trayecto unTrayecto = trayectoSegunId.getValue();
 
-            //Creo cada unos de los tramos del trayecto y luego los agrego al trayecto creado
-            List<Tramo> tramosDeUnTrayecto = tramosDTODeUnTrayecto
-                    .stream()
-                    .map(TramosMapper::toEntity)
-                    .collect(Collectors.toList());
-            unTrayecto.agregarTramos(tramosDeUnTrayecto);
+                //Creo cada unos de los tramos del trayecto y luego los agrego al trayecto creado
+                List<Tramo> tramosDeUnTrayecto = tramosDTODeUnTrayecto
+                        .stream()
+                        .map(TramosMapper::toEntity)
+                        .collect(Collectors.toList());
+                unTrayecto.agregarTramos(tramosDeUnTrayecto);
 
-            trayectos.add(unTrayecto);
-        }
-            //TODO AGREGAR TRAYECTOS A TODOS LOS MIEMBROS (ESTAN EN LOS TRAYECTOS SOLAMENTE)
+                trayectosSegunId.put(trayectoSegunId.getKey(),unTrayecto);
+            }
         }
 
+        //Se podria hacer al mismo tiempo en el for de las entries
+        for(Trayecto unTrayecto : trayectosSegunId.values()) {
+            for(Miembro unMiembro : unTrayecto.getMiembros()) { //deberia ser un unico miembro hasta el momento
+                unMiembro.agregarTrayecto(unTrayecto);
+            }
+        }
+
+        for(TramoCSVDTO2 tramoCompartidoDTO : tramosSegunIdTrayecto.get(0)) {
+            TramosMapper.mapTrayectoCompartido(trayectosSegunId,tramoCompartidoDTO);
+        }
 
 
+        System.out.println(trayectosSegunId.values());
 
-
-        System.out.println(trayectos);
-
-
-        return trayectos;
+        return new ArrayList<>(trayectosSegunId.values());
+//        return trayectosSegunId.values().stream().collect(Collectors.toList());
     }
 }

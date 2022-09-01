@@ -11,7 +11,9 @@ import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class TramosMapper {
@@ -60,25 +62,28 @@ public class TramosMapper {
         );
     }
 
-    public static Trayecto modelarTrayecto(List<TramoCSVDTO2> tramosDTODeUnTrayecto) {
+    public static Map.Entry<Integer, Trayecto> modelarTrayecto(List<TramoCSVDTO2> tramosDTODeUnTrayecto) {
         if(!tramosDTODeUnTrayecto.stream().findFirst().isPresent()) throw new RuntimeException("Error al parsear tramo"); //Nunca deberia obtenerse del CSV un trayecto que no tenga un tramoDTO...
-        TramoCSVDTO2 unTramo = tramosDTODeUnTrayecto.stream().findFirst().get();
-        Trayecto unTrayecto = new Trayecto(PeriodoMapper.toEntity(unTramo.periodicidad, unTramo.fecha));
+        TramoCSVDTO2 unTramoDTO = tramosDTODeUnTrayecto.stream().findFirst().get();
+        Trayecto unTrayecto = new Trayecto(PeriodoMapper.toEntity(unTramoDTO.periodicidad, unTramoDTO.fecha));
 
         Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
-        Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == unTramo.idMiembro).findFirst();
+        Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == unTramoDTO.idMiembro).findFirst();
         if(!posibleMiembro.isPresent()) throw new RuntimeException("Miembro Inexistente");
         unTrayecto.agregarmiembro(posibleMiembro.get());
-        return unTrayecto;
+        return new AbstractMap.SimpleEntry<>(unTramoDTO.idTrayecto, unTrayecto);
     }
 
-    public static void mapTrayectoCompartido(List<Trayecto> trayectos, TramoCSVDTO2 tramoDTOCompartido) {
-        Trayecto trayectoCompartido = new Trayecto(); //TODO VER SI AGREGAR ID TRAYECTO COMO ATRIBUTO O MAPEAR AL MISMO TIEMPO DE GENERADA CADA ENTRY EN EL PARSER
-
-        Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
-        Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == tramoDTOCompartido.idMiembro).findFirst();
-        if(!posibleMiembro.isPresent()) throw new RuntimeException("Miembro Inexistente");
-        trayectoCompartido.agregarmiembro(posibleMiembro.get());
-
+    public static void mapTrayectoCompartido(Map<Integer, Trayecto> trayectosSegunId, TramoCSVDTO2 tramoDTOCompartido) {
+        if(trayectosSegunId.containsKey(tramoDTOCompartido.idTrayectoCompartido)) {
+            Trayecto trayectoCompartido = trayectosSegunId.get(tramoDTOCompartido.idTrayectoCompartido);
+            Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
+            Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == tramoDTOCompartido.idMiembro).findFirst();
+            if (!posibleMiembro.isPresent()) throw new RuntimeException("Miembro Inexistente");
+            trayectoCompartido.agregarmiembro(posibleMiembro.get());
+            posibleMiembro.get().agregarTrayecto(trayectoCompartido);
+        } else {
+            throw new RuntimeException("Trayecto Compartido Inexistente");
+        }
     }
 }

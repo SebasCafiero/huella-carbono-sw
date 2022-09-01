@@ -112,6 +112,7 @@ public class Miembro extends EntidadPersistente {
     }
 
     public void agregarTrayecto(Trayecto trayecto) {
+        if(trayectos.contains(trayecto)) System.out.println("TRAYECTO REPETIDO EN MIEMBRO ("+nroDocumento+").");
         trayectos.add(trayecto);
     }
 
@@ -134,5 +135,6 @@ public class Miembro extends EntidadPersistente {
                 ", trayectos=" + trayectos +
                 '}';
     }
+
 }
 
