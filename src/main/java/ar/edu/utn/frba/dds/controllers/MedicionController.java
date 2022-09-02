@@ -19,7 +19,7 @@ public class MedicionController {
 
     public String obtener(Request request, Response response){
         Medicion medicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        return medicion.toString();//que deberia devolver?
+        return medicion.toString();
     }
 
     public String mostrarTodos(Request request, Response response){

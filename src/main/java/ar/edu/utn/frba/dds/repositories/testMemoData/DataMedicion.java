@@ -30,7 +30,7 @@ public class DataMedicion {
             m4.setUnidad("kg");
 
 
-            addAll(m1, m2,m3,m4);
+            addAll(m1,m2,m3,m4);
         }
         return (List<EntidadPersistente>)(List<?>) mediciones;
     }
