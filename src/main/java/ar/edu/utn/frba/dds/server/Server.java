@@ -8,10 +8,11 @@ import static spark.Spark.port;
 public class Server {
     public static void main(String[] args) {
         //port(9000);
-        Router.init();
-        //DebugScreen.enableDebugScreen();
-
         port(getHerokuAssignedPort());
+        Router.init();
+        DebugScreen.enableDebugScreen();
+
+
         }
 
         static int getHerokuAssignedPort() {
