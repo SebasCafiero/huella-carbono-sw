@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.mapping.FactorEmisionMapper;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
@@ -7,6 +8,8 @@ import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
+
+import java.util.List;
 
 public class FactorEmisionController {
     private Repositorio<FactorEmision> repositorio;
@@ -21,7 +24,13 @@ public class FactorEmisionController {
         JSONObject jsonObject = new JSONObject(request.body());
         FactorEmisionMapper.toEntity(jsonObject);
         this.repositorio.modificar(factorEmisionActual,factorEmisionNuevo);
-        return response;
+        List<FactorEmision> factores = this.repositorio.buscarTodos();
+        return factores.toString();
+    }
+
+    public String mostrarTodos(Request request, Response response) { // solo para probar
+        List<FactorEmision> factores = this.repositorio.buscarTodos();
+        return factores.toString();
     }
 
 }

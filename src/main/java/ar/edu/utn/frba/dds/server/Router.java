@@ -47,5 +47,6 @@ public class Router {
         Spark.post("/batchMedicion", batchMedicionController::agregar);
         FactorEmisionController factorEmisionController = new FactorEmisionController();
         Spark.put("/factorEmision/:id", factorEmisionController :: modificar);
+        Spark.get("/factorEmision",factorEmisionController :: mostrarTodos); // solo para probar
     }
 }

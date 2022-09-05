@@ -32,5 +32,8 @@ public class FactorEmision extends EntidadPersistente {
         this.valor = valor;
     }
 
-
+    @Override
+    public String toString() {
+        return  '\n' + "Factor Emision { " + "valor = " + valor.toString() + ", unidad = " + unidad + " }";
+    }
 }

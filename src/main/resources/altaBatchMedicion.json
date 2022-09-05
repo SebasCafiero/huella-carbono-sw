@@ -7,10 +7,12 @@
       "tipoConsumo": "unTipoConsumo"
     },
     "unidad": "unaUnidad",
-    "periodiciad": "M",
     "valor": 123.4,
-    "periodo": "unPeriodo",
-    "fecha": "2020-07-19"
+    "periodo": {
+      "periodicidad" : "M",
+      "anio" : 2022,
+      "mes" : 9
+    }
   },
   {
     "categoria": {
@@ -19,10 +21,12 @@
       "tipoConsumo": "otroTipoConsumo"
     },
     "unidad": "otraUnidad",
-    "periodiciad": "A",
     "valor": 567.8,
-    "periodo": "otroPeriodo",
-    "fecha": "2022-07-19"
+    "periodo": {
+      "periodicidad" : "A",
+      "anio" : 2021,
+      "mes" : 10
+    }
   }],
   "fecha": "2022-07-21"
 }
