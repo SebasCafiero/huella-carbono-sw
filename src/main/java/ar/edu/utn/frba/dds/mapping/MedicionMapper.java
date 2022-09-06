@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.mapping;
 
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserTrayectos;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import java.util.List;
 public class MedicionMapper {
     public static Medicion toEntity(JSONObject medicionDTO) {
         Medicion medicion = new Medicion();
+
         JSONObject categoriaDTO = medicionDTO.optJSONObject("categoria");
         Categoria categoria = new Categoria(
                 categoriaDTO.optInt("id"),
@@ -21,13 +23,18 @@ public class MedicionMapper {
                 categoriaDTO.optString("tipoConsumo")
         );
 
+        JSONObject periodoDTO = medicionDTO.optJSONObject("periodo");
+        Periodo periodo;
+        if(Character.valueOf('M').equals(periodoDTO.optString("periodicidad").trim().charAt(0))) {
+            periodo = new Periodo(medicionDTO.optInt("anio"), medicionDTO.optInt("mes"));
+        } else {
+            periodo = new Periodo(medicionDTO.optInt("anio"));
+        }
+
+        medicion.setPeriodo(periodo);
         medicion.setCategoria(categoria);
         medicion.setUnidad(medicionDTO.optString("unidad"));
-        Character periodicidad = medicionDTO.optString("periodicidad").trim().charAt(0);
-        medicion.setPeriodicidad(periodicidad);
         medicion.setValor(medicionDTO.optFloat("valor"));
-//        medicion.setFecha(LocalDate.parse(medicionDTO.optString("fecha")));
-        medicion.setFecha(PeriodoMapper.toEntity(periodicidad, medicionDTO.optString("fecha")));
 
         return medicion;
     }

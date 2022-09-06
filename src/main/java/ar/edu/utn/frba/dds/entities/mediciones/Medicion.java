@@ -9,15 +9,12 @@ public class Medicion extends EntidadPersistente implements Medible {
     private Categoria categoria;
     private String unidad;
     private Float valor;
-//    private Character periodicidad; // M o A
-//    private LocalDate fecha; // AAAA-MM-DD
     private Periodo periodo;
 
     public Medicion(Categoria categoria, String unidad, Float valor) {
         this.categoria = categoria;
         this.unidad = unidad;
         this.valor = valor;
-        //TODO
     }
 
     public Medicion() {} //TODO
@@ -27,32 +24,6 @@ public class Medicion extends EntidadPersistente implements Medible {
         this.unidad = unidad;
         this.valor = valor;
         this.periodo = periodo;
-    }
-
-    public Character getPeriodicidad() {
-        return this.periodo.getPeriodicidad();
-    }
-
-//    public LocalDate getFecha() {
-//        return fecha;
-//    }
-
-//    public Integer getAnio(){
-//        return fecha.getYear();
-//    }
-//
-//    public Integer getMes(){
-//        return fecha.getMonthValue();
-//    }
-
-    public Integer getAnio() {
-//        return this.periodo.obtenerAnio();
-        return periodo.getAnio();
-    }
-
-    public Integer getMes() {
-//        return this.periodo.obtenerMes();
-        return periodo.getMes();
     }
 
     @Override
@@ -73,20 +44,17 @@ public class Medicion extends EntidadPersistente implements Medible {
         this.valor = valor;
     }
 
+    public Periodo getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(Periodo periodo) {
+        this.periodo = periodo;
+    }
+
     public void setPeriodicidad(Character periodicidad) {
         this.periodo.setPeriodicidad(periodicidad);
     }
-
-//    public void setFecha(LocalDate fecha) {
-//        this.fecha = fecha;
-//    }
-
-    public void setFecha(Periodo fecha) {
-        this.periodo = fecha;
-    }
-
-
-
 
     @Override
     public String getCategoria() {
@@ -103,10 +71,10 @@ public class Medicion extends EntidadPersistente implements Medible {
     }
 
     public boolean perteneceAPeriodo(Integer anio, Integer mes) {
-        if(getPeriodicidad().equals('A')) {
-            return getAnio().equals(anio);
-        } else if(getPeriodicidad().equals('M')) {
-            return getAnio().equals(anio) && getMes().equals(mes);
+        if(getPeriodo().getPeriodicidad().equals('A')) {
+            return getPeriodo().getAnio().equals(anio);
+        } else if(getPeriodo().getPeriodicidad().equals('M')) {
+            return getPeriodo().getAnio().equals(anio) && getPeriodo().getMes().equals(mes);
         }
         return false;
     }
