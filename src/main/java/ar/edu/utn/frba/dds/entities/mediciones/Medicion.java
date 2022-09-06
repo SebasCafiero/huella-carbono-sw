@@ -5,7 +5,8 @@ import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 
 import java.time.LocalDate;
 
-public class Medicion extends EntidadPersistente implements Medible {
+public class Medicion implements Medible {
+    private Integer id;
     private Categoria categoria;
     private String unidad;
     private Float valor;
@@ -24,6 +25,14 @@ public class Medicion extends EntidadPersistente implements Medible {
         this.unidad = unidad;
         this.valor = valor;
         this.periodo = periodo;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override

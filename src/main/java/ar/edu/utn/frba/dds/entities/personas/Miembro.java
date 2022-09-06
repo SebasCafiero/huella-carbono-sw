@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
@@ -9,7 +8,8 @@ import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Miembro extends EntidadPersistente {
+public class Miembro {
+    private Integer id;
     private String nombre;
     private String apellido;
     private TipoDeDocumento tipoDeDocumento;
@@ -76,6 +76,14 @@ public class Miembro extends EntidadPersistente {
         this.trayectos.add(unTrayecto);
         //registrar en cada organizacion en la que trabaja
 //        this.sectoresDondeTrabaja.iterator().next().getOrganizacion().cargarTrayecto(unTrayecto,this);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNombre() {

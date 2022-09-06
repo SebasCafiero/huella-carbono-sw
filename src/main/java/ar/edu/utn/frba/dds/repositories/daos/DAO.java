@@ -5,7 +5,7 @@ import java.util.List;
 public interface DAO<T> {
     List<T> buscarTodos();
     T buscar(int id);
-    void agregar(Object unObjeto);
-    void modificar(Object unObjeto1, Object unObjeto2);
-    void eliminar(Object unObjeto);
+    void agregar(T unObjeto);
+    void modificar(T unObjeto);
+    void eliminar(T unObjeto);
 }

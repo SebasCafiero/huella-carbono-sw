@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.entities.trayectos;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
@@ -10,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Trayecto extends EntidadPersistente {
+public class Trayecto {
+    private Integer id;
     private List<Tramo> tramos;
     private List<Miembro> miembros;
     private Periodo fecha;
@@ -32,6 +32,14 @@ public class Trayecto extends EntidadPersistente {
         this.miembros = new ArrayList<>();
         this.tramos = new ArrayList<>();
         Collections.addAll(this.tramos,tramos);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void agregarTramos(List<Tramo> tramos){

@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.mapping.FactorEmisionMapper;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import org.json.JSONObject;
 import spark.Request;

@@ -1,11 +1,19 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.CalculadoraDistancias;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
 
-public abstract class MedioDeTransporte extends EntidadPersistente {
+public abstract class MedioDeTransporte {
+    private Integer id;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Float calcularDistancia(Tramo tramo) {
 //        CalculadoraDistancias servicioContratado = new AdaptadorServicioDDSTPA(); // TODO ver de definir en MedioDeTransporte

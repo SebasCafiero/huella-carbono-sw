@@ -10,6 +10,7 @@ import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.mapping.UbicacionMapper;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 //import com.sun.org.apache.xpath.internal.operations.Or; ---> para que esta?
 import org.json.JSONArray;
@@ -44,8 +45,10 @@ public class ParserOrganizaciones {
                 throw new Exception("Error en el tipo de la organizacion. No existe el tipo " + org.getString("tipo"));
 
             TipoDeOrganizacionEnum tipoDeOrganizacion = TipoDeOrganizacionEnum.valueOf(org.getString("tipo"));
-            UbicacionGeografica ubicacionOrg = UbicacionMapper.toEntity(org.optJSONObject("ubicacion"));
+//            UbicacionGeografica ubicacionOrg = new UbicacionGeografica(org.getString("ubicacion"), org.getFloat("latitud"), org.getFloat("longitud"));
+            UbicacionGeografica ubicacionOrg = new UbicacionGeografica(new Coordenada(org.getFloat("latitud"), org.getFloat("longitud"))); //TODO VER DE PARSEAR DIRECCION
 
+//                        UbicacionGeografica ubicacionOrg = UbicacionMapper.toEntity(org.optJSONObject("ubicacion"));
             Organizacion nuevaOrg = new Organizacion(razonSocial, tipoDeOrganizacion, clasificacion, ubicacionOrg);
             organizaciones.add(nuevaOrg);
             repoOrganizaciones.agregar(nuevaOrg);
@@ -66,12 +69,9 @@ public class ParserOrganizaciones {
                     TipoDeDocumento tipoDeDocumento = TipoDeDocumento.valueOf(miembro.getString("tipoDocumento"));
                     int documento = miembro.getInt("documento");
 
-//                    UbicacionGeografica ubicacionMiembro = new UbicacionGeografica(miembro.getString("ubicacion"), miembro.getFloat("latitud"), miembro.getFloat("longitud"));
-//                    UbicacionGeografica ubicacionMiembro = new UbicacionGeografica(new Coordenada(miembro.getFloat("latitud"), miembro.getFloat("longitud"))); //TODO VER DE PARSEAR DIRECCION
-//                    UbicacionGeografica ubicacionMiembro = UbicacionMapper.toEntity(miembro.optJSONObject("ubicacion"));
-
-
-                    Miembro nuevoMiembro = new Miembro(nombreMiembro, apellido, tipoDeDocumento, documento);
+//                    UbicacionGeografica ubicacionMiembro = new UbicacionGeografica(org.getString("ubicacion"), org.getFloat("latitud"), org.getFloat("longitud"));
+                    UbicacionGeografica ubicacionMiembro = new UbicacionGeografica(new Coordenada(org.getFloat("latitud"), org.getFloat("longitud"))); //TODO VER DE PARSEAR DIRECCION
+                    Miembro nuevoMiembro = new Miembro(nombreMiembro, apellido, tipoDeDocumento, documento, ubicacionMiembro);
 
                     nuevoSector.agregarMiembro(nuevoMiembro);
                     repoMiembros.agregar(nuevoMiembro);

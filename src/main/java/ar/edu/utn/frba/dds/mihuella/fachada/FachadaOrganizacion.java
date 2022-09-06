@@ -7,17 +7,17 @@ import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
-import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class FachadaOrganizacion implements FachadaOrg {
-    private final Repositorio<FactorEmision> repoFactores;
+    private final RepoFactores repoFactores;
 
     public FachadaOrganizacion() {
-        repoFactores = FactoryRepositorio.get(FactorEmision.class);
+        repoFactores = (RepoFactores) FactoryRepositorio.get(FactorEmision.class);
     }
 
     @Override
@@ -28,9 +28,11 @@ public class FachadaOrganizacion implements FachadaOrg {
     @Override
     public Float obtenerHU(Collection<Medible> mediciones) {
         return (float) mediciones.stream().mapToDouble(medible -> {
-            Optional<FactorEmision> factorEmision = this.repoFactores.buscarTodos().stream()
-                    .filter(factor -> factor.getCategoria().equals(medible.getCategoria()))
-                    .findFirst();
+//            Optional<FactorEmision> factorEmision = this.repoFactores.buscarTodos().stream()
+//                    .filter(factor -> factor.getCategoria().equals(medible.getCategoria()))
+//                    .findFirst();
+            Optional<FactorEmision> factorEmision = this.repoFactores.findByCategoria(medible.getCategoria())
+                    .stream().findFirst();
 
             if(!factorEmision.isPresent()) {
                 throw new MedicionSinFactorEmisionException(medible.getCategoria());

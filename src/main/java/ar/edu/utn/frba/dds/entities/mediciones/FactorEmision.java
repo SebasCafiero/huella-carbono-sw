@@ -1,8 +1,7 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
-
-public class FactorEmision extends EntidadPersistente {
+public class FactorEmision {
+    private Integer id;
     private Categoria categoria;
     private String unidad;
     private Float valor;
@@ -18,16 +17,19 @@ public class FactorEmision extends EntidadPersistente {
     public String getCategoria() {
         return this.categoria.toString();
     }
+
     public void setCategoria(Categoria categoria) {this.categoria = categoria;}
 
     public String getUnidad() {
         return unidad;
     }
+
     public void setUnidad(String unidad) {this.unidad = unidad;}
 
     public Float getValor() {
         return valor;
     }
+
     public void setValor(Float valor) {
         this.valor = valor;
     }
@@ -35,5 +37,12 @@ public class FactorEmision extends EntidadPersistente {
     @Override
     public String toString() {
         return  '\n' + "Factor Emision { " + "valor = " + valor.toString() + ", unidad = " + unidad + " }";
+    }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

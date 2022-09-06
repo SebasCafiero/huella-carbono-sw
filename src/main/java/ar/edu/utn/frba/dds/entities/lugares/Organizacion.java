@@ -10,15 +10,19 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Organizacion extends EntidadPersistente {
+public class Organizacion {
+    private Integer id;
     private String razonSocial;
     private TipoDeOrganizacionEnum tipo;
     private UbicacionGeografica ubicacion;
     private ClasificacionOrganizacion clasificacionOrganizacion;
-    private Set<Sector> sectores = new HashSet<>();
+    private Set<Sector> sectores;
     private List<Medicion> mediciones;
     private List<String> contactosMail;
     private List<Integer> contactosTelefono;
+
+    public Organizacion() {
+    }
 
     public Organizacion(String razonSocial,
                         TipoDeOrganizacionEnum tipo,
@@ -32,6 +36,14 @@ public class Organizacion extends EntidadPersistente {
         this.mediciones = new ArrayList<>();
         this.contactosMail = new ArrayList<>();
         this.contactosTelefono = new ArrayList<>();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Set<Miembro> getMiembros() {
@@ -124,9 +136,6 @@ public class Organizacion extends EntidadPersistente {
 
     public List<Trayecto> trayectosDeMiembros() {
         return getMiembros().stream().flatMap(m -> m.getTrayectos().stream()).collect(Collectors.toList());
-    }
-
-    public Organizacion() {
     }
 
     public void setRazonSocial(String razonSocial) {

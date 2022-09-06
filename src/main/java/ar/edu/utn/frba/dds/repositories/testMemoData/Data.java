@@ -13,13 +13,11 @@ public class Data {
         return DataMedicion.getList();
     }*/
 
-    public static List<EntidadPersistente> getDataMedicion(){return DataMedicion.getList();}
+    public static List<EntidadPersistente> getDataMedicion(){
+        return DataMedicion.getList();
+    }
 
-    public static List<EntidadPersistente> getDataOrganizacion(){return DataOrganizacion.getList();}
-
-    public static List<EntidadPersistente> getDataMiembro(){return DataMiembro.getList();}
-
-    public static List<EntidadPersistente> getDataBatchMedicion(){return DataBatchMedicion.getList();}
-
-    public static List<EntidadPersistente> getDataFactorEmision() {return DataFactorEmision.getList();}
+    public static List<EntidadPersistente> getDataOrganizacion(){
+        return DataOrganizacion.getList();
+    }
 }
