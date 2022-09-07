@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.mapping;
 
 import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
+import ar.edu.utn.frba.dds.mihuella.dto.BatchMedicionJSONDTO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,6 +14,13 @@ public class BatchMedicionMapper {
         batchMedicion.setId(batchmedicionDTO.optInt("id"));
         batchMedicion.setFecha(batchmedicionDTO.optString("fecha"));
 
+        return batchMedicion;
+    }
+
+    public static BatchMedicion toEntity(BatchMedicionJSONDTO batchMedicionDTO) {
+        BatchMedicion batchMedicion = new BatchMedicion(
+                MedicionMapper.toListOfEntity(batchMedicionDTO.mediciones),
+                batchMedicionDTO.fecha);
         return batchMedicion;
     }
 }

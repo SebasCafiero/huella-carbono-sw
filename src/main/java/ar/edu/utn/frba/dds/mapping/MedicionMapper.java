@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
+import ar.edu.utn.frba.dds.mihuella.dto.MedicionJSONDTO;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserTrayectos;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -56,6 +57,24 @@ public class MedicionMapper {
                         medicionCSVDTO.getPeriodo().trim()
                 )
         );
+    }
+
+    public static Medicion toEntity(MedicionJSONDTO medicionDTO) {
+        Medicion medicion = new Medicion(
+                CategoriaMapper.toEntity(medicionDTO.categoria),
+                medicionDTO.unidad,
+                medicionDTO.valor
+        );
+        return medicion;
+    }
+
+    public static List<Medicion> toListOfEntity(List<MedicionJSONDTO> medicionesDTO) {
+        List<Medicion> mediciones = new ArrayList<>();
+        medicionesDTO.forEach(medicionJSONDTO -> {
+            mediciones.add(MedicionMapper.toEntity(medicionJSONDTO));
+
+        });
+        return mediciones;
     }
 
     public static List<Medicion> toListOfEntity(JSONArray medicionesDTO) {

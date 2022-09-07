@@ -12,6 +12,11 @@ public class BatchMedicion {
     public BatchMedicion() {
     }
 
+    public BatchMedicion(List<Medicion> mediciones, LocalDate fecha) {
+        this.mediciones = mediciones;
+        this.fecha = fecha;
+    }
+
     public Integer getId() {
         return id;
     }
