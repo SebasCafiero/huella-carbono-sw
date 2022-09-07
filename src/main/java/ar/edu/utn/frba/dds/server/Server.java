@@ -7,11 +7,10 @@ import static spark.Spark.port;
 
 public class Server {
     public static void main(String[] args) {
-//        port(8080);
-        System.out.println("HEROKU: "+getHerokuAssignedPort());
+        System.out.println("HEROKU-PORT: "+getHerokuAssignedPort());
         port(getHerokuAssignedPort());
         Router.init();
-        DebugScreen.enableDebugScreen();
+//        DebugScreen.enableDebugScreen();
 
 
         }
