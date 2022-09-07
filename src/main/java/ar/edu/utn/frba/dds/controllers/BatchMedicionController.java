@@ -40,8 +40,8 @@ public class BatchMedicionController {
         BatchMedicion batchMedicionActual = this.repositorio.buscar(Integer.valueOf(request.params("id")));
         BatchMedicion batchMedicionNueva = new BatchMedicion();
         JSONObject jsonObject = new JSONObject(request.body());
-        BatchMedicionMapper.toEntity(jsonObject);
-        this.repositorio.modificar(batchMedicionActual,batchMedicionNueva);
+//        BatchMedicionMapper.toEntity(jsonObject);
+//        this.repositorio.modificar(batchMedicionActual,batchMedicionNueva);
         return response;
     }
 

@@ -34,11 +34,15 @@ public class FactoryRepositorio {
         else{
             if(!isJPA()) {
                 if(type.equals(Organizacion.class)) {
-                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, (List<T>) Data.getDataOrganizacion()));
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataOrganizacion()));
                 } else if(type.equals(Medicion.class)) {
-                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, (List<T>) Data.getDataMedicion()));
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataMedicion()));
+                } else if(type.equals(BatchMedicion.class)) {
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataBatchMedicion()));
+                } else if(type.equals(Miembro.class)) {
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataMiembro()));
                 } else if(type.equals(FactorEmision.class)) {
-                    repo = new RepoFactoresMemoria(new DAOMemoria<>(type, (List<T>) Data.getDataFactores()));
+                    repo = new RepoFactoresMemoria(new DAOMemoria<>(type, Data.getDataFactorEmision()));
                 } else {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
                 }
@@ -49,6 +53,7 @@ public class FactoryRepositorio {
             // Esta linea es la posta ==> repo = new Repositorio<>(new DAOMemoria<>(Data.getData(type)));
             repos.put(type.getName(), repo);
         }
+
         return repo;
     }
 

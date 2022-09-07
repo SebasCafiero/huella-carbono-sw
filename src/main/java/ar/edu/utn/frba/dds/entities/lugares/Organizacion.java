@@ -1,11 +1,11 @@
 package ar.edu.utn.frba.dds.entities.lugares;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
+import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;

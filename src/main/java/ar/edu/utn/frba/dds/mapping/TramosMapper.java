@@ -6,8 +6,8 @@ import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO2;
-import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

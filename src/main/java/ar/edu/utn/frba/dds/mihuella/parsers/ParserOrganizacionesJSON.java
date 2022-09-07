@@ -2,22 +2,14 @@ package ar.edu.utn.frba.dds.mihuella.parsers;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.mapping.OrganizacionMapper;
 import ar.edu.utn.frba.dds.mihuella.dto.OrganizacionJSONDTO;
-import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;

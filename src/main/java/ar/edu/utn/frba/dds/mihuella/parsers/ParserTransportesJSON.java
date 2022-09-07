@@ -3,8 +3,8 @@ package ar.edu.utn.frba.dds.mihuella.parsers;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.mapping.TransportesMapper;
 import ar.edu.utn.frba.dds.mihuella.dto.TransporteJSONDTO;
-import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 

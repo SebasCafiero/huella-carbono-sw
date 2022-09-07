@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.testMemoData;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.List;
 public class DataMiembro {
     private static List<Miembro> miembros = new ArrayList<>();
 
-    public static List<EntidadPersistente> getList(){
+    public static <T> List<T> getList(){
         if(miembros.size() == 0) {
 
             Miembro m1 = new Miembro();
@@ -28,7 +27,7 @@ public class DataMiembro {
 
             addAll(m1, m2, m3, m4);
         }
-        return (List<EntidadPersistente>)(List<?>) miembros;
+        return (List<T>) miembros;
     }
 
     private static void addAll(Miembro ... miembros){

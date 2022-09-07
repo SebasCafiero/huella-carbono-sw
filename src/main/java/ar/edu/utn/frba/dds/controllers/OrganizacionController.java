@@ -32,8 +32,8 @@ public class OrganizacionController {
         Organizacion organizacionActual = this.repositorio.buscar(Integer.valueOf(request.params("id")));
         Organizacion organizacionNueva = new Organizacion();
         JSONObject jsonObject = new JSONObject(request.body());
-        OrganizacionMapper.map(jsonObject, organizacionNueva);
-        this.repositorio.modificar(organizacionActual, organizacionNueva);
+//        OrganizacionMapper.map(jsonObject, organizacionNueva);
+//        this.repositorio.modificar(organizacionActual, organizacionNueva);
         return response;
     }
 

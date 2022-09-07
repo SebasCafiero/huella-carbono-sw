@@ -2,11 +2,9 @@ package ar.edu.utn.frba.dds.mapping;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
-import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

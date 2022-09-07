@@ -1,8 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.testMemoData;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
@@ -13,11 +10,24 @@ public class Data {
         return DataMedicion.getList();
     }*/
 
-    public static List<EntidadPersistente> getDataMedicion(){
+    public static <T> List<T> getDataMedicion(){
         return DataMedicion.getList();
     }
 
-    public static List<EntidadPersistente> getDataOrganizacion(){
+    public static <T> List<T> getDataOrganizacion(){
         return DataOrganizacion.getList();
     }
+
+    public static <T> List<T> getDataMiembro(){
+        return DataMiembro.getList();
+    }
+
+    public static <T> List<T> getDataBatchMedicion(){
+        return DataBatchMedicion.getList();
+    }
+
+    public static <T> List<T> getDataFactorEmision() {
+        return DataFactorEmision.getList();
+    }
+
 }

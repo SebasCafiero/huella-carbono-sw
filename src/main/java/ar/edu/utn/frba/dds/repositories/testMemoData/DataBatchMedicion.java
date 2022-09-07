@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.testMemoData;
 
-import ar.edu.utn.frba.dds.entities.EntidadPersistente;
 import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 
@@ -11,7 +10,7 @@ import java.util.List;
 public class DataBatchMedicion {
     private static List<BatchMedicion> batches = new ArrayList<>();
 
-    public static List<EntidadPersistente> getList(){
+    public static <T> List<T> getList(){
         if(batches.size() == 0) {
 
             Medicion m1 = new Medicion();
@@ -49,7 +48,7 @@ public class DataBatchMedicion {
 
             addAll(b1,b2);
         }
-        return (List<EntidadPersistente>)(List<?>) batches;
+        return (List<T>) batches;
     }
 
     private static void addAll(BatchMedicion ... batches){

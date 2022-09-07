@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.repositories.daos;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -15,15 +16,10 @@ public class DAOMemoria<T> implements DAO<T> {
     private Integer id;
 
     public DAOMemoria(Class<T> clazz, List<T> entidades){
-        this.entidades = entidades;
         this.persistentClass = clazz;
         this.id = 1;
-//        this.persistentClass.getName();
-//        this.persistentClass = (Class<T>) ((ParameterizedType) getClass()
-//                .getGenericSuperclass()).getActualTypeArguments()[0];
-
-//            System.out.println(Arrays.stream(this.getClass().getFields()).map(fi -> fi.getName()).collect(Collectors.toList()));
-
+        this.entidades = new ArrayList<>();
+        entidades.forEach(this::agregar);
     }
 
     @Override
@@ -38,11 +34,6 @@ public class DAOMemoria<T> implements DAO<T> {
                 .filter(e -> invocarGetter(getId, e).equals(id))
                 .findFirst()
                 .get();
-//        return this.entidades
-//                .stream()
-//                .filter(e -> e.getId() == id)
-//                .findFirst()
-//                .get();
     }
 
     public List<T> buscar(Predicate<T> condicion) {
@@ -71,7 +62,8 @@ public class DAOMemoria<T> implements DAO<T> {
     }
 
     private Method obtenerMetodo(String nombre) {
-        Optional<Method> getterId = Arrays.stream(persistentClass.getMethods()).filter(me -> me.getName().equals(nombre)).findFirst();
+        Optional<Method> getterId = Arrays.stream(persistentClass.getMethods())
+                .filter(me -> me.getName().equals(nombre)).findFirst();
         if (!getterId.isPresent()) {
             throw new EntidadSinPrimaryKey();
         }
