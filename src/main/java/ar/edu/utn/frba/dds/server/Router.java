@@ -21,8 +21,8 @@ public class Router {
     }
 
     public static void init() {
-        Router.initEngine();
-        Spark.staticFileLocation("/public");
+//        Router.initEngine();
+//        Spark.staticFileLocation("/public");
         Router.configure();
     }
 
