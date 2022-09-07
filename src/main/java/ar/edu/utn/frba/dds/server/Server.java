@@ -7,8 +7,9 @@ import static spark.Spark.port;
 
 public class Server {
     public static void main(String[] args) {
-        port(8080);
-//        port(getHerokuAssignedPort());
+//        port(8080);
+        System.out.println("HEROKU: "+getHerokuAssignedPort());
+        port(getHerokuAssignedPort());
         Router.init();
         DebugScreen.enableDebugScreen();
 
@@ -16,7 +17,6 @@ public class Server {
         }
 
         static int getHerokuAssignedPort() {
-            System.out.println(System.getenv("nombreVariable"));
             ProcessBuilder processBuilder = new ProcessBuilder();
             if (processBuilder.environment().get("PORT") != null) {
                 return Integer.parseInt(processBuilder.environment().get("PORT"));
