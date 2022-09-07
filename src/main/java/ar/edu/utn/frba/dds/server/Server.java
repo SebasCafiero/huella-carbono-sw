@@ -16,6 +16,7 @@ public class Server {
         }
 
         static int getHerokuAssignedPort() {
+            System.out.println(System.getenv("nombreVariable"));
             ProcessBuilder processBuilder = new ProcessBuilder();
             if (processBuilder.environment().get("PORT") != null) {
                 return Integer.parseInt(processBuilder.environment().get("PORT"));
