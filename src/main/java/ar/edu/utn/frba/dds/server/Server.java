@@ -11,7 +11,7 @@ public class Server {
         System.out.println("HEROKU: "+getHerokuAssignedPort());
         port(getHerokuAssignedPort());
         Router.init();
-        DebugScreen.enableDebugScreen();
+//        DebugScreen.enableDebugScreen();
 
 
         }
