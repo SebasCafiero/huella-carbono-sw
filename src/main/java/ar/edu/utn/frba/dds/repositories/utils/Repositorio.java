@@ -8,4 +8,6 @@ public interface Repositorio<T> {
     void eliminar(T unObjeto);
     List<T> buscarTodos();
     T buscar(int id);
+
+    void modificar(int id,T unObjeto);
 }

@@ -5,6 +5,8 @@ import ar.edu.utn.frba.dds.mihuella.dto.BatchMedicionJSONDTO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.LocalDate;
+
 public class BatchMedicionMapper {
     public static BatchMedicion toEntity(JSONObject batchmedicionDTO){
         BatchMedicion batchMedicion = new BatchMedicion();
@@ -20,7 +22,7 @@ public class BatchMedicionMapper {
     public static BatchMedicion toEntity(BatchMedicionJSONDTO batchMedicionDTO) {
         BatchMedicion batchMedicion = new BatchMedicion(
                 MedicionMapper.toListOfEntity(batchMedicionDTO.mediciones),
-                batchMedicionDTO.fecha);
+                LocalDate.parse(batchMedicionDTO.fecha));
         return batchMedicion;
     }
 }

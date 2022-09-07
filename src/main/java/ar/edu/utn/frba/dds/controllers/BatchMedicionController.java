@@ -1,10 +1,8 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.mapping.BatchMedicionMapper;
 import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
-import ar.edu.utn.frba.dds.mapping.FactorEmisionMapper;
-import ar.edu.utn.frba.dds.mapping.OrganizacionMapper;
+import ar.edu.utn.frba.dds.mapping.BatchMedicionMapper;
+import ar.edu.utn.frba.dds.mihuella.parsers.ParserBatchesJSON;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
@@ -29,19 +27,16 @@ public class BatchMedicionController {
         return batchMedicion.toString();
     }
 
+
     public Object agregar(Request request, Response response){
-        JSONObject jsonObject = new JSONObject(request.body());
-        BatchMedicion batchMedicion = BatchMedicionMapper.toEntity(jsonObject);
+        BatchMedicion batchMedicion = ParserBatchesJSON.generarBatch(request.body());
         this.repositorio.agregar(batchMedicion);
         return response;
     }
 
     public Object modificar(Request request, Response response){
-        BatchMedicion batchMedicionActual = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        BatchMedicion batchMedicionNueva = new BatchMedicion();
-        JSONObject jsonObject = new JSONObject(request.body());
-//        BatchMedicionMapper.toEntity(jsonObject);
-//        this.repositorio.modificar(batchMedicionActual,batchMedicionNueva);
+        BatchMedicion batchMedicion = ParserBatchesJSON.generarBatch(request.body());
+        this.repositorio.modificar(Integer.valueOf(request.params("id")), batchMedicion);
         return response;
     }
 

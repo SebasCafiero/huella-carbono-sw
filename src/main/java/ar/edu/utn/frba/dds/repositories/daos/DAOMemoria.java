@@ -56,6 +56,12 @@ public class DAOMemoria<T> implements DAO<T> {
         agregar(unObjeto);
     }
 
+    public void modificar(int id, T nuevoObjeto) {
+        eliminar(buscar(id));
+        invocarSetter(obtenerMetodo("setId"), nuevoObjeto, id);
+        this.entidades.add(nuevoObjeto);
+    }
+
     @Override
     public void eliminar(T unObjeto) {
         this.entidades.remove(unObjeto);

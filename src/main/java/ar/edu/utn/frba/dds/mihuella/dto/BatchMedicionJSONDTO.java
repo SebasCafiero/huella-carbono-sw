@@ -5,5 +5,5 @@ import java.util.List;
 
 public class BatchMedicionJSONDTO {
     public List<MedicionJSONDTO> mediciones;
-    public LocalDate fecha;
+    public String fecha;
 }

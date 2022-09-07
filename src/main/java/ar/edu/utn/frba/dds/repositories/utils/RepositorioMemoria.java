@@ -39,4 +39,9 @@ public class RepositorioMemoria<T> implements Repositorio<T> {
     public T buscar(int id) {
         return this.dao.buscar(id);
     }
+
+    @Override
+    public void modificar(int id, T unObjeto) {
+        this.dao.modificar(id,unObjeto);
+    }
 }
