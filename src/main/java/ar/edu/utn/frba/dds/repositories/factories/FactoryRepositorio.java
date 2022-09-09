@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.repositories.factories;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
+import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
@@ -43,6 +44,8 @@ public class FactoryRepositorio {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataMiembro()));
                 } else if(type.equals(FactorEmision.class)) {
                     repo = new RepoFactoresMemoria(new DAOMemoria<>(type, Data.getDataFactorEmision()));
+                } else if (type.equals(AgenteSectorial.class)) {
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type,Data.getDataAgenteSectorial()));
                 } else {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
                 }

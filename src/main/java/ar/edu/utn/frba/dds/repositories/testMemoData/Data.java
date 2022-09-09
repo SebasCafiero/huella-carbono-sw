@@ -26,8 +26,9 @@ public class Data {
         return DataBatchMedicion.getList();
     }
 
-    public static <T> List<T> getDataFactorEmision() {
-        return DataFactorEmision.getList();
-    }
+    public static <T> List<T> getDataFactorEmision() {return DataFactorEmision.getList();}
+
+    public static <T> List<T> getDataAgenteSectorial() {return DataAgenteSectorial.getList();}
 
 }
+

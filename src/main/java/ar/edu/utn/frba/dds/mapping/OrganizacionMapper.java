@@ -17,10 +17,7 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class OrganizacionMapper {
     public static void map(JSONObject organizacionDTO, Organizacion organizacion){
@@ -112,5 +109,22 @@ public class OrganizacionMapper {
 
         System.out.println(unaOrg.toString());
         return unaOrg;
+    }
+
+    public static Set<Organizacion> toSetOfEntity(Set<OrganizacionJSONDTO> organizacionesDTO) {
+        Set<Organizacion> organizaciones = (Set<Organizacion>) new ArrayList<Organizacion>(); //esta bien esto??
+        organizacionesDTO.forEach(organizacionJSONDTO -> {
+            organizaciones.add(OrganizacionMapper.toEntity(organizacionJSONDTO));
+        });
+
+        return organizaciones;
+    }
+
+    public static List<Organizacion> toListOfEntity(List<OrganizacionJSONDTO> organizacinesDTO) {
+        List<Organizacion> organizaciones = new ArrayList<>();
+        organizacinesDTO.forEach(organizacionJSONDTO -> {
+            organizaciones.add(OrganizacionMapper.toEntity(organizacionJSONDTO));
+        });
+        return organizaciones;
     }
 }

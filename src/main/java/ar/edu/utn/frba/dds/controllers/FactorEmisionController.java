@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
-import ar.edu.utn.frba.dds.mapping.FactorEmisionMapper;
+import ar.edu.utn.frba.dds.mihuella.parsers.ParserFactoresJSON;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
-import org.json.JSONObject;
+
 import spark.Request;
 import spark.Response;
 
@@ -18,13 +18,9 @@ public class FactorEmisionController {
     }
 
     public Object modificar(Request request, Response response){
-        FactorEmision factorEmisionActual = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        FactorEmision factorEmisionNuevo = new FactorEmision();
-        JSONObject jsonObject = new JSONObject(request.body());
-//        FactorEmisionMapper.toEntity(jsonObject);
-//        this.repositorio.modificar(factorEmisionActual,factorEmisionNuevo);
-        List<FactorEmision> factores = this.repositorio.buscarTodos();
-        return factores.toString();
+        FactorEmision factorEmision = ParserFactoresJSON.generarFactor(request.body());
+        this.repositorio.modificar(Integer.valueOf(request.params("id")), factorEmision);
+        return response;
     }
 
     public String mostrarTodos(Request request, Response response) { // solo para probar

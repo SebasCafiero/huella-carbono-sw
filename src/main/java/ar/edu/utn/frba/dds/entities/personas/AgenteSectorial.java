@@ -26,6 +26,16 @@ public class AgenteSectorial {
         this.area = areaSectorial;
     }
 
+    public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, String telefono, List<Reporte> reportes) {
+        this.area = areaSectorial;
+        this.contactoMail = contactoMail;
+        this.telefono = telefono;
+        this.reportes = reportes;
+    }
+
+
+    public AgenteSectorial() {}
+
     public Float obtenerHC(Integer anio, Integer mes) throws MedicionSinFactorEmisionException {
         return obtenerHcxOrg(anio, mes).values().stream().reduce(0F, Float::sum);
     }
@@ -88,5 +98,14 @@ public class AgenteSectorial {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public void setArea(AreaSectorial area) {this.area = area;}
+
+    public void setReportes(List<Reporte> reportes) {this.reportes = reportes;}
+
+    @Override
+    public String toString() {
+        return '\n' + "Mail : " + this.contactoMail.getDireccionEMail() + '\n' + "Telefono : " + this.telefono + '\n';
     }
 }

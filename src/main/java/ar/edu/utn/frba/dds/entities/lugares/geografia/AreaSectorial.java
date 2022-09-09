@@ -45,4 +45,20 @@ public abstract class AreaSectorial {
     public List<Reporte> getReportes() {
         return reportes;
     }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setOrganizaciones(Set<Organizacion> organizaciones) {
+        this.organizaciones = organizaciones;
+    }
+
+    public void setAgentes(Set<AgenteSectorial> agentes) {
+        this.agentes = agentes;
+    }
+
+    public void setReportes(List<Reporte> reportes) {
+        this.reportes = reportes;
+    }
 }

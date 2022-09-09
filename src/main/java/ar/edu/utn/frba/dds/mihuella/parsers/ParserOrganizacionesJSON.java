@@ -1,8 +1,11 @@
 package ar.edu.utn.frba.dds.mihuella.parsers;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.mapping.MedicionMapper;
 import ar.edu.utn.frba.dds.mapping.OrganizacionMapper;
+import ar.edu.utn.frba.dds.mihuella.dto.MedicionJSONDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.OrganizacionJSONDTO;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
@@ -21,8 +24,6 @@ public class ParserOrganizacionesJSON {
 
     public static List<Organizacion> generarOrganizaciones(String archivo) throws IOException, ParseException {
         List<Organizacion> organizaciones = new ArrayList<>();
-//        JSONArray listaOrganizacionesJSON = new JSONArray(new JSONParser().parse(new FileReader(archivo)).toString());
-
         Type listType = new TypeToken<List<OrganizacionJSONDTO>>(){}.getType();
         List<OrganizacionJSONDTO> organizacionesDTO = new Gson().fromJson(new FileReader(archivo), listType);
 
@@ -33,26 +34,12 @@ public class ParserOrganizacionesJSON {
             }
             organizaciones.add(unaOrg);
         }
-
-
-        /*for(Object orgJSON : listaOrganizacionesJSON) {
-            JSONObject unaOrgDTO = (JSONObject) orgJSON;
-            Organizacion unaOrg = OrganizacionMapper.toEntity(unaOrgDTO);
-
-            for(Miembro unMiembro : unaOrg.getMiembros()){
-                repoMiembros.agregar(unMiembro);
-            }
-            organizaciones.add(unaOrg);
-        }*/
-
-        /*for(int orgIndex = 0; orgIndex < listaOrganizacionesJSON.length(); orgIndex++){
-            JSONObject unaOrgDTO = listaOrganizacionesJSON.optJSONObject(orgIndex);
-            Organizacion unaOrg = OrganizacionMapper.toEntity(unaOrgDTO);
-            for(Miembro unMiembro : unaOrg.getMiembros()){
-                repoMiembros.agregar(unMiembro);
-            }
-            organizaciones.add(unaOrg);
-        }*/
         return organizaciones;
+    }
+
+    public static Organizacion generarOrganizacion(String json) {
+        OrganizacionJSONDTO organizacionnDTO = new Gson().fromJson(json,OrganizacionJSONDTO.class);
+        Organizacion unaOrganizacion = OrganizacionMapper.toEntity(organizacionnDTO);
+        return unaOrganizacion;
     }
 }

@@ -1,9 +1,7 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
-import ar.edu.utn.frba.dds.mapping.BatchMedicionMapper;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserBatchesJSON;
-import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 import java.util.List;

@@ -1,9 +1,6 @@
 package ar.edu.utn.frba.dds.server;
 
-import ar.edu.utn.frba.dds.controllers.BatchMedicionController;
-import ar.edu.utn.frba.dds.controllers.FactorEmisionController;
-import ar.edu.utn.frba.dds.controllers.MedicionController;
-import ar.edu.utn.frba.dds.controllers.OrganizacionController;
+import ar.edu.utn.frba.dds.controllers.*;
 import ar.edu.utn.frba.dds.spark.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.spark.utils.HandlebarsTemplateEngineBuilder;
 import spark.Spark;
@@ -48,5 +45,13 @@ public class Router {
         FactorEmisionController factorEmisionController = new FactorEmisionController();
         Spark.put("/factorEmision/:id", factorEmisionController :: modificar);
         Spark.get("/factorEmision",factorEmisionController :: mostrarTodos); // solo para probar
+        AgenteSectorialController agenteSectorialController = new AgenteSectorialController();
+        System.out.println(System.getenv("llegue Aca"));
+        Spark.get("/agenteSectorial/:id", agenteSectorialController::obtener);
+        Spark.get("/agenteSectorial", agenteSectorialController::mostrarTodos);
+        System.out.println(System.getenv("no lo tomo porque soy gill"));
+        Spark.delete("/agenteSectorial/:id", agenteSectorialController::eliminar);
+        Spark.put("/agenteSectorial/:id", agenteSectorialController::modificar);
+        Spark.post("/agenteSectorial", agenteSectorialController::agregar);
     }
 }

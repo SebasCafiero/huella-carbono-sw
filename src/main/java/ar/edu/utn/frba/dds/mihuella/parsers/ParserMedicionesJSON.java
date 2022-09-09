@@ -27,7 +27,7 @@ public class ParserMedicionesJSON implements ParserMediciones {
         return mediciones;
     }
 
-    public Medicion generarMedicion(String json) throws IOException {
+    public Medicion generarMedicion(String json){
         MedicionJSONDTO medicionDTO = new Gson().fromJson(json, MedicionJSONDTO.class);
         Medicion unaMedicion = MedicionMapper.toEntity(medicionDTO);
         return unaMedicion;

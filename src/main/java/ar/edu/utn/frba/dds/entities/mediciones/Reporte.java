@@ -22,6 +22,13 @@ public class Reporte {
         this.fecha = LocalDate.now();
     }
 
+    public Reporte(Set<Organizacion> organizaciones, AreaSectorial area, Float hcTotal) {
+        this.organizaciones = organizaciones;
+        this.area = area;
+        this.hcTotal = hcTotal;
+        this.fecha = LocalDate.now();
+    }
+
     public Set<Organizacion> getOrganizaciones() {
         return organizaciones;
     }
