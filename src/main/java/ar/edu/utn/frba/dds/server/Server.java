@@ -11,14 +11,13 @@ public class Server {
         port(getHerokuAssignedPort());
         Router.init();
 //        DebugScreen.enableDebugScreen();
-
-
         }
 
         static int getHerokuAssignedPort() {
             ProcessBuilder processBuilder = new ProcessBuilder();
-            if (processBuilder.environment().get("PORT") != null) {
-                return Integer.parseInt(processBuilder.environment().get("PORT"));
+            String herokuPort = processBuilder.environment().get("PORT"); //System.getenv("PORT");
+            if ( herokuPort != null) {
+                return Integer.parseInt(herokuPort);
             }
             return 9000; //return default port if heroku-port isn't set (i.e. on localhost)
         }

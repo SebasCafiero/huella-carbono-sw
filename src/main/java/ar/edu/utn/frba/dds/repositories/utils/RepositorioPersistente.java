@@ -1,13 +1,18 @@
 package ar.edu.utn.frba.dds.repositories.utils;
 
+import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
 import ar.edu.utn.frba.dds.repositories.daos.DAOJPA;
 
 import java.util.List;
 
 public class RepositorioPersistente<T> implements Repositorio<T> {
-    private final DAOJPA<T> dao;
+//    private final DAOJPA<T> dao;
+//    public RepositorioPersistente(DAOJPA<T> dao) {
+//        this.dao = dao;
+//    }
 
-    public RepositorioPersistente(DAOJPA<T> dao) {
+    private final DAOHibernate<T> dao;
+    public RepositorioPersistente(DAOHibernate<T> dao) {
         this.dao = dao;
     }
 
