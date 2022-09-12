@@ -19,7 +19,7 @@
     </properties>
 
     <dependencies>
-
+        <!-- TODO REVISAR DEPENDENCIAS TRANSITIVAS COMO OPENCSV Y COMMONS-LANG3 -->
         <!-- OPEN CSV -->
         <dependency>
             <groupId>com.opencsv</groupId>
@@ -90,12 +90,12 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-        <!-- Creo que ya vienen en openCSV -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.0</version>
-        </dependency>
+        <!-- Creo que ya vienen en openCSV, evitar dependencia transitiva! -->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.commons</groupId>-->
+<!--            <artifactId>commons-lang3</artifactId>-->
+<!--            <version>3.0</version>-->
+<!--        </dependency>-->
 
         <!-- HANDLEBARS -->
         <dependency>
