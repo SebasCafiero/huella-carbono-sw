@@ -24,13 +24,10 @@ public class ParserTransportesJSON {
         Type listType = new TypeToken<List<TransporteJSONDTO>>(){}.getType();
         List<TransporteJSONDTO> transportesDTO = new Gson().fromJson(new FileReader(archivo),listType);
 
-        System.out.println("\nCarga de Transportes2:\n" + new Gson().toJson(transportesDTO, listType) + "\n");
-
         for(TransporteJSONDTO transporteDTO : transportesDTO){
             MedioDeTransporte unTransporte = TransportesMapper.toEntity(transporteDTO);
             mediosDeTransporte.add(unTransporte);
             repoMedios.agregar(unTransporte);
-            System.out.println("Agregado " + unTransporte + "\n");
         }
 
         return mediosDeTransporte;

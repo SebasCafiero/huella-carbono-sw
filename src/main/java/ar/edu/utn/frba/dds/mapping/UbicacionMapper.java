@@ -40,8 +40,6 @@ public class UbicacionMapper {
             );
         }
 
-        System.out.println("DIR: " + direccion);
-        System.out.println("COR: " + coordenadas);
         return new UbicacionGeografica(direccion, coordenadas);
     }
 

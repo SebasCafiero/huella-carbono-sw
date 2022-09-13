@@ -16,7 +16,7 @@ public class DataFactorEmision {
             FactorEmision f1 = new FactorEmision();
             f1.setValor(0.3f);
             f1.setUnidad("m3");
-            f1.setCategoria(new Categoria("Traslado de Miembros", "Particular - GNC"));
+            f1.setCategoria(new Categoria("Traslado de Miembros", "Publico - SUBTE"));
 
             FactorEmision f2 = new FactorEmision();
             f2.setValor(0.5f);
