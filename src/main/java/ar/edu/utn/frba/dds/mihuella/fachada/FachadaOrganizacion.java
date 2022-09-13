@@ -19,6 +19,8 @@ public class FachadaOrganizacion implements FachadaOrg {
     public FachadaOrganizacion() {
         repoFactores = (RepoFactores) FactoryRepositorio.get(FactorEmision.class);
     }
+    //TODO la fachada deberia ser para una organizacion especifica, quizás deberia ser atributo
+
 
     @Override
     public void cargarParametros(Map<String, Float> parametrosSistema) {
@@ -42,34 +44,6 @@ public class FachadaOrganizacion implements FachadaOrg {
         }).reduce(0, Double::sum);
     }
 
-    //TODO la fachada deberia ser para una organizacion especifica, deberia ser atributo
-    public Float obtenerConsumoTotalTrayectosOrganizacion(Organizacion unaOrg) throws MedicionSinFactorEmisionException {
-        Float consumo = 0F;
-        for(Trayecto unTrayecto : unaOrg.trayectosDeMiembros()) {
-            consumo += obtenerHU(new ArrayList<>(unTrayecto.getTramos())) / unTrayecto.cantidadDeMiembros();
-            System.out.println("CONSUMO CADA TRAYECTO DE ORG: " + consumo);
-        }
-        System.out.println("CONSUMO TRAYECTOS TOTAL DE ORG: " + consumo);
-        return consumo;
-    }
-
-    public Float obtenerImpactoMiembroEnTrayectos(Organizacion unaOrg, Miembro unMiembro) throws MedicionSinFactorEmisionException {
-        Float consumoMiembro = 0F;
-        for(Trayecto unTrayecto : unMiembro.getTrayectos()){
-            consumoMiembro += obtenerHU(new ArrayList<>(unTrayecto.getTramos())) / unTrayecto.cantidadDeMiembros();
-            System.out.println("Consumo Miembro " + unMiembro.getNroDocumento() + " Cada Trayecto: " + consumoMiembro);
-        }
-        System.out.println("Consumo Miembro " + unMiembro.getNroDocumento() + " Total: " + consumoMiembro);
-        return consumoMiembro / obtenerConsumoTotalTrayectosOrganizacion(unaOrg);
-    }
-
-    public Float obtenerImpactoSector(Organizacion unaOrg, Sector unSector) throws MedicionSinFactorEmisionException {
-        Float impactoMiembro = 0F;
-        for(Miembro unMiembro : unSector.getListaDeMiembros()){
-            impactoMiembro += obtenerImpactoMiembroEnTrayectos(unaOrg,unMiembro);
-        }
-        return impactoMiembro;
-    }
 
     public void cargarParametro(String nombreFactor, Float valor) {
         String[] categoriaString = nombreFactor.split(":");

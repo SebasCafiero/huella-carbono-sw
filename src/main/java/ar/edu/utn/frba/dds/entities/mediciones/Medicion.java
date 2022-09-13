@@ -2,11 +2,28 @@ package ar.edu.utn.frba.dds.entities.mediciones;
 
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 
+import javax.persistence.*;
+
+@Entity
+@Table
 public class Medicion implements Medible {
+    @Id
+    @GeneratedValue
+    private int myid;
+
+    @Column
     private Integer id;
+
+    @Transient
     private Categoria categoria;
+
+    @Column
     private String unidad;
+
+    @Transient
     private Float valor;
+    
+    @Transient
     private Periodo periodo;
 
     public Medicion(Categoria categoria, String unidad, Float valor) {

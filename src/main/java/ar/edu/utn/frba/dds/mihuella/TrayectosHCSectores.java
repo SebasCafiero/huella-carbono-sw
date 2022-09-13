@@ -51,34 +51,19 @@ public class TrayectosHCSectores {
 
         Map<String,Float> factoresDeEmision;
         List<Organizacion> organizaciones;
-        List<TramoCSVDTO> tramosCSV;
-        List<MedioDeTransporte> medios;
 
         try {
             factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
-            organizaciones = new ParserOrganizaciones().cargarOrganizaciones(ns.getString("organizaciones"));
-            medios = new ParserTransportes().cargarTransportes(ns.getString("transportes"));
-            System.out.println(medios.toString());
-            tramosCSV = new ParserTrayectos().capturarEntradas(ns.getString("trayectos"));
-            tramosCSV.forEach(tr -> {
-                boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");
-                if(!esCompartidoPasivo) {
-                    new ParserTrayectos().cargarTrayectoActivo(TrayectosMapper.toNuevoTrayectoDTO(tr), tr.getPeriodicidad().trim().charAt(0), tr.getFecha().trim());
-                } else {
-                    new ParserTrayectos().cargarTrayectoPasivo(TrayectosMapper.toTrayectoCompartidoDTO(tr));
-                }
-            });
+            organizaciones = ParserOrganizacionesJSON.generarOrganizaciones(ns.getString("organizaciones"));
+            ParserTransportesJSON.generarTransportes(ns.getString("transportes"));
+            ParserTrayectos.generarTrayectos(ns.getString("trayectos"));
         } catch (IOException | FechaException | NoExisteMedioException ex) {
             System.out.println(ex.getMessage());
             return;
         }
 
-        System.out.println("Obtener trayectos");
-
         FachadaOrganizacion fachada = new FachadaOrganizacion();
         fachada.cargarParametros(factoresDeEmision);
-
-        System.out.println("Cargue parametros");
 
         //SALIDA 2
         PrintWriter writer = new PrintWriter(SALIDA_2_PATH, "UTF-8");
@@ -94,8 +79,10 @@ public class TrayectosHCSectores {
 
             for(Sector sector : sectores){
                 String nombreSector = sector.getNombre();
+                System.out.println("Sector: " + nombreSector);
                 float impacto = fachada.getImpactoSector(sector, anio, mes) / consumoTotalOrganizacion;
                 writer.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto);
+                System.out.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto + '\n');
             }
         }
         writer.close();

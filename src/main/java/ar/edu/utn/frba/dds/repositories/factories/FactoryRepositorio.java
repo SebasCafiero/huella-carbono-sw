@@ -7,6 +7,8 @@ import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.repositories.daos.DAO;
+import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
@@ -50,7 +52,8 @@ public class FactoryRepositorio {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
                 }
             } else {
-                repo = new RepositorioPersistente<>(new DAOJPA<>(new ArrayList<>()));
+//                repo = new RepositorioPersistente<>(new DAOJPA<>(new ArrayList<>()));
+                repo = new RepositorioPersistente<>(new DAOHibernate<>(type));
             }
 
             // Esta linea es la posta ==> repo = new Repositorio<>(new DAOMemoria<>(Data.getData(type)));

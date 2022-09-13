@@ -79,9 +79,9 @@ public class TrayectosTest {
         trayectoCompartido.agregarmiembro(miembro3);
 
         FachadaOrganizacion fachada = new FachadaOrganizacion();
-        fachada.cargarParametro("Traslado de Miembros - Publico - TREN",250F);
-        fachada.cargarParametro("Traslado de Miembros - Contratado", 130F);
-        fachada.cargarParametro("Traslado de Miembros - Ecologico",0F);
+        fachada.cargarParametro("Traslado de Miembros -> Publico - TREN : km",250F);
+        fachada.cargarParametro("Traslado de Miembros -> Contratado : km", 130F);
+        fachada.cargarParametro("Traslado de Miembros -> Ecologico : km",0F);
 
 //        List<Medible> tramosTotales = unaOrg.miembros().stream().flatMap(m->m.getTrayectos().stream().flatMap(tray->tray.getTramos().stream())).collect(Collectors.toList());
 

@@ -59,11 +59,11 @@ public class Sector {
     }
 
     @Override
-    public String toString() {
+    public String toString() { // TODO cambio organizacion y miembros por recursividad!
         return "<br>&nbsp;&nbsp;&nbsp;&nbsp;Sector{<br>" +
                 "&nbsp;&nbsp;&nbsp;&nbsp;nombre='" + nombre + '\'' +
-                ", organizacion=<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + organizacion.toString() +
-                ",<br>&nbsp;&nbsp;&nbsp;&nbsp;miembros=" + miembros.toString() +
+                ", organizacion=<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + organizacion.getRazonSocial() +
+                ",<br>&nbsp;&nbsp;&nbsp;&nbsp;miembros=" + miembros.stream().map(m->m.getNroDocumento()) +
                 "}<br>";
     }
 }

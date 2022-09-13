@@ -7,19 +7,17 @@ import static spark.Spark.port;
 
 public class Server {
     public static void main(String[] args) {
-        port(8080);
-//        port(getHerokuAssignedPort());
+        System.out.println("HEROKU-PORT: "+getHerokuAssignedPort());
+        port(getHerokuAssignedPort());
         Router.init();
-        DebugScreen.enableDebugScreen();
-
-
+//        DebugScreen.enableDebugScreen();
         }
 
         static int getHerokuAssignedPort() {
-            System.out.println(System.getenv("nombreVariable"));
             ProcessBuilder processBuilder = new ProcessBuilder();
-            if (processBuilder.environment().get("PORT") != null) {
-                return Integer.parseInt(processBuilder.environment().get("PORT"));
+            String herokuPort = processBuilder.environment().get("PORT"); //System.getenv("PORT");
+            if ( herokuPort != null) {
+                return Integer.parseInt(herokuPort);
             }
             return 9000; //return default port if heroku-port isn't set (i.e. on localhost)
         }

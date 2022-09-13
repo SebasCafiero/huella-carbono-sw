@@ -232,10 +232,15 @@ Se recopila la información de cada archivo en repositorios runtime (almacenamos
 Se obtiene la HC y el aporte de cada miembro o sector, filtrando los trayectos/mediciones según corresponda:
 HCtotal(8140+22090+5150) = HCtotal(35380)
 - Respecto a miembros:
-  m1: (t1(7x200 + 15x250) + t2(46x130/2)) / HCtotal(281) = 8140/35380 = 23.01%
-  m2: (t3(10x0 + 191x100) + t2(46x130/2)) / HCtotal(281) = 22090/35380 = 62.44%
-  m3: t4(7x200 + 15x250) / HCtotal(281) = 5150/35380 = 14.56%
-  m4: 0 / HCtotal() = 0/281 = 0%
+  t1: 7x200 + 15x250 = 5150
+  t2: 46x130 = 5980
+  t3: 10x0 + 191x100 = 19100
+  t4: 7x200 + 15x250 = 5150
+  
+  m1: (t1 + t2/2) / HCtotal = 8140/35380 = 23.01%
+  m2: (t3 + t2/2) / HCtotal = 22090/35380 = 62.44%
+  m3: t4 / HCtotal = 5150/35380 = 14.56%
+  m4: 0 / HCtotal = 0/281 = 0%
 - Respecto a sectores:
   s1: m1 y m2 => 85.45%
   s2: m3 y m4 => 14.56%

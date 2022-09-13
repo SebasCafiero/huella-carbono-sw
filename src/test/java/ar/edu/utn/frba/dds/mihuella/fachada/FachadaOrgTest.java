@@ -17,7 +17,7 @@ public class FachadaOrgTest {
     @Test
     void seObtieneCorrectamenteHC() throws Exception {
         HashMap<String, Float> fe = new HashMap<>();
-        fe.put("Combustion Fija - Gas Natural", 1F);
+        fe.put("Combustion Fija -> Gas Natural : m3", 1F);
         FachadaOrganizacion calculadora = new FachadaOrganizacion();
         calculadora.cargarParametros(fe);
 

@@ -131,112 +131,16 @@ public class ParserTrayectos {
         return trayectos;
     }
 
-    public void cargarTrayectoActivo(NuevoTrayectoDTO trayectoDTO, char periodicidad, String periodoDTO) {
-//              Optional<Miembro> miembro = repoMiembros.buscarTodos().stream()
-//                .filter(mi -> mi.getNroDocumento().equals(trayectoCompartidoDTO.getMiembroDNI())
-//                        && mi.getTipoDeDocumento().equals(TipoDeDocumento.DNI))
-//                .findFirst();
-
-        Optional<Miembro> miembro = repoMiembros.buscarTodos().stream()
-                .filter(mi -> mi.getNroDocumento().equals(trayectoDTO.getMiembroDNI()))
-                .findFirst();
-
-        if(!miembro.isPresent()) {
-            throw new NoSuchElementException("El miembro con DNI: " + trayectoDTO.getMiembroDNI() + " no existe en el sistema");
-        }
-
-        Optional<Trayecto> estadoTrayecto = repoTrayectos.buscarTodos().stream()
-                .filter(tr -> tr.getId().equals(trayectoDTO.getTrayectoId()))
-                .findFirst();
-
-        Trayecto trayecto;
-        if(estadoTrayecto.isPresent()) {
-            trayecto = estadoTrayecto.get();
-        } else {
-//            LocalDate periodo = PeriodoMapper.toLocalDate(periodicidad, periodoDTO);
-            Periodo periodo = PeriodoMapper.toEntity(periodicidad, periodoDTO);
-            trayecto = new Trayecto(periodo);
-            trayecto.setId(Math.toIntExact(trayectoDTO.getTrayectoId()));
-            repoTrayectos.agregar(trayecto);
-//            miembro.get().agregarTrayecto(trayecto);
-        }
-        miembro.get().agregarTrayecto(trayecto);
-        trayecto.agregarmiembro(miembro.get());
-
-        MedioDeTransporte medioSolicitado = new MedioFactory().getMedioDeTransporte(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
-
-        System.out.println(medioSolicitado);
-        repoMedios.buscarTodos().forEach(System.out::println);
-
-        Optional<MedioDeTransporte> medioDeTransporte = repoMedios.buscarTodos().stream()
-                .filter((me) -> me.equals(medioSolicitado)).findFirst();
-
-        if(!medioDeTransporte.isPresent()) {
-            throw new NoExisteMedioException(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
-        }
-
-        Coordenada coordenadaInicial = new Coordenada(trayectoDTO.getLatitudInicial(), trayectoDTO.getLongitudInicial());
-        Coordenada coordenadaFinal = new Coordenada(trayectoDTO.getLatitudFinal(), trayectoDTO.getLongitudFinal());
-//        Direccion direccionInicial = new Direccion();
-//        Direccion direccionFinal = new Direccion();
-
-        UbicacionGeografica ubicacionInicial = new UbicacionGeografica(coordenadaInicial);
-        UbicacionGeografica ubicacionFinal = new UbicacionGeografica(coordenadaFinal);
-        trayecto.agregarTramo(new Tramo(medioDeTransporte.get(), ubicacionInicial, ubicacionFinal));
-    }
-        
-    public void cargarTrayectoPasivo(TrayectoCompartidoDTO trayectoCompartidoDTO) {
-//        Optional<Miembro> miembro = repoMiembros.buscarTodos().stream()
-//                .filter(mi -> mi.getNroDocumento().equals(trayectoCompartidoDTO.getMiembroDNI())
-//                        && mi.getTipoDeDocumento().equals(TipoDeDocumento.DNI))
-//                .findFirst();
-
-        Optional<Miembro> miembro = repoMiembros.buscarTodos().stream()
-                .filter(mi -> mi.getNroDocumento().equals(trayectoCompartidoDTO.getMiembroDNI()))
-                .findFirst();
-
-        if(!miembro.isPresent()) {
-            throw new NoSuchElementException("El miembro con DNI: " + trayectoCompartidoDTO.getMiembroDNI() + "no existe en el sistema");
-        }
-        // Si da error el get es porque se intentó referenciar con un trayecto
-        // compartido a un lider de trayecto que no existe
-        Optional<Trayecto> trayectoOp = repoTrayectos.buscarTodos().stream()
-                .filter(tr -> tr.getId().equals(trayectoCompartidoDTO.getTrayectoReferencia()))
-                .findFirst();
-        Trayecto trayecto;
-        if(trayectoOp.isPresent()) {
-            trayecto = trayectoOp.get();
-        } else {
-            return ;
-//            throw new NoExisteTrayectoCompartido(trayectoCompartidoDTO.getTrayectoReferencia());
-        }
-
-        trayecto.agregarmiembro(miembro.get());
-        miembro.get().agregarTrayecto(trayecto);
-    }
-
-    public List<TramoCSVDTO> capturarEntradas(String archivo) throws FileNotFoundException {
-        List<TramoCSVDTO> tramos = new CsvToBeanBuilder(new FileReader(archivo))
-                .withType(TramoCSVDTO.class)
-                .build()
-                .parse();
-
-        tramos.forEach(System.out::println);
-
-        return tramos;
-    }
-
-    public static List<Trayecto> generarTrayectos2(String archivo) throws FileNotFoundException {
+    public static List<Trayecto> generarTrayectos(String archivo) throws FileNotFoundException {
         List<TramoCSVDTO2> tramosDTO = new CsvToBeanBuilder(new FileReader(archivo))
                 .withOrderedResults(false)
                 .withType(TramoCSVDTO2.class)
                 .build()
                 .parse();
-        for(TramoCSVDTO2 tramoDTO : tramosDTO) {
-            System.out.println(tramoDTO);
-        }
 
         //TODO VER DE EVITAR EL TrayectoId=0 EN QUE FOR
+
+        //TODO VER DE REALIZAR OPERACIONES EN EL MAPPER
 
         Map<Integer, List<TramoCSVDTO2>> tramosSegunIdTrayecto = new HashMap<>();
         for(TramoCSVDTO2 tramoDTO : tramosDTO) {
@@ -278,9 +182,6 @@ public class ParserTrayectos {
         for(TramoCSVDTO2 tramoCompartidoDTO : tramosSegunIdTrayecto.get(0)) {
             TramosMapper.mapTrayectoCompartido(trayectosSegunId,tramoCompartidoDTO);
         }
-
-
-        System.out.println(trayectosSegunId.values());
 
         return new ArrayList<>(trayectosSegunId.values());
 //        return trayectosSegunId.values().stream().collect(Collectors.toList());

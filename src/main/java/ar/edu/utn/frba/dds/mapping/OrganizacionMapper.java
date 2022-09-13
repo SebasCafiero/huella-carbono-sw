@@ -74,7 +74,6 @@ public class OrganizacionMapper {
             }
         }
 
-        System.out.println(unaOrg.toString());
         return unaOrg;
     }
 
@@ -107,7 +106,6 @@ public class OrganizacionMapper {
 
         }
 
-        System.out.println(unaOrg.toString());
         return unaOrg;
     }
 

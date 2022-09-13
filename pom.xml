@@ -12,7 +12,6 @@
     <name>CI-Test</name>
     <packaging>jar</packaging>
 
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -20,23 +19,23 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.5.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.argparse4j</groupId>
-            <artifactId>argparse4j</artifactId>
-            <version>0.9.0</version>
-        </dependency>
+        <!-- TODO REVISAR DEPENDENCIAS TRANSITIVAS COMO OPENCSV Y COMMONS-LANG3 -->
+        <!-- OPEN CSV -->
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>5.6</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- JAKARTA MAIL -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+
+        <!-- JSON (ver de sacarlos x Gson) TODO -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -47,6 +46,8 @@
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
+
+        <!-- RETROFIT + GSON (Json) -->
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
             <artifactId>retrofit</artifactId>
@@ -59,11 +60,14 @@
             <version>2.9.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>jakarta.mail</artifactId>
-            <version>1.6.4</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.5.0</version>
         </dependency>
+
+        <!-- SPARK -->
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
@@ -80,6 +84,21 @@
             <version>0.5</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <!-- Creo que ya vienen en openCSV, evitar dependencia transitiva! -->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.commons</groupId>-->
+<!--            <artifactId>commons-lang3</artifactId>-->
+<!--            <version>3.0</version>-->
+<!--        </dependency>-->
+
+        <!-- HANDLEBARS -->
+        <dependency>
             <groupId>com.github.jknack</groupId>
             <artifactId>handlebars-helpers</artifactId>
             <version>4.3.0</version>
@@ -89,22 +108,33 @@
             <artifactId>handlebars-humanize</artifactId>
             <version>4.3.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.36</version>
-        </dependency>
+
+        <!-- UQBAR: https://mvnrepository.com/artifact/org.uqbar-project/jpa-java8-extras -->
+        <!-- org.hibernate/.javax.persistence.jpa/.core/.entityManager -->
         <dependency>
             <groupId>org.uqbar-project</groupId>
             <artifactId>jpa-java8-extras</artifactId>
             <version>1.0-alpha-1</version>
         </dependency>
 
+        <!-- ARGPARSE4J (Parser) -->
+        <dependency>
+            <groupId>net.sourceforge.argparse4j</groupId>
+            <artifactId>argparse4j</artifactId>
+            <version>0.9.0</version>
+        </dependency>
+
+        <!-- JUNIT -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.5.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -114,9 +144,18 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals><goal>copy-dependencies</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
-
 </project>
