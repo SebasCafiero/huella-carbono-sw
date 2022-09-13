@@ -41,6 +41,18 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- JSON (ver de sacarlos x Gson) TODO -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
         <!-- RETROFIT + GSON (Json) -->
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
@@ -61,11 +73,10 @@
             <version>1.6.4</version>
         </dependency>
 
-        <!-- SPARK -->
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
-            <version>2.9.3</version>
+            <version>2.9.4</version>
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
@@ -77,6 +88,19 @@
             <artifactId>spark-debug-tools</artifactId>
             <version>0.5</version>
         </dependency>
+
+        <!-- HANDLEBARS -->
+        <dependency>
+            <groupId>com.github.jknack</groupId>
+            <artifactId>handlebars-helpers</artifactId>
+            <version>4.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jknack</groupId>
+            <artifactId>handlebars-humanize</artifactId>
+            <version>4.3.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
@@ -90,18 +114,6 @@
         <!--            <artifactId>commons-lang3</artifactId>-->
         <!--            <version>3.0</version>-->
         <!--        </dependency>-->
-
-        <!-- HANDLEBARS -->
-        <dependency>
-            <groupId>com.github.jknack</groupId>
-            <artifactId>handlebars-helpers</artifactId>
-            <version>4.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jknack</groupId>
-            <artifactId>handlebars-humanize</artifactId>
-            <version>4.3.0</version>
-        </dependency>
 
         <!-- POSTGRES -->
         <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
@@ -118,19 +130,6 @@
             <artifactId>jpa-java8-extras</artifactId>
             <version>1.0-alpha-1</version>
         </dependency>
-
-        <!-- JSON (ver de sacarlos x Gson) TODO -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20220320</version>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-
     </dependencies>
 
     <build>

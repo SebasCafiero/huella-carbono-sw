@@ -9,9 +9,6 @@ import javax.persistence.*;
 public class Medicion implements Medible {
     @Id
     @GeneratedValue
-    private int myid;
-
-    @Column
     private Integer id;
 
     @Transient
