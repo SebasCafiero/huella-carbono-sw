@@ -9,6 +9,9 @@ public class ContactoMail {
         this.passsword = passsword;
     }
 
+    public ContactoMail() {
+    }
+
     public String getDireccionEMail() {
         return direccionesEMail;
     }

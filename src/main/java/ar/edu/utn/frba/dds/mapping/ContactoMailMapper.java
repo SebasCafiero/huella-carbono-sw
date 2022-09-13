@@ -5,10 +5,13 @@ import ar.edu.utn.frba.dds.mihuella.dto.ContactoMailJSONDTO;
 
 public class ContactoMailMapper {
     public static ContactoMail toEntity(ContactoMailJSONDTO contactoMailDTO) {
-        ContactoMail contactoMail = new ContactoMail(
-                contactoMailDTO.direccionesEMail,
-                contactoMailDTO.password
-        );
+        ContactoMail contactoMail = new ContactoMail();
+
+        if(contactoMailDTO != null){
+            contactoMail.setDireccionEMail(contactoMailDTO.direccionesEMail);
+            contactoMail.setPasssword(contactoMailDTO.password);
+        }
+
         return contactoMail;
     }
 }
