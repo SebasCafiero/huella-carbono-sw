@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -19,6 +18,13 @@
     </properties>
 
     <dependencies>
+        <!-- JUNIT -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.5.2</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- ARGPARSE4J (Parser) -->
         <dependency>
@@ -33,6 +39,18 @@
             <artifactId>opencsv</artifactId>
             <version>5.6</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- JSON (ver de sacarlos x Gson) TODO -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
         </dependency>
 
         <!-- RETROFIT + GSON (Json) -->
@@ -97,40 +115,12 @@
             <version>4.3.0</version>
         </dependency>
 
-        <!-- POSTGRES -->
-        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.5.0</version>
-        </dependency>
-
         <!-- UQBAR: https://mvnrepository.com/artifact/org.uqbar-project/jpa-java8-extras -->
         <!-- org.hibernate/.javax.persistence.jpa/.core/.entityManager -->
         <dependency>
             <groupId>org.uqbar-project</groupId>
             <artifactId>jpa-java8-extras</artifactId>
             <version>1.0-alpha-1</version>
-        </dependency>
-
-        <!-- JUNIT -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.5.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- JSON (ver de sacarlos x Gson) TODO -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20220320</version>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
         </dependency>
 
     </dependencies>
