@@ -26,19 +26,19 @@ public class OrganizacionController {
     public Object eliminar(Request request, Response response){
         Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
         this.repositorio.eliminar(organizacion);
-        return response;
+        return "Organizacion borrada correctamente";
     }
 
     public Object modificar(Request request, Response response){
         Organizacion organizacion = ParserOrganizacionesJSON.generarOrganizacion(request.body());
         this.repositorio.modificar(Integer.valueOf(request.params("id")), organizacion);
-        return response;
+        return "Organizacion modificada correctamente";
     }
 
     public Object agregar(Request request, Response response){
         Organizacion organizacion = ParserOrganizacionesJSON.generarOrganizacion(request.body());
         this.repositorio.agregar(organizacion);
-        return response;
+        return "Agregaste correctamente la organizacion";
     }
 
     public String mostrarTodos(Request request, Response response){
