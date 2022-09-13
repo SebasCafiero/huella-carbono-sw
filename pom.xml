@@ -103,6 +103,14 @@
             <version>4.3.0</version>
         </dependency>
 
+        <!-- POSTGRES -->
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.5.0</version>
+        </dependency>
+
         <!-- UQBAR: https://mvnrepository.com/artifact/org.uqbar-project/jpa-java8-extras -->
         <!-- org.hibernate/.javax.persistence.jpa/.core/.entityManager -->
         <dependency>
