@@ -20,7 +20,7 @@ public class FactorEmisionController {
     public Object modificar(Request request, Response response){
         FactorEmision factorEmision = ParserFactoresJSON.generarFactor(request.body());
         this.repositorio.modificar(Integer.valueOf(request.params("id")), factorEmision);
-        return response;
+        return "Factor de emision de id : " + String.valueOf(request.params("id")) + " modificado correctamente.";
     }
 
     public String mostrarTodos(Request request, Response response) { // solo para probar
