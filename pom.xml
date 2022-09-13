@@ -41,6 +41,18 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- JSON (ver de sacarlos x Gson) TODO -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
         <!-- RETROFIT + GSON (Json) -->
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
@@ -64,7 +76,7 @@
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
-            <version>2.9.3</version>
+            <version>2.9.4</version>
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
@@ -94,26 +106,13 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.36</version>
         </dependency>
-        
+
         <!-- UQBAR: https://mvnrepository.com/artifact/org.uqbar-project/jpa-java8-extras -->
         <!-- org.hibernate/.javax.persistence.jpa/.core/.entityManager -->
         <dependency>
             <groupId>org.uqbar-project</groupId>
             <artifactId>jpa-java8-extras</artifactId>
             <version>1.0-alpha-1</version>
-        </dependency>
-
-
-        <!-- JSON (ver de sacarlos x Gson) TODO -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20220320</version>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
         </dependency>
     </dependencies>
 
