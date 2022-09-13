@@ -29,7 +29,7 @@ public class BatchMedicionController {
     public Object agregar(Request request, Response response){
         BatchMedicion batchMedicion = ParserBatchesJSON.generarBatch(request.body());
         this.repositorio.agregar(batchMedicion);
-        return response;
+        return "BatchMedicion agregado correctamente.";
     }
 
     public Object modificar(Request request, Response response){
@@ -41,7 +41,7 @@ public class BatchMedicionController {
     public Object eliminar(Request request, Response response){
         BatchMedicion batchMedicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
         this.repositorio.eliminar(batchMedicion);
-        return response;
+        return "BatchMedicion de id : " + request.params("id") + " eliminado correctamente.";
     }
 
 }

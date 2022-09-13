@@ -157,9 +157,6 @@ public class Organizacion {
 
     @Override
     public String toString() {
-        return "Organizacion{ <br>" +
-                "&nbsp;&nbsp;&nbsp;&nbsp;razonSocial='" + razonSocial + '\'' +
-                ", sectores=" + sectores +
-                "}<br>";
+        return '\n' + "Organizacion: " + "Nombre = " + razonSocial;
     }
 }

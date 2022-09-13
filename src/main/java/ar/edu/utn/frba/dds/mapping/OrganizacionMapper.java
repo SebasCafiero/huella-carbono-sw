@@ -110,7 +110,8 @@ public class OrganizacionMapper {
     }
 
     public static Set<Organizacion> toSetOfEntity(Set<OrganizacionJSONDTO> organizacionesDTO) {
-        Set<Organizacion> organizaciones = (Set<Organizacion>) new ArrayList<Organizacion>(); //esta bien esto??
+        HashSet<Organizacion> organizaciones = new HashSet<>(new ArrayList<Organizacion>());
+        //Set<Organizacion> organizaciones = (Set<Organizacion>) new ArrayList<Organizacion>(); //esta bien esto??
         organizacionesDTO.forEach(organizacionJSONDTO -> {
             organizaciones.add(OrganizacionMapper.toEntity(organizacionJSONDTO));
         });

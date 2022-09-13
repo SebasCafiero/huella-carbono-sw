@@ -27,18 +27,18 @@ public class AgenteSectorialController {
     public Object agregar(Request request, Response response){
         AgenteSectorial agenteSectorial = ParserAgentesJSON.generarAgente(request.body());
         this.repositorio.agregar(agenteSectorial);
-        return response;
+        return "Agente Sectorial agregado correctamente";
     }
 
     public Object modificar(Request request, Response response){
         AgenteSectorial agenteSectorial = ParserAgentesJSON.generarAgente(request.body());
         this.repositorio.modificar(Integer.valueOf(request.params("id")),agenteSectorial);
-        return response;
+        return "Agente Sectorial modificado correctamente";
     }
 
     public Object eliminar(Request request, Response response){
         AgenteSectorial agenteSectorial = this.repositorio.buscar(Integer.valueOf(request.params("id")));
         this.repositorio.eliminar(agenteSectorial);
-        return response;
+        return "Agente Sectorial eliminado correctamente";
     }
     }
