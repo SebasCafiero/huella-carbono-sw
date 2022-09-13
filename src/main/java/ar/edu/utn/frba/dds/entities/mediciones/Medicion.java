@@ -20,7 +20,7 @@ public class Medicion implements Medible {
     @Column
     private String unidad;
 
-    @Transient
+    @Column
     private Float valor;
     
     @Transient

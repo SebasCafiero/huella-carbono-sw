@@ -17,8 +17,8 @@ public abstract class MedioDeTransporte {
     }
 
     public Float calcularDistancia(Tramo tramo) {
-        CalculadoraDistancias servicioContratado = new AdaptadorServicioDDSTPA(); // TODO ver de definir en MedioDeTransporte
-//        CalculadoraDistancias servicioContratado = new ServicioSimulado();
+//        CalculadoraDistancias servicioContratado = new AdaptadorServicioDDSTPA(); // TODO ver de definir en MedioDeTransporte
+        CalculadoraDistancias servicioContratado = new ServicioSimulado();
 
         return servicioContratado.calcularDistancia(tramo.getUbicacionInicial(), tramo.getUbicacionFinal());
     }

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AgenteSectorial {
+    private Integer id;
     private AreaSectorial area;
     private ContactoMail contactoMail;
     private String telefono;
@@ -35,6 +36,14 @@ public class AgenteSectorial {
 
 
     public AgenteSectorial() {}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Float obtenerHC(Integer anio, Integer mes) throws MedicionSinFactorEmisionException {
         return obtenerHcxOrg(anio, mes).values().stream().reduce(0F, Float::sum);

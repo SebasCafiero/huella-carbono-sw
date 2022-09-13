@@ -19,7 +19,7 @@ public class Server {
             if ( herokuPort != null) {
                 return Integer.parseInt(herokuPort);
             }
-            return 9000; //return default port if heroku-port isn't set (i.e. on localhost)
+            return 8080; //return default port if heroku-port isn't set (i.e. on localhost)
         }
 
 }

@@ -10,15 +10,17 @@
         <properties> 
 	        <property name="hibernate.archive.autodetection" value="class"/>
 
-            <!-- TODO sacar cuando confirme que esta en variable entorno -->
+            <!-- TODO las variables de entorno tienen prioridad y pisan estos valores! -->
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="use_sql_comments" value="true" />
 
-            <!-- HIBERNATE POSTGRES -->
+
             <!-- Se obtienen los valores al crear el EntityManager, sino descomentar y setear cada campo. -->
             <!-- Para MySQL/MariaDB usar "com.mysql.jdbc.Driver" y "jdbc:mysql://(...)" -->
+
+            <!-- HIBERNATE POSTGRES -->
 <!--            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />-->
 <!--            <property name="hibernate.connection.url" value="jdbc:postgresql://<HOST>:<PORT>/<DATABASE>" />-->
 <!--            <property name="hibernate.connection.username" value="<USER>" />-->

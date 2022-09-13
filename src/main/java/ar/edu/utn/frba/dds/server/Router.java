@@ -18,8 +18,8 @@ public class Router {
     }
 
     public static void init() {
-        Router.initEngine();
-        Spark.staticFileLocation("/public");
+//        Router.initEngine(); //Para diseño web
+//        Spark.staticFileLocation("/public"); //Para diseño web
         Router.configure();
     }
 
@@ -46,10 +46,8 @@ public class Router {
         Spark.put("/factorEmision/:id", factorEmisionController :: modificar);
         Spark.get("/factorEmision",factorEmisionController :: mostrarTodos); // solo para probar
         AgenteSectorialController agenteSectorialController = new AgenteSectorialController();
-        System.out.println(System.getenv("llegue Aca"));
         Spark.get("/agenteSectorial/:id", agenteSectorialController::obtener);
         Spark.get("/agenteSectorial", agenteSectorialController::mostrarTodos);
-        System.out.println(System.getenv("no lo tomo porque soy gill"));
         Spark.delete("/agenteSectorial/:id", agenteSectorialController::eliminar);
         Spark.put("/agenteSectorial/:id", agenteSectorialController::modificar);
         Spark.post("/agenteSectorial", agenteSectorialController::agregar);
