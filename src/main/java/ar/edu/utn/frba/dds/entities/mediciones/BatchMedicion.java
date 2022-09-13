@@ -1,11 +1,18 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@Entity
+@Table
 public class BatchMedicion {
+    @Id
+    @GeneratedValue
     private Integer id;
+    @Transient
     private List<Medicion> mediciones;
+    @Transient
     private LocalDate fecha;
 
 

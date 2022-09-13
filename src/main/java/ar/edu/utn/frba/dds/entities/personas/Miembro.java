@@ -5,16 +5,30 @@ import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
+import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Entity
+@Table
 public class Miembro {
+    @Id
+    @GeneratedValue
     private Integer id;
+
+    @Column
     private String nombre;
+
+    @Column
     private String apellido;
+
+    @Transient
     private TipoDeDocumento tipoDeDocumento;
+    @Transient
     private int nroDocumento;
+    @Transient
     private Set<Sector> sectoresDondeTrabaja; //Los sectores conocen las organizaciones
+    @Transient
     private List<Trayecto> trayectos;
 
     public Miembro(String nombre, String apellido, TipoDeDocumento tipoDeDocumento, int nroDocumento) {

@@ -5,20 +5,33 @@ import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Entity
+@Table
 public class Organizacion {
+    @Id
+    @GeneratedValue
     private Integer id;
+
+    @Column
     private String razonSocial;
+    @Transient
     private TipoDeOrganizacionEnum tipo;
+    @Transient
     private UbicacionGeografica ubicacion;
+    @Transient
     private ClasificacionOrganizacion clasificacionOrganizacion;
+    @Transient
     private Set<Sector> sectores;
+    @Transient
     private List<Medicion> mediciones;
+    @Transient
     private List<String> contactosMail;
+    @Transient
     private List<Integer> contactosTelefono;
 
     public Organizacion() {
