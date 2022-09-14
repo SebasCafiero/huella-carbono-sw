@@ -11,24 +11,33 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
-@Table
+@Table(name = "ORGANIZACION")
 public class Organizacion {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column
+    @Column (name = "razon_social")
     private String razonSocial;
-    @Transient
+
+    @Enumerated(EnumType.STRING)
     private TipoDeOrganizacionEnum tipo;
+
     @Transient
     private UbicacionGeografica ubicacion;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     @Transient
     private ClasificacionOrganizacion clasificacionOrganizacion;
-    @Transient
+
+    @OneToMany(mappedBy = "organizacion", fetch = FetchType.LAZY)
     private Set<Sector> sectores;
-    @Transient
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizacion_id")
     private List<Medicion> mediciones;
+
     @Transient
     private List<String> contactosMail;
     @Transient

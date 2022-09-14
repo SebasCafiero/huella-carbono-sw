@@ -5,14 +5,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "BATCH_MEDICION")
 public class BatchMedicion {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @Transient
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "batch_id")
     private List<Medicion> mediciones;
-    @Transient
+
+    @Column
     private LocalDate fecha;
 
 

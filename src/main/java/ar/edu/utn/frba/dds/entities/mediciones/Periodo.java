@@ -1,5 +1,9 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Periodo {
     private Character periodicidad;
     private Integer anio;

@@ -97,7 +97,7 @@ public class EntityManagerHelper {
         //https://stackoverflow.com/questions/8836834/read-environment-variables-in-persistence-xml-file
         Map<String, String> env = System.getenv();
         Map<String, Object> configOverrides = new HashMap<String, Object>();
-        String motorDB = "jdbc:postgresql://";
+        final String motorDB = "jdbc:postgresql://";
 
         String[] keys = new String[]{
                 //, "javax.persistence.jdbc.url",
@@ -105,7 +105,7 @@ public class EntityManagerHelper {
                 "DATABASE_URL",
                 "hibernate.show_sql",
                 "ddlauto",
-                "javax.persistence.jdbc.driver"
+                "jdbc.driver"
                 //"javax.persistence.schema-generation.database.action"
         };
 
@@ -132,7 +132,11 @@ public class EntityManagerHelper {
                     String value = env.get(key);
                     configOverrides.put("hibernate.hbm2ddl.auto", value);
                 }
-
+//                if (key.equals("jdbc.driver")) {
+//                    String value = env.get(key);
+////                    configOverrides.put("javax.persistence.jdbc.driver", value);
+//                    configOverrides.put("hibernate.connection.driver_class", value);
+//                }
 
             }
         }

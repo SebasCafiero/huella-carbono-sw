@@ -3,12 +3,26 @@ package ar.edu.utn.frba.dds.entities.lugares;
 import ar.edu.utn.frba.dds.entities.personas.MiembroException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
+@Table(name = "SECTOR")
 public class Sector {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+    @Column(name = "nombre")
     private String nombre;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Organizacion organizacion;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "MIEMBRO_POR_SECTOR")
     private Set<Miembro> miembros;
 
     public Sector(String nombre, Organizacion organizacion) throws SectorException {

@@ -1,8 +1,18 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "CATEGORIA")
 public class Categoria {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
+    @Column(name = "actividad")
     private String actividad;
+
+    @Column(name = "tipo_consumo")
     private String tipoConsumo;
 
     public Categoria(String actividad, String tipoConsumo) {

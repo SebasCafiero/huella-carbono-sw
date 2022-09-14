@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
+import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserBatchesJSON;
 import spark.Request;
 import spark.Response;
@@ -29,6 +30,9 @@ public class BatchMedicionController {
     public Object agregar(Request request, Response response){
         BatchMedicion batchMedicion = ParserBatchesJSON.generarBatch(request.body());
         this.repositorio.agregar(batchMedicion);
+        for(Medicion medicion : batchMedicion.getMediciones()) {
+            FactoryRepositorio.get(Medicion.class).agregar(medicion);
+        }
         return "BatchMedicion agregado correctamente.";
     }
 

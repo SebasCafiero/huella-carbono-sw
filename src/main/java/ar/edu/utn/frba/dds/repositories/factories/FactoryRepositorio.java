@@ -18,6 +18,7 @@ import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.testMemoData.Data;
 import ar.edu.utn.frba.dds.repositories.testMemoData.DataMedicion;
 
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +55,15 @@ public class FactoryRepositorio {
             } else {
 //                repo = new RepositorioPersistente<>(new DAOJPA<>(new ArrayList<>()));
                 repo = new RepositorioPersistente<>(new DAOHibernate<>(type));
+                if(type.isAnnotationPresent(Entity.class))
+                    repo = new RepositorioPersistente<>(new DAOHibernate<>(type));
+                else {
+                    if(type.equals(FactorEmision.class)) {
+                        repo = new RepoFactoresMemoria(new DAOMemoria<>(type, Data.getDataFactorEmision()));
+                    } else {
+                        repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
+                    }
+                }
             }
 
             // Esta linea es la posta ==> repo = new Repositorio<>(new DAOMemoria<>(Data.getData(type)));
