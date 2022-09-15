@@ -50,12 +50,18 @@ public class BatchMedicion {
 
     public void setFecha(String fecha) {this.fecha = LocalDate.parse(fecha);}
 
+    public Integer getCantidadDeMedicinoes() {return mediciones.size();}
+
+//    @Override
+//    public String toString() {
+//        return '\n' + "BatchMedicion { " + '\n' +
+//                "  Mediciones = " + mediciones.toString() + '\n' +
+//                "fecha = " + fecha.toString()  +
+//                '}';
+//    }
     @Override
     public String toString() {
-        return '\n' + "BatchMedicion { " + '\n' +
-                "  Mediciones = " + mediciones.toString() + '\n' +
-                "fecha = " + fecha.toString()  +
-                '}';
+        return "El batch de mediciones de id : " + getId().toString() + " ,fue cargado en la fecha : " + getFecha().toString() + " ,y tiene " + getCantidadDeMedicinoes().toString() + " mediciones." + '\n';
     }
 }
 

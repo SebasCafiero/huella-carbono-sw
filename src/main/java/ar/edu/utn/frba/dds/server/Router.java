@@ -37,11 +37,10 @@ public class Router {
         Spark.get("/medicion/unidad/:unidad",medicionController::filtrarUnidad);
         Spark.get("/medicion/valor/:valor",medicionController::filtrarValor);
         BatchMedicionController batchMedicionController = new BatchMedicionController();
-        Spark.get("/batchMedicion/:id", batchMedicionController::obtener);
-        Spark.delete("/batchMedicion/:id", batchMedicionController::eliminar);
         Spark.get("/batchMedicion", batchMedicionController::mostrarTodos);
-        Spark.put("/batchMedicion/:id", batchMedicionController::modificar);
+        Spark.get("/batchMedicion/:id", batchMedicionController::obtener);
         Spark.post("/batchMedicion", batchMedicionController::agregar);
+        Spark.delete("/batchMedicion/:id", batchMedicionController::eliminar);
         FactorEmisionController factorEmisionController = new FactorEmisionController();
         Spark.put("/factorEmision/:id", factorEmisionController :: modificar);
         Spark.get("/factorEmision",factorEmisionController :: mostrarTodos); // solo para probar

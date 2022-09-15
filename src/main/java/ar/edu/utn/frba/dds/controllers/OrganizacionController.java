@@ -1,11 +1,9 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.mapping.OrganizacionMapper;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserOrganizacionesJSON;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
-import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 

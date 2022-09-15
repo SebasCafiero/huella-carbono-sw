@@ -5,18 +5,15 @@ import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
-import ar.edu.utn.frba.dds.repositories.daos.DAO;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
-import ar.edu.utn.frba.dds.repositories.daos.DAOJPA;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.testMemoData.Data;
-import ar.edu.utn.frba.dds.repositories.testMemoData.DataMedicion;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +61,6 @@ public class FactoryRepositorio {
     }
 
     private static boolean isJPA() {
-        return true;
+        return false;
     }
 }
