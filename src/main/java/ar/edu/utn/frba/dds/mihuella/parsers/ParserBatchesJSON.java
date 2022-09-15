@@ -10,7 +10,6 @@ public class ParserBatchesJSON {
 
         System.out.println("Request: "+json);
         BatchMedicionJSONDTO batchDTO = new Gson().fromJson(json, BatchMedicionJSONDTO.class);
-        BatchMedicion batchMedicion = BatchMedicionMapper.toEntity(batchDTO);
-        return batchMedicion;
+        return BatchMedicionMapper.toEntity(batchDTO);
     }
 }
