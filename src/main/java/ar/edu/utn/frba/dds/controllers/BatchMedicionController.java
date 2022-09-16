@@ -5,6 +5,8 @@ import ar.edu.utn.frba.dds.mihuella.parsers.ParserBatchesJSON;
 import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
+
+import java.time.LocalDate;
 import java.util.List;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
@@ -31,6 +33,7 @@ public class BatchMedicionController {
 
     public Object agregar(Request request, Response response){
         BatchMedicion batchMedicion = ParserBatchesJSON.generarBatch(request.body());
+        batchMedicion.setFecha(LocalDate.now());
         this.repositorio.agregar(batchMedicion);
         return "BatchMedicion agregado correctamente.";
     }
