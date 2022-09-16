@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Table
 public class Miembro {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column
@@ -26,8 +26,10 @@ public class Miembro {
     private TipoDeDocumento tipoDeDocumento;
     @Transient
     private int nroDocumento;
-    @Transient
+
+    @ManyToMany(mappedBy = "miembros", fetch = FetchType.EAGER)
     private Set<Sector> sectoresDondeTrabaja; //Los sectores conocen las organizaciones
+
     @Transient
     private List<Trayecto> trayectos;
 

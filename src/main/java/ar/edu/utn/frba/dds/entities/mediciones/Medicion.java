@@ -5,22 +5,25 @@ import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import javax.persistence.*;
 
 @Entity
-@Table
+@Table(name = "MEDICION")
 public class Medicion implements Medible {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+//    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+//    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     @Transient
     private Categoria categoria;
 
-    @Column
+    @Column(name = "unidad")
     private String unidad;
 
-    @Column
+    @Column(name = "valor")
     private Float valor;
     
-    @Transient
+    @Embedded
+    @AttributeOverride(name = "periodicidad",column = @Column(name = "periodicidad"))
     private Periodo periodo;
 
     public Medicion(Categoria categoria, String unidad, Float valor) {

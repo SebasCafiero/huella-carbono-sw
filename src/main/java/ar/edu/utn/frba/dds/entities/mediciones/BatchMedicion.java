@@ -5,27 +5,34 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "BATCH_MEDICION")
 public class BatchMedicion {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @Transient
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "batch_id")
     private List<Medicion> mediciones;
-    @Transient
+
+    @Column
     private LocalDate fecha;
 
+    @Column
+    private Integer cantidadMediciones;
 
     public BatchMedicion() {
     }
 
     public BatchMedicion(List<Medicion> mediciones, LocalDate fecha) {
         this.mediciones = mediciones;
+        this.cantidadMediciones = mediciones.size();
         this.fecha = fecha;
     }
 
     public BatchMedicion(List<Medicion> mediciones) {
         this.mediciones = mediciones;
+        this.cantidadMediciones = mediciones.size();
     }
 
     public Integer getId() {
@@ -54,18 +61,17 @@ public class BatchMedicion {
 
     public void setFecha(String fecha) {this.fecha = LocalDate.parse(fecha);}
 
-    public Integer getCantidadDeMedicinoes() {return mediciones.size();}
+    public Integer getCantidadMediciones() {
+        return cantidadMediciones;
+    }
 
-//    @Override
-//    public String toString() {
-//        return '\n' + "BatchMedicion { " + '\n' +
-//                "  Mediciones = " + mediciones.toString() + '\n' +
-//                "fecha = " + fecha.toString()  +
-//                '}';
-//    }
+    public void setCantidadMediciones(Integer cantidadMediciones) {
+        this.cantidadMediciones = cantidadMediciones;
+    }
+
     @Override
     public String toString() {
-        return "El batch de mediciones de id : " + getId().toString() + " ,fue cargado en la fecha : " + getFecha().toString() + " ,y tiene " + getCantidadDeMedicinoes().toString() + " mediciones." + '\n';
+        return "El batch de mediciones de id " + getId().toString() + " fue cargado en la fecha " + getFecha().toString() + " y tiene " + getCantidadMediciones().toString() + " mediciones." + '\n';
     }
 }
 

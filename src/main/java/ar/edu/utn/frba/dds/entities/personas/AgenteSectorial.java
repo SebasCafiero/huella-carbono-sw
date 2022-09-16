@@ -10,16 +10,29 @@ import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.servicios.reportes.NotificadorReportes;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Entity
+@Table(name = "AGENTE_SECTORIAL")
 public class AgenteSectorial {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
+    @Transient
     private AreaSectorial area;
+
+    @Transient
     private ContactoMail contactoMail;
+
+    @Transient
     private String telefono;
+
+    @Transient
     private List<Reporte> reportes;
 
     public AgenteSectorial(AreaSectorial areaSectorial) {

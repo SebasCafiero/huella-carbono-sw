@@ -1,9 +1,21 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
+import javax.persistence.*;
+
+//@Entity
+//@Table(name = "FACTOR_DE_EMISION")
 public class FactorEmision {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
+    @Transient
     private Categoria categoria;
+
+    @Column(name = "unidad")
     private String unidad;
+
+    @Column(name = "valor")
     private Float valor;
 
     public FactorEmision(Categoria categoria, String unidad, Float valor) {
