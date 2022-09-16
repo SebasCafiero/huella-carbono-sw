@@ -26,6 +26,10 @@ public class Medicion implements Medible {
     @AttributeOverride(name = "periodicidad",column = @Column(name = "periodicidad"))
     private Periodo periodo;
 
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "batch_id", referencedColumnName = "id")
+//    private BatchMedicion batchMedicion;
+
     public Medicion(Categoria categoria, String unidad, Float valor) {
         this.categoria = categoria;
         this.unidad = unidad;
