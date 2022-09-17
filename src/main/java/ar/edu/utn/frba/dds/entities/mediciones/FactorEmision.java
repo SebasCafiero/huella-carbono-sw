@@ -2,14 +2,15 @@ package ar.edu.utn.frba.dds.entities.mediciones;
 
 import javax.persistence.*;
 
-//@Entity
-//@Table(name = "FACTOR_DE_EMISION")
+@Entity
+@Table(name = "FACTOR_DE_EMISION")
 public class FactorEmision {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Transient
+    @JoinColumn(name = "categoria")
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private Categoria categoria;
 
     @Column(name = "unidad")

@@ -2,11 +2,15 @@ package ar.edu.utn.frba.dds.repositories.factories;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
+import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
+import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoCategoriasJPA;
+import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoFactoresJPA;
+import ar.edu.utn.frba.dds.repositories.impl.memory.RepoCategoriasMemoria;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
@@ -42,22 +46,25 @@ public class FactoryRepositorio {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataMiembro()));
                 } else if(type.equals(FactorEmision.class)) {
                     repo = new RepoFactoresMemoria(new DAOMemoria<>(type, Data.getDataFactorEmision()));
-                } else if (type.equals(AgenteSectorial.class)) {
+                } else if(type.equals(Categoria.class)) {
+                    repo = new RepoCategoriasMemoria(new DAOMemoria<>(type, Data.getDataFactorEmision()));
+                } else if(type.equals(AgenteSectorial.class)) {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type,Data.getDataAgenteSectorial()));
                 } else {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
                 }
             } else {
-//                repo = new RepositorioPersistente<>(new DAOJPA<>(new ArrayList<>()));
-                repo = new RepositorioPersistente<>(new DAOHibernate<>(type));
-                if(type.isAnnotationPresent(Entity.class))
-                    repo = new RepositorioPersistente<>(new DAOHibernate<>(type));
-                else {
-                    if(type.equals(FactorEmision.class)) {
-                        repo = new RepoFactoresMemoria(new DAOMemoria<>(type, Data.getDataFactorEmision()));
+                if(type.isAnnotationPresent(Entity.class)) {
+                    if (type.equals(FactorEmision.class)) {
+                        repo = new RepoFactoresJPA(new DAOHibernate<>(type));
+                    } else if (type.equals(Categoria.class)) {
+                        repo = new RepoCategoriasJPA(new DAOHibernate<>(type));
                     } else {
-                        repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
+                        repo = new RepositorioPersistente<>(new DAOHibernate<>(type));
                     }
+                }
+                else {
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
                 }
             }
 

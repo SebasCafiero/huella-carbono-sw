@@ -26,12 +26,11 @@ public class DAOHibernate<T> implements DAO<T> {
         return EntityManagerHelper.getEntityManager().find(type, id);
     }
 
-//    @Override
-//    public T buscar(BusquedaCondicional condicional) {
-//        return (T) EntityManagerHelper.getEntityManager()
-//                .createQuery(condicional.getCondicionCritero())
-//                .getSingleResult();
-//    }
+    public List<T> buscar(CriteriaQuery<T> condicion) {
+        return EntityManagerHelper.getEntityManager()
+                .createQuery(condicion)
+                .getResultList();
+    }
 
     @Override
     public void agregar(Object unObjeto) {

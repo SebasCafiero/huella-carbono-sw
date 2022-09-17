@@ -2,16 +2,19 @@ package ar.edu.utn.frba.dds.repositories.utils;
 
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
 import ar.edu.utn.frba.dds.repositories.daos.DAOJPA;
+import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
+import ar.edu.utn.frba.dds.repositories.daos.EntityManagerHelper;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public class RepositorioPersistente<T> implements Repositorio<T> {
-//    private final DAOJPA<T> dao;
-//    public RepositorioPersistente(DAOJPA<T> dao) {
-//        this.dao = dao;
-//    }
-
     private final DAOHibernate<T> dao;
+
+    public DAOHibernate<T> getDao() {
+        return dao;
+    }
+
     public RepositorioPersistente(DAOHibernate<T> dao) {
         this.dao = dao;
     }
@@ -43,6 +46,10 @@ public class RepositorioPersistente<T> implements Repositorio<T> {
 
     @Override
     public void modificar(int id, T unObjeto) {
+        this.dao.modificar(unObjeto);
+    }
 
+    public CriteriaBuilder criteriaBuilder(){
+        return EntityManagerHelper.getEntityManager().getCriteriaBuilder();
     }
 }

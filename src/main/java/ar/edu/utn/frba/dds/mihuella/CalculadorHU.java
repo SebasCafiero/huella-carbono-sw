@@ -53,9 +53,7 @@ public class CalculadorHU {
 
         FachadaOrganizacion calculadora = new FachadaOrganizacion();
         calculadora.cargarParametros(factoresDeEmision);
-
-
-
+        
         Float hcOrg;
         try {
             hcOrg = calculadora.obtenerHU(mediciones);
@@ -65,10 +63,6 @@ public class CalculadorHU {
         }
 
         System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + hcOrg);
-
-        RepoFactores repoFactores = (RepoFactores) FactoryRepositorio.get(FactorEmision.class);
-        FactorEmision factor = repoFactores.buscar(2);
-        System.out.println(factor);
+        System.exit(0);
     }
-
 }

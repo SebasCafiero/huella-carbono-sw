@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.repositories.RepoCategorias;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 
@@ -15,12 +16,12 @@ import java.util.stream.Collectors;
 
 public class FachadaOrganizacion implements FachadaOrg {
     private final RepoFactores repoFactores;
+    private final RepoCategorias repoCategorias;
 
     public FachadaOrganizacion() {
         repoFactores = (RepoFactores) FactoryRepositorio.get(FactorEmision.class);
+        repoCategorias = (RepoCategorias) FactoryRepositorio.get(Categoria.class);
     }
-    //TODO la fachada deberia ser para una organizacion especifica, quizás deberia ser atributo
-
 
     @Override
     public void cargarParametros(Map<String, Float> parametrosSistema) {
@@ -30,17 +31,17 @@ public class FachadaOrganizacion implements FachadaOrg {
     @Override
     public Float obtenerHU(Collection<Medible> mediciones) {
         return (float) mediciones.stream().mapToDouble(medible -> {
-//            Optional<FactorEmision> factorEmision = this.repoFactores.buscarTodos().stream()
-//                    .filter(factor -> factor.getCategoria().equals(medible.getCategoria()))
-//                    .findFirst();
-            Optional<FactorEmision> factorEmision = this.repoFactores.findByCategoria(medible.getCategoria())
-                    .stream().findFirst();
+            Optional<Categoria> categoria = repoCategorias
+                    .findByNombreCategoria(medible.getCategoria());
 
-            if(!factorEmision.isPresent()) {
+            if(!categoria.isPresent()) {
                 throw new MedicionSinFactorEmisionException(medible.getCategoria());
             }
 
-            return factorEmision.get().getValor() * medible.getValor();
+            FactorEmision factorEmision = this.repoFactores
+                    .findByCategoria(categoria.get()).get(0);
+
+            return factorEmision.getValor() * medible.getValor();
         }).reduce(0, Double::sum);
     }
 
@@ -48,16 +49,18 @@ public class FachadaOrganizacion implements FachadaOrg {
     public void cargarParametro(String nombreFactor, Float valor) {
         String[] categoriaString = nombreFactor.split(":");
         String[] subCategoria = categoriaString[0].split("->");
+        String unidad = categoriaString[1].trim();
 
-        Optional<FactorEmision> factorAnterior = this.repoFactores.buscarTodos().stream()
-                .filter(factor -> factor.getCategoria().equals(categoriaString[0]))
-                .findFirst();
-        if(factorAnterior.isPresent()) {
-            factorAnterior.get().setValor(valor);
+        Optional<Categoria> optCategoria = repoCategorias
+                .findByActividadAndTipoConsumo(subCategoria[0].trim(), subCategoria[1].trim());
+
+        if(optCategoria.isPresent()) {
+            FactorEmision factorEmision = this.repoFactores.findByCategoria(optCategoria.get()).get(0);
+            factorEmision.setValor(valor);
         } else {
-            this.repoFactores.agregar(
-                    new FactorEmision(new Categoria(subCategoria[0].trim(), subCategoria[1].trim()),
-                            categoriaString[1].trim(), valor));
+            Categoria categoria = new Categoria(subCategoria[0].trim(), subCategoria[1].trim());
+            this.repoCategorias.agregar(categoria);
+            this.repoFactores.agregar(new FactorEmision(categoria, unidad, valor));
         }
     }
 
