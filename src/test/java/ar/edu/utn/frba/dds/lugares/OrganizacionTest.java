@@ -10,7 +10,6 @@ import static ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum.*;
 
 public class OrganizacionTest {
 
-
     @Test
     public void unaOrganizacionNoPuedeRepetirSector() throws SectorException {
         Organizacion unaOrg = new Organizacion("Una empresa",
@@ -31,8 +30,7 @@ public class OrganizacionTest {
                 ONG,
                 new ClasificacionOrganizacion("GreenPeace"),
                 new UbicacionGeografica(new Coordenada(10F,5F)));
-
-
+        
         Assertions.assertEquals(0,unaOrg.cantidadSectores());
         Sector sector1 = new Sector("sector1",unaOrg);
         Assertions.assertEquals(1,unaOrg.cantidadSectores());

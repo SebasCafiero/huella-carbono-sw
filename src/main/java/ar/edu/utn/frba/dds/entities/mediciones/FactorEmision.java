@@ -9,8 +9,9 @@ public class FactorEmision {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @JoinColumn(name = "categoria")
-    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "categoria")
+//    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @Embedded
     private Categoria categoria;
 
     @Column(name = "unidad")
@@ -25,13 +26,25 @@ public class FactorEmision {
         this.valor = valor;
     }
 
-    public FactorEmision() {}
+    public FactorEmision() {
+
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getCategoria() {
         return this.categoria.toString();
     }
 
-    public void setCategoria(Categoria categoria) {this.categoria = categoria;}
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
 
     public String getUnidad() {
         return unidad;
@@ -49,13 +62,11 @@ public class FactorEmision {
 
     @Override
     public String toString() {
-        return  '\n' + "Factor Emision { " + "valor = " + valor.toString() + ", unidad = " + unidad + " }";
-    }
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        return "FactorEmision{" +
+                "id=" + id +
+                ", categoria=" + categoria +
+                ", unidad='" + unidad + '\'' +
+                ", valor=" + valor +
+                '}';
     }
 }

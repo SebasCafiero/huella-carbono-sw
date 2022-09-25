@@ -59,7 +59,7 @@ public class EnviadorReportes {
             organizaciones = new ParserOrganizaciones().cargarOrganizaciones(ns.getString("organizaciones"));
             medios = new ParserTransportes().cargarTransportes(ns.getString("transportes"));
             System.out.println(medios.toString());
-            trayectos = new ParserTrayectos().generarTrayectos(ns.getString("trayectos"), organizaciones, medios);
+            ParserTrayectos.generarTrayectos(ns.getString("trayectos"));
         } catch (IOException | FechaException | NoExisteMedioException ex) {
             System.out.println(ex.getMessage());
             return;

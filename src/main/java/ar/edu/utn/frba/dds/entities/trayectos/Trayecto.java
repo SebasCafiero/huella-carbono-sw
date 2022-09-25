@@ -4,26 +4,35 @@ import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Entity
+@Table(name = "TRAYECTO")
 public class Trayecto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trayecto", cascade = CascadeType.ALL)
     private List<Tramo> tramos;
+    @Transient
     private List<Miembro> miembros;
-    private Periodo fecha;
+    @Column
+    private Integer compartido;
+    @Embedded
+//    @Transient
+    private Periodo periodo;
 
-    /*public Trayecto(LocalDate fecha, Character periodicidad) {
-        this.fecha = fecha;
-        this.periodicidad = periodicidad;
+    public Trayecto() {
         this.miembros = new ArrayList<>();
         this.tramos = new ArrayList<>();
-    }*/
+    }
 
-    public Trayecto(Periodo fecha) {
-        this.fecha = fecha;
+    public Trayecto(Periodo periodo) {
+        this.periodo = periodo;
         this.miembros = new ArrayList<>();
         this.tramos = new ArrayList<>();
     }
@@ -42,6 +51,30 @@ public class Trayecto {
         this.id = id;
     }
 
+    public List<Tramo> getTramos() {
+        return tramos;
+    }
+
+    public void setTramos(List<Tramo> tramos) {
+        this.tramos = tramos;
+    }
+
+    public List<Miembro> getMiembros() {
+        return miembros;
+    }
+
+    public void setMiembros(List<Miembro> miembros) {
+        this.miembros = miembros;
+    }
+
+    public Periodo getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(Periodo periodo) {
+        this.periodo = periodo;
+    }
+
     public void agregarTramos(List<Tramo> tramos){
         this.tramos.addAll(tramos);
     }
@@ -50,8 +83,12 @@ public class Trayecto {
         this.tramos.add(unTramo);
     }
 
-    public List<Tramo> getTramos() {
-        return tramos;
+    public Integer getCompartido() {
+        return compartido;
+    }
+
+    public void setCompartido(Integer compartido) {
+        this.compartido = compartido;
     }
 
     public Coordenada obtenerPuntoInicial(){
@@ -71,14 +108,6 @@ public class Trayecto {
         return this.calcularDistancia()/tramos.size();
     }
 
-    public void setTramos(List<Tramo> tramos) {
-        this.tramos = tramos;
-    }
-
-    public List<Miembro> getMiembros() {
-        return this.miembros;
-    }
-
     public void agregarmiembro(Miembro miembro) {
         this.miembros.add(miembro);
     }
@@ -87,48 +116,7 @@ public class Trayecto {
         return miembros.size();
     }
 
-    public Character getPeriodicidad(){
-        return fecha.getPeriodicidad();
-    }
-
-    /*public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public Integer getMes(){
-        return fecha.getMonthValue();
-    }
-
-    public Integer getAnio() {
-        return fecha.getYear();
-    }*/
-
-    public Periodo getFecha() {
-        return fecha;
-    }
-
-    public Integer getMes() {
-        return fecha.getMes();
-    }
-
-    public Integer getAnio() {
-        return fecha.getAnio();
-    }
-
     public boolean perteneceAPeriodo(Integer anio, Integer mes) {
-        if(getPeriodicidad().equals('A')) {
-            return getAnio().equals(anio);
-        } else if(getPeriodicidad().equals('M')) {
-            return getAnio().equals(anio) && getMes().equals(mes);
-        }
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return "Trayecto{" +
-                "tramos=" + tramos +
-                ", fecha=" + fecha +
-                "} " + super.toString();
+        return periodo.incluye(anio, mes);
     }
 }

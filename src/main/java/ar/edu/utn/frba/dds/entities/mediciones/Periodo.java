@@ -9,16 +9,18 @@ public class Periodo {
     private Integer anio;
     private Integer mes;
 
-    public Periodo(Integer anio, Integer mes) {
-        this.periodicidad = 'M';
-        this.anio = anio;
-        this.mes = mes;
-    }
+    public Periodo() {}
 
     public Periodo(Integer anio) {
         this.periodicidad = 'A';
         this.anio = anio;
         this.mes = 0; //TODO principio isp
+    }
+
+    public Periodo(Integer anio, Integer mes) {
+        this.periodicidad = 'M';
+        this.anio = anio;
+        this.mes = mes;
     }
 
     public Character getPeriodicidad() {
@@ -33,39 +35,12 @@ public class Periodo {
         return mes;
     }
 
-    public void setPeriodicidad(Character periodicidad) {
-        this.periodicidad = periodicidad;
+    public boolean incluye(Integer anio, Integer mes) {
+        if(this.periodicidad.equals('A')) {
+            return this.anio.equals(anio);
+        } else if(this.periodicidad.equals('M')) {
+            return this.anio.equals(anio) && this.mes.equals(mes);
+        }
+        return false;
     }
 }
-
-
-
-/*public class Periodo {
-    private Character periodicidad;
-    private String fecha;
-
-    public Periodo(Integer anio, Integer mes) {
-        this.periodicidad = 'M';
-        this.fecha = anio.toString()+mes.toString();
-    }
-
-    public Periodo(Integer anio) {
-        this.periodicidad = 'A';
-        this.fecha = anio.toString();
-    }
-
-    public Character getPeriodicidad() {
-        return periodicidad;
-    }
-
-    public Integer obtenerAnio() {
-        return Integer.parseInt(fecha.substring(0,4));
-    }
-
-    public Integer obtenerMes() {
-        if(periodicidad == 'M')
-            return Integer.parseInt(fecha.substring(4));
-        else
-            return 0; //TODO principio isp
-    }
-}*/

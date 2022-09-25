@@ -8,6 +8,7 @@ import ar.edu.utn.frba.dds.mihuella.dto.TrayectoCompartidoDTO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,10 @@ public class TrayectosMapper {
         nuevoTrayectoDTO.setTipoMedio(tramo.getTipo().trim());
         nuevoTrayectoDTO.setAtributo1(tramo.getAtributo1().trim());
         nuevoTrayectoDTO.setAtributo2(tramo.getAtributo2().trim());
+        nuevoTrayectoDTO.setPeriodicidad(tramo.getPeriodicidad().charAt(0));
+        String[] periodo = tramo.getFecha().split("/");
+        nuevoTrayectoDTO.setAnio(Integer.parseInt(periodo[1]));
+        nuevoTrayectoDTO.setMes(Integer.parseInt(periodo[0]));
 
         return nuevoTrayectoDTO;
     }

@@ -45,9 +45,9 @@ public class FactoryRepositorio {
                 } else if(type.equals(Miembro.class)) {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataMiembro()));
                 } else if(type.equals(FactorEmision.class)) {
-                    repo = new RepoFactoresMemoria(new DAOMemoria<>(type, Data.getDataFactorEmision()));
+                    repo = new RepoFactoresMemoria(new DAOMemoria<>(FactorEmision.class, Data.getDataFactorEmision()));
                 } else if(type.equals(Categoria.class)) {
-                    repo = new RepoCategoriasMemoria(new DAOMemoria<>(type, Data.getDataFactorEmision()));
+                    repo = new RepoCategoriasMemoria(new DAOMemoria<>(Categoria.class, Data.getDataCategorias()));
                 } else if(type.equals(AgenteSectorial.class)) {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type,Data.getDataAgenteSectorial()));
                 } else {
@@ -68,7 +68,6 @@ public class FactoryRepositorio {
                 }
             }
 
-            // Esta linea es la posta ==> repo = new Repositorio<>(new DAOMemoria<>(Data.getData(type)));
             repos.put(type.getName(), repo);
         }
 

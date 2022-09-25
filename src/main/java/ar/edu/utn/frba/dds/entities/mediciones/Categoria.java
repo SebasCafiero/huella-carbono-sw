@@ -2,12 +2,13 @@ package ar.edu.utn.frba.dds.entities.mediciones;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "CATEGORIA")
+//@Entity
+//@Table(name = "CATEGORIA")
+@Embeddable
 public class Categoria {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    private Integer id;
 
     @Column(name = "actividad")
     private String actividad;
@@ -24,15 +25,27 @@ public class Categoria {
     }
 
     @Override
-    public String toString() { return actividad + " - " + tipoConsumo;}
+    public String toString() {
+        return actividad + " - " + tipoConsumo;
+    }
 
-    public Integer getId() {return id;}
+//    public Integer getId() {return id;}
 
-    public void setId(Integer id) {this.id = id;}
+//    public void setId(Integer id) {this.id = id;}
 
-    public String getActividad() {return actividad;}
+    public String getActividad() {
+        return actividad;
+    }
 
-    public void setActividad(String actividad) {this.actividad = actividad;}
+    public void setActividad(String actividad) {
+        this.actividad = actividad;
+    }
 
-    public String getTipoConsumo() {return tipoConsumo;}
+    public String getTipoConsumo() {
+        return tipoConsumo;
+    }
+
+    public void setTipoConsumo(String tipoConsumo) {
+        this.tipoConsumo = tipoConsumo;
+    }
 }

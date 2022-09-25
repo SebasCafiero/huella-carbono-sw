@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 
 public class FachadaOrganizacion implements FachadaOrg {
     private final RepoFactores repoFactores;
-    private final RepoCategorias repoCategorias;
+//    private final RepoCategorias repoCategorias;
 
     public FachadaOrganizacion() {
         repoFactores = (RepoFactores) FactoryRepositorio.get(FactorEmision.class);
-        repoCategorias = (RepoCategorias) FactoryRepositorio.get(Categoria.class);
+//        repoCategorias = (RepoCategorias) FactoryRepositorio.get(Categoria.class);
     }
 
     @Override
@@ -31,35 +31,27 @@ public class FachadaOrganizacion implements FachadaOrg {
     @Override
     public Float obtenerHU(Collection<Medible> mediciones) {
         return (float) mediciones.stream().mapToDouble(medible -> {
-            Optional<Categoria> categoria = repoCategorias
-                    .findByNombreCategoria(medible.getCategoria());
+            String[] subCategoria = medible.getCategoria().split("-", 2);
+            Categoria categoria = new Categoria(subCategoria[0].trim(), subCategoria[1].trim());
 
-            if(!categoria.isPresent()) {
-                throw new MedicionSinFactorEmisionException(medible.getCategoria());
-            }
-
-            FactorEmision factorEmision = this.repoFactores
-                    .findByCategoria(categoria.get()).get(0);
-
-            return factorEmision.getValor() * medible.getValor();
+            return medible.getValor() * repoFactores.findByCategoria(categoria).stream().findFirst()
+                    .orElseThrow(() -> new MedicionSinFactorEmisionException(medible.getCategoria()))
+                    .getValor();
         }).reduce(0, Double::sum);
     }
-
 
     public void cargarParametro(String nombreFactor, Float valor) {
         String[] categoriaString = nombreFactor.split(":");
         String[] subCategoria = categoriaString[0].split("->");
         String unidad = categoriaString[1].trim();
 
-        Optional<Categoria> optCategoria = repoCategorias
-                .findByActividadAndTipoConsumo(subCategoria[0].trim(), subCategoria[1].trim());
+        Categoria categoria = new Categoria(subCategoria[0].trim(), subCategoria[1].trim());
+        Optional<FactorEmision> optFactor = repoFactores
+                .findByCategoria(categoria).stream().findFirst();
 
-        if(optCategoria.isPresent()) {
-            FactorEmision factorEmision = this.repoFactores.findByCategoria(optCategoria.get()).get(0);
-            factorEmision.setValor(valor);
+        if(optFactor.isPresent()) {
+            optFactor.get().setValor(valor);
         } else {
-            Categoria categoria = new Categoria(subCategoria[0].trim(), subCategoria[1].trim());
-            this.repoCategorias.agregar(categoria);
             this.repoFactores.agregar(new FactorEmision(categoria, unidad, valor));
         }
     }
@@ -120,5 +112,9 @@ public class FachadaOrganizacion implements FachadaOrg {
                 .filter(tr -> tr.perteneceAPeriodo(anio, mes))
                 .flatMap(tr -> tr.getTramos().stream())
                 .collect(Collectors.toList());
+    }
+
+    public void mostrarParametros() {
+        repoFactores.buscarTodos().forEach(System.out::println);
     }
 }

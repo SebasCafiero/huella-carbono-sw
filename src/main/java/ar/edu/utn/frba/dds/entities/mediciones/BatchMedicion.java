@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "BATCH_MEDICION")
+@Table(name = "BATCH_MEDICIONES")
 public class BatchMedicion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -59,7 +59,9 @@ public class BatchMedicion {
         this.fecha = fecha;
     }
 
-    public void setFecha(String fecha) {this.fecha = LocalDate.parse(fecha);}
+    public void setFecha(String fecha) {
+        this.fecha = LocalDate.parse(fecha);
+    }
 
     public Integer getCantidadMediciones() {
         return cantidadMediciones;

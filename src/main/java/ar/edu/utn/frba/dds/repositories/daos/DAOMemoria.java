@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.repositories.daos;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -12,10 +13,10 @@ import java.util.stream.Collectors;
 
 public class DAOMemoria<T> implements DAO<T> {
     private final List<T> entidades;
-    public Class<T> persistentClass;
+    public final Class<T> persistentClass;
     private Integer id;
 
-    public DAOMemoria(Class<T> clazz, List<T> entidades){
+    public DAOMemoria(Class<T> clazz, List<T> entidades) {
         this.persistentClass = clazz;
         this.id = 1;
         this.entidades = new ArrayList<>();

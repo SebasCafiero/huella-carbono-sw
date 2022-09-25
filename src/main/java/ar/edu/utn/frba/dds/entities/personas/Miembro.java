@@ -151,17 +151,17 @@ public class Miembro {
         return trayectos;
     }
 
-    @Override
-    public String toString() {
-        return "Miembro{" +
-                "nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", tipoDeDocumento=" + tipoDeDocumento +
-                ", nroDocumento=" + nroDocumento +
-                ", sectoresDondeTrabaja=" + sectoresDondeTrabaja +
-                ", trayectos=" + trayectos +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Miembro{" +
+//                "nombre='" + nombre + '\'' +
+//                ", apellido='" + apellido + '\'' +
+//                ", tipoDeDocumento=" + tipoDeDocumento +
+//                ", nroDocumento=" + nroDocumento +
+//                ", sectoresDondeTrabaja=" + sectoresDondeTrabaja +
+//                ", trayectos=" + trayectos +
+//                '}';
+//    }
     /*TO string raro que no quisimos borrar por si era util
     @Override
     public String toString() {

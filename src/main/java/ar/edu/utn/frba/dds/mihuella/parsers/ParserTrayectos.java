@@ -105,7 +105,7 @@ public class ParserTrayectos {
                         .filter( me -> me.equals(medioSolicitado)).findFirst();
 
                 if(!medioDeTransporte.isPresent()) {
-                    throw new NoExisteMedioException(data[7], data[8], data[9]);
+                    throw new NoExisteMedioException(medioSolicitado);
                 }
 
                 Coordenada coordenadaInicial = new Coordenada(Float.parseFloat(data[3]), Float.parseFloat(data[4]));
@@ -185,5 +185,14 @@ public class ParserTrayectos {
 
         return new ArrayList<>(trayectosSegunId.values());
 //        return trayectosSegunId.values().stream().collect(Collectors.toList());
+    }
+
+    public List<TramoCSVDTO> capturarEntradas(String archivo) throws FileNotFoundException {
+        List<TramoCSVDTO> tramos = new CsvToBeanBuilder(new FileReader(archivo))
+                .withType(TramoCSVDTO.class)
+                .build()
+                .parse();
+//        tramos.forEach(System.out::println);
+        return tramos;
     }
 }
