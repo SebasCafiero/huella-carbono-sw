@@ -31,7 +31,7 @@ public class Organizacion {
     @Transient
     private ClasificacionOrganizacion clasificacionOrganizacion;
 
-    @OneToMany(mappedBy = "organizacion", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "organizacion", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<Sector> sectores;
 
     @OneToMany(fetch = FetchType.LAZY)

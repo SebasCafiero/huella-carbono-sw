@@ -21,7 +21,7 @@ public class Sector {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Organizacion organizacion;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "MIEMBRO_POR_SECTOR")
     private Set<Miembro> miembros;
 
@@ -48,6 +48,14 @@ public class Sector {
 
     public Organizacion getOrganizacion() {
         return this.organizacion;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public boolean esMiembro(Miembro miembro) {

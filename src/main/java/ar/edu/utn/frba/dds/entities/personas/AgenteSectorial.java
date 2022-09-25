@@ -128,6 +128,6 @@ public class AgenteSectorial {
 
     @Override
     public String toString() {
-        return '\n' + "Mail : " + this.contactoMail.getDireccionEMail() + '\n' + "Telefono : " + this.telefono + '\n';
+        return '\n' + "ID : " + this.id + '\n';
     }
 }

@@ -12,6 +12,9 @@ import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.mihuella.dto.MiembroJSONDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.OrganizacionJSONDTO;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class OrganizacionMapper {
 
@@ -22,24 +25,17 @@ public class OrganizacionMapper {
                 new ClasificacionOrganizacion(orgDTO.clasificacion),
                 UbicacionMapper.toEntity(orgDTO.ubicacion)
         );
-        for(OrganizacionJSONDTO.SectorJSONDTO sectorDTO : orgDTO.sectores) {
-            Sector unSector;
-            try {
-                unSector = new Sector(sectorDTO.nombre, unaOrg);
-                for(MiembroJSONDTO unMiembro : sectorDTO.miembros){
-                    unSector.agregarMiembro(new Miembro(
-                            unMiembro.nombre,
-                            unMiembro.apellido,
-                            TipoDeDocumento.valueOf(unMiembro.tipoDocumento.toUpperCase()),
-                            unMiembro.documento
-                    ));
-                }
-            } catch (SectorException e) {
-                e.printStackTrace();
-            } catch (MiembroException e) {
-                e.printStackTrace();
+
+        try {
+            for(OrganizacionJSONDTO.SectorJSONDTO sectorDTO : orgDTO.sectores) {
+                unaOrg.agregarSector(SectoresMapper.toEntity(sectorDTO, unaOrg));
             }
         }
+        catch (SectorException sectorException){
+            sectorException.printStackTrace();
+        }
+
+
 
         return unaOrg;
     }
