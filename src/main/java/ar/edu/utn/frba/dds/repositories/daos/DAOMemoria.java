@@ -16,6 +16,12 @@ public class DAOMemoria<T> implements DAO<T> {
     public final Class<T> persistentClass;
     private Integer id;
 
+    public DAOMemoria(Class<T> clazz) {
+        this.persistentClass = clazz;
+        this.id = 1;
+        this.entidades = new ArrayList<>();
+    }
+
     public DAOMemoria(Class<T> clazz, List<T> entidades) {
         this.persistentClass = clazz;
         this.id = 1;

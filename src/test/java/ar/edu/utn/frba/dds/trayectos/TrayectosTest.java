@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.trayectos;
 import ar.edu.utn.frba.dds.entities.lugares.*;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.personas.MiembroException;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
@@ -12,6 +13,8 @@ import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
+import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
+import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +30,7 @@ public class TrayectosTest {
     }
 
     @Test
-    public void testCargaDeTrayectosEnOrganizacion() throws SectorException, MiembroException {
+    public void testCargaDeTrayectosEnOrganizacion() {
         Organizacion unaOrg = new Organizacion("utn", TipoDeOrganizacionEnum.INSTITUCION,new ClasificacionOrganizacion("Universidad"),new UbicacionGeografica(new Coordenada(10F,5F)));
         Sector unSector = new Sector("Administracion",unaOrg);
         Miembro unMiembro = new Miembro("Pedrito","Lopez", TipoDeDocumento.DNI,12345);
@@ -52,7 +55,7 @@ public class TrayectosTest {
     }
 
     @Test
-    public void testCargaDeTrayectosCompartidos() throws MedicionSinFactorEmisionException {
+    public void testCargaDeTrayectosCompartidos() {
         UbicacionGeografica ubicacionHogar = new UbicacionGeografica(new Coordenada(0F,0F));
 //        UbicacionGeografica ubicacionOrg = new UbicacionGeografica("Buenos Aires",10F,15F);
 //        Organizacion unaOrg = new Organizacion("utn",TipoDeOrganizacionEnum.INSTITUCION, new ClasificacionOrganizacion("Universidad"),ubicacionOrg);
@@ -78,7 +81,7 @@ public class TrayectosTest {
         trayectoCompartido.agregarmiembro(miembro2);
         trayectoCompartido.agregarmiembro(miembro3);
 
-        FachadaOrganizacion fachada = new FachadaOrganizacion();
+        FachadaOrganizacion fachada = new FachadaOrganizacion(new RepoFactoresMemoria<>(new DAOMemoria<>(FactorEmision.class)));
         fachada.cargarParametro("Traslado de Miembros -> Publico - TREN : km",250F);
         fachada.cargarParametro("Traslado de Miembros -> Contratado : km", 130F);
         fachada.cargarParametro("Traslado de Miembros -> Ecologico : km",0F);

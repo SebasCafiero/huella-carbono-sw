@@ -29,6 +29,12 @@ public class FachadaTrayectos {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
     }
 
+    public FachadaTrayectos(Repositorio<Miembro> repoMiembros, Repositorio<Trayecto> repoTrayectos, Repositorio<MedioDeTransporte> repoMedios) {
+        this.repoMiembros = repoMiembros;
+        this.repoTrayectos = repoTrayectos;
+        this.repoMedios = repoMedios;
+    }
+
     public void mostrarTrayectos() {
         repoTrayectos.buscarTodos().forEach(System.out::println);
     }

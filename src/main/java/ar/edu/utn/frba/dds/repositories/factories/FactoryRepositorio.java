@@ -19,23 +19,32 @@ import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.testMemoData.Data;
 
 import javax.persistence.Entity;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 
 public class FactoryRepositorio {
+    private static Boolean jpa;
     private static HashMap<String, Repositorio> repos;
 
     static {
         repos = new HashMap<>();
     }
 
-    public static <T> Repositorio<T> get(Class<T> type){
+    public static <T> Repositorio<T> get(Class<T> type) {
+        return get(type, isJPA());
+    }
+
+    public static <T> Repositorio<T> get(Class<T> type, boolean isJPA){
         Repositorio<T> repo;
         if(repos.containsKey(type.getName())){
             repo = (Repositorio<T>) repos.get(type.getName());
         }
         else{
-            if(!isJPA()) {
+            if(!isJPA) {
                 if(type.equals(Organizacion.class)) {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataOrganizacion()));
                 } else if(type.equals(Medicion.class)) {
@@ -75,6 +84,17 @@ public class FactoryRepositorio {
     }
 
     private static boolean isJPA() {
-        return true;
+        if(jpa != null) return jpa;
+
+        try {
+            Properties propiedades = new Properties();
+            FileReader file = new FileReader("resources/aplication.properties");
+            propiedades.load(file);
+            jpa = propiedades.getProperty("jpa").equals("true");
+            file.close();
+        } catch (IOException e) {
+            throw new RuntimeException("El archivo properties no existe");
+        }
+        return jpa;
     }
 }

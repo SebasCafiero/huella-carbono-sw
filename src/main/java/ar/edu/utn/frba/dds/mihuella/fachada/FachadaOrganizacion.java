@@ -23,6 +23,10 @@ public class FachadaOrganizacion implements FachadaOrg {
 //        repoCategorias = (RepoCategorias) FactoryRepositorio.get(Categoria.class);
     }
 
+    public FachadaOrganizacion(RepoFactores repoFactores) {
+        this.repoFactores = repoFactores;
+    }
+
     @Override
     public void cargarParametros(Map<String, Float> parametrosSistema) {
         parametrosSistema.forEach(this::cargarParametro);
@@ -57,6 +61,8 @@ public class FachadaOrganizacion implements FachadaOrg {
     }
 
     public Float getImpactoOrganizacion(Organizacion org, Integer anio, Integer mes) {
+        Float valor1 = getImpactoMedicionesOrganizacion(org, anio, mes);
+        Float valor2 = getImpactoTrayectosOrganizacion(org, anio, mes);
         return getImpactoMedicionesOrganizacion(org, anio, mes) + getImpactoTrayectosOrganizacion(org, anio, mes);
     }
 

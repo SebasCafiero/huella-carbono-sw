@@ -25,12 +25,12 @@ public class OrganizacionTest {
     }
 
     @Test
-    public void agregarSectoresAUnaOrganizacoin() throws Exception {
+    public void agregarSectoresAUnaOrganizacion() throws Exception {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 ONG,
                 new ClasificacionOrganizacion("GreenPeace"),
                 new UbicacionGeografica(new Coordenada(10F,5F)));
-        
+
         Assertions.assertEquals(0,unaOrg.cantidadSectores());
         Sector sector1 = new Sector("sector1",unaOrg);
         Assertions.assertEquals(1,unaOrg.cantidadSectores());

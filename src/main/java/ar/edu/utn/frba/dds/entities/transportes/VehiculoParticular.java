@@ -6,11 +6,6 @@ public class VehiculoParticular extends MedioDeTransporte {
     private final TipoVehiculo tipo;
     private final TipoCombustible combustible;
 
-    public VehiculoParticular(String [] argumentos) {
-        this.tipo = TipoVehiculo.valueOf(argumentos[0]);
-        this.combustible = TipoCombustible.valueOf(argumentos[1]);
-    }
-
     public VehiculoParticular(TipoVehiculo tipo, TipoCombustible combustible){
         this.tipo = tipo;
         this.combustible = combustible;
