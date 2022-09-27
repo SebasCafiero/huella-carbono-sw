@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.entities.lugares.geografia;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.entities.mediciones.Reporte;
+import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 
 import java.util.List;
@@ -12,8 +12,8 @@ public abstract class AreaSectorial {
     protected String nombre;
     protected Set<Organizacion> organizaciones;
 
-    protected Set<AgenteSectorial> agentes;
-    protected List<Reporte> reportes;
+    protected AgenteSectorial agente;
+    protected List<ReporteAgente> reportes;
 
     public Set<Organizacion> getOrganizaciones() {
         return this.organizaciones;
@@ -26,11 +26,15 @@ public abstract class AreaSectorial {
         return this.organizaciones.stream().map(o -> o.getUbicacion()).collect(Collectors.toSet());
     }
 
-    public void agregarAgente(AgenteSectorial unAgente) {
-        this.agentes.add(unAgente);
+    public AgenteSectorial getAgente() {
+        return agente;
     }
 
-    public void agregarReporte(Reporte unReporte) {
+    public void setAgente(AgenteSectorial agente) {
+        this.agente = agente;
+    }
+
+    public void agregarReporte(ReporteAgente unReporte) {
         this.reportes.add(unReporte);
     }
 
@@ -38,11 +42,8 @@ public abstract class AreaSectorial {
         return nombre;
     }
 
-    public Set<AgenteSectorial> getAgentes() {
-        return agentes;
-    }
 
-    public List<Reporte> getReportes() {
+    public List<ReporteAgente> getReportes() {
         return reportes;
     }
 
@@ -54,11 +55,7 @@ public abstract class AreaSectorial {
         this.organizaciones = organizaciones;
     }
 
-    public void setAgentes(Set<AgenteSectorial> agentes) {
-        this.agentes = agentes;
-    }
-
-    public void setReportes(List<Reporte> reportes) {
+    public void setReportes(List<ReporteAgente> reportes) {
         this.reportes = reportes;
     }
 }

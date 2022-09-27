@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.servicios.reportes;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.entities.mediciones.Reporte;
+import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 
 import javax.mail.Message;
@@ -15,35 +15,33 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class NotificadorReportesMail implements NotificadorReportes {
-    private Reporte reporte;
-    private AgenteSectorial agente;
 
     @Override
-    public void notificarReporte() {
-        String asunto = "Reporte periódico de consumo de Huella de Carbono";
+    public void notificarReporte(AgenteSectorial agente, ReporteAgente reporte) {
+        String asunto = "ReporteAgente periódico de consumo de Huella de Carbono";
 
         String saludo = "Hola:\nSe informan por este medio los resultados del informe periódico "
                 + "respecto del consumo de Huella de Carbono.";
         String ubicacion = "Este informe se refiere al sector geográfico de "
-                + this.reporte.getArea().getNombre() + ".";
+                + reporte.getArea().getNombre() + ".";
         String despedida = "Muchas gracias.";
 
         String consumo = "";
-        for(Organizacion organizacion : this.reporte.getHcOrganizaciones().keySet()) {
+        for(Organizacion organizacion : reporte.getHcOrganizaciones().keySet()) {
             consumo += "El consumo correspondiente a la organización "
                     + organizacion.getRazonSocial() + " es "
-                    + this.reporte.getHcOrganizaciones().get(organizacion) + ". Esto corresponde al "
-                    + 100 * this.reporte.getHcOrganizaciones().get(organizacion) / this.reporte.getHcTotal()
+                    + reporte.getHcOrganizaciones().get(organizacion) + ". Esto corresponde al "
+                    + 100 * reporte.getHcOrganizaciones().get(organizacion) / reporte.getHcTotal()
                     + "% de todo el sector.\n";
         }
-        consumo += "\nFinalmente, el consumo total del sector es " + this.reporte.getHcTotal().toString() + ".";
+        consumo += "\nFinalmente, el consumo total del sector es " + reporte.getHcTotal().toString() + ".";
 
         String cuerpo = saludo + "\n" + ubicacion + "\n" + consumo + "\n" + despedida;
 
         System.out.println(reporte);
         System.out.println(reporte.getOrganizaciones().toString() + reporte.getOrganizaciones().size());
 
-        List<String> destinatarios = this.reporte.getOrganizaciones().stream()
+        List<String> destinatarios = reporte.getOrganizaciones().stream()
                 .flatMap(org -> org.getContactosMail().stream()).collect(Collectors.toList());
 
         System.out.println(destinatarios);
@@ -80,17 +78,5 @@ public class NotificadorReportesMail implements NotificadorReportes {
         catch (MessagingException me) {
             me.printStackTrace();   //Si se produce un error
         }
-    }
-
-    @Override
-    public NotificadorReportes setInformacionReporte(Reporte reporte) {
-        this.reporte = reporte;
-        return this;
-    }
-
-    @Override
-    public NotificadorReportes setAgente(AgenteSectorial agente) {
-        this.agente = agente;
-        return this;
     }
 }

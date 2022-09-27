@@ -79,6 +79,10 @@ public class Medicion implements Medible {
         this.periodo = periodo;
     }
 
+    public Categoria getMiCategoria() {
+        return this.categoria;
+    }
+
     @Override
     public String getCategoria() {
         return categoria.toString();

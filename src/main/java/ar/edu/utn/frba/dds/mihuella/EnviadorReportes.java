@@ -4,7 +4,11 @@ import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Municipio;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.mapping.TrayectosMapper;
+import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
+import ar.edu.utn.frba.dds.mihuella.fachada.FachadaReportes;
+import ar.edu.utn.frba.dds.mihuella.fachada.FachadaTrayectos;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
@@ -22,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EnviadorReportes {
-    public static void main(String[] args) throws Exception, MedicionSinFactorEmisionException {
+    public static void main(String[] args) throws Exception {
         ArgumentParser parser = ArgumentParsers.newFor("Checksum").build()
                 .defaultHelp(true)
                 .description("Calculate checksum of given files.");
@@ -49,48 +53,53 @@ public class EnviadorReportes {
         System.out.println("Archivo de trayectos: " + ns.get("trayectos"));
         System.out.println("Archivo de transportes: " + ns.get("transportes"));
 
+        FachadaOrganizacion fachadaOrganizacion = new FachadaOrganizacion();
+        FachadaTrayectos fachadaTrayectos = new FachadaTrayectos();
         Map<String,Float> factoresDeEmision;
         List<Organizacion> organizaciones;
-        List<Trayecto> trayectos;
+        List<TramoCSVDTO> trayectosDTO;
         List<MedioDeTransporte> medios;
 
         try {
             factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
-            organizaciones = new ParserOrganizaciones().cargarOrganizaciones(ns.getString("organizaciones"));
-            medios = new ParserTransportes().cargarTransportes(ns.getString("transportes"));
-            System.out.println(medios.toString());
-            ParserTrayectos.generarTrayectos(ns.getString("trayectos"));
+            organizaciones = ParserOrganizacionesJSON.generarOrganizaciones(ns.getString("organizaciones"));
+            ParserTransportesJSON.generarTransportes(ns.getString("transportes"));
+            trayectosDTO = new ParserTrayectos().capturarEntradas(ns.getString("trayectos"));
         } catch (IOException | FechaException | NoExisteMedioException ex) {
             System.out.println(ex.getMessage());
             return;
         }
 
+        fachadaOrganizacion.cargarParametros(factoresDeEmision);
+        trayectosDTO.forEach(tr -> {
+            boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");
+            if(!esCompartidoPasivo) {
+                fachadaTrayectos.cargarTrayectoActivo(TrayectosMapper.toNuevoTrayectoDTO(tr));
+            } else {
+                fachadaTrayectos.cargarTrayectoPasivo(TrayectosMapper.toTrayectoCompartidoDTO(tr));
+            }
+        });
+
         Integer anio = 2020;
         Integer mes = 10;
-
-        FachadaOrganizacion fachada = new FachadaOrganizacion();
-        fachada.cargarParametros(factoresDeEmision);
 
         for(String categoria : factoresDeEmision.keySet()) {
             System.out.println(categoria + " -> " + factoresDeEmision.get(categoria));
         }
 
-//        AreaSectorial areaReporte = new AreaSectorial("Mataderios");
-//        AreaSectorial areaReporte = new Municipio("Avellaneda","Buenos Aires", "Argentina");
         AreaSectorial areaReporte = new Municipio("Ciudad de Buenos Aires","Ciudad de Buenos Aires", "Argentina");
-        organizaciones.get(0).agregarContactoMail("cuentaejemplodds2@gmail.com");
-        organizaciones.get(1).agregarContactoMail("rumplestilskink@gmail.com");
+//        organizaciones.get(0).agregarContactoMail("cuentaejemplodds2@gmail.com");
+//        organizaciones.get(1).agregarContactoMail("rumplestilskink@gmail.com");
 
         areaReporte.agregarOrganizacion(organizaciones.get(0));
         areaReporte.agregarOrganizacion(organizaciones.get(1));
 
         AgenteSectorial agente = new AgenteSectorial(areaReporte);
-        agente.setContactoMail(new ContactoMail("cuentaejemplodds1", ns.getString("password")));
-
-        NotificadorReportes enviadorReportes = new NotificadorReportesMail()
-                .setAgente(agente)
-                .setInformacionReporte(agente.crearReporte(anio, mes));
-
-        enviadorReportes.notificarReporte();
+        agente.setContactoMail(new ContactoMail("cuentaejemplodds2", ""));
+//      new ContactoMail("cuentaejemplodds1", ns.getString("password"));
+        FachadaReportes fachadaReportes = new FachadaReportes();
+        fachadaReportes
+                .setNotificador(new NotificadorReportesMail())
+                .realizarReporte(areaReporte, anio, mes);
     }
 }

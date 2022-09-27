@@ -4,6 +4,8 @@ import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
+import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
@@ -60,45 +62,6 @@ public class FachadaOrganizacion implements FachadaOrg {
         }
     }
 
-    public Float getImpactoOrganizacion(Organizacion org, Integer anio, Integer mes) {
-        Float valor1 = getImpactoMedicionesOrganizacion(org, anio, mes);
-        Float valor2 = getImpactoTrayectosOrganizacion(org, anio, mes);
-        return getImpactoMedicionesOrganizacion(org, anio, mes) + getImpactoTrayectosOrganizacion(org, anio, mes);
-    }
-
-    public Float getImpactoMedicionesOrganizacion(Organizacion org, Integer anio, Integer mes) {
-        return obtenerHU(org.getMediciones().stream()
-                .filter(me -> me.perteneceAPeriodo(anio, mes)).collect(Collectors.toList()));
-    }
-
-    public Float getImpactoTrayectosOrganizacion(Organizacion org, Integer anio, Integer mes) {
-        return (float) org.getSectores().stream()
-                .mapToDouble(sector -> getImpactoSector(sector, anio, mes))
-                .reduce(Double::sum).orElse(0);
-    }
-
-    public Float getTrayectosDeMiembro(Miembro miembro, Integer anio, Integer mes) {
-        return (float) miembro.getTrayectos().stream()
-                .filter(tr -> tr.perteneceAPeriodo(anio, mes))
-                .mapToDouble(tr -> obtenerHU(new ArrayList<>(tr.getTramos())) / tr.cantidadDeMiembros())
-                .reduce(Double::sum).orElse(0);
-    }
-
-    public Float getImpactoSector(Sector unSector, Integer anio, Integer mes) {
-        return (float) unSector.getListaDeMiembros().stream()
-                .mapToDouble(mi -> getImpactoMiembroEnPeriodo(mi, anio, mes)
-                        / mi.cantidadDeOrganizacionesDondeTrabaja())
-                .reduce(Double::sum).orElse(0);
-    }
-
-    public Float getImpactoMiembroEnPeriodo(Miembro miembro, Integer anio, Integer mes) {
-        return (float) miembro.getTrayectos().stream()
-                .filter(tr -> tr.perteneceAPeriodo(anio, mes))
-                .mapToDouble(tr -> obtenerHU(new ArrayList<>(tr.getTramos()))
-                        / tr.cantidadDeMiembros())
-                .reduce(Double::sum).orElse(0);
-    }
-
     public List<Medible> getMediblesDePeriodo(Organizacion organizacion, Integer anio, Integer mes) {
         List<Medible> mediciones = getMedicionesDePeriodo(organizacion, anio, mes);
         mediciones.addAll(getTramosDePeriodo(organizacion, anio, mes));
@@ -122,5 +85,53 @@ public class FachadaOrganizacion implements FachadaOrg {
 
     public void mostrarParametros() {
         repoFactores.buscarTodos().forEach(System.out::println);
+    }
+
+    public Float getNuevoImpactoOrganizacion(Organizacion org, Periodo periodo) {
+        return getNuevoImpactoMedicionesOrganizacion(org, periodo) +
+                getNuevoImpactoTrayectosOrganizacion(org, periodo);
+    }
+
+    private Float getNuevoImpactoMedicionesOrganizacion(Organizacion org, Periodo periodo) {
+//        return obtenerHU(org.getMediciones().stream()
+//                .filter(me -> me.perteneceAPeriodo(periodo.getAnio(), periodo.getMes()))
+//                .map(me -> {
+//                    return new Medicion(me.getMiCategoria(), me.getUnidad(),
+//                            me.getValor() * factorEquivalencia(periodo, me.getPeriodo()));
+//                })
+//                .collect(Collectors.toList()));
+        return org.getMediciones().stream()
+                .map(me -> obtenerHU(Collections.singletonList(me)) *
+                        factorEquivalencia(periodo, me.getPeriodo()))
+                .reduce(Float::sum).orElse(0F);
+    }
+
+    private Float getNuevoImpactoTrayectosOrganizacion(Organizacion org, Periodo periodo) {
+        return org.getSectores().stream()
+                .flatMap(sector -> sector.getListaDeMiembros().stream())
+                .map(miembro -> miembro.getTrayectos().stream()
+                        .map(trayecto -> obtenerHU(new ArrayList<>(trayecto.getTramos())) /
+                                trayecto.cantidadDeMiembros())
+                        .reduce(Float::sum).orElse(0F) / miembro.cantidadDeOrganizacionesDondeTrabaja()
+                ).reduce(Float::sum).orElse(0F);
+    }
+
+    private float factorEquivalencia(Periodo periodoDeseado, Periodo periodoMedible) {
+        if(!periodoDeseado.getAnio().equals(periodoMedible.getAnio()))
+            return 0;
+
+        if(periodoDeseado.getPeriodicidad().equals('A')) {
+            return 1;
+        }
+
+        if(periodoMedible.getPeriodicidad().equals('A')) {
+            return 1/12F;
+        }
+
+        if(!periodoDeseado.getMes().equals(periodoMedible.getMes())) {
+            return 0;
+        }
+
+        return 1;
     }
 }
