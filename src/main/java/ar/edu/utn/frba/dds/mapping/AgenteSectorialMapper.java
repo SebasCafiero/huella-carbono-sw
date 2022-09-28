@@ -6,15 +6,10 @@ import java.util.stream.Collectors;
 
 public class AgenteSectorialMapper {
     public static AgenteSectorial toEntity(AgenteSectorialJSONDTO agenteDTO) {
-
-
-
         AgenteSectorial agenteSectorial = new AgenteSectorial(
                 AreaSectorialMapper.toEntity(agenteDTO.area),
                 ContactoMailMapper.toEntity(agenteDTO.contactoMail),
-                agenteDTO.telefono,
-                agenteDTO.reportes.stream().map(ReporteMapper::toEntity).collect(Collectors.toList())
-        );
+                agenteDTO.telefono);
         return agenteSectorial;
     }
 }

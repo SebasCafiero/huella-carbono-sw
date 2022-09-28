@@ -113,6 +113,10 @@ public class Tramo implements Medible {
         return categoria.toString();
     }
 
+    public Categoria getMiCategoria() {
+        return this.categoria;
+    }
+
     @Override
     public String toString() {
         return "Tramo{" +

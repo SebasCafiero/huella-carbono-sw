@@ -10,8 +10,8 @@ public class AreaSectorialMapper {
         AreaSectorial area = new AreaSectorial() {};
         area.setNombre(areaDTO.nombre);
         area.setOrganizaciones(areaDTO.organizaciones.stream().map(OrganizacionMapper::toEntity).collect(Collectors.toSet()));
-        area.setAgentes(areaDTO.agentes.stream().map(AgenteSectorialMapper::toEntity).collect(Collectors.toSet()));
-        area.setReportes(areaDTO.reportes.stream().map(ReporteMapper::toEntity).collect(Collectors.toList()));
+//        area.setAgentes(areaDTO.agentes.stream().map(AgenteSectorialMapper::toEntity).collect(Collectors.toSet()));
+//        area.setReportes(areaDTO.reportes.stream().map(ReporteMapper::toEntity).collect(Collectors.toList()));
         return area;
     }
 }

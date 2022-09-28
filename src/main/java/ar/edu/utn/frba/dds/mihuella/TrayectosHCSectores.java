@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.mihuella;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.mapping.TrayectosMapper;
 import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
@@ -86,12 +87,12 @@ public class TrayectosHCSectores {
         for(Organizacion org : organizaciones){
             String razonSocial = org.getRazonSocial();
             Set<Sector> sectores = org.getSectores();
-            Float consumoTotalOrganizacion = fachada.getImpactoTrayectosOrganizacion(org, anio, mes);
+            Float consumoTotalOrganizacion = fachada.calcularImpactoOrganizacion(org, new Periodo(anio, mes));
 
             for(Sector sector : sectores){
                 String nombreSector = sector.getNombre();
                 System.out.println("Sector: " + nombreSector);
-                float impacto = fachada.getImpactoSector(sector, anio, mes) / consumoTotalOrganizacion;
+                float impacto = fachada.calcularImpactoTrayectos(sector, new Periodo(anio, mes)) / consumoTotalOrganizacion;
                 writer.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto);
                 System.out.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto + '\n');
             }

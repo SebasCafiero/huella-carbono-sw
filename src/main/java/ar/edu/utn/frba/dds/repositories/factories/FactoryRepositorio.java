@@ -84,7 +84,8 @@ public class FactoryRepositorio {
     }
 
     private static boolean isJPA() {
-        if(jpa != null) return jpa;
+        if(jpa != null)
+            return jpa;
 
         try {
             Properties propiedades = new Properties();

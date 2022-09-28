@@ -44,11 +44,15 @@ public class Router {
         FactorEmisionController factorEmisionController = new FactorEmisionController();
         Spark.put("/factorEmision/:id", factorEmisionController :: modificar);
         Spark.get("/factorEmision",factorEmisionController :: mostrarTodos); // solo para probar
+
         AgenteSectorialController agenteSectorialController = new AgenteSectorialController();
         Spark.get("/agenteSectorial/:id", agenteSectorialController::obtener);
         Spark.get("/agenteSectorial", agenteSectorialController::mostrarTodos);
         Spark.delete("/agenteSectorial/:id", agenteSectorialController::eliminar);
         Spark.put("/agenteSectorial/:id", agenteSectorialController::modificar);
         Spark.post("/agenteSectorial", agenteSectorialController::agregar);
+
+        ReportesController reportesController = new ReportesController();
+        Spark.get("/reportes/agente", reportesController::generarReporteAgente);
     }
 }

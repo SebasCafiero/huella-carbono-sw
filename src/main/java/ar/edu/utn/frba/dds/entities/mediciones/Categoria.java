@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 //@Entity
 //@Table(name = "CATEGORIA")
@@ -47,5 +48,18 @@ public class Categoria {
 
     public void setTipoConsumo(String tipoConsumo) {
         this.tipoConsumo = tipoConsumo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Categoria)) return false;
+        Categoria categoria = (Categoria) o;
+        return Objects.equals(getActividad(), categoria.getActividad()) && Objects.equals(getTipoConsumo(), categoria.getTipoConsumo());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getActividad(), getTipoConsumo());
     }
 }

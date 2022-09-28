@@ -12,10 +12,8 @@ import ar.edu.utn.frba.dds.mihuella.fachada.FachadaTrayectos;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
-import ar.edu.utn.frba.dds.servicios.reportes.NotificadorReportes;
 import ar.edu.utn.frba.dds.servicios.reportes.NotificadorReportesMail;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -88,18 +86,19 @@ public class EnviadorReportes {
         }
 
         AreaSectorial areaReporte = new Municipio("Ciudad de Buenos Aires","Ciudad de Buenos Aires", "Argentina");
-//        organizaciones.get(0).agregarContactoMail("cuentaejemplodds2@gmail.com");
-//        organizaciones.get(1).agregarContactoMail("rumplestilskink@gmail.com");
+        organizaciones.get(0).agregarContactoMail("cuentaejemplodds2@gmail.com");
+        organizaciones.get(1).agregarContactoMail("rumplestilskink@gmail.com");
 
         areaReporte.agregarOrganizacion(organizaciones.get(0));
         areaReporte.agregarOrganizacion(organizaciones.get(1));
 
         AgenteSectorial agente = new AgenteSectorial(areaReporte);
-        agente.setContactoMail(new ContactoMail("cuentaejemplodds2", ""));
-//      new ContactoMail("cuentaejemplodds1", ns.getString("password"));
+        areaReporte.setAgente(agente);
+//        agente.setContactoMail(new ContactoMail("cuentaejemplodds2", ""));
+        agente.setContactoMail(new ContactoMail("cuentaejemplodds1", ns.getString("password")));
         FachadaReportes fachadaReportes = new FachadaReportes();
         fachadaReportes
                 .setNotificador(new NotificadorReportesMail())
-                .realizarReporte(areaReporte, anio, mes);
+                .generarReporteAgente(areaReporte, anio, mes);
     }
 }

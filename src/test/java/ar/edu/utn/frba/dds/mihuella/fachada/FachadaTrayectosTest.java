@@ -116,6 +116,6 @@ public class FachadaTrayectosTest {
         miembro1.agregarSector(sector1);
         miembro2.agregarSector(sector1);
         organizacion.agregarSector(sector1);
-        Assertions.assertEquals(80F, calculadora.getImpactoOrganizacion(organizacion, 2020, 11));
+        Assertions.assertEquals(80F, calculadora.calcularImpactoOrganizacion(organizacion, new Periodo(2020, 11)));
     }
 }

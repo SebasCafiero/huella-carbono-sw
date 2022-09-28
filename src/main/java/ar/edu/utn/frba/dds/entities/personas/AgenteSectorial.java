@@ -44,11 +44,10 @@ public class AgenteSectorial {
         this.area = areaSectorial;
     }
 
-    public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, String telefono, List<ReporteAgente> reportes) {
+    public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, String telefono) {
         this.area = areaSectorial;
         this.contactoMail = contactoMail;
         this.telefono = telefono;
-        this.reportes = reportes;
     }
 
     public Integer getId() {

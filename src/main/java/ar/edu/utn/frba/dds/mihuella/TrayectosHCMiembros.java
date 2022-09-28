@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.mihuella;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mapping.TrayectosMapper;
@@ -86,7 +87,7 @@ public class TrayectosHCMiembros {
         writer.println("Anio, Mes, Razon Social, DNI, Impacto");
 
         Integer anio = 2020;
-        int mes = 10; //TODO
+        int mes = 10;
 
         fachadaTrayectos.mostrarTrayectos();
         fachada.mostrarParametros();
@@ -95,12 +96,12 @@ public class TrayectosHCMiembros {
             String razonSocial = org.getRazonSocial();
             Set<Miembro> miembros = org.getMiembros();
 
-            Float consumoTotalOrganizacion = fachada.getImpactoTrayectosOrganizacion(org, anio, mes);
+            Float consumoTotalOrganizacion = fachada.calcularImpactoOrganizacion(org, new Periodo(anio, mes));
 //                System.out.println("Consumo total de la organizacion: " + consumoTotalOrganizacion);
             for (Miembro miembro : miembros) {
                 Integer documento = miembro.getNroDocumento();
                 System.out.println("MiembroID: " + documento);
-                float impacto = 100 * fachada.getTrayectosDeMiembro(miembro, anio, mes) / consumoTotalOrganizacion;
+                float impacto = 100 * fachada.calcularImpactoTrayectos(miembro, new Periodo(anio, mes)) / consumoTotalOrganizacion;
                 writer.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto);
                 System.out.println(anio + ", " + mes + ", " + razonSocial + ", " + documento + ", " + impacto + '\n');
             }

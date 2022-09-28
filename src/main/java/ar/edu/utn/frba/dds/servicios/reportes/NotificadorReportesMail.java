@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.servicios.reportes;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
+import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -10,11 +11,14 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class NotificadorReportesMail implements NotificadorReportes {
+    private ContactoMail contactoSistema;
 
     @Override
     public void notificarReporte(AgenteSectorial agente, ReporteAgente reporte) {
@@ -22,7 +26,7 @@ public class NotificadorReportesMail implements NotificadorReportes {
 
         String saludo = "Hola:\nSe informan por este medio los resultados del informe periódico "
                 + "respecto del consumo de Huella de Carbono.";
-        String ubicacion = "Este informe se refiere al sector geográfico de "
+        String ubicacion = "Este informe corresponde al sector geográfico de "
                 + reporte.getArea().getNombre() + ".";
         String despedida = "Muchas gracias.";
 
@@ -34,7 +38,7 @@ public class NotificadorReportesMail implements NotificadorReportes {
                     + 100 * reporte.getHcOrganizaciones().get(organizacion) / reporte.getHcTotal()
                     + "% de todo el sector.\n";
         }
-        consumo += "\nFinalmente, el consumo total del sector es " + reporte.getHcTotal().toString() + ".";
+        consumo += "\nFinalmente, el consumo total del sector territorial es " + reporte.getHcTotal().toString() + ".";
 
         String cuerpo = saludo + "\n" + ubicacion + "\n" + consumo + "\n" + despedida;
 
@@ -78,5 +82,24 @@ public class NotificadorReportesMail implements NotificadorReportes {
         catch (MessagingException me) {
             me.printStackTrace();   //Si se produce un error
         }
+    }
+
+    private ContactoMail getContactoSistema() {
+        if(this.contactoSistema != null)
+            return this.contactoSistema;
+
+        ContactoMail contacto;
+        try {
+            Properties propiedades = new Properties();
+            FileReader file = new FileReader("resources/aplication.properties");
+            propiedades.load(file);
+            String direccion = propiedades.getProperty("contacto.mail.direccion");
+            String password = propiedades.getProperty("contacto.mail.password");
+            file.close();
+            contacto = new ContactoMail(direccion, password);
+        } catch (IOException e) {
+            throw new RuntimeException("El archivo properties no existe");
+        }
+        return contacto;
     }
 }
