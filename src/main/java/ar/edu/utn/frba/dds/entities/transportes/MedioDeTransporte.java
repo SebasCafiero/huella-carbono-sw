@@ -8,6 +8,9 @@ import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
 public abstract class MedioDeTransporte {
     private Integer id;
 
+    protected CalculadoraDistancias servicioDistancias;
+//        CalculadoraDistancias servicioContratado = new AdaptadorServicioDDSTPA();
+
     public Integer getId() {
         return id;
     }
@@ -17,10 +20,12 @@ public abstract class MedioDeTransporte {
     }
 
     public Float calcularDistancia(Tramo tramo) {
-//        CalculadoraDistancias servicioContratado = new AdaptadorServicioDDSTPA(); // TODO ver de definir en MedioDeTransporte
-        CalculadoraDistancias servicioContratado = new ServicioSimulado();
+//        throw new RuntimeException("Dead.");
+        return this.servicioDistancias.calcularDistancia(tramo.getUbicacionInicial(), tramo.getUbicacionFinal());
+    }
 
-        return servicioContratado.calcularDistancia(tramo.getUbicacionInicial(), tramo.getUbicacionFinal());
+    public void setServicioDistancias(CalculadoraDistancias servicioDistancias) {
+        this.servicioDistancias = servicioDistancias;
     }
 
     @Override

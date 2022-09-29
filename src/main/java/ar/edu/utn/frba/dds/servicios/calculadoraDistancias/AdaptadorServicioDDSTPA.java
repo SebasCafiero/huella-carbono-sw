@@ -42,7 +42,7 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
         }
         System.out.println("DistanciaConAPI: " + valorDistancia + " " + unidadDistancia);
 
-        if(unidadDistancia != "KM"){
+        if(unidadDistancia != "KM"){ //TODO
             //valorDistancia = valorDistancia * multiplicadorRespectoKM(unidadDistancia);
         }
         return valorDistancia;

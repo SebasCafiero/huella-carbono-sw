@@ -11,6 +11,7 @@ public class ServicioSimulado implements CalculadoraDistancias {
         Float latitudFinal = ubicacionFinal.getCoordenada().getLatitud();
         Float longitudFinal = ubicacionFinal.getCoordenada().getLongitud();
 
+//        throw new RuntimeException("Servicio Sin Ganas de Trabajar");
         return Math.abs(latitudFinal-latitudInicial)+Math.abs(longitudFinal-longitudInicial);
     }
 }

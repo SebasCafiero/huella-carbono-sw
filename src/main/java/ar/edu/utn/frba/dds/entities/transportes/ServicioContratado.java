@@ -1,10 +1,14 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.CalculadoraDistancias;
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
+
 public class ServicioContratado extends MedioDeTransporte {
     private TipoServicio tipo;
 
     public ServicioContratado(TipoServicio tipoServicio){
         tipo = tipoServicio;
+        servicioDistancias = new ServicioSimulado();
     }
 
     @Override

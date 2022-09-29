@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
+
 import java.util.Objects;
 
 public class VehiculoParticular extends MedioDeTransporte {
@@ -14,6 +16,7 @@ public class VehiculoParticular extends MedioDeTransporte {
     public VehiculoParticular(TipoVehiculo tipo, TipoCombustible combustible){
         this.tipo = tipo;
         this.combustible = combustible;
+        servicioDistancias = new ServicioSimulado();
     }
 
     @Override

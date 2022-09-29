@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
+
 import java.util.Objects;
 
 public class TransporteEcologico extends MedioDeTransporte {
@@ -7,6 +9,7 @@ public class TransporteEcologico extends MedioDeTransporte {
 
     public TransporteEcologico(TipoTransporteEcologico tipo){
         this.tipo = tipo;
+        servicioDistancias = new ServicioSimulado();
     }
 
     @Override
