@@ -93,6 +93,7 @@ public class EntityManagerHelper {
         }
     }
 
+    //TODO podríamos tener un archivo solamente con las prioridades y dsp las variables de entorno (1º persistenceXML, 2º arch, 3º env vars)
     private static Map<String, Object> seteoPropiedades() throws URISyntaxException {
         //https://stackoverflow.com/questions/8836834/read-environment-variables-in-persistence-xml-file
         Map<String, String> env = System.getenv();

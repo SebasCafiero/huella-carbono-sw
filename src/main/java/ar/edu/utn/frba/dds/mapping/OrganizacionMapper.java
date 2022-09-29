@@ -26,14 +26,11 @@ public class OrganizacionMapper {
                 UbicacionMapper.toEntity(orgDTO.ubicacion)
         );
 
-        try {
-            for(OrganizacionJSONDTO.SectorJSONDTO sectorDTO : orgDTO.sectores) {
-                unaOrg.agregarSector(SectoresMapper.toEntity(sectorDTO, unaOrg));
-            }
+        for(OrganizacionJSONDTO.SectorJSONDTO sectorDTO : orgDTO.sectores) {
+//                unaOrg.agregarSector(SectoresMapper.toEntity(sectorDTO, unaOrg));
+            SectoresMapper.toEntity(sectorDTO, unaOrg);
         }
-        catch (SectorException sectorException){
-            sectorException.printStackTrace();
-        }
+
 
 
 

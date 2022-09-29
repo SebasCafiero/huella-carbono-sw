@@ -69,6 +69,6 @@ public class FactoryRepositorio {
     }
 
     private static boolean isJPA() {
-        return true;
+        return false;
     }
 }
