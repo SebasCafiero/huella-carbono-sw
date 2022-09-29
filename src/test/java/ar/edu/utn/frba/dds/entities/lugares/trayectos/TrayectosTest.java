@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.trayectos;
+package ar.edu.utn.frba.dds.entities.lugares.trayectos;
 
 import ar.edu.utn.frba.dds.entities.lugares.*;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
@@ -20,19 +20,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TrayectosTest {
 
     @BeforeEach
-    public void iniciarOrgSectorMiembro() throws SectorException, MiembroException {
+    public void iniciarOrgSectorMiembro() {
 
     }
 
     @Test
     public void testCargaDeTrayectosEnOrganizacion() {
-        Organizacion unaOrg = new Organizacion("utn", TipoDeOrganizacionEnum.INSTITUCION,new ClasificacionOrganizacion("Universidad"),new UbicacionGeografica(new Coordenada(10F,5F)));
-        Sector unSector = new Sector("Administracion",unaOrg);
+        Organizacion unaOrg = new Organizacion("utn", TipoDeOrganizacionEnum.INSTITUCION, new ClasificacionOrganizacion("Universidad"), new UbicacionGeografica(new Coordenada(10F,5F)));
+        Sector unSector = new Sector("Administracion", unaOrg);
         Miembro unMiembro = new Miembro("Pedrito","Lopez", TipoDeDocumento.DNI,12345);
         unMiembro.solicitarIngresoAlSector(unSector);
 
@@ -44,14 +45,13 @@ public class TrayectosTest {
         );
 
         Trayecto unTrayecto = new Trayecto();
-        Tramo tramo1 = new Tramo(unTransportePublico,new Coordenada(1F,1F),new Coordenada(3F,7F));
-        Tramo tramo2 = new Tramo(unTransportePublico,new Coordenada(3F,7F),new Coordenada(15F,13F));
+        Tramo tramo1 = new Tramo(unTransportePublico, new Coordenada(1F,1F), new Coordenada(3F,7F));
+        Tramo tramo2 = new Tramo(unTransportePublico, new Coordenada(3F,7F), new Coordenada(15F,13F));
         unTrayecto.agregarTramo(tramo1);
         unTrayecto.agregarTramo(tramo2);
 
         unMiembro.registrarTrayecto(unTrayecto);
-        Assertions.assertEquals(26,unTrayecto.calcularDistancia());
-//        Assertions.assertEquals(26,unaOrg.obtenerDistanciaTrayecto());
+        Assertions.assertEquals(26, unTrayecto.calcularDistancia());
     }
 
     @Test
@@ -60,15 +60,16 @@ public class TrayectosTest {
 //        UbicacionGeografica ubicacionOrg = new UbicacionGeografica("Buenos Aires",10F,15F);
 //        Organizacion unaOrg = new Organizacion("utn",TipoDeOrganizacionEnum.INSTITUCION, new ClasificacionOrganizacion("Universidad"),ubicacionOrg);
 
-        Miembro miembro1 = new Miembro("m1","m1",TipoDeDocumento.DNI,1);
-        Miembro miembro2 = new Miembro("m2","m2",TipoDeDocumento.DNI,2);
-        Miembro miembro3 = new Miembro("m3","m3",TipoDeDocumento.DNI,3);
+        Miembro miembro1 = new Miembro("m1","m1", TipoDeDocumento.DNI,1);
+        Miembro miembro2 = new Miembro("m2","m2", TipoDeDocumento.DNI,2);
+        Miembro miembro3 = new Miembro("m3","m3", TipoDeDocumento.DNI,3);
 
         TransportePublico unTransportePublico = new TransportePublico(TipoTransportePublico.TREN,"Mitre");
         unTransportePublico.agregarParada(new Parada(new Coordenada(8F,15F),22F,13F)); //Parada de mas
         unTransportePublico.agregarParada(new Parada(new Coordenada(5F,5F),13F,20F));
         unTransportePublico.agregarParada(new Parada(new Coordenada(20F,10F),20F,30F));
         unTransportePublico.agregarParada(new Parada(new Coordenada(30F,30F),30F,26F)); //Parada de mas
+
         TransporteEcologico unaCaminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
         ServicioContratado unServicioContratado = new ServicioContratado(new TipoServicio("Taxi"));
 
@@ -76,10 +77,10 @@ public class TrayectosTest {
         Tramo tramo2 = new Tramo(unTransportePublico, new Coordenada(5F,5F),new Coordenada(20F,10F));
         Tramo tramo3 = new Tramo(unTransportePublico, new Coordenada(20F,10F),new Coordenada(30F,30F));
         Tramo tramo4 = new Tramo(unServicioContratado, new Coordenada(30F,30F),new Coordenada(10F,15F));
-        Trayecto trayectoCompartido = new Trayecto(tramo1, tramo2, tramo3, tramo4);
-        trayectoCompartido.agregarmiembro(miembro1);
-        trayectoCompartido.agregarmiembro(miembro2);
-        trayectoCompartido.agregarmiembro(miembro3);
+
+        Trayecto trayectoCompartido = new Trayecto();
+        trayectoCompartido.setTramos(Arrays.asList(tramo1, tramo2, tramo3, tramo4));
+        trayectoCompartido.setMiembros(Arrays.asList(miembro1, miembro2, miembro3));
 
         FachadaOrganizacion fachada = new FachadaOrganizacion(new RepoFactoresMemoria<>(new DAOMemoria<>(FactorEmision.class)));
         fachada.cargarParametro("Traslado de Miembros -> Publico - TREN : km",250F);
@@ -88,13 +89,9 @@ public class TrayectosTest {
 
 //        List<Medible> tramosTotales = unaOrg.miembros().stream().flatMap(m->m.getTrayectos().stream().flatMap(tray->tray.getTramos().stream())).collect(Collectors.toList());
 
-        List<Medible> tramosTotales = new ArrayList<>();
-        tramosTotales.add(tramo1);
-        tramosTotales.add(tramo2);
-        tramosTotales.add(tramo3);
-        tramosTotales.add(tramo4);
+        List<Medible> tramosTotales = Arrays.asList(tramo1, tramo2, tramo3, tramo4);
 
-        Float hu = fachada.obtenerHU(tramosTotales)/trayectoCompartido.cantidadDeMiembros();
+        Float hu = fachada.obtenerHU(tramosTotales) / trayectoCompartido.cantidadDeMiembros();
         Float distanciaTotal = tramosTotales.stream().map(tr -> tr.getValor()).reduce(0F,(d1,d2)->d1+d2);
         Assertions.assertEquals(10+20+30+35, distanciaTotal);
         Assertions.assertEquals((0+5000+7500+4550)/3F, hu);

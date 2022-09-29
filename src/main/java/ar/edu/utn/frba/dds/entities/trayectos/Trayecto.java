@@ -101,7 +101,7 @@ public class Trayecto {
     }
 
     public Float calcularDistancia(){
-        return tramos.stream().map(tramo -> tramo.getValor()).reduce(0F, (tot, dist) -> tot + dist);
+        return tramos.stream().map(Tramo::getValor).reduce(0F, Float::sum);
     }
 
     public Float calcularDistanciaMedia(){

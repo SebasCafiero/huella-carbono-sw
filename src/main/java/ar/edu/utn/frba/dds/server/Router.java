@@ -53,6 +53,7 @@ public class Router {
         Spark.post("/agenteSectorial", agenteSectorialController::agregar);
 
         ReportesController reportesController = new ReportesController();
-        Spark.get("/reportes/agente", reportesController::generarReporteAgente);
+        Spark.get("/reportes/agente/:id", reportesController::generarReporteAgente);
+        Spark.get("/reportes/organizacion/:id", reportesController::generarReporteOrganizacion);
     }
 }

@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.lugares;
+package ar.edu.utn.frba.dds.entities.lugares;
 
 import ar.edu.utn.frba.dds.entities.lugares.*;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;

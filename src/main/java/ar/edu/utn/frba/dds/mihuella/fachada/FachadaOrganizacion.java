@@ -73,16 +73,14 @@ public class FachadaOrganizacion implements FachadaOrg {
     private Float calcularImpactoMediciones(Organizacion organizacion, Periodo periodo) {
         return organizacion.getMediciones().stream()
                 .map(me -> obtenerHU(Collections.singletonList(me)) *
-                        factorEquivalencia(periodo, me.getPeriodo()))
+                        factorEquivalenciaPeriodos(periodo, me.getPeriodo()))
                 .reduce(Float::sum).orElse(0F);
     }
 
     public Float calcularImpactoTrayectos(Miembro miembro, Periodo periodo) {
         return miembro.getTrayectos().stream()
-                .map(trayecto -> obtenerHU(new ArrayList<>(trayecto.getTramos())) /
-                        miembro.cantidadDeOrganizacionesDondeTrabaja() /
-                        trayecto.cantidadDeMiembros() *
-                        factorEquivalencia(periodo, trayecto.getPeriodo())
+                .map(trayecto -> obtenerHU(new ArrayList<>(trayecto.getTramos())) *
+                        factorProporcionalTrayecto(trayecto, miembro, periodo)
                 ).reduce(Float::sum).orElse(0F);
     }
 
@@ -94,17 +92,16 @@ public class FachadaOrganizacion implements FachadaOrg {
 
     private Float calcularImpactoTrayectos(Organizacion org, Periodo periodo) {
         return org.getSectores().stream()
-                .flatMap(sector -> sector.getListaDeMiembros().stream())
-                .map(miembro -> miembro.getTrayectos().stream()
-                        .map(trayecto -> obtenerHU(new ArrayList<>(trayecto.getTramos())) /
-                                miembro.cantidadDeOrganizacionesDondeTrabaja() /
-                                trayecto.cantidadDeMiembros() *
-                                factorEquivalencia(periodo, trayecto.getPeriodo())
-                        ).reduce(Float::sum).orElse(0F)
-                ).reduce(Float::sum).orElse(0F);
+                .map(sector -> calcularImpactoTrayectos(sector, periodo))
+                .reduce(Float::sum).orElse(0F);
     }
 
-    public float factorEquivalencia(Periodo periodoDeseado, Periodo periodoMedible) {
+    public float factorProporcionalTrayecto(Trayecto trayecto, Miembro miembro, Periodo periodo) {
+        return factorEquivalenciaPeriodos(periodo, trayecto.getPeriodo()) *
+                factorProporcionalCompartido(trayecto) *
+                factorProporcionalOrganizaciones(miembro);
+    }
+    public float factorEquivalenciaPeriodos(Periodo periodoDeseado, Periodo periodoMedible) {
         if(!periodoDeseado.getAnio().equals(periodoMedible.getAnio()))
             return 0;
 
@@ -118,5 +115,19 @@ public class FachadaOrganizacion implements FachadaOrg {
             return 0;
 
         return 1;
+    }
+
+    private float factorProporcionalCompartido(Trayecto trayecto) {
+        if(trayecto.cantidadDeMiembros().equals(0))
+            throw new TrayectoSinMiembrosAsignadosException(trayecto);
+
+        return 1F / trayecto.cantidadDeMiembros();
+    }
+
+    private float factorProporcionalOrganizaciones(Miembro miembro) {
+        if(miembro.cantidadDeOrganizacionesDondeTrabaja().equals(0))
+            throw new MiembroSinOrganizacionesException(miembro);
+
+        return 1F / miembro.cantidadDeOrganizacionesDondeTrabaja();
     }
 }

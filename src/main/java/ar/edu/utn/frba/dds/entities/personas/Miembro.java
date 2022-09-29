@@ -60,19 +60,19 @@ public class Miembro {
         return this.nombre + " " + this.apellido;
     }
 
-    public void agregarSector(Sector sector) throws MiembroException {
+    public void agregarSector(Sector sector) {
         if(this.trabajaEnSector(sector))
             throw new MiembroException("El miembro ya trabaja en ese sector");
         this.sectoresDondeTrabaja.add(sector);
     }
 
-    public void quitarSector(Sector sector) throws MiembroException {
+    public void quitarSector(Sector sector) {
         if(!this.trabajaEnSector(sector))
             throw new MiembroException("El miembro no trabaja en ese sector");
         this.sectoresDondeTrabaja.remove(sector);
     }
 
-    public void solicitarIngresoAlSector(Sector sector) throws MiembroException {
+    public void solicitarIngresoAlSector(Sector sector) {
         sector.agregarMiembro(this);
     }
 

@@ -13,7 +13,6 @@ import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
-import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
@@ -37,6 +36,7 @@ public class FachadaTrayectosTest {
 
         Map<String, Float> fe = new HashMap<>();
         fe.put("Traslado de Miembros -> Publico - COLECTIVO : lt", 10F);
+        fe.put("Traslado de Miembros -> Particular - NAFTA : lt", 20F);
         calculadora = new FachadaOrganizacion(new RepoFactoresMemoria<>(new DAOMemoria<>(FactorEmision.class)));
         calculadora.cargarParametros(fe);
 

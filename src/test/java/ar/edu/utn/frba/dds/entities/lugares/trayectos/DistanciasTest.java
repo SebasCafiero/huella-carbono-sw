@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.trayectos;
+package ar.edu.utn.frba.dds.entities.lugares.trayectos;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.transportes.*;
@@ -25,7 +25,7 @@ public class DistanciasTest {
         listaTramos.add(tramo2);
         unTrayecto.agregarTramos(listaTramos);
         unTrayecto.agregarTramo(tramo3);
-        Assertions.assertEquals(4+3+6,unTrayecto.calcularDistancia());
+        Assertions.assertEquals(4+3+6, unTrayecto.calcularDistancia());
     }
 
     @Test

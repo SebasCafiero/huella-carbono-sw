@@ -7,7 +7,6 @@ import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteOrganizacion;
-import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.servicios.reportes.NotificadorReportes;
 
@@ -57,9 +56,7 @@ public class FachadaReportes {
                 Float consumoMiembro = miembro.getTrayectos().stream()
                         .flatMap(trayecto -> trayecto.getTramos().stream()).map(tramo -> {
                             final float consumoTramo = fachadaOrganizacion.obtenerHU(Collections.singletonList(tramo)) /
-                                    miembro.cantidadDeOrganizacionesDondeTrabaja() /
-                                    tramo.getTrayecto().cantidadDeMiembros() *
-                                    fachadaOrganizacion.factorEquivalencia(periodo, tramo.getTrayecto().getPeriodo());
+                                    fachadaOrganizacion.factorProporcionalTrayecto(tramo.getTrayecto(), miembro, periodo);
 
                             consumoPorCategoria.putIfAbsent(tramo.getMiCategoria(), 0F);
                             consumoPorCategoria.compute(tramo.getMiCategoria(), (anterior, nuevo) -> +consumoTramo);
@@ -75,7 +72,7 @@ public class FachadaReportes {
 
         Float totalMediciones = organizacion.getMediciones().stream().map(me -> {
             final float consumoMedicion = fachadaOrganizacion.obtenerHU(Collections.singletonList(me)) *
-                    fachadaOrganizacion.factorEquivalencia(periodo, me.getPeriodo());
+                    fachadaOrganizacion.factorEquivalenciaPeriodos(periodo, me.getPeriodo());
 
             consumoPorCategoria.putIfAbsent(me.getMiCategoria(), 0F);
             consumoPorCategoria.compute(me.getMiCategoria(), (anterior, nuevo) -> +consumoMedicion);
