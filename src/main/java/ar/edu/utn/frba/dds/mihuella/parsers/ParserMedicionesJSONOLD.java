@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.mihuella.parsers;
 
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.mapping.MedicionMapper;
-import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.MedicionJSONDTO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -13,7 +12,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParserMedicionesJSON implements ParserMediciones {
+public class ParserMedicionesJSONOLD implements ParserMediciones { //TODO VER SI BORRAR
     public List<MedicionJSONDTO> generarMediciones(String archivo) throws IOException {
         List<Medicion> mediciones = new ArrayList<>();
 

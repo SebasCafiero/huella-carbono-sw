@@ -45,6 +45,8 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
         if(unidadDistancia != "KM"){ //TODO
             //valorDistancia = valorDistancia * multiplicadorRespectoKM(unidadDistancia);
         }
+
+//        throw new RuntimeException("Servicio Morido");
         return valorDistancia;
     }
 

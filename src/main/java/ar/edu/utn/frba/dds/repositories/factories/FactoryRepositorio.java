@@ -89,7 +89,7 @@ public class FactoryRepositorio {
 
         try {
             Properties propiedades = new Properties();
-            FileReader file = new FileReader("resources/aplication.properties");
+            FileReader file = new FileReader("resources/aplication.properties"); //TODO
             propiedades.load(file);
             jpa = propiedades.getProperty("jpa").equals("true");
             file.close();

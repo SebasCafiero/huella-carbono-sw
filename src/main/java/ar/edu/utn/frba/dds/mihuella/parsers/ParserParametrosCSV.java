@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParserParametrosCSV implements ParserParametros {
+public class ParserParametrosCSV implements ParserParametros { //TODO VER DE USAR POJO
 
     @Override
     public Map<String, Float> generarFE(String archivo) throws IOException {

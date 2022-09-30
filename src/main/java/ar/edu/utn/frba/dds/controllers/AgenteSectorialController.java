@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
+import ar.edu.utn.frba.dds.mapping.AgenteSectorialMapper;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserAgentesJSON;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
@@ -25,13 +26,13 @@ public class AgenteSectorialController {
     }
 
     public Object agregar(Request request, Response response){
-        AgenteSectorial agenteSectorial = ParserAgentesJSON.generarAgente(request.body());
+        AgenteSectorial agenteSectorial = AgenteSectorialMapper.toEntity(ParserAgentesJSON.generarAgente(request.body()));
         this.repositorio.agregar(agenteSectorial);
         return "Agente Sectorial agregado correctamente";
     }
 
     public Object modificar(Request request, Response response){
-        AgenteSectorial agenteSectorial = ParserAgentesJSON.generarAgente(request.body());
+        AgenteSectorial agenteSectorial = AgenteSectorialMapper.toEntity(ParserAgentesJSON.generarAgente(request.body()));
         this.repositorio.modificar(Integer.valueOf(request.params("id")),agenteSectorial);
         return "Agente Sectorial modificado correctamente";
     }

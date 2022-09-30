@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
+import ar.edu.utn.frba.dds.mapping.FactorEmisionMapper;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserFactoresJSON;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
@@ -18,7 +19,7 @@ public class FactorEmisionController {
     }
 
     public Object modificar(Request request, Response response){
-        FactorEmision factorEmision = ParserFactoresJSON.generarFactor(request.body());
+        FactorEmision factorEmision = FactorEmisionMapper.toEntity(ParserFactoresJSON.generarFactor(request.body()));
         this.repositorio.modificar(Integer.valueOf(request.params("id")), factorEmision);
         return "Factor de emision de id : " + String.valueOf(request.params("id")) + " modificado correctamente.";
     }

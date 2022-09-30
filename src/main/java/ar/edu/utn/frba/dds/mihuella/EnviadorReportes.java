@@ -4,22 +4,33 @@ import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Municipio;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
+import ar.edu.utn.frba.dds.mapping.OrganizacionMapper;
+import ar.edu.utn.frba.dds.mapping.TransportesMapper;
 import ar.edu.utn.frba.dds.mapping.TrayectosMapper;
+import ar.edu.utn.frba.dds.mihuella.dto.OrganizacionJSONDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
+import ar.edu.utn.frba.dds.mihuella.dto.TransporteJSONDTO;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaReportes;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaTrayectos;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.servicios.reportes.NotificadorReportesMail;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,33 +63,22 @@ public class EnviadorReportes {
         System.out.println("Archivo de transportes: " + ns.get("transportes"));
 
         FachadaOrganizacion fachadaOrganizacion = new FachadaOrganizacion();
-        FachadaTrayectos fachadaTrayectos = new FachadaTrayectos();
         Map<String,Float> factoresDeEmision;
         List<Organizacion> organizaciones;
-        List<TramoCSVDTO> trayectosDTO;
-        List<MedioDeTransporte> medios;
 
         try {
-            factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
-            organizaciones = ParserOrganizacionesJSON.generarOrganizaciones(ns.getString("organizaciones"));
-            ParserTransportesJSON.generarTransportes(ns.getString("transportes"));
-            trayectosDTO = new ParserTrayectos().capturarEntradas(ns.getString("trayectos"));
+            factoresDeEmision = cargarFE(ns.getString("params"));
+            organizaciones = cargarOrganizaciones(ns.getString("organizaciones"));
+            cargarTransportes(ns.getString("transportes"));
+            cargarTrayectos(ns.getString("trayectos"));
         } catch (IOException | FechaException | NoExisteMedioException ex) {
             System.out.println(ex.getMessage());
             return;
         }
 
         fachadaOrganizacion.cargarParametros(factoresDeEmision);
-        trayectosDTO.forEach(tr -> {
-            boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");
-            if(!esCompartidoPasivo) {
-                fachadaTrayectos.cargarTrayectoActivo(TrayectosMapper.toNuevoTrayectoDTO(tr));
-            } else {
-                fachadaTrayectos.cargarTrayectoPasivo(TrayectosMapper.toTrayectoCompartidoDTO(tr));
-            }
-        });
 
-        Integer anio = 2020;
+        Integer anio = 2020;//TODO
         Integer mes = 10;
 
         for(String categoria : factoresDeEmision.keySet()) {
@@ -100,5 +100,59 @@ public class EnviadorReportes {
         fachadaReportes
                 .setNotificador(new NotificadorReportesMail())
                 .generarReporteAgente(areaReporte, anio, mes);
+    }
+
+
+    public static Map<String,Float> cargarFE(String archFE) throws IOException {
+        Map<String,Float> factoresDeEmision = new ParserParametrosCSV().generarFE(archFE); //TODO parser-mapper
+        return factoresDeEmision;
+    }
+
+    public static List<Organizacion> cargarOrganizaciones(String archOrg) throws IOException, ParseException {
+        List<Organizacion> organizaciones = new ArrayList<>();
+
+        List<OrganizacionJSONDTO> organizacionesDTO = ParserOrganizacionesJSON.generarOrganizaciones(archOrg);
+        Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
+
+        for(OrganizacionJSONDTO organizacionDTO : organizacionesDTO){
+            Organizacion unaOrg = OrganizacionMapper.toEntity(organizacionDTO);
+            for(Miembro unMiembro : unaOrg.getMiembros()){
+                repoMiembros.agregar(unMiembro);
+            }
+            organizaciones.add(unaOrg);
+        }
+
+        return organizaciones;
+    }
+
+    public static void cargarTransportes(String archTrans) throws FileNotFoundException {
+        //List<MedioDeTransporte> mediosDeTransporte = new ArrayList<>();
+
+        List<TransporteJSONDTO> transportesDTO = ParserTransportesJSON.generarTransportes(archTrans);
+        Repositorio<MedioDeTransporte> repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
+
+        for(TransporteJSONDTO transporteDTO : transportesDTO){
+            MedioDeTransporte unTransporte = TransportesMapper.toEntity(transporteDTO);
+            //mediosDeTransporte.add(unTransporte);
+            repoMedios.agregar(unTransporte);
+        }
+    }
+
+    public static void cargarTrayectos(String archTray) throws FileNotFoundException {
+        List<Tramo> tramos = new ArrayList<>();
+        FachadaTrayectos fachadaTrayectos = new FachadaTrayectos();
+
+        List<TramoCSVDTO> trayectosDTO = new ParserTrayectos().capturarEntradas(archTray);
+
+        trayectosDTO.forEach(tr -> {
+            boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");
+            if(!esCompartidoPasivo) {
+                fachadaTrayectos.cargarTrayectoActivo(TrayectosMapper.toNuevoTrayectoDTO(tr));
+            } else {
+                fachadaTrayectos.cargarTrayectoPasivo(TrayectosMapper.toTrayectoCompartidoDTO(tr));
+            }
+        });
+
+        fachadaTrayectos.mostrarTrayectos();
     }
 }

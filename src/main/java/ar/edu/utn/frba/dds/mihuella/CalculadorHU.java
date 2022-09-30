@@ -49,17 +49,17 @@ public class CalculadorHU {
         System.out.println("Archivo de parametros: " + ns.get("params"));
 
         Map<String,Float> factoresDeEmision;
-        List<MedicionCSVDTO> medicionesDTO;
+        Repositorio<Medicion> repoMediciones = FactoryRepositorio.get(Medicion.class);
+        List<Medicion> mediciones;
         try {
-            factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
-            medicionesDTO = new ParserMedicionesCSV().generarMediciones(ns.getString("mediciones"));
+            factoresDeEmision = cargarFE(ns.getString("params"));
+            mediciones = cargarMediciones(ns.getString("mediciones"));
         } catch (IOException | FechaException ex) {
             System.out.println(ex.getMessage());
             return;
         }
 
-        Repositorio<Medicion> repoMediciones = FactoryRepositorio.get(Medicion.class);
-        List<Medicion> mediciones = medicionesDTO.stream().map(MedicionMapper::toEntity).collect(Collectors.toList());
+
         mediciones.forEach(repoMediciones::agregar);
 
         FachadaOrganizacion calculadora = new FachadaOrganizacion();
@@ -79,5 +79,15 @@ public class CalculadorHU {
 
         System.out.println("La huella de carbono correspondiente a las mediciones ingresadas es: " + hcOrg);
         System.exit(0);
+    }
+
+    public static Map<String,Float> cargarFE(String archFE) throws IOException {
+        Map<String,Float> factoresDeEmision = new ParserParametrosCSV().generarFE(archFE); //TODO parser-mapper
+        return factoresDeEmision;
+    }
+
+    public static List<Medicion> cargarMediciones(String archMed) throws IOException {
+        List<MedicionCSVDTO> medicionesDTO = new ParserMedicionesCSV().generarMediciones(archMed);
+        return medicionesDTO.stream().map(MedicionMapper::toEntity).collect(Collectors.toList());
     }
 }

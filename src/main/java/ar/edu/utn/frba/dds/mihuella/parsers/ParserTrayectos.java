@@ -28,7 +28,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ParserTrayectos {
+public class ParserTrayectos { //TODO VER DE BORRAR METODOS VIEJOS
     private final Repositorio<Miembro> repoMiembros;
     private final Repositorio<Trayecto> repoTrayectos;
     private final Repositorio<MedioDeTransporte> repoMedios;

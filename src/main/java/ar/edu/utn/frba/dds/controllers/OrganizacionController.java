@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.SectorException;
+import ar.edu.utn.frba.dds.mapping.OrganizacionMapper;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserOrganizacionesJSON;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
@@ -29,13 +30,13 @@ public class OrganizacionController {
     }
 
     public Object modificar(Request request, Response response) throws SectorException {
-        Organizacion organizacion = ParserOrganizacionesJSON.generarOrganizacion(request.body());
+        Organizacion organizacion = OrganizacionMapper.toEntity(ParserOrganizacionesJSON.generarOrganizacion(request.body()));
         this.repositorio.modificar(Integer.valueOf(request.params("id")), organizacion);
         return "Organizacion modificada correctamente";
     }
 
     public Object agregar(Request request, Response response) throws SectorException {
-        Organizacion organizacion = ParserOrganizacionesJSON.generarOrganizacion(request.body());
+        Organizacion organizacion = OrganizacionMapper.toEntity(ParserOrganizacionesJSON.generarOrganizacion(request.body()));
         this.repositorio.agregar(organizacion);
         return "Agregaste correctamente la organizacion";
     }

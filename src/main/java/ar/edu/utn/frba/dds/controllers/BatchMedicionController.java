@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.mapping.BatchMedicionMapper;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserBatchesJSON;
 import com.google.gson.Gson;
 import spark.Request;
@@ -33,7 +34,7 @@ public class BatchMedicionController {
 
 
     public Object agregar(Request request, Response response){
-        BatchMedicion batchMedicion = ParserBatchesJSON.generarBatch(request.body());
+        BatchMedicion batchMedicion = BatchMedicionMapper.toEntity(ParserBatchesJSON.generarBatch(request.body()));
         batchMedicion.setFecha(LocalDate.now());
         this.repositorio.agregar(batchMedicion);
         for(Medicion medicion : batchMedicion.getMediciones()) {
