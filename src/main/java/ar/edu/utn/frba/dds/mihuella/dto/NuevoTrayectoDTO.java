@@ -11,13 +11,14 @@ public class NuevoTrayectoDTO {
     private String tipoMedio;
     private String atributo1;
     private String atributo2;
+    private Character periodicidad;
+    private Integer anio;
+    private Integer mes;
 
     public NuevoTrayectoDTO() {
     }
 
-    public NuevoTrayectoDTO(Integer trayectoId, Integer miembroDNI, Boolean compartidoPasivo, Float latitudInicial,
-                            Float longitudInicial, Float latitudFinal, Float longitudFinal, String tipoMedio,
-                            String atributo1, String atributo2) {
+    public NuevoTrayectoDTO(Integer trayectoId, Integer miembroDNI, Boolean compartidoPasivo, Float latitudInicial, Float longitudInicial, Float latitudFinal, Float longitudFinal, String tipoMedio, String atributo1, String atributo2, Character periodicidad, Integer anio, Integer mes) {
         this.trayectoId = trayectoId;
         this.miembroDNI = miembroDNI;
         this.compartidoPasivo = compartidoPasivo;
@@ -28,6 +29,9 @@ public class NuevoTrayectoDTO {
         this.tipoMedio = tipoMedio;
         this.atributo1 = atributo1;
         this.atributo2 = atributo2;
+        this.periodicidad = periodicidad;
+        this.anio = anio;
+        this.mes = mes;
     }
 
     public Integer getTrayectoId() {
@@ -110,19 +114,27 @@ public class NuevoTrayectoDTO {
         this.atributo2 = atributo2;
     }
 
-    @Override
-    public String toString() {
-        return "NuevoTrayectoDTO{" +
-                "trayectoId=" + trayectoId +
-                ", miembroDNI=" + miembroDNI +
-                ", compartidoPasivo=" + compartidoPasivo +
-                ", latitudInicial=" + latitudInicial +
-                ", longitudInicial=" + longitudInicial +
-                ", latitudFinal=" + latitudFinal +
-                ", longitudFinal=" + longitudFinal +
-                ", tipoMedio='" + tipoMedio + '\'' +
-                ", atributo1='" + atributo1 + '\'' +
-                ", atributo2='" + atributo2 + '\'' +
-                '}';
+    public Character getPeriodicidad() {
+        return periodicidad;
+    }
+
+    public void setPeriodicidad(Character periodicidad) {
+        this.periodicidad = periodicidad;
+    }
+
+    public Integer getAnio() {
+        return anio;
+    }
+
+    public void setAnio(Integer anio) {
+        this.anio = anio;
+    }
+
+    public Integer getMes() {
+        return mes;
+    }
+
+    public void setMes(Integer mes) {
+        this.mes = mes;
     }
 }

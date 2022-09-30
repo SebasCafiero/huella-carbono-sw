@@ -3,9 +3,11 @@ package ar.edu.utn.frba.dds.mihuella;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
+import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
+import ar.edu.utn.frba.dds.mihuella.fachada.FachadaTrayectos;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import net.sourceforge.argparse4j.ArgumentParsers;
@@ -50,19 +52,29 @@ public class TrayectosHCSectores {
 
         Map<String,Float> factoresDeEmision;
         List<Organizacion> organizaciones;
+        List<TramoCSVDTO> trayectosDTO;
+        FachadaOrganizacion fachada = new FachadaOrganizacion();
+        FachadaTrayectos fachadaTrayectos = new FachadaTrayectos();
 
         try {
             factoresDeEmision = new ParserParametrosCSV().generarFE(ns.getString("params"));
             organizaciones = ParserOrganizacionesJSON.generarOrganizaciones(ns.getString("organizaciones"));
             ParserTransportesJSON.generarTransportes(ns.getString("transportes"));
-            ParserTrayectos.generarTrayectos(ns.getString("trayectos"));
+            trayectosDTO = new ParserTrayectos().capturarEntradas(ns.getString("trayectos"));
         } catch (IOException | FechaException | NoExisteMedioException ex) {
             System.out.println(ex.getMessage());
             return;
         }
 
-        FachadaOrganizacion fachada = new FachadaOrganizacion();
         fachada.cargarParametros(factoresDeEmision);
+        trayectosDTO.forEach(tr -> {
+            boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");
+            if(!esCompartidoPasivo) {
+                fachadaTrayectos.cargarTrayectoActivo(TrayectosMapper.toNuevoTrayectoDTO(tr));
+            } else {
+                fachadaTrayectos.cargarTrayectoPasivo(TrayectosMapper.toTrayectoCompartidoDTO(tr));
+            }
+        });
 
         //SALIDA 2
         PrintWriter writer = new PrintWriter(SALIDA_2_PATH, "UTF-8");
@@ -74,12 +86,12 @@ public class TrayectosHCSectores {
         for(Organizacion org : organizaciones){
             String razonSocial = org.getRazonSocial();
             Set<Sector> sectores = org.getSectores();
-            Float consumoTotalOrganizacion = fachada.getImpactoTrayectosOrganizacion(org, anio, mes);
+            Float consumoTotalOrganizacion = fachada.calcularImpactoOrganizacion(org, new Periodo(anio, mes));
 
             for(Sector sector : sectores){
                 String nombreSector = sector.getNombre();
                 System.out.println("Sector: " + nombreSector);
-                float impacto = fachada.getImpactoSector(sector, anio, mes) / consumoTotalOrganizacion;
+                float impacto = fachada.calcularImpactoTrayectos(sector, new Periodo(anio, mes)) / consumoTotalOrganizacion;
                 writer.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto);
                 System.out.println(anio + ", " + mes + ", " + razonSocial + ", " + nombreSector + ", " + impacto + '\n');
             }

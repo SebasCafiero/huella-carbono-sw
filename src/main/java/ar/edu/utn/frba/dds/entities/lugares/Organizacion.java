@@ -76,7 +76,7 @@ public class Organizacion {
                 .collect(Collectors.toSet());
     }
 
-    public void agregarSector(Sector sector) throws SectorException {
+    public void agregarSector(Sector sector) {
         if (this.sectores.contains(sector)) {
             throw new SectorException("El sector ya pertenece a la organización.");
         }

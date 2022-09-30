@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.lugares;
+package ar.edu.utn.frba.dds.entities.lugares;
 
 import ar.edu.utn.frba.dds.entities.lugares.*;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import static ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum.*;
 
 public class OrganizacionTest {
-
 
     @Test
     public void unaOrganizacionNoPuedeRepetirSector() throws SectorException {
@@ -26,12 +25,11 @@ public class OrganizacionTest {
     }
 
     @Test
-    public void agregarSectoresAUnaOrganizacoin() throws Exception {
+    public void agregarSectoresAUnaOrganizacion() throws Exception {
         Organizacion unaOrg = new Organizacion("miRazonSocial",
                 ONG,
                 new ClasificacionOrganizacion("GreenPeace"),
                 new UbicacionGeografica(new Coordenada(10F,5F)));
-
 
         Assertions.assertEquals(0,unaOrg.cantidadSectores());
         Sector sector1 = new Sector("sector1",unaOrg);

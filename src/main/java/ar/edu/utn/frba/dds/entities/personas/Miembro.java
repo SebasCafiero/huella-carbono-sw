@@ -60,19 +60,19 @@ public class Miembro {
         return this.nombre + " " + this.apellido;
     }
 
-    public void agregarSector(Sector sector) throws MiembroException {
+    public void agregarSector(Sector sector) {
         if(this.trabajaEnSector(sector))
             throw new MiembroException("El miembro ya trabaja en ese sector");
         this.sectoresDondeTrabaja.add(sector);
     }
 
-    public void quitarSector(Sector sector) throws MiembroException {
+    public void quitarSector(Sector sector) {
         if(!this.trabajaEnSector(sector))
             throw new MiembroException("El miembro no trabaja en ese sector");
         this.sectoresDondeTrabaja.remove(sector);
     }
 
-    public void solicitarIngresoAlSector(Sector sector) throws MiembroException {
+    public void solicitarIngresoAlSector(Sector sector) {
         sector.agregarMiembro(this);
     }
 
@@ -151,17 +151,17 @@ public class Miembro {
         return trayectos;
     }
 
-    @Override
-    public String toString() {
-        return "Miembro{" +
-                "nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", tipoDeDocumento=" + tipoDeDocumento +
-                ", nroDocumento=" + nroDocumento +
-                ", sectoresDondeTrabaja=" + sectoresDondeTrabaja +
-                ", trayectos=" + trayectos +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Miembro{" +
+//                "nombre='" + nombre + '\'' +
+//                ", apellido='" + apellido + '\'' +
+//                ", tipoDeDocumento=" + tipoDeDocumento +
+//                ", nroDocumento=" + nroDocumento +
+//                ", sectoresDondeTrabaja=" + sectoresDondeTrabaja +
+//                ", trayectos=" + trayectos +
+//                '}';
+//    }
     /*TO string raro que no quisimos borrar por si era util
     @Override
     public String toString() {

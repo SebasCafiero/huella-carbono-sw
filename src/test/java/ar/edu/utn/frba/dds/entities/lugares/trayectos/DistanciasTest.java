@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.trayectos;
+package ar.edu.utn.frba.dds.entities.lugares.trayectos;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
@@ -52,8 +52,8 @@ public class DistanciasTest {
         listaTramos.add(tramo2);
         unTrayecto.agregarTramos(listaTramos);
         unTrayecto.agregarTramo(tramo3);
-        Assertions.assertEquals(0,unTrayecto.calcularDistancia());
-//        Assertions.assertEquals(4+3+6,unTrayecto.calcularDistancia());
+        Assertions.assertEquals(0, unTrayecto.calcularDistancia());
+//        Assertions.assertEquals(4+3+6, unTrayecto.calcularDistancia());
     }
 
     @Test
@@ -70,15 +70,16 @@ public class DistanciasTest {
         );
 
         Trayecto unTrayecto = new Trayecto();
-        Tramo tramo1 = new Tramo(unTransportePublico,new Coordenada(5F,5F),new Coordenada(8F,12F));
-        Tramo tramo2 = new Tramo(unTransportePublico,new Coordenada(8F,12F),new Coordenada(11F,15F));
-        Tramo tramo3 = new Tramo(unTransportePublico,new Coordenada(11F,15F),new Coordenada(5F,5F));
-        ArrayList listaTramos = new ArrayList<>();
+        Tramo tramo1 = new Tramo(unTransportePublico, new Coordenada(5F,5F), new Coordenada(8F,12F));
+        Tramo tramo2 = new Tramo(unTransportePublico, new Coordenada(8F,12F), new Coordenada(11F,15F));
+        Tramo tramo3 = new Tramo(unTransportePublico, new Coordenada(11F,15F), new Coordenada(5F,5F));
+        ArrayList<Tramo> listaTramos = new ArrayList<>();
         listaTramos.add(tramo1);
         listaTramos.add(tramo2);
         unTrayecto.agregarTramos(listaTramos);
         unTrayecto.agregarTramo(tramo3);
-        Assertions.assertEquals(0.6F+0.8F+0.3F,unTrayecto.calcularDistancia());
+        Assertions.assertEquals(2.5F, unTrayecto.calcularDistancia());
+//        Assertions.assertEquals(0.6F+0.8F+0.3F,unTrayecto.calcularDistancia());
     }
 
     @Test

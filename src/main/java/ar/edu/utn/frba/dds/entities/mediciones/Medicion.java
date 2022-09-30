@@ -13,7 +13,7 @@ public class Medicion implements Medible {
 
 //    @ManyToOne(fetch = FetchType.EAGER, optional = true)
 //    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
-    @Transient
+    @Embedded
     private Categoria categoria;
 
     @Column(name = "unidad")
@@ -79,8 +79,8 @@ public class Medicion implements Medible {
         this.periodo = periodo;
     }
 
-    public void setPeriodicidad(Character periodicidad) {
-        this.periodo.setPeriodicidad(periodicidad);
+    public Categoria getMiCategoria() {
+        return this.categoria;
     }
 
     @Override
@@ -98,11 +98,6 @@ public class Medicion implements Medible {
     }
 
     public boolean perteneceAPeriodo(Integer anio, Integer mes) {
-        if(getPeriodo().getPeriodicidad().equals('A')) {
-            return getPeriodo().getAnio().equals(anio);
-        } else if(getPeriodo().getPeriodicidad().equals('M')) {
-            return getPeriodo().getAnio().equals(anio) && getPeriodo().getMes().equals(mes);
-        }
-        return false;
+        return periodo.incluye(anio, mes);
     }
 }
