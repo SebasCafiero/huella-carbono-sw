@@ -123,7 +123,7 @@ public class Tramo implements Medible {
                 "medioDeTransporte=" + medioDeTransporte +
                 ", ubicacionInicial=" + ubicacionInicial +
                 ", ubicacionFinal=" + ubicacionFinal +
-                ", trayecto=" + trayecto +
+                ", trayectoId=" + trayecto.getId() +
                 ", valor=" + valor +
                 '}';
     }

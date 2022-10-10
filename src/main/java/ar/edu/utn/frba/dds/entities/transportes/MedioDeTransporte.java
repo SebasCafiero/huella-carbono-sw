@@ -37,5 +37,7 @@ public abstract class MedioDeTransporte {
     @Override
     public abstract String toString();
 
+    public abstract String getClasificacion(); //todo para web
+
     public abstract String getCategoria();
 }

@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
 import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoCategoriasJPA;
 import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoFactoresJPA;
@@ -59,6 +60,8 @@ public class FactoryRepositorio {
                     repo = new RepoCategoriasMemoria(new DAOMemoria<>(Categoria.class, Data.getDataCategorias()));
                 } else if(type.equals(AgenteSectorial.class)) {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type,Data.getDataAgenteSectorial()));
+                } else if(type.equals(Trayecto.class)) {
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataTrayecto()));
                 } else {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
                 }

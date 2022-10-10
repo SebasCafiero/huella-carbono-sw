@@ -17,6 +17,11 @@ public class ServicioContratado extends MedioDeTransporte {
     }
 
     @Override
+    public String getClasificacion() {
+        return tipo.toString();
+    }
+
+    @Override
     public String getCategoria() {
         return "Contratado";
     }

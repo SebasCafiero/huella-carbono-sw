@@ -41,5 +41,9 @@ public class Data {
         return DataAgenteSectorial.getList();
     }
 
+    public static <T> List<T> getDataTrayecto() {
+        return DataTrayecto.getList();
+    }
+
 }
 

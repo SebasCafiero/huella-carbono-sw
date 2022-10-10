@@ -18,8 +18,8 @@ public class Router {
     }
 
     public static void init() {
-//        Router.initEngine(); //Para diseño web
-//        Spark.staticFileLocation("/public"); //Para diseño web
+        Router.initEngine(); //Para diseño web
+        Spark.staticFileLocation("/public"); //Para diseño web
         Router.configure();
     }
 
@@ -55,5 +55,16 @@ public class Router {
         ReportesController reportesController = new ReportesController();
         Spark.get("/reportes/agente/:id", reportesController::generarReporteAgente);
         Spark.get("/reportes/organizacion/:id", reportesController::generarReporteOrganizacion);
+
+
+        TrayectosController trayectosController = new TrayectosController();
+        Spark.get("/trayectos", trayectosController::mostrarTodos, engine); //muestro todos trayectos.html
+
+        Spark.get("/trayecto/:id", trayectosController::obtener, engine); //muestro el trayecto especifico trayecto.html
+        Spark.post("/trayecto/:id", trayectosController::modificar); //modifico un trayecto (trayecto-edicion.html) (PUT no en <form>)
+
+        Spark.get("/trayecto", trayectosController::darAlta); //muestro para crear un nuevo trayecto trayecto-edicion.html
+        Spark.post("/trayecto", trayectosController::agregar); //creo un nuevo trayecto (trayecto-edicion.html)
+
     }
 }

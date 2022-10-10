@@ -20,6 +20,11 @@ public class VehiculoParticular extends MedioDeTransporte {
     }
 
     @Override
+    public String getClasificacion() {
+        return tipo.toString() + " - " + combustible.toString();
+    }
+
+    @Override
     public int hashCode() {
         return 0;
     }

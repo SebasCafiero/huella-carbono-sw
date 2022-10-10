@@ -169,5 +169,14 @@ public class Miembro {
                 "&nbsp;&nbsp;&nbsp;&nbsp;nombre='" + nombre + '\'' +
                 "}<br>";
     }*/
+
+    @Override
+    public String toString() {
+        return "Miembro{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                '}';
+    }
 }
 

@@ -16,6 +16,7 @@ import ar.edu.utn.frba.dds.repositories.daos.EntityManagerHelper;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class FachadaTrayectos {
@@ -33,6 +34,14 @@ public class FachadaTrayectos {
         this.repoMiembros = repoMiembros;
         this.repoTrayectos = repoTrayectos;
         this.repoMedios = repoMedios;
+    }
+
+    public void cargarTrayecto(Trayecto unTrayecto) {
+        this.repoTrayectos.agregar(unTrayecto); //TODO ver si validar que los demas repos tengan los datos del trayecto (miembros por ej)
+    }
+
+    public List<Trayecto> obtenerTrayectos() {
+        return this.repoTrayectos.buscarTodos();
     }
 
     public void mostrarTrayectos() {

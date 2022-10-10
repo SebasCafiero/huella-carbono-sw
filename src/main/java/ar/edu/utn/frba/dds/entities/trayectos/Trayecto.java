@@ -77,10 +77,12 @@ public class Trayecto {
 
     public void agregarTramos(List<Tramo> tramos){
         this.tramos.addAll(tramos);
+        tramos.forEach(tr -> tr.setTrayecto(this)); //todo
     }
 
     public void agregarTramo(Tramo unTramo){
         this.tramos.add(unTramo);
+        unTramo.setTrayecto(this); //todo
     }
 
     public Integer getCompartido() {
@@ -118,5 +120,16 @@ public class Trayecto {
 
     public boolean perteneceAPeriodo(Integer anio, Integer mes) {
         return periodo.incluye(anio, mes);
+    }
+
+    @Override
+    public String toString() {
+        return "\nTrayecto{" +
+                "id=" + id +
+                ", tramos=" + tramos +
+                ", miembros=" + miembros +
+                ", compartido=" + compartido +
+                ", periodo=" + periodo +
+                '}';
     }
 }

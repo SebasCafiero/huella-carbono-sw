@@ -18,6 +18,11 @@ public class TransporteEcologico extends MedioDeTransporte {
     }
 
     @Override
+    public String getClasificacion() {
+        return tipo.toString();
+    }
+
+    @Override
     public String getCategoria() {
         return "Ecologico";
     }

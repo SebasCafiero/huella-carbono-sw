@@ -40,10 +40,12 @@ public class DataBatchMedicion {
             BatchMedicion b1 = new BatchMedicion();
             b1.setMediciones(mediciones1);
             b1.setFecha("2022-09-01");
+            b1.setCantidadMediciones(b1.getMediciones().size());
 
             BatchMedicion b2 = new BatchMedicion();
             b2.setMediciones(mediciones2);
             b2.setFecha("2021-09-01");
+            b2.setCantidadMediciones(b2.getMediciones().size());
 
 
             addAll(b1,b2);

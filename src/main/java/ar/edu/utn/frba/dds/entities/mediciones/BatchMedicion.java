@@ -71,9 +71,16 @@ public class BatchMedicion {
         this.cantidadMediciones = cantidadMediciones;
     }
 
+//    @Override
+//    public String toString() {
+//        return "El batch de mediciones de id " + getId().toString() + " fue cargado en la fecha " + getFecha().toString() + " y tiene " + getCantidadMediciones().toString() + " mediciones." + '\n';
+//    }
+
     @Override
     public String toString() {
-        return "El batch de mediciones de id " + getId().toString() + " fue cargado en la fecha " + getFecha().toString() + " y tiene " + getCantidadMediciones().toString() + " mediciones." + '\n';
+        return "\nBatch id: " + id.toString() +
+                "\nFecha: " + fecha.toString() +
+                "\nMediciones: " + mediciones.toString();
     }
 }
 
