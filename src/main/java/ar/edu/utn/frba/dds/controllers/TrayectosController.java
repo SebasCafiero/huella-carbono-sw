@@ -31,8 +31,13 @@ public class TrayectosController {
     public ModelAndView obtener(Request request, Response response) {
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("trayecto", repoTrayectos.buscar(Integer.parseInt(request.params("id"))));
-        return new ModelAndView(parametros, "trayecto.hbs");
+        if(request.queryParamOrDefault("mode","view").equals("edit"))
+            return new ModelAndView(parametros,"trayecto-edicion.hbs");
+        else
+            return new ModelAndView(parametros, "trayecto.hbs");
     }
+
+    //queryparamsvalues para muchos valores con mismo name
 
     public String modificar(Request request, Response response) {
         return "modificar";

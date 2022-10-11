@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="/css/trayecto.css">
   </head>
   <body>
+    <div class="volver">
+      <span><a href="/trayectos">VOLVER</a></span>
+    </div>
   {{#with trayecto}}
     <div>
       <table class="particular">
@@ -79,7 +82,7 @@
       </table>
     </div>
     <div class="edicion">
-      <span><a href="#">EDITAR</a></span>
+      <span><a href="?mode=edit">EDITAR</a></span>
     </div>
   {{/with}}
   </body>
