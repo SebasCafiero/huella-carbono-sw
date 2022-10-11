@@ -4,25 +4,20 @@ import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
-import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
-import ar.edu.utn.frba.dds.repositories.RepoCategorias;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FachadaOrganizacion implements FachadaOrg {
     private final RepoFactores repoFactores;
-//    private final RepoCategorias repoCategorias;
 
     public FachadaOrganizacion() {
         repoFactores = (RepoFactores) FactoryRepositorio.get(FactorEmision.class);
-//        repoCategorias = (RepoCategorias) FactoryRepositorio.get(Categoria.class);
     }
 
     public FachadaOrganizacion(RepoFactores repoFactores) {

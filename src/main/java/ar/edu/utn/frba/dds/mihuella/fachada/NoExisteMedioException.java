@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.mihuella.parsers;
+package ar.edu.utn.frba.dds.mihuella.fachada;
 
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 

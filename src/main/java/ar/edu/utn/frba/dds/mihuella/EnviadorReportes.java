@@ -5,16 +5,16 @@ import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Municipio;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.mapping.OrganizacionMapper;
 import ar.edu.utn.frba.dds.mapping.TransportesMapper;
 import ar.edu.utn.frba.dds.mapping.TrayectosMapper;
-import ar.edu.utn.frba.dds.mihuella.dto.OrganizacionJSONDTO;
+import ar.edu.utn.frba.dds.mihuella.dto.OrganizacionConMiembrosJSONDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.TransporteJSONDTO;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaReportes;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaTrayectos;
+import ar.edu.utn.frba.dds.mihuella.fachada.NoExisteMedioException;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
@@ -28,7 +28,6 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,17 +103,20 @@ public class EnviadorReportes {
 
 
     public static Map<String,Float> cargarFE(String archFE) throws IOException {
-        Map<String,Float> factoresDeEmision = new ParserParametrosCSV().generarFE(archFE); //TODO parser-mapper
-        return factoresDeEmision;
+//        Map<String,Float> factoresDeEmision = new ParserParametrosCSV().generarFE(archFE); //TODO parser-mapper
+//        return factoresDeEmision;
+        return null;
     }
 
     public static List<Organizacion> cargarOrganizaciones(String archOrg) throws IOException, ParseException {
         List<Organizacion> organizaciones = new ArrayList<>();
 
-        List<OrganizacionJSONDTO> organizacionesDTO = ParserOrganizacionesJSON.generarOrganizaciones(archOrg);
+//        List<OrganizacionConMiembrosJSONDTO> organizacionesDTO = ParserOrganizacionesJSON.generarOrganizaciones(archOrg);
+        List<OrganizacionConMiembrosJSONDTO> organizacionesDTO = new ParserJSON<>(OrganizacionConMiembrosJSONDTO.class).parseFileToCollection(archOrg);
+
         Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
 
-        for(OrganizacionJSONDTO organizacionDTO : organizacionesDTO){
+        for(OrganizacionConMiembrosJSONDTO organizacionDTO : organizacionesDTO){
             Organizacion unaOrg = OrganizacionMapper.toEntity(organizacionDTO);
             for(Miembro unMiembro : unaOrg.getMiembros()){
                 repoMiembros.agregar(unMiembro);
@@ -125,10 +127,10 @@ public class EnviadorReportes {
         return organizaciones;
     }
 
-    public static void cargarTransportes(String archTrans) throws FileNotFoundException {
+    public static void cargarTransportes(String archTrans) throws IOException {
         //List<MedioDeTransporte> mediosDeTransporte = new ArrayList<>();
 
-        List<TransporteJSONDTO> transportesDTO = ParserTransportesJSON.generarTransportes(archTrans);
+        List<TransporteJSONDTO> transportesDTO = new ParserJSON<>(TransporteJSONDTO.class).parseFileToCollection(archTrans);
         Repositorio<MedioDeTransporte> repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
 
         for(TransporteJSONDTO transporteDTO : transportesDTO){
@@ -138,11 +140,10 @@ public class EnviadorReportes {
         }
     }
 
-    public static void cargarTrayectos(String archTray) throws FileNotFoundException {
-        List<Tramo> tramos = new ArrayList<>();
+    public static void cargarTrayectos(String archTray) throws IOException {
         FachadaTrayectos fachadaTrayectos = new FachadaTrayectos();
 
-        List<TramoCSVDTO> trayectosDTO = new ParserTrayectos().capturarEntradas(archTray);
+        List<TramoCSVDTO> trayectosDTO = new ParserCSV<>(TramoCSVDTO.class).parseFileToCollection(archTray);
 
         trayectosDTO.forEach(tr -> {
             boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");

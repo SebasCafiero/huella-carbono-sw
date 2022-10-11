@@ -11,8 +11,6 @@ import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mihuella.dto.NuevoTrayectoDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.TrayectoCompartidoDTO;
-import ar.edu.utn.frba.dds.mihuella.parsers.NoExisteMedioException;
-import ar.edu.utn.frba.dds.repositories.daos.EntityManagerHelper;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 

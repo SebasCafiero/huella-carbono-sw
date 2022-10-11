@@ -40,7 +40,7 @@ public class DAOMemoria<T> implements DAO<T> {
         return this.entidades.stream()
                 .filter(e -> invocarGetter(getId, e).equals(id))
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 
     public List<T> buscar(Predicate<T> condicion) {

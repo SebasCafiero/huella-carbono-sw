@@ -2,12 +2,12 @@ package ar.edu.utn.frba.dds.mihuella.dto;
 
 import java.util.List;
 
-public class OrganizacionJSONDTO {
+public class OrganizacionConMiembrosJSONDTO {
     private String organizacion;
     private UbicacionJSONDTO ubicacion;
     private String clasificacion;
     private String tipo;
-    private List<SectorDTO> sectores;
+    private List<SectorConMiembrosDTO> sectores;
 
     public String getOrganizacion() {
         return organizacion;
@@ -41,11 +41,11 @@ public class OrganizacionJSONDTO {
         this.tipo = tipo;
     }
 
-    public List<SectorDTO> getSectores() {
+    public List<SectorConMiembrosDTO> getSectores() {
         return sectores;
     }
 
-    public void setSectores(List<SectorDTO> sectores) {
+    public void setSectores(List<SectorConMiembrosDTO> sectores) {
         this.sectores = sectores;
     }
 }

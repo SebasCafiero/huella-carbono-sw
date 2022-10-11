@@ -1,8 +1,11 @@
 package ar.edu.utn.frba.dds.mapping;
 
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
+import ar.edu.utn.frba.dds.mihuella.dto.FactorEmisionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.FactorEmisionJSONDTO;
 
+import java.util.AbstractMap;
+import java.util.Map;
 
 
 public class FactorEmisionMapper {
@@ -14,5 +17,13 @@ public class FactorEmisionMapper {
                 factorEmisionDTO.valor
         );
         return factorEmision;
+    }
+
+    public static Map.Entry<String, Float> generarFE(FactorEmisionCSVDTO factor) {
+        String key = factor.getActividad() + " -> " +
+                factor.getTipoConsumo() + " : " +
+                factor.getUnidad();
+
+        return new AbstractMap.SimpleEntry<String, Float>(key, factor.getValor());
     }
 }
