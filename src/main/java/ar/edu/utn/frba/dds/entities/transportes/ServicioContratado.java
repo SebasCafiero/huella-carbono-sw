@@ -1,9 +1,15 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.CalculadoraDistancias;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
 
+import javax.persistence.*;
+
+@Entity
+@PrimaryKeyJoinColumn(name = "contratado_id")
+@Table(name = "SERVICIO_CONTRATADO")
 public class ServicioContratado extends MedioDeTransporte {
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "tipo_servicio_id")
     private TipoServicio tipo;
 
     public ServicioContratado(TipoServicio tipoServicio){

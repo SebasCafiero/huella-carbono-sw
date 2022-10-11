@@ -19,11 +19,11 @@ public class FactorEmisionMapper {
         return factorEmision;
     }
 
-    public static Map.Entry<String, Float> generarFE(FactorEmisionCSVDTO factor) {
+    public static Map.Entry<String, Float> toEntry(FactorEmisionCSVDTO factor) {
         String key = factor.getActividad() + " -> " +
                 factor.getTipoConsumo() + " : " +
                 factor.getUnidad();
 
-        return new AbstractMap.SimpleEntry<String, Float>(key, factor.getValor());
+        return new AbstractMap.SimpleEntry<>(key, factor.getValor());
     }
 }

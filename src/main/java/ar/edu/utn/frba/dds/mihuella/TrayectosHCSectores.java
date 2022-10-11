@@ -107,7 +107,7 @@ public class TrayectosHCSectores {
                 .parseFileToCollection(archFE);
 
         Map<String,Float> mapaFactores = factoresDeEmision.stream()
-                .map(FactorEmisionMapper::generarFE)
+                .map(FactorEmisionMapper::toEntry)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         return mapaFactores;

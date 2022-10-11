@@ -25,7 +25,6 @@ import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -114,7 +113,7 @@ public class TrayectosHCMiembros {
                 .parseFileToCollection(archFE);
 
         Map<String,Float> mapaFactores = factoresDeEmision.stream()
-                .map(FactorEmisionMapper::generarFE)
+                .map(FactorEmisionMapper::toEntry)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         return mapaFactores;

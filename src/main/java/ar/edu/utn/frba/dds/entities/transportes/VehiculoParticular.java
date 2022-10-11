@@ -2,10 +2,16 @@ package ar.edu.utn.frba.dds.entities.transportes;
 
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@PrimaryKeyJoinColumn(name = "particular_id")
+@Table(name = "VEHICULO_PARTICULAR")
 public class VehiculoParticular extends MedioDeTransporte {
+    @Enumerated(EnumType.STRING)
     private final TipoVehiculo tipo;
+    @Enumerated(EnumType.STRING)
     private final TipoCombustible combustible;
 
     public VehiculoParticular(TipoVehiculo tipo, TipoCombustible combustible){

@@ -1,12 +1,28 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "TIPO_SERVICIO")
 public class TipoServicio {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+    @Column(name = "nombre")
     private final String nombre;
 
     public TipoServicio(String nombre){
         this.nombre = nombre;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -14,17 +30,16 @@ public class TipoServicio {
     }
 
     @Override
-    public int hashCode() {
-        return 0;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TipoServicio)) return false;
+        TipoServicio that = (TipoServicio) o;
+        return Objects.equals(getId(), that.getId());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        TipoServicio other = (TipoServicio) obj;
-        return Objects.equals(nombre, other.nombre);
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
 

@@ -3,12 +3,19 @@ package ar.edu.utn.frba.dds.entities.transportes;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 
+import javax.persistence.*;
 import java.util.*;
 import java.util.function.ToDoubleFunction;
 
+@Entity
+@PrimaryKeyJoinColumn(name = "publico_id")
+@Table(name = "TRANSPORTE_PUBLICO")
 public class TransportePublico extends MedioDeTransporte {
+    @Enumerated(EnumType.STRING)
     private final TipoTransportePublico tipo;
+    @Transient
     private final LinkedList<Parada> paradas;
+    @Column(name = "linea")
     private final String linea;
 
     public TransportePublico(TipoTransportePublico tipo, String linea) {
