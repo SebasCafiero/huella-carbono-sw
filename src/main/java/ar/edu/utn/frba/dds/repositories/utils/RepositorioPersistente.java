@@ -1,8 +1,6 @@
 package ar.edu.utn.frba.dds.repositories.utils;
 
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
-import ar.edu.utn.frba.dds.repositories.daos.DAOJPA;
-import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.daos.EntityManagerHelper;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,8 +18,8 @@ public class RepositorioPersistente<T> implements Repositorio<T> {
     }
 
     @Override
-    public void agregar(T unObjeto) {
-        this.dao.agregar(unObjeto);
+    public T agregar(T unObjeto) {
+        return this.dao.agregar(unObjeto);
     }
 
     @Override

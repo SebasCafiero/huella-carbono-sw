@@ -22,9 +22,11 @@ public class Miembro {
     @Column
     private String apellido;
 
-    @Transient
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_documento")
     private TipoDeDocumento tipoDeDocumento;
-    @Transient
+
+    @Column(name = "numero_documento")
     private int nroDocumento;
 
     @ManyToMany(mappedBy = "miembros", fetch = FetchType.EAGER)
@@ -33,6 +35,11 @@ public class Miembro {
     @Transient
     private List<Trayecto> trayectos;
 
+    public Miembro() {
+        this.sectoresDondeTrabaja = new HashSet<>();
+        this.trayectos = new ArrayList<>();
+    }
+
     public Miembro(String nombre, String apellido, TipoDeDocumento tipoDeDocumento, int nroDocumento) {
         this.nombre = nombre;
         this.apellido = apellido;
@@ -40,9 +47,6 @@ public class Miembro {
         this.nroDocumento = nroDocumento;
         this.sectoresDondeTrabaja = new HashSet<>();
         this.trayectos = new ArrayList<>();
-    }
-
-    public Miembro() {
     }
 
     public Set<Sector> getSectoresDondeTrabaja() {

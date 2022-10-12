@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.mapping.BatchMedicionMapper;
 import ar.edu.utn.frba.dds.mihuella.dto.BatchMedicionJSONDTO;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserJSON;
@@ -16,9 +17,11 @@ import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 
 public class BatchMedicionController {
     private Repositorio<BatchMedicion> repositorio;
+    private Repositorio<MedioDeTransporte> repoMedios;
 
     public BatchMedicionController(){
         this.repositorio = FactoryRepositorio.get(BatchMedicion.class);
+        this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
     }
 
     public String mostrarTodos(Request request, Response response) {
@@ -27,10 +30,22 @@ public class BatchMedicionController {
     }
 
     public String obtener(Request request, Response response){
-        BatchMedicion batchMedicion = this.repositorio.buscar(Integer.parseInt(request.params("id")));
-        //return batchMedicion.toString();
-        String json = new Gson().toJson(batchMedicion);
-        return json;
+//        BatchMedicion batchMedicion = this.repositorio.buscar(Integer.parseInt(request.params("id")));
+//        //return batchMedicion.toString();
+//        String json = new Gson().toJson(batchMedicion);
+//        return json;
+
+        TransportePublico publico = new TransportePublico(TipoTransportePublico.COLECTIVO, "47");
+        TransporteEcologico ecologico = new TransporteEcologico(TipoTransporteEcologico.PIE);
+        ServicioContratado servicio = new ServicioContratado(new TipoServicio("tatsi"));
+        VehiculoParticular particular = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.ELECTRICO);
+
+        this.repoMedios.agregar(publico);
+        this.repoMedios.agregar(ecologico);
+        this.repoMedios.agregar(servicio);
+        this.repoMedios.agregar(particular);
+
+        return "OK";
     }
 
     public Object agregar(Request request, Response response){

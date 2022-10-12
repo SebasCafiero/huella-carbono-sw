@@ -33,21 +33,22 @@ public class DAOHibernate<T> implements DAO<T> {
     }
 
     @Override
-    public void agregar(Object unObjeto) {
+    public T agregar(T unObjeto) {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
         EntityManagerHelper.getEntityManager().persist(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();
+        return unObjeto;
     }
 
     @Override
-    public void modificar(Object unObjeto) {
+    public void modificar(T unObjeto) {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
         EntityManagerHelper.getEntityManager().merge(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();
     }
 
     @Override
-    public void eliminar(Object unObjeto) {
+    public void eliminar(T unObjeto) {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
         EntityManagerHelper.getEntityManager().remove(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();

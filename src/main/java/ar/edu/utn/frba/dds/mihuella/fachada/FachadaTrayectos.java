@@ -5,29 +5,31 @@ import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.MiembroException;
+import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.transportes.MedioFactory;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mihuella.dto.NuevoTrayectoDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.TrayectoCompartidoDTO;
+import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
 import java.util.NoSuchElementException;
 
 public class FachadaTrayectos {
-    private final Repositorio<Miembro> repoMiembros;
+    private final RepoMiembros repoMiembros;
     private final Repositorio<Trayecto> repoTrayectos;
     private final Repositorio<MedioDeTransporte> repoMedios;
 
     public FachadaTrayectos() {
-        this.repoMiembros = FactoryRepositorio.get(Miembro.class);
+        this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
     }
 
-    public FachadaTrayectos(Repositorio<Miembro> repoMiembros, Repositorio<Trayecto> repoTrayectos, Repositorio<MedioDeTransporte> repoMedios) {
+    public FachadaTrayectos(RepoMiembros repoMiembros, Repositorio<Trayecto> repoTrayectos, Repositorio<MedioDeTransporte> repoMedios) {
         this.repoMiembros = repoMiembros;
         this.repoTrayectos = repoTrayectos;
         this.repoMedios = repoMedios;
@@ -38,9 +40,9 @@ public class FachadaTrayectos {
     }
 
     public void cargarTrayectoActivo(NuevoTrayectoDTO trayectoDTO) {
-        Miembro unMiembro = repoMiembros.buscarTodos().stream()
-                .filter(mi -> mi.getNroDocumento().equals(trayectoDTO.getMiembroDNI()))
-                .findFirst().orElseThrow(MiembroException::new);
+        Miembro unMiembro = repoMiembros.findByDocumento(TipoDeDocumento.valueOf(trayectoDTO.getTipoDocumento()),
+                        trayectoDTO.getMiembroDNI())
+                .orElseThrow(MiembroException::new);
 
         Trayecto trayecto = repoTrayectos.buscarTodos().stream()
                 .filter(tr -> tr.getCompartido().equals(trayectoDTO.getTrayectoId()))
@@ -66,7 +68,9 @@ public class FachadaTrayectos {
         MedioDeTransporte medioSolicitado = new MedioFactory()
                 .getMedioDeTransporte(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
         MedioDeTransporte medio = repoMedios.buscarTodos().stream()
-                .filter((me) -> me.equals(medioSolicitado)).findFirst()
+                .filter((me) -> {
+                    return me.equals(medioSolicitado);
+                }).findFirst()
                 .orElseThrow(() -> new NoExisteMedioException(medioSolicitado));
 
         Coordenada coordenadaInicial = new Coordenada(trayectoDTO.getLatitudInicial(), trayectoDTO.getLongitudInicial());

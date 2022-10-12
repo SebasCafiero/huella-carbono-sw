@@ -6,11 +6,15 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "ecologico_id")
 @Table(name = "TRANSPORTE_ECOLOGICO")
+@PrimaryKeyJoinColumn(name = "ecologico_id")
 public class TransporteEcologico extends MedioDeTransporte {
     @Enumerated(EnumType.STRING)
     private TipoTransporteEcologico tipo;
+
+    public TransporteEcologico() {
+        servicioDistancias = new ServicioSimulado();
+    }
 
     public TransporteEcologico(TipoTransporteEcologico tipo){
         this.tipo = tipo;
@@ -39,5 +43,13 @@ public class TransporteEcologico extends MedioDeTransporte {
         if (getClass() != obj.getClass()) return false;
         TransporteEcologico other = (TransporteEcologico) obj;
         return Objects.equals(tipo, other.tipo);
+    }
+
+    public TipoTransporteEcologico getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoTransporteEcologico tipo) {
+        this.tipo = tipo;
     }
 }

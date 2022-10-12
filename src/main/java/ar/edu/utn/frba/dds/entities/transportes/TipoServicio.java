@@ -11,9 +11,12 @@ public class TipoServicio {
     private Integer id;
 
     @Column(name = "nombre")
-    private final String nombre;
+    private String nombre;
 
-    public TipoServicio(String nombre){
+    public TipoServicio() {
+    }
+
+    public TipoServicio(String nombre) {
         this.nombre = nombre;
     }
 
@@ -34,12 +37,16 @@ public class TipoServicio {
         if (this == o) return true;
         if (!(o instanceof TipoServicio)) return false;
         TipoServicio that = (TipoServicio) o;
-        return Objects.equals(getId(), that.getId());
+        return Objects.equals(getNombre(), that.getNombre());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }
 

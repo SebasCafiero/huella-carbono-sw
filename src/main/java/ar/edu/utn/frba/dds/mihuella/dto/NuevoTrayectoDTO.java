@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.mihuella.dto;
 
 public class NuevoTrayectoDTO {
     private Integer trayectoId;
+    private String tipoDocumento;
     private Integer miembroDNI;
     private Boolean compartidoPasivo;
     private Float latitudInicial;
@@ -40,6 +41,14 @@ public class NuevoTrayectoDTO {
 
     public void setTrayectoId(Integer trayectoId) {
         this.trayectoId = trayectoId;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
     public Integer getMiembroDNI() {

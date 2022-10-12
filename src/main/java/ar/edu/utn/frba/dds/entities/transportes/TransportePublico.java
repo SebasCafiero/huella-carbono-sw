@@ -5,18 +5,21 @@ import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.function.ToDoubleFunction;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "publico_id")
 @Table(name = "TRANSPORTE_PUBLICO")
+@PrimaryKeyJoinColumn(name = "publico_id")
 public class TransportePublico extends MedioDeTransporte {
     @Enumerated(EnumType.STRING)
-    private final TipoTransportePublico tipo;
+    private TipoTransportePublico tipo;
     @Transient
     private final LinkedList<Parada> paradas;
     @Column(name = "linea")
-    private final String linea;
+    private String linea;
+
+    public TransportePublico() {
+        this.paradas = new LinkedList<>();
+    }
 
     public TransportePublico(TipoTransportePublico tipo, String linea) {
         this.tipo = tipo;
@@ -35,17 +38,6 @@ public class TransportePublico extends MedioDeTransporte {
     public LinkedList<Parada> getParadas() {
         return paradas;
     }
-
-//    @Override
-//    public Float calcularDistancia(Tramo tramo) { //Quizas una interface que haga el calculo, ver calculadoraDistancias_Objetivo del diagrama
-//        Parada paradaInicial = buscarParada(tramo.getUbicacionInicial().getCoordenada());
-//        if (paradaInicial == null)
-//            System.out.println("ERROR DE COORDENADAS"); //TODO VER DE USAR EXCEPCIONES
-//        //Parada paradaFinal = buscarParada(tramo.getCoordenadaFinal());
-//        //Se podria validar que la distancia proxima de la parada inicial sea igual a la distancia anterior de la parada final.
-//
-//        return paradaInicial.getDistanciaProxima();
-//    }
 
     @Override
     public Float calcularDistancia(Tramo tramo) {
@@ -98,5 +90,21 @@ public class TransportePublico extends MedioDeTransporte {
     @Override
     public String getCategoria() {
         return "Publico - " + tipo.toString();
+    }
+
+    public TipoTransportePublico getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoTransportePublico tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getLinea() {
+        return linea;
+    }
+
+    public void setLinea(String linea) {
+        this.linea = linea;
     }
 }

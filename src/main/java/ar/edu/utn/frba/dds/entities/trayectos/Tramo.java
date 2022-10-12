@@ -15,7 +15,8 @@ public class Tramo implements Medible {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Transient
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "medio_id")
     private MedioDeTransporte medioDeTransporte;
     @Transient
     private UbicacionGeografica ubicacionInicial;

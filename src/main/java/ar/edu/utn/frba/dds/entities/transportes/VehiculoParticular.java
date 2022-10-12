@@ -6,13 +6,17 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "particular_id")
 @Table(name = "VEHICULO_PARTICULAR")
+@PrimaryKeyJoinColumn(name = "particular_id")
 public class VehiculoParticular extends MedioDeTransporte {
     @Enumerated(EnumType.STRING)
-    private final TipoVehiculo tipo;
+    private TipoVehiculo tipo;
     @Enumerated(EnumType.STRING)
-    private final TipoCombustible combustible;
+    private TipoCombustible combustible;
+
+    public VehiculoParticular() {
+        servicioDistancias = new ServicioSimulado();
+    }
 
     public VehiculoParticular(TipoVehiculo tipo, TipoCombustible combustible){
         this.tipo = tipo;
@@ -43,5 +47,21 @@ public class VehiculoParticular extends MedioDeTransporte {
     @Override
     public String getCategoria() {
         return "Particular - " + combustible.toString();
+    }
+
+    public TipoVehiculo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoVehiculo tipo) {
+        this.tipo = tipo;
+    }
+
+    public TipoCombustible getCombustible() {
+        return combustible;
+    }
+
+    public void setCombustible(TipoCombustible combustible) {
+        this.combustible = combustible;
     }
 }

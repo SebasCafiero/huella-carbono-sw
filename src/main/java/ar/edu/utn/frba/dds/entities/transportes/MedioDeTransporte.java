@@ -8,8 +8,8 @@ import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
 import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "MEDIO_DE_TRANSPORTE")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class MedioDeTransporte {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

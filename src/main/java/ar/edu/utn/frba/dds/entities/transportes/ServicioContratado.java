@@ -3,23 +3,28 @@ package ar.edu.utn.frba.dds.entities.transportes;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "contratado_id")
 @Table(name = "SERVICIO_CONTRATADO")
+@PrimaryKeyJoinColumn(name = "contratado_id")
 public class ServicioContratado extends MedioDeTransporte {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "tipo_servicio_id")
     private TipoServicio tipo;
 
-    public ServicioContratado(TipoServicio tipoServicio){
+    public ServicioContratado() {
+        servicioDistancias = new ServicioSimulado();
+    }
+
+    public ServicioContratado(TipoServicio tipoServicio) {
         tipo = tipoServicio;
         servicioDistancias = new ServicioSimulado();
     }
 
     @Override
     public String toString() {
-        return "contratado"  + tipo.getNombre();
+        return "contratado - "  + tipo.getNombre();
     }
 
     @Override
@@ -28,17 +33,16 @@ public class ServicioContratado extends MedioDeTransporte {
     }
 
     @Override
-    public int hashCode() {
-        return 0;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServicioContratado)) return false;
+        ServicioContratado that = (ServicioContratado) o;
+        return Objects.equals(tipo, that.tipo);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        ServicioContratado other = (ServicioContratado) obj;
-        return this.tipo.equals(other.tipo);
+    public int hashCode() {
+        return Objects.hash(tipo);
     }
 }
 
