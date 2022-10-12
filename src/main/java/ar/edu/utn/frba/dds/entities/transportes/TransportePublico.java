@@ -12,9 +12,12 @@ import java.util.*;
 public class TransportePublico extends MedioDeTransporte {
     @Enumerated(EnumType.STRING)
     private TipoTransportePublico tipo;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "parada_id")
+    @OrderColumn(name = "posicion")
+    @JoinColumn(name = "medio_id")
     private List<Parada> paradas;
+
     @Column(name = "linea")
     private String linea;
 

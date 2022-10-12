@@ -5,7 +5,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "UBICACION")
 public class UbicacionGeografica {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ubicacion_id")
@@ -16,6 +15,9 @@ public class UbicacionGeografica {
 
     @Transient
     private Direccion direccion;
+
+    public UbicacionGeografica() {
+    }
 
     public UbicacionGeografica(Direccion direccion, Coordenada coordenada) {
         this.coordenada = coordenada;

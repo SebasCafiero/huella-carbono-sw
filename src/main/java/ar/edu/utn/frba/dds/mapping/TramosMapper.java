@@ -52,14 +52,17 @@ public class TramosMapper {
     public static Tramo toEntity(TramoCSVDTO2 tramoDTO) {
         Repositorio<MedioDeTransporte> repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
         MedioDeTransporte medioSolicitado = new MedioFactory().getMedioDeTransporte(tramoDTO.tipoTransporte, tramoDTO.subtipoTransporte, tramoDTO.info);
-        Optional<MedioDeTransporte> posibleTransporte = repoMedios.buscarTodos().stream().filter(m -> m.equals(medioSolicitado)).findFirst();
-        if(!posibleTransporte.isPresent()) throw new RuntimeException("Medio de Transporte Inexistente");
 
-        return new Tramo(
-                posibleTransporte.get(),
+        Optional<MedioDeTransporte> posibleTransporte = repoMedios.buscarTodos().stream().filter(m -> m.equals(medioSolicitado)).findFirst();
+        if(!posibleTransporte.isPresent()) {
+            throw new RuntimeException("Medio de Transporte Inexistente");
+        }
+
+        Tramo tramo = new Tramo(posibleTransporte.get(),
                 new Coordenada(tramoDTO.latInicial, tramoDTO.longInicial),
-                new Coordenada(tramoDTO.latFinal, tramoDTO.longFinal)
-        );
+                new Coordenada(tramoDTO.latFinal, tramoDTO.longFinal));
+
+        return tramo;
     }
 
     public static Map.Entry<Integer, Trayecto> modelarTrayecto(List<TramoCSVDTO2> tramosDTODeUnTrayecto) {

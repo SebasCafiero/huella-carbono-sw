@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.entities.lugares.geografia;
 
+import ar.edu.utn.frba.dds.server.SystemProperties;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -36,9 +38,9 @@ public class Coordenada {
         this.longitud = longitud;
     }
 
-    public boolean esIgualAOtraCoordenada(Coordenada otraCoordenada){
-        return otraCoordenada.getLatitud().equals(this.latitud)
-                && otraCoordenada.getLongitud().equals(this.longitud);
+    public boolean esIgualAOtraCoordenada(Coordenada otraCoordenada) {
+        return Math.abs(otraCoordenada.getLatitud() - this.latitud) < SystemProperties.getDelta() &&
+                Math.abs(otraCoordenada.getLongitud() - this.longitud) < SystemProperties.getDelta();
     }
 
     @Override

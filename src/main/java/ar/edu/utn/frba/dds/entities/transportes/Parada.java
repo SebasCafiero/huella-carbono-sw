@@ -11,6 +11,7 @@ import javax.persistence.*;
 public class Parada {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "parada_id")
     private Integer id;
 
     @OneToOne(cascade = CascadeType.ALL)

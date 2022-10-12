@@ -50,17 +50,12 @@ public class FachadaTrayectos {
                     Periodo periodo = trayectoDTO.getPeriodicidad().equals('A')
                             ? new Periodo(trayectoDTO.getAnio())
                             : new Periodo(trayectoDTO.getAnio(), trayectoDTO.getMes());
-                    Trayecto nuevoTrayecto = new Trayecto(periodo);
-                    System.out.println(Math.toIntExact(trayectoDTO.getTrayectoId()));
-                    nuevoTrayecto.setCompartido(trayectoDTO.getTrayectoId());
-//                    repoTrayectos.modificar(nuevoTrayecto);
-                    repoTrayectos.agregar(nuevoTrayecto);
-//                    EntityManagerHelper.getEntityManager().getTransaction().begin();
-//                    Trayecto mgTrayecto = EntityManagerHelper.getEntityManager().merge(nuevoTrayecto);
-//                    EntityManagerHelper.getEntityManager().persist(mgTrayecto);
-//                    EntityManagerHelper.getEntityManager().getTransaction().commit();
 
+                    Trayecto nuevoTrayecto = new Trayecto(periodo);
+                    nuevoTrayecto.setCompartido(trayectoDTO.getTrayectoId());
                     unMiembro.agregarTrayecto(nuevoTrayecto);
+                    repoTrayectos.agregar(nuevoTrayecto);
+
                     return nuevoTrayecto;
                 });
         trayecto.agregarmiembro(unMiembro);
@@ -77,9 +72,11 @@ public class FachadaTrayectos {
         Coordenada coordenadaFinal = new Coordenada(trayectoDTO.getLatitudFinal(), trayectoDTO.getLongitudFinal());
         UbicacionGeografica ubicacionInicial = new UbicacionGeografica(coordenadaInicial);
         UbicacionGeografica ubicacionFinal = new UbicacionGeografica(coordenadaFinal);
+
         Tramo tramo = new Tramo(medio, ubicacionInicial, ubicacionFinal);
-        tramo.setValor(10F);
+        tramo.setValor();
         tramo.setTrayecto(trayecto);
+
         trayecto.agregarTramo(tramo);
         repoTrayectos.modificar(trayecto);
     }
