@@ -1,8 +1,20 @@
 package ar.edu.utn.frba.dds.entities.lugares.geografia;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "UBICACION")
 public class UbicacionGeografica {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ubicacion_id")
+    private Integer id;
+
+    @Embedded
     private Coordenada coordenada;
+
+    @Transient
     private Direccion direccion;
 
     public UbicacionGeografica(Direccion direccion, Coordenada coordenada) {

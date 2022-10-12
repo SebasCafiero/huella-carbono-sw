@@ -12,8 +12,9 @@ import java.util.*;
 public class TransportePublico extends MedioDeTransporte {
     @Enumerated(EnumType.STRING)
     private TipoTransportePublico tipo;
-    @Transient
-    private final LinkedList<Parada> paradas;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "parada_id")
+    private List<Parada> paradas;
     @Column(name = "linea")
     private String linea;
 
@@ -32,10 +33,10 @@ public class TransportePublico extends MedioDeTransporte {
     }
 
     public void agregarParadas(Parada... paradas){
-        Collections.addAll(this.paradas,paradas);
+        Collections.addAll(this.paradas, paradas);
     }
 
-    public LinkedList<Parada> getParadas() {
+    public List<Parada> getParadas() {
         return paradas;
     }
 
@@ -106,5 +107,9 @@ public class TransportePublico extends MedioDeTransporte {
 
     public void setLinea(String linea) {
         this.linea = linea;
+    }
+
+    public void setParadas(LinkedList<Parada> paradas) {
+        this.paradas = paradas;
     }
 }

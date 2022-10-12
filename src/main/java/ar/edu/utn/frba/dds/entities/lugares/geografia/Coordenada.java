@@ -1,8 +1,19 @@
 package ar.edu.utn.frba.dds.entities.lugares.geografia;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Coordenada {
+
+    @Column(name = "latitud")
     private Float latitud;
+
+    @Column(name = "longitud")
     private Float longitud;
+
+    public Coordenada() {
+    }
 
     public Coordenada(Float latitud, Float longitud) {
         this.latitud = latitud;
@@ -15,6 +26,14 @@ public class Coordenada {
 
     public Float getLongitud() {
         return longitud;
+    }
+
+    public void setLatitud(Float latitud) {
+        this.latitud = latitud;
+    }
+
+    public void setLongitud(Float longitud) {
+        this.longitud = longitud;
     }
 
     public boolean esIgualAOtraCoordenada(Coordenada otraCoordenada){
