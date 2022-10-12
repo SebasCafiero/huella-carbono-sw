@@ -44,6 +44,18 @@ public class FachadaTrayectos {
         return this.repoTrayectos.buscarTodos();
     }
 
+    public Trayecto obtenerTrayecto(Integer id) {
+        return this.repoTrayectos.buscar(id);
+    }
+
+    public List<Miembro> obtenerMiembros() {
+        return this.repoMiembros.buscarTodos();
+    }
+
+    public List<MedioDeTransporte> obtenerTransportes() {
+        return this.repoMedios.buscarTodos();
+    }
+
     public void mostrarTrayectos() {
         repoTrayectos.buscarTodos().forEach(System.out::println);
     }

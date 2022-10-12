@@ -13,6 +13,7 @@ import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoCategoriasJPA;
 import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoFactoresJPA;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoCategoriasMemoria;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
+import ar.edu.utn.frba.dds.repositories.impl.memory.RepoTrayectosMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
@@ -61,7 +62,8 @@ public class FactoryRepositorio {
                 } else if(type.equals(AgenteSectorial.class)) {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type,Data.getDataAgenteSectorial()));
                 } else if(type.equals(Trayecto.class)) {
-                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataTrayecto()));
+                    repo = new RepoTrayectosMemoria(new DAOMemoria<>(type, Data.getDataTrayecto()));
+//                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataTrayecto()));
                 } else {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
                 }

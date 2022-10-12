@@ -26,10 +26,10 @@ public class DataTrayecto {
             Miembro m3 = new Miembro("Ángel", "Di María", TipoDeDocumento.DNI, 456);
             Miembro m4 = new Miembro("Rodrigo", "De Paul", TipoDeDocumento.DNI, 789);
 
-            m1.setId(1);
-            m2.setId(2);
-            m3.setId(3);
-            m4.setId(4);
+//            m1.setId(1);
+//            m2.setId(2);
+//            m3.setId(3);
+//            m4.setId(4);
 
             MedioDeTransporte subteA = new TransportePublico(TipoTransportePublico.SUBTE, "A");
             MedioDeTransporte bondi47 = new TransportePublico(TipoTransportePublico.COLECTIVO, "47");
@@ -54,6 +54,7 @@ public class DataTrayecto {
             t1.agregarTramos(tramos);
             t1.setPeriodo(new Periodo(2020,10));
             t1.agregarmiembro(m1);
+            m1.agregarTrayecto(t1);
 
             Trayecto t2 = new Trayecto();
             Tramo t21 = new Tramo(trenSarmiento, coor3, coor4);
@@ -67,8 +68,11 @@ public class DataTrayecto {
 //            t2.agregarTramos(tramos);
             t2.setPeriodo(new Periodo(2021,9));
             t2.agregarmiembro(m2);
+            m2.agregarTrayecto(t2);
             t2.agregarmiembro(m3);
+            m3.agregarTrayecto(t2);
             t2.agregarmiembro(m4);
+            m4.agregarTrayecto(t2);
 
             Trayecto t3 = new Trayecto();
             Tramo t31 = new Tramo(motoNafta, coor3, coor1);
@@ -76,7 +80,9 @@ public class DataTrayecto {
             t3.agregarTramo(t31);
             t3.setPeriodo(new Periodo(2022,11));
             t3.agregarmiembro(m1);
+            m1.agregarTrayecto(t3);
             t3.agregarmiembro(m3);
+            m3.agregarTrayecto(t3);
 
             addAll(t1, t2, t3);
         }

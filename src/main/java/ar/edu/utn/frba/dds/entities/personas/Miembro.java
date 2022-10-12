@@ -88,12 +88,6 @@ public class Miembro {
         return this.sectoresDondeTrabaja.contains(unSector);
     }
 
-    public void registrarTrayecto(Trayecto unTrayecto) {
-        this.trayectos.add(unTrayecto);
-        //registrar en cada organizacion en la que trabaja
-//        this.sectoresDondeTrabaja.iterator().next().getOrganizacion().cargarTrayecto(unTrayecto,this);
-    }
-
     public Integer getId() {
         return id;
     }
@@ -140,7 +134,7 @@ public class Miembro {
 
     public void agregarTrayecto(Trayecto trayecto) {
         if(trayectos.contains(trayecto)) System.out.println("TRAYECTO REPETIDO EN MIEMBRO ("+nroDocumento+").");
-        trayectos.add(trayecto);
+        trayectos.add(trayecto); //todo ver si trayecto.agregarMiembro(miembro) y miembro.agregarTrayecto(trayecto) en misma operacion
     }
 
     public Integer cantidadTrayectos() {

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Modificar Trayecto</title>
+    <title>Modificar Trayecto {{trayecto.id}}</title>
     <link rel="stylesheet" href="/css/trayecto-edicion.css" >
   </head>
   <body>
@@ -12,20 +12,20 @@
       <form action="/trayecto/{{trayecto.id}}" method="post">
       	<div class="form-fecha">
         <label for="fecha">Fecha</label>
-      	<input id="fecha" type="month" name="fecha" value="{{trayecto.periodo}}"/>
+      	<input id="fecha" type="text" name="fecha" value="{{trayecto.periodo.mes}}/{{trayecto.periodo.anio}}"/>
         </div>
         <br />
         <div class="form-miembros">
           <fieldset>
             <legend>Miembros</legend>
+
             <input id="logueado" type="checkbox" value="m-logueado" name="m-miembro" checked disabled/>
             <label for="logueado">Miembro Logueado</label><br />
-            <input id="miembro1" type="checkbox" value="m-miembro1" name="m-miembro"/>
-            <label for="miembro1">Leo Messi 10</label><br />
-            <input id="miembro2" type="checkbox" value="m-miembro2" name="m-miembro"/>
-            <label for="miembro2">Leo Paredes 123</label><br />
-            <input id="miembro3" type="checkbox" value="m-miembro3" name="m-miembro"/>
-            <label for="miembro3">Ángel Di María 987</label><br />
+
+            {{#each miembros}}
+              <input id="miembro{{miembro.id}}" type="checkbox" value="m-miembro{{miembro.id}}" name="m-mimbro"  {{#if contieneTrayecto}}checked{{/if}} />
+              <label for="miembro{{miembro.id}}">{{miembro.nombre}} {{miembro.apellido}} - {{miembro.tipoDeDocumento}}: {{miembro.nroDocumento}}</label><br />
+            {{/each}}
             <!-- ver si name="m-miembro[]" como PHP -->
           </fieldset>
         </div>
@@ -35,8 +35,16 @@
           <fieldset>
             <legend>Tramo{{id}}</legend>
             <label for="transporte">Transporte</label>
-            <select id="transporte" name="transporte" required>
-              <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+
+              <select id="transporte" name="transporte" >
+                <option class="campo-seleccionar" value="{{medioDeTransporte.clasificacion}}" selected>{{medioDeTransporte.clasificacion}}</option>
+                {{#each transportes}}
+                <option value="transporte{{id}}">{{clasificacion}}</option>
+                {{/each}}
+              </select>
+
+            <!--<select id="transporte" name="transporte" required>
+              <option class="campo-seleccionar" value="{{medioDeTransporte.clasificacion}}" selected>{{medioDeTransporte.clasificacion}}</option>
               <optgroup label="Público">
                 <option value="subteA">Subte A</option>
                 <option value="bondi47">Colectivo 47</option>
@@ -54,23 +62,22 @@
                 <option value="taxi">Taxi</option>
                 <option value="didi">DiDi</option>
               </optgroup>
-            </select>
-            <input type="text" value="{{medioDeTransporte.clasificacion}}"/>
+            </select>-->
             <br /><br />
             <fieldset>
               <legend>Coordenadas Iniciales</legend>
               <label>Latitud:</label>
-              <input id="lat-inicial" type="number" name="lat-inicial" min="0" step="0.001"/>
+              <input id="lat-inicial" type="text" name="lat-inicial" value="{{ubicacionInicial.coordenada.latitud}}" />
               <label>Longitud:</label>
-              <input id="lon-inicial" type="number" name="lon-inicial" min="0" step="0.001"/>
+              <input id="lon-inicial" type="text" name="lon-inicial" value="{{ubicacionInicial.coordenada.longitud}}"/>
             </fieldset>
             <br />
             <fieldset>
               <legend>Coordenadas Finales</legend>
               <label for="lat-final">Latitud:</label>
-              <input id="lat-final" type="number" name="lat-final" min="0" step="0.001"/>
+              <input id="lat-final" type="text" name="lat-final" value="{{ubicacionFinal.coordenada.latitud}}"/>
               <label for="lon-final">Longitud:</label>
-              <input id="lon-final" type="number" name="lon-final" min="0" step="0.001"/>
+              <input id="lon-final" type="text" name="lon-final" value="{{ubicacionFinal.coordenada.longitud}}"/>
             </fieldset>
           </fieldset>
           <br />

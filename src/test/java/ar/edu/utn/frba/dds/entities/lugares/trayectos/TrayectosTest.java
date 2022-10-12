@@ -50,7 +50,7 @@ public class TrayectosTest {
         unTrayecto.agregarTramo(tramo1);
         unTrayecto.agregarTramo(tramo2);
 
-        unMiembro.registrarTrayecto(unTrayecto);
+        unMiembro.agregarTrayecto(unTrayecto);
         Assertions.assertEquals(26, unTrayecto.calcularDistancia());
     }
 
