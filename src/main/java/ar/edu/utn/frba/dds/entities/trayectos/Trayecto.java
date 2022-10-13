@@ -57,6 +57,7 @@ public class Trayecto {
 
     public void setTramos(List<Tramo> tramos) {
         this.tramos = tramos;
+        tramos.forEach(tr -> tr.setTrayecto(this)); //todo
     }
 
     public List<Miembro> getMiembros() {

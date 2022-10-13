@@ -85,6 +85,10 @@ public class Tramo implements Medible {
         return medioDeTransporte;
     }
 
+    public void setMedioDeTransporte(MedioDeTransporte nuevoMedioDeTransporte) {
+        this.medioDeTransporte = nuevoMedioDeTransporte;
+    }
+
     public UbicacionGeografica getUbicacionInicial() {
         return ubicacionInicial;
     }

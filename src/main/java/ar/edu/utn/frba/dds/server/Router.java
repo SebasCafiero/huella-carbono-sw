@@ -63,7 +63,7 @@ public class Router {
         Spark.get("/trayecto/:id", trayectosController::obtener, engine); //muestro el trayecto especifico trayecto.html
         Spark.post("/trayecto/:id", trayectosController::modificar); //modifico un trayecto (trayecto-edicion.html) (PUT no en <form>)
 
-        Spark.get("/trayecto", trayectosController::darAlta); //muestro para crear un nuevo trayecto trayecto-edicion.html
+        Spark.get("/trayecto", trayectosController::darAlta, engine); //muestro para crear un nuevo trayecto trayecto-edicion.html
         Spark.post("/trayecto", trayectosController::agregar); //creo un nuevo trayecto (trayecto-edicion.html)
 
     }

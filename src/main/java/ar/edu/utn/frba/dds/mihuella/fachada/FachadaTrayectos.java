@@ -52,8 +52,20 @@ public class FachadaTrayectos {
         return this.repoMiembros.buscarTodos();
     }
 
+    public Miembro obtenerMiembro(Integer id) {
+        return this.repoMiembros.buscar(id);
+    }
+
     public List<MedioDeTransporte> obtenerTransportes() {
         return this.repoMedios.buscarTodos();
+    }
+
+    public MedioDeTransporte obtenerTransporte(Integer id) {
+        return this.repoMedios.buscar(id);
+    }
+
+    public void modificarTrayecto(Trayecto trayecto) {
+        this.repoTrayectos.modificar(trayecto.getId(),trayecto);
     }
 
     public void mostrarTrayectos() {
