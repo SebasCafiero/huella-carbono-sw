@@ -66,5 +66,6 @@ public class Router {
         Spark.get("/trayecto", trayectosController::darAlta, engine); //muestro para crear un nuevo trayecto trayecto-edicion.html
         Spark.post("/trayecto", trayectosController::agregar); //creo un nuevo trayecto (trayecto-edicion.html)
 
+        Spark.get("/home", new HomeController()::inicio, engine); //todo EL LOGUIN DEBE LLEVAR AL MENU
     }
 }

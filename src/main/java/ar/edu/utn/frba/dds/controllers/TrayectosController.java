@@ -100,7 +100,7 @@ public class TrayectosController {
         String[] fecha = req.queryParams("f-fecha").split("/"); //TODO VALIDAR
         trayecto.setPeriodo(new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0])));
 
-        List<Miembro> miembros = Arrays.stream(req.queryParamsValues("f-miembro"))
+        List<Miembro> miembros = Arrays.stream(req.queryParamsValues("f-miembro")) //todo validar
                 .map(m -> fachada.obtenerMiembro(Integer.parseInt(m)))
                 .collect(Collectors.toList());
         trayecto.setMiembros(miembros);
