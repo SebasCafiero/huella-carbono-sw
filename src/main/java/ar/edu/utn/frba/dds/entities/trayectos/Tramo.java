@@ -41,7 +41,7 @@ public class Tramo implements Medible {
     public Tramo() {
     }
 
-    public Tramo(MedioDeTransporte medioDeTransporte, Direccion direccionInicial, Coordenada coordInicial, Direccion direccionFinal, Coordenada coordFinal){
+    public Tramo(MedioDeTransporte medioDeTransporte, Direccion direccionInicial, Coordenada coordInicial, Direccion direccionFinal, Coordenada coordFinal) {
         this.medioDeTransporte = medioDeTransporte;
         this.categoria = new Categoria("Traslado de Miembros", medioDeTransporte.getCategoria());
         this.ubicacionInicial = new UbicacionGeografica(direccionInicial, coordInicial);
@@ -117,7 +117,9 @@ public class Tramo implements Medible {
 
     @Override
     public Float getValor() {
-        if(this.valor == null) this.valor = this.calcularDistancia();
+        if(this.valor == null) {
+            this.setValor();
+        }
         return this.valor;
     }
 

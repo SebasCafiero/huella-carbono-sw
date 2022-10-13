@@ -58,7 +58,7 @@ public class FachadaTrayectos {
 
                     return nuevoTrayecto;
                 });
-        trayecto.agregarmiembro(unMiembro);
+        trayecto.agregarMiembro(unMiembro);
 
         MedioDeTransporte medioSolicitado = new MedioFactory()
                 .getMedioDeTransporte(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
@@ -96,7 +96,7 @@ public class FachadaTrayectos {
                         new NoExisteTrayectoCompartidoException(trayectoCompartidoDTO.getTrayectoReferencia())
                 );
 
-        trayecto.agregarmiembro(miembro);
+        trayecto.agregarMiembro(miembro);
         miembro.agregarTrayecto(trayecto);
     }
 }

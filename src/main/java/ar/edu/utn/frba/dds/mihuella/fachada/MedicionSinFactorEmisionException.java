@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.mihuella;
+package ar.edu.utn.frba.dds.mihuella.fachada;
 
 public class MedicionSinFactorEmisionException extends RuntimeException {
 

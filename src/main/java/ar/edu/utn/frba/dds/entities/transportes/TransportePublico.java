@@ -35,7 +35,8 @@ public class TransportePublico extends MedioDeTransporte {
         this.paradas.add(parada);
     }
 
-    public void agregarParadas(Parada... paradas){
+    public void agregarParadas(Parada... paradas) {
+//        Arrays.asList(paradas).forEach(parada -> this.paradas.add(parada));
         Collections.addAll(this.paradas, paradas);
     }
 

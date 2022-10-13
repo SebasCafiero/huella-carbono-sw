@@ -73,7 +73,7 @@ public class TramosMapper {
         Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
         Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == unTramoDTO.idMiembro).findFirst();
         if(!posibleMiembro.isPresent()) throw new RuntimeException("Miembro Inexistente");
-        unTrayecto.agregarmiembro(posibleMiembro.get());
+        unTrayecto.agregarMiembro(posibleMiembro.get());
         return new AbstractMap.SimpleEntry<>(unTramoDTO.idTrayecto, unTrayecto);
     }
 
@@ -83,7 +83,7 @@ public class TramosMapper {
             Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
             Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == tramoDTOCompartido.idMiembro).findFirst();
             if (!posibleMiembro.isPresent()) throw new RuntimeException("Miembro Inexistente");
-            trayectoCompartido.agregarmiembro(posibleMiembro.get());
+            trayectoCompartido.agregarMiembro(posibleMiembro.get());
             posibleMiembro.get().agregarTrayecto(trayectoCompartido);
         } else {
             throw new RuntimeException("Trayecto Compartido Inexistente");

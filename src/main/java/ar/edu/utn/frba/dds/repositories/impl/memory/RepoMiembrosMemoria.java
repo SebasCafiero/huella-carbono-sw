@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -21,7 +22,8 @@ public class RepoMiembrosMemoria<T> extends RepositorioMemoria<Miembro> implemen
     }
 
     private Predicate<Miembro> condicionDocumento(TipoDeDocumento tipoDeDocumento, Integer nroDocumento) {
-        return miembro -> miembro.getTipoDeDocumento().equals(tipoDeDocumento) &&
-                miembro.getNroDocumento().equals(nroDocumento);
+        return miembro -> miembro.getTipoDeDocumento() != null && miembro.getNroDocumento() != null &&
+                Objects.equals(miembro.getTipoDeDocumento(), tipoDeDocumento) &&
+                Objects.equals(miembro.getNroDocumento(), nroDocumento);
     }
 }

@@ -105,9 +105,9 @@ public class FachadaTrayectosTest {
         Miembro miembro1 = new Miembro("Carlos", "Tevez", TipoDeDocumento.DNI, 23423423);
         Miembro miembro2 = new Miembro("Esteban", "Tevez", TipoDeDocumento.DNI, 23423424);
         miembro1.agregarTrayecto(trayecto);
-        trayecto.agregarmiembro(miembro1);
+        trayecto.agregarMiembro(miembro1);
         miembro2.agregarTrayecto(trayecto);
-        trayecto.agregarmiembro(miembro2);
+        trayecto.agregarMiembro(miembro2);
 
         Organizacion organizacion = new Organizacion("UTN", TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Facultad"),

@@ -8,6 +8,7 @@ import ar.edu.utn.frba.dds.mapping.MedicionMapper;
 import ar.edu.utn.frba.dds.mihuella.dto.FactorEmisionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
+import ar.edu.utn.frba.dds.mihuella.fachada.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserCSV;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;

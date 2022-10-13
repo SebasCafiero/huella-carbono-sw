@@ -8,6 +8,7 @@ import java.util.Properties;
 public class SystemProperties {
     private static final Boolean jpa;
     private static final Float delta;
+    private static final Float coeficienteGradoKm;
 
     static {
         try {
@@ -18,6 +19,8 @@ public class SystemProperties {
             jpa = Objects.equals(propiedades.getProperty("jpa"), "true");
             delta = Float.parseFloat(
                     propiedades.getProperty("coordenadas.precision.delta", "0.00001"));
+            coeficienteGradoKm = Float.parseFloat(
+                    propiedades.getProperty("coordenadas.precision.equivalencia", "111.10"));
 
             file.close();
         } catch (IOException e) {
@@ -32,4 +35,10 @@ public class SystemProperties {
     public static Float getDelta() {
         return delta;
     }
+
+    public static Float getCoeficienteGradoKm() {
+        return coeficienteGradoKm;
+    }
+
+
 }

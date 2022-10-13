@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
-import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
@@ -61,8 +60,10 @@ public class FachadaOrganizacion implements FachadaOrg {
     }
 
     public Float calcularImpactoOrganizacion(Organizacion organizacion, Periodo periodo) {
-        return calcularImpactoMediciones(organizacion, periodo) +
-                calcularImpactoTrayectos(organizacion, periodo);
+        Float mediciones = calcularImpactoMediciones(organizacion, periodo);
+        Float trayectos = calcularImpactoTrayectos(organizacion, periodo);
+
+        return mediciones + trayectos;
     }
 
     private Float calcularImpactoMediciones(Organizacion organizacion, Periodo periodo) {
@@ -74,20 +75,29 @@ public class FachadaOrganizacion implements FachadaOrg {
 
     public Float calcularImpactoTrayectos(Miembro miembro, Periodo periodo) {
         return miembro.getTrayectos().stream()
-                .map(trayecto -> obtenerHU(new ArrayList<>(trayecto.getTramos())) *
-                        factorProporcionalTrayecto(trayecto, miembro, periodo)
-                ).reduce(Float::sum).orElse(0F);
+                .map(trayecto -> {
+                    Float trayectos = obtenerHU(new ArrayList<>(trayecto.getTramos())) *
+                                    factorProporcionalTrayecto(trayecto, miembro, periodo);
+                    return trayectos;
+                })
+                .reduce(Float::sum).orElse(0F);
     }
 
     public Float calcularImpactoTrayectos(Sector sector, Periodo periodo) {
         return sector.getListaDeMiembros().stream()
-                .map(miembro -> calcularImpactoTrayectos(miembro, periodo))
+                .map(miembro -> {
+                    Float trayectos = calcularImpactoTrayectos(miembro, periodo);
+                    return trayectos;
+                })
                 .reduce(Float::sum).orElse(0F);
     }
 
     private Float calcularImpactoTrayectos(Organizacion org, Periodo periodo) {
         return org.getSectores().stream()
-                .map(sector -> calcularImpactoTrayectos(sector, periodo))
+                .map(sector -> {
+                    Float trayectos = calcularImpactoTrayectos(sector, periodo);
+                    return  trayectos;
+                })
                 .reduce(Float::sum).orElse(0F);
     }
 

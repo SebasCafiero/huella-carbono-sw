@@ -23,9 +23,12 @@ import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class FactoryRepositorio {
     private static HashMap<String, Repositorio> repos;
+
 
     static {
         repos = new HashMap<>();
@@ -35,7 +38,7 @@ public class FactoryRepositorio {
         return get(type, SystemProperties.isJpa());
     }
 
-    public static <T> Repositorio<T> get(Class<T> type, boolean isJPA){
+    public static <T> Repositorio<T> get(Class<T> type, boolean isJPA) {
         Repositorio<T> repo;
         if(repos.containsKey(type.getName())){
             repo = (Repositorio<T>) repos.get(type.getName());
@@ -55,9 +58,9 @@ public class FactoryRepositorio {
                 } else if(type.equals(Categoria.class)) {
                     repo = new RepositorioMemoria<>(new DAOMemoria<T>(type, (List<T>) Data.getDataCategorias()));
                 } else if(type.equals(AgenteSectorial.class)) {
-                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type,Data.getDataAgenteSectorial()));
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataAgenteSectorial()));
                 } else {
-                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, new ArrayList<>()));
+                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type));
                 }
             } else {
                 if(type.isAnnotationPresent(Entity.class)) {
@@ -78,5 +81,25 @@ public class FactoryRepositorio {
         }
 
         return repo;
+    }
+
+    private static <S> Map.Entry<Class<S>, Supplier<Repositorio<S>>> getLazyMap() {
+        Map<Class, Supplier<Repositorio>> mapa = new HashMap<>();
+
+        mapa.put(Organizacion.class, () -> new RepositorioMemoria<>(
+                        new DAOMemoria<>(Organizacion.class, Data.getDataOrganizacion())));
+        mapa.put(Medicion.class, () -> new RepositorioMemoria<>(
+                new DAOMemoria<>(Medicion.class, Data.getDataMedicion())));
+        mapa.put(BatchMedicion.class, () -> new RepositorioMemoria<>(
+                new DAOMemoria<>(BatchMedicion.class, Data.getDataBatchMedicion())));
+//        } else if(type.equals(Miembro.class)) {
+//            repo = new RepoMiembrosMemoria(new DAOMemoria<>(Miembro.class, Data.getDataMiembro()));
+//        } else if(type.equals(FactorEmision.class)) {
+//            repo = new RepoFactoresMemoria(new DAOMemoria<>(FactorEmision.class, Data.getDataFactorEmision()));
+//        } else if(type.equals(Categoria.class)) {
+//            repo = new RepositorioMemoria<>(new DAOMemoria<T>(type, (List<T>) Data.getDataCategorias()));
+//        } else if(type.equals(AgenteSectorial.class)) {
+//            repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataAgenteSectorial()));
+
     }
 }
