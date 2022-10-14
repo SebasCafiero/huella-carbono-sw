@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface Repositorio<T> {
     T agregar(T unObjeto);
+
+    void agregar(T... objetos);
     void modificar(T unObjeto);
     void eliminar(T unObjeto);
     List<T> buscarTodos();

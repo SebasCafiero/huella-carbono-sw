@@ -62,14 +62,14 @@ public class Sector {
         return this.miembros.contains(miembro);
     }
 
-    public void agregarMiembro(Miembro miembro) throws MiembroException{
+    public void agregarMiembro(Miembro miembro) {
         if(esMiembro(miembro))
             throw new MiembroException("El miembro ya pertenece a este sector");
         miembros.add(miembro);
         miembro.agregarSector(this);
     }
 
-    public void quitarMiembro(Miembro miembro) throws MiembroException {
+    public void quitarMiembro(Miembro miembro) {
         if(!esMiembro(miembro))
             throw new MiembroException("El miembro no pertenece a este sector");
         miembros.remove(miembro);
@@ -78,14 +78,5 @@ public class Sector {
 
     public Integer cantidadMiembros() {
         return this.miembros.size();
-    }
-
-    @Override
-    public String toString() { // TODO cambio organizacion y miembros por recursividad!
-        return "<br>&nbsp;&nbsp;&nbsp;&nbsp;Sector{<br>" +
-                "&nbsp;&nbsp;&nbsp;&nbsp;nombre='" + nombre + '\'' +
-                ", organizacion=<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + organizacion.getRazonSocial() +
-                ",<br>&nbsp;&nbsp;&nbsp;&nbsp;miembros=" + miembros.stream().map(m->m.getNroDocumento()) +
-                "}<br>";
     }
 }

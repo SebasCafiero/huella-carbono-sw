@@ -30,7 +30,7 @@ public class Miembro {
     private int nroDocumento;
 
     @ManyToMany(mappedBy = "miembros", fetch = FetchType.EAGER)
-    private Set<Sector> sectoresDondeTrabaja; //Los sectores conocen las organizaciones
+    private Set<Sector> sectoresDondeTrabaja;
 
     @Transient
     private List<Trayecto> trayectos;
@@ -56,7 +56,7 @@ public class Miembro {
     public Set<Organizacion> organizacionesDondeTrabaja(){
         return this.sectoresDondeTrabaja
                 .stream()
-                .map(sector -> sector.getOrganizacion())
+                .map(Sector::getOrganizacion)
                 .collect(Collectors.toSet());
     }
 
@@ -81,7 +81,7 @@ public class Miembro {
     }
 
     public Integer cantidadDeSectoresDondeTrabaja() {
-        return this.sectoresDondeTrabaja.size();
+        return this.getSectoresDondeTrabaja().size();
     }
 
     public Integer cantidadDeOrganizacionesDondeTrabaja() {

@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.repositories.utils;
 
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class RepositorioMemoria<T> implements Repositorio<T> {
@@ -18,6 +19,11 @@ public class RepositorioMemoria<T> implements Repositorio<T> {
     @Override
     public T agregar(T unObjeto) {
         return this.dao.agregar(unObjeto);
+    }
+
+    @Override
+    public void agregar(T... objetos) {
+        Arrays.stream(objetos).forEach(this.dao::agregar);
     }
 
     @Override
