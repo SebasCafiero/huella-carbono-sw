@@ -17,7 +17,7 @@ public class DataTrayecto {
 
         private static List<Trayecto> trayectos = new ArrayList<>();
 
-    public static <T> List<T> getList(){
+    public static List<Trayecto> getList(){
         if(trayectos.size() == 0) {
             List<Tramo> tramos = new ArrayList<>();
 
@@ -86,7 +86,7 @@ public class DataTrayecto {
 
             addAll(t1, t2, t3);
         }
-        return (List<T>) trayectos;
+        return trayectos;
     }
 
     private static void addAll(Trayecto ... trayectos){

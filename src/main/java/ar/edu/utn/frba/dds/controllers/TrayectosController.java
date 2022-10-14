@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class TrayectosController {
 
-    private FachadaTrayectos fachada; //TODO volver a poner los repos y sacar fachada?
+    private FachadaTrayectos fachada;
 
     public TrayectosController() {
         this.fachada = new FachadaTrayectos();

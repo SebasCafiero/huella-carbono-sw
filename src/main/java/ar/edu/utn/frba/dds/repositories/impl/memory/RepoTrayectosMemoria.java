@@ -11,10 +11,9 @@ import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 
 public class RepoTrayectosMemoria<T> extends RepositorioMemoria<Trayecto> {
 
-    //TODO
-    // No sabia donde hacerlo así que cree RepoTrayectos para sincronizar los repos
-    // Sino el Data de trayectos debería tenerlos vacíos y en otro lado crear los
-    // miembros y usando el repoMiembros agregarlos, y modificar el repoTrayectos
+    //TODO Cree RepoTrayectos para sincronizar los repo,sino el Data de trayectos
+    // debería tenerlos vacío y al utilizarlos agregar cada dato en cada
+    // repositorio, pero sin agregar dos veces (con if o usando Set en vez de List)
 
     public RepoTrayectosMemoria(DAOMemoria<Trayecto> dao) {
         super(dao);

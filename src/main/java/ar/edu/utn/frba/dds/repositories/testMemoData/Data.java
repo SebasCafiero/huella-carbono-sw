@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.repositories.testMemoData;
 
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
+import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class Data {
         return DataAgenteSectorial.getList();
     }
 
-    public static <T> List<T> getDataTrayecto() {
+    public static List<Trayecto> getDataTrayecto() {
         return DataTrayecto.getList();
     }
 
