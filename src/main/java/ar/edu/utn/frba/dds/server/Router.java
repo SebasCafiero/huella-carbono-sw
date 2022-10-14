@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.server;
 
 import ar.edu.utn.frba.dds.controllers.*;
+import ar.edu.utn.frba.dds.login.LoginController;
 import ar.edu.utn.frba.dds.spark.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.spark.utils.HandlebarsTemplateEngineBuilder;
 import spark.Spark;
@@ -55,5 +56,8 @@ public class Router {
         ReportesController reportesController = new ReportesController();
         Spark.get("/reportes/agente/:id", reportesController::generarReporteAgente);
         Spark.get("/reportes/organizacion/:id", reportesController::generarReporteOrganizacion);
+
+        LoginController loginController = new LoginController();
+        Spark.post("/login", loginController::intentarLogear);
     }
 }
