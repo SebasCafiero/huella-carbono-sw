@@ -90,6 +90,9 @@ public class TrayectosController {
     public Response modificar(Request request, Response response) {
         Integer id = Integer.parseInt(request.params("id"));
         Trayecto trayecto = fachada.obtenerTrayecto(id);
+        if(request.queryParams("f-eliminar") != null)
+            if(request.queryParams("f-eliminar").equals("true")) //innecesario quizas
+                return this.eliminar(request, response); //todo crear JS method DELETE desde la pagina
         asignarCampos(trayecto, request);
         fachada.modificarTrayecto(trayecto);
         response.redirect("/trayecto/"+id);
@@ -121,7 +124,29 @@ public class TrayectosController {
             cant++;
         }
         trayecto.setTramos(tramos);
+
+        if(req.queryParams("f-transporte-nuevo") != null) {
+            MedioDeTransporte transporte = fachada.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-nuevo")));
+            Coordenada coorInicial = new Coordenada(
+                    Float.parseFloat(req.queryParams("f-lat-inicial-nueva")),
+                    Float.parseFloat(req.queryParams("f-lon-inicial-nueva")));
+            Coordenada coorFinal = new Coordenada(
+                    Float.parseFloat(req.queryParams("f-lat-final-nueva")),
+                    Float.parseFloat(req.queryParams("f-lon-final-nueva")));
+            Tramo tramoNuevo = new Tramo(transporte, coorInicial, coorFinal);
+            tramoNuevo.setId(cant);
+            tramos.add(tramoNuevo);
+            //cant++;
+        }
     }
+
+    public Response eliminar(Request request, Response response) {
+        Trayecto trayecto = fachada.obtenerTrayecto(Integer.parseInt(request.params("id")));
+        fachada.eliminarTrayecto(trayecto);
+        response.redirect("/trayectos");
+        return response;
+    }
+    //todo al eliminar, chequear la accion del form que no existiria mas el id?
 
     public ModelAndView darAlta(Request request, Response response) {
         Map<String, Object> parametros = new HashMap<>();
@@ -137,8 +162,8 @@ public class TrayectosController {
             miembros.add(miembroMap);
         });
         parametros.put("miembros", miembros);
-
-
+        parametros.put("transportesTotales",fachada.obtenerTransportes());
+        //VER DE REUTILIZAR setearCampos()
         return new ModelAndView(parametros, "/trayecto-edicion.hbs");
     }
 
@@ -149,4 +174,6 @@ public class TrayectosController {
         response.redirect("/trayecto/"+trayecto.getId());
         return response;
     }
+
+
 }

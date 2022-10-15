@@ -1,0 +1,41 @@
+form {
+    text-align: center;
+}
+
+.campo-seleccionar {
+    font-style: italic;
+}
+
+.enviar {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid black;
+}
+
+.enviar input {
+    color: black;
+    background-color: #22CC22;
+    border: 3px solid orange;
+    border-radius: 20px;
+    font-size: 20px;
+    padding: 5px 15px;
+}
+
+input[type=submit]:hover, input[type=reset]:hover {
+    opacity: 0.8;
+}
+
+input[type=submit]:active {
+    background-color: #22BB22;
+}
+
+.volver {
+    text-align: center;
+    padding: 10px;
+}
+
+.volver span {
+    border: 2px dotted blue;
+    padding: 10px;
+}

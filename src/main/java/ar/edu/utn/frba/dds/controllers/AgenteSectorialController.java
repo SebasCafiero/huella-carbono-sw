@@ -21,7 +21,7 @@ public class AgenteSectorialController {
     }
 
     public String obtener(Request request, Response response){
-        AgenteSectorial agenteSectorial = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+        AgenteSectorial agenteSectorial = this.repositorio.buscar(Integer.parseInt(request.params("id")));
         return agenteSectorial.toString();
     }
 
@@ -33,12 +33,12 @@ public class AgenteSectorialController {
 
     public Object modificar(Request request, Response response){
         AgenteSectorial agenteSectorial = AgenteSectorialMapper.toEntity(ParserAgentesJSON.generarAgente(request.body()));
-        this.repositorio.modificar(Integer.valueOf(request.params("id")),agenteSectorial);
+        this.repositorio.modificar(Integer.parseInt(request.params("id")),agenteSectorial);
         return "Agente Sectorial modificado correctamente";
     }
 
     public Object eliminar(Request request, Response response){
-        AgenteSectorial agenteSectorial = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+        AgenteSectorial agenteSectorial = this.repositorio.buscar(Integer.parseInt(request.params("id")));
         this.repositorio.eliminar(agenteSectorial);
         return "Agente Sectorial eliminado correctamente";
     }

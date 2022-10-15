@@ -19,19 +19,19 @@ public class OrganizacionController {
     }
 
     public String obtener(Request request, Response response){
-        Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+        Organizacion organizacion = this.repositorio.buscar(Integer.parseInt(request.params("id")));
         return organizacion.getRazonSocial();
     }
 
     public Object eliminar(Request request, Response response){
-        Organizacion organizacion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+        Organizacion organizacion = this.repositorio.buscar(Integer.parseInt(request.params("id")));
         this.repositorio.eliminar(organizacion);
         return "Organizacion borrada correctamente";
     }
 
     public Object modificar(Request request, Response response) throws SectorException {
         Organizacion organizacion = OrganizacionMapper.toEntity(ParserOrganizacionesJSON.generarOrganizacion(request.body()));
-        this.repositorio.modificar(Integer.valueOf(request.params("id")), organizacion);
+        this.repositorio.modificar(Integer.parseInt(request.params("id")), organizacion);
         return "Organizacion modificada correctamente";
     }
 

@@ -10,7 +10,7 @@
   <div class="volver">
     <span><a href="/home">VOLVER AL MENU PRINCIPAL</a></span>
   </div>
-  <div>
+  <div class="trayectos">
     <table class="general">
         <thead>
         <tr>
@@ -42,10 +42,16 @@
             </td>
             <td><a href="/trayecto/{{id}}?mode=view">VER</a></td>
         </tr>
-
+        {{else}}
+        <tr>
+            <td class="ausente" colspan="4">SIN TRAYECTOS</td>
+        </tr>
         {{/each}}
         </tbody>
     </table>
+  </div>
+  <div class="generar">
+      <span><a href="/trayecto">Generar Trayecto</a></span>
   </div>
 </body>
 </html>

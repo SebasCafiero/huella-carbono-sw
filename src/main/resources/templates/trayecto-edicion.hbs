@@ -15,7 +15,7 @@
   <body>
   	<div class="edicion">
       <span>ID-Trayecto: {{trayecto.id}}</span> <br /><br />
-      <!-- action="/trayecto/#id" al editar particular (method post xq html no tiene form.put) -->
+      <!-- action="/trayecto/#id" al editar particular (method post xq html.form no tiene put) -->
         <form {{#if trayecto}} action="/trayecto/{{trayecto.id}}" {{else}} action="/trayecto" {{/if}} method="post">
       	<div class="form-fecha">
         <label for="fecha">Fecha</label>
@@ -35,7 +35,8 @@
           </fieldset>
         </div>
         <br />
-        <div class="tramos">
+
+        <div class="form-tramos">
         {{#each trayecto.tramos}}
           <fieldset>
             <legend>Tramo{{id}}</legend>
@@ -85,8 +86,44 @@
           </fieldset>
           <br />
         {{/each}}
+
+          <div class="tramos-nuevos">
+            <fieldset>
+              <legend>Nuevo Tramo</legend>
+              <label for="transporte">Transporte</label>
+              <select id="transporte" name="f-transporte-nuevo" >
+                <option class="campo-seleccionar" selected disabled>Seleccionar</option>
+                {{#each transportesTotales}}
+                    <option value="{{id}}">{{clasificacion}}</option>
+                {{/each}}
+              </select>
+              <br /><br />
+              <fieldset>
+                <legend>Coordenadas Iniciales</legend>
+                <label>Latitud:</label>
+                <input id="lat-inicial" type="text" name="f-lat-inicial-nueva" value="" />
+                <label>Longitud:</label>
+                <input id="lon-inicial" type="text" name="f-lon-inicial-nueva" value=""/>
+              </fieldset>
+              <br />
+              <fieldset>
+                <legend>Coordenadas Finales</legend>
+                <label for="lat-final">Latitud:</label>
+                <input id="lat-final" type="text" name="f-lat-final-nueva" value=""/>
+                <label for="lon-final">Longitud:</label>
+                <input id="lon-final" type="text" name="f-lon-final-nueva" value=""/>
+              </fieldset>
+            </fieldset>
+            <br />
+          </div>
+
         </div>
-        
+        {{#if trayecto}}
+        <div class="eliminar">
+            <label for="eliminacion">¿Eliminar Trayecto?</label>
+            <input id="eliminacion" type="checkbox" value="true" name="f-eliminar" />
+        </div>
+        {{/if}}
         <div class="reiniciar">
           <input type="reset" value="Reiniciar"/> <!-- Quizas sacarlo -->
         </div>

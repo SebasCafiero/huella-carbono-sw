@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Trayectos</title>
+    <style>
+	  
+	
+	  .campo-seleccionar {
+		  font-style: italic;
+	  }
+	  
+	  .reiniciar {
+		  text-align: right;
+	  }
+	  
+	  
+	  .reiniciar input {
+		  color: black;
+		  background-color: #DDAA22;
+		  border-radius: 20px;
+		  margin: 10px 10px;
+	  }
+	  
+	  .enviar {
+		  text-align: center;
+		  padding-bottom: 10px;
+		  border-bottom: 1px solid black;
+	  }
+	  
+	  .enviar input {
+		  color: black;
+		  background-color: #22CC22;
+		  border: 3px solid orange;
+		  border-radius: 20px;
+		  font-size: 20px;
+		  padding: 5px 15px;
+		  margin-top: -15px;
+	  }
+	  
+	  input[type=submit]:hover, input[type=reset]:hover {
+		  opacity: 0.8;
+	  }
+	  
+	  input[type=submit]:active {
+		  background-color: #22BB22;
+	  }
+	  
+	  .cancelar {
+		  text-align: center;
+		  padding: 10px;
+	  }
+	  
+	  .cancelar span {
+		  border: 2px dotted blue;
+		  padding: 10px;
+	  }
+    </style>
+    
+  </head>
+  <body>
+  	<div class="edicion">
+      <span>ID-Trayecto: id?</span> <br /><br />
+      <!-- action="/trayecto/#id" al editar particular (method post xq html no tiene form.put) -->
+      <form action="/trayecto" method="post">
+      	<div class="form-fecha">
+        <label for="fecha">Fecha</label>
+      	<input id="fecha" type="month" name="fecha"/>
+        </div>
+        <br />
+        <div class="form-miembros">
+          <fieldset>
+            <legend>Miembros</legend>
+            <input id="logueado" type="checkbox" value="m-logueado" name="m-miembro" checked disabled/>
+            <label for="logueado">Miembro Logueado</label><br />
+            <input id="miembro1" type="checkbox" value="m-miembro1" name="m-miembro"/>
+            <label for="miembro1">Leo Messi 10</label><br />
+            <input id="miembro2" type="checkbox" value="m-miembro2" name="m-miembro"/>
+            <label for="miembro2">Leo Paredes 123</label><br />
+            <input id="miembro3" type="checkbox" value="m-miembro3" name="m-miembro"/>
+            <label for="miembro3">Ángel Di María 987</label><br />
+            <!-- ver si name="m-miembro[]" como PHP -->
+          </fieldset>
+        </div>
+        <br />
+        <div class="tramos">
+          <fieldset>
+            <legend>Tramo1</legend>
+            <label for="transporte">Transporte</label>
+            <select id="transporte" name="transporte" required>
+              <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+              <optgroup label="Público">
+                <option value="subteA">Subte A</option>
+                <option value="bondi47">Colectivo 47</option>
+              </optgroup>
+              <optgroup label="Particular">
+                <option value="nafta">Nafta</option>
+                <option value="gnc">GNC</option>
+              </optgroup>
+              <optgroup label="Ecológico">
+                <option value="pie">A Pie</option>
+                <option value="bicicleta">Bicicleta</option>
+              </optgroup>
+              <optgroup label="Contratado">
+                <option value="uber">Uber</option>
+                <option value="taxi">Taxi</option>
+                <option value="didi">DiDi</option>
+              </optgroup>
+            </select>
+            <br /><br />
+            <fieldset>
+              <legend>Coordenadas Iniciales</legend>
+              <label>Latitud:</label>
+              <input id="lat-inicial" type="number" name="lat-inicial" min="0" step="0.001"/>
+              <label>Longitud:</label>
+              <input id="lon-inicial" type="number" name="lon-inicial" min="0" step="0.001"/>
+            </fieldset>
+            <br />
+            <fieldset>
+              <legend>Coordenadas Finales</legend>
+              <label for="lat-final">Latitud:</label>
+              <input id="lat-final" type="number" name="lat-final" min="0" step="0.001"/>
+              <label for="lon-final">Longitud:</label>
+              <input id="lon-final" type="number" name="lon-final" min="0" step="0.001"/>
+            </fieldset>
+          </fieldset>
+          <br />
+          <fieldset>
+            <legend>Tramo2</legend>
+            <label for="transporte">Transporte</label>
+            <select id="transporte" name="transporte" required>
+              <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+              <optgroup label="Público">
+                <option value="subteA">Subte A</option>
+                <option value="bondi47">Colectivo 47</option>
+              </optgroup>
+              <optgroup label="Particular">
+                <option value="nafta">Nafta</option>
+                <option value="gnc">GNC</option>
+              </optgroup>
+              <optgroup label="Ecológico">
+                <option value="pie">A Pie</option>
+                <option value="bicicleta">Bicicleta</option>
+              </optgroup>
+              <optgroup label="Contratado">
+                <option value="uber">Uber</option>
+                <option value="taxi">Taxi</option>
+                <option value="didi">DiDi</option>
+              </optgroup>
+            </select>
+            <br /><br />
+            <fieldset>
+              <legend>Coordenadas Iniciales</legend>
+              <label>Latitud:</label>
+              <input id="lat-inicial" type="number"/>
+              <label>Longitud:</label>
+              <input id="lon-inicial" type="number"/>
+            </fieldset>
+            <br />
+            <fieldset>
+              <legend>Coordenadas Finales</legend>
+              <label for="lat-final">Latitud:</label>
+              <input id="lat-final" type="number"/>
+              <label for="lon-final">Longitud:</label>
+              <input id="lon-final" type="number"/>
+            </fieldset>
+          </fieldset>
+        </div>
+        
+        <div class="reiniciar">
+          <input type="reset" value="Reiniciar"/> <!-- Quizas sacarlo -->
+        </div>
+        <div class="enviar"> 
+          <!-- Cuando es en trayectos "Crear Nuevo": value="Crear" -->
+          <!-- Cuando es en trayecto particular "Editar": value="Confirmar" -->
+          <input type="submit" value="Crear" />
+        </div>
+      </form>
+    </div>
+    <br />
+    <!-- Cuando es en trayectos "Crear Nuevo": href="/trayectos" -->
+    <!-- Cuando es en trayecto particular "Editar": href="/trayecto/#id" -->
+    <div class="cancelar">
+      <span><a href="/trayectos">CANCELAR</a></span>
+    </div>
+  </body>
+</html>

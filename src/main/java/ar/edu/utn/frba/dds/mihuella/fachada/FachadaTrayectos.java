@@ -48,6 +48,10 @@ public class FachadaTrayectos {
         return this.repoTrayectos.buscar(id);
     }
 
+    public void eliminarTrayecto(Trayecto trayecto) {
+        repoTrayectos.eliminar(trayecto);
+    }
+
     public List<Miembro> obtenerMiembros() {
         return this.repoMiembros.buscarTodos();
     }

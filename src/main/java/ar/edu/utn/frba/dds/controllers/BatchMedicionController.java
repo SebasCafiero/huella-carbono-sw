@@ -26,7 +26,7 @@ public class BatchMedicionController {
     }
 
     public String obtener(Request request, Response response){
-        BatchMedicion batchMedicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+        BatchMedicion batchMedicion = this.repositorio.buscar(Integer.parseInt(request.params("id")));
         //return batchMedicion.toString();
         String json = new Gson().toJson(batchMedicion);
         return json;
@@ -46,7 +46,7 @@ public class BatchMedicionController {
 
 
     public Object eliminar(Request request, Response response){
-        BatchMedicion batchMedicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+        BatchMedicion batchMedicion = this.repositorio.buscar(Integer.parseInt(request.params("id")));
         this.repositorio.eliminar(batchMedicion);
         return "BatchMedicion de id : " + request.params("id") + " eliminado correctamente.";
     }
