@@ -53,7 +53,7 @@ public class DataTrayecto {
             Collections.addAll(tramos, t11, t12, t13);
             t1.agregarTramos(tramos);
             t1.setPeriodo(new Periodo(2020,10));
-            t1.agregarmiembro(m1);
+            t1.agregarMiembro(m1);
             m1.agregarTrayecto(t1);
 
             Trayecto t2 = new Trayecto();
@@ -67,11 +67,11 @@ public class DataTrayecto {
 //            Collections.addAll(tramos, t21, t22);
 //            t2.agregarTramos(tramos);
             t2.setPeriodo(new Periodo(2021,9));
-            t2.agregarmiembro(m2);
+            t2.agregarMiembro(m2);
             m2.agregarTrayecto(t2);
-            t2.agregarmiembro(m3);
+            t2.agregarMiembro(m3);
             m3.agregarTrayecto(t2);
-            t2.agregarmiembro(m4);
+            t2.agregarMiembro(m4);
             m4.agregarTrayecto(t2);
 
             Trayecto t3 = new Trayecto();
@@ -79,9 +79,9 @@ public class DataTrayecto {
             t31.setId(31);
             t3.agregarTramo(t31);
             t3.setPeriodo(new Periodo(2022,11));
-            t3.agregarmiembro(m1);
+            t3.agregarMiembro(m1);
             m1.agregarTrayecto(t3);
-            t3.agregarmiembro(m3);
+            t3.agregarMiembro(m3);
             m3.agregarTrayecto(t3);
 
             addAll(t1, t2, t3);

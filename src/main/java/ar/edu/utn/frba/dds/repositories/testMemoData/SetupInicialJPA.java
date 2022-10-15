@@ -121,6 +121,7 @@ public class SetupInicialJPA {
         administracionUtnMedrano.agregarMiembro(elTitan);
 
         this.repoOrganizaciones.agregar(orgUtnCampus);
+        this.repoOrganizaciones.agregar(orgUtnMedrano);
 
         Tramo fiat600 = new Tramo(fitito, ubicacionUtnCampus, mirallaAlberdi);
         fiat600.setValor();

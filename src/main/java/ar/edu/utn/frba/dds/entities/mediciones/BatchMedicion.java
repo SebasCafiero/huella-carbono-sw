@@ -35,10 +35,10 @@ public class BatchMedicion {
         this.fecha = fecha;
     }
 
-//    public BatchMedicion(List<Medicion> mediciones) {
-//        this.mediciones = mediciones;
-//        this.cantidadMediciones = mediciones.size();
-//    }
+    public BatchMedicion(List<Medicion> mediciones) {
+        this.mediciones = mediciones;
+        this.cantidadMediciones = mediciones.size();
+    }
 
     public Integer getId() {
         return id;

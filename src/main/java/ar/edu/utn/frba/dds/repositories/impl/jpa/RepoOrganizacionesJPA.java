@@ -27,7 +27,7 @@ public class RepoOrganizacionesJPA<T> extends RepositorioPersistente<Organizacio
 
         Root<Organizacion> condicionRaiz = factorQuery.from(Organizacion.class);
 
-        Predicate condicionCategoria = criteriaBuilder.equal(condicionRaiz.get("razon_social"), razonSocial);
+        Predicate condicionCategoria = criteriaBuilder.equal(condicionRaiz.get("razonSocial"), razonSocial);
 
         factorQuery.where(condicionCategoria);
 
