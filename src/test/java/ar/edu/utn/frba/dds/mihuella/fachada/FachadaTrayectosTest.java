@@ -13,8 +13,10 @@ import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
+import ar.edu.utn.frba.dds.repositories.impl.memory.RepoMiembrosMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +32,7 @@ public class FachadaTrayectosTest {
     @BeforeAll
     public static void initialize() {
         fachadaTrayectos = new FachadaTrayectos(
-                new RepositorioMemoria<>(new DAOMemoria<>(Miembro.class)),
+                new RepoMiembrosMemoria(new DAOMemoria<>(Miembro.class)),
                 new RepositorioMemoria<>(new DAOMemoria<>(Trayecto.class)),
                 new RepositorioMemoria<>(new DAOMemoria<>(MedioDeTransporte.class)));
 

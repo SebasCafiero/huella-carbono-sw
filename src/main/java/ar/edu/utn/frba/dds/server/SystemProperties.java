@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.server;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Objects;
@@ -11,8 +13,10 @@ public class SystemProperties {
     private static final Float coeficienteGradoKm;
 
     static {
+        File archivo = null;
         try {
             Properties propiedades = new Properties();
+            archivo = new File("resources/aplication.properties");
             FileReader file = new FileReader("resources/aplication.properties");
             propiedades.load(file);
 
@@ -23,8 +27,12 @@ public class SystemProperties {
                     propiedades.getProperty("coordenadas.precision.equivalencia", "111.10"));
 
             file.close();
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            System.out.println(archivo.getAbsolutePath());
+            System.out.println(e.getMessage());
             throw new RuntimeException("El archivo properties no existe");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
