@@ -10,8 +10,10 @@ import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
 import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoMiembrosJPA;
 import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoFactoresJPA;
+import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoOrganizacionesJPA;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoMiembrosMemoria;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
+import ar.edu.utn.frba.dds.repositories.impl.memory.RepoOrganizacionesMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
@@ -46,7 +48,7 @@ public class FactoryRepositorio {
         else{
             if(!isJPA) {
                 if(type.equals(Organizacion.class)) {
-                    repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataOrganizacion()));
+                    repo = new RepoOrganizacionesMemoria(new DAOMemoria<>(Organizacion.class, Data.getDataOrganizacion()));
                 } else if(type.equals(Medicion.class)) {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataMedicion()));
                 } else if(type.equals(BatchMedicion.class)) {
@@ -64,7 +66,9 @@ public class FactoryRepositorio {
                 }
             } else {
                 if(type.isAnnotationPresent(Entity.class)) {
-                    if (type.equals(FactorEmision.class)) {
+                    if(type.equals(Organizacion.class)) {
+                        repo = new RepoOrganizacionesJPA(new DAOHibernate<>(type));
+                    } else if (type.equals(FactorEmision.class)) {
                         repo = new RepoFactoresJPA(new DAOHibernate<>(type));
                     } else if (type.equals(Miembro.class)) {
                         repo = new RepoMiembrosJPA(new DAOHibernate<>(type));

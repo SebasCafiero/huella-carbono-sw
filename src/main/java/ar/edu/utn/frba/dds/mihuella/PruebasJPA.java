@@ -1,35 +1,20 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-import ar.edu.utn.frba.dds.entities.lugares.ClasificacionOrganizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
-import ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
-import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteOrganizacion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
-import ar.edu.utn.frba.dds.entities.transportes.*;
-import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
-import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaReportes;
-import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
-import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
-import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoOrganizacionesJPA;
 import ar.edu.utn.frba.dds.repositories.testMemoData.SetupInicialJPA;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.server.SystemProperties;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Map;
 
 import static java.lang.System.exit;
@@ -38,7 +23,7 @@ public class PruebasJPA {
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
 
         SetupInicialJPA setup = new SetupInicialJPA();
-        setup.undoSetup();
+//        setup.undoSetup();
         setup.doSetup();
 
         String archivoSalida = SystemProperties.isJpa() ? "resources/salida-jpa.csv" : "resources/salida-mem.csv";
@@ -47,7 +32,7 @@ public class PruebasJPA {
 
         Periodo periodo = new Periodo(2022);
 
-        RepoOrganizaciones repoOrganizaciones = new RepoOrganizacionesJPA<>(new DAOHibernate<>(Organizacion.class));
+        RepoOrganizaciones repoOrganizaciones = (RepoOrganizaciones) FactoryRepositorio.get(Organizacion.class);
 
         FachadaReportes fachadaReportes = new FachadaReportes();
 

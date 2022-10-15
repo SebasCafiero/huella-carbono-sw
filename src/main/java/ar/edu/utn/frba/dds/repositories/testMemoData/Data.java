@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.repositories.testMemoData;
 
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 
@@ -11,7 +12,7 @@ public class Data {
         return DataMedicion.getList();
     }
 
-    public static <T> List<T> getDataOrganizacion(){
+    public static List<Organizacion> getDataOrganizacion(){
         return DataOrganizacion.getList();
     }
 

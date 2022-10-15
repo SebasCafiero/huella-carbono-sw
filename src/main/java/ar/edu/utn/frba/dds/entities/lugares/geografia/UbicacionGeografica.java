@@ -39,6 +39,22 @@ public class UbicacionGeografica {
         this.direccion = new Direccion();
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setCoordenada(Coordenada coordenada) {
+        this.coordenada = coordenada;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+
     public Direccion getDireccion() {
         return direccion;
     }

@@ -17,6 +17,7 @@ import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
+import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
@@ -27,13 +28,13 @@ import java.util.HashMap;
 public class SetupInicialJPA {
     private final Repositorio<MedioDeTransporte> repoMedios;
     private final Repositorio<UbicacionGeografica> repoUbicaciones;
-    private final Repositorio<Organizacion> repoOrganizaciones;
+    private final RepoOrganizaciones repoOrganizaciones;
     private final Repositorio<Trayecto> repoTrayectos;
 
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
         this.repoUbicaciones = FactoryRepositorio.get(UbicacionGeografica.class);
-        this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
+        this.repoOrganizaciones = (RepoOrganizaciones) FactoryRepositorio.get(Organizacion.class);
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
     }
 
