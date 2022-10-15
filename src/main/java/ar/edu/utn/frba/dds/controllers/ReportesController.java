@@ -66,7 +66,6 @@ public class ReportesController {
     }
 
     public Response generar(Request request, Response response) {
-//        response.redirect("/reportes"); //si agregamos para ver todos los reportes
         Organizacion organizacion = repoOrganizaciones.buscar(Integer.parseInt(request.queryParams("f-organizacion")));
         if(organizacion == null) {
             //return new ErrorResponse("La organizacion no existe");

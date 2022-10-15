@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +23,9 @@ public class BatchMedicion {
     @Column
     private Integer cantidadMediciones;
 
+    @Transient
+    private Organizacion organizacion;
+
     public BatchMedicion() {
     }
 
@@ -30,10 +35,10 @@ public class BatchMedicion {
         this.fecha = fecha;
     }
 
-    public BatchMedicion(List<Medicion> mediciones) {
-        this.mediciones = mediciones;
-        this.cantidadMediciones = mediciones.size();
-    }
+//    public BatchMedicion(List<Medicion> mediciones) {
+//        this.mediciones = mediciones;
+//        this.cantidadMediciones = mediciones.size();
+//    }
 
     public Integer getId() {
         return id;
@@ -71,7 +76,15 @@ public class BatchMedicion {
         this.cantidadMediciones = cantidadMediciones;
     }
 
-//    @Override
+    public Organizacion getOrganizacion() {
+        return organizacion;
+    }
+
+    public void setOrganizacion(Organizacion organizacion) {
+        this.organizacion = organizacion;
+    }
+
+    //    @Override
 //    public String toString() {
 //        return "El batch de mediciones de id " + getId().toString() + " fue cargado en la fecha " + getFecha().toString() + " y tiene " + getCantidadMediciones().toString() + " mediciones." + '\n';
 //    }
