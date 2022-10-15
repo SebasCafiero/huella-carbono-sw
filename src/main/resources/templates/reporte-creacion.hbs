@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/img/logo.png">
+    <title>Crear Reporte</title>
+    <link rel="stylesheet" href="/css/reporte-creacion.css" >
+  </head>
+  <body>
+    <div class="info">
+        <span>Se creará el reporte de la organización seleccionada</span>
+        <ul>
+            <li>Por Año</li>
+            <li>Por Mes</li>
+            <li>Desglosando por cada Categoría</li>
+            <li>Desglosando por cada Sector</li>
+            <li>Desglosando por cada Miembro</li>
+        </ul>
+    </div>
+    <br />
+    <div class="edicion">
+        <form action="/reporte" method="post">
+            <div class="organizaciones">
+                <label for="organizacion">Seleccione la Organizacion:</label>
+                <select id="organizacion" name="f-organizacion">
+                    <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+                    {{#each organizaciones}}
+                    <option value="{{id}}">{{razonSocial}}</option>
+                {{/each}}
+                </select>
+            </div>
+            <div class="enviar">
+                <input type="submit" value="Generar Reporte"/>
+            </div>
+        </form>
+    </div>
+    <br />
+    <div class="volver">
+      <span><a href="/home">CANCELAR Y VOLVER AL MENU PRINCIPAL</a></span>
+    </div>
+  </body>
+</html>

@@ -86,6 +86,7 @@ public class FachadaReportes {
         reporte.setConsumoTotal(totalTrayectos + totalMediciones);
         reporte.setConsumoMediciones(totalMediciones);
         reporte.setFechaCreacion(LocalDate.now());
+        organizacion.agregarReporte(reporte);
 
         return reporte;
 //        this.notificadorReportes.notificarReporteOrganizacion(area.getAgente(), reporte);

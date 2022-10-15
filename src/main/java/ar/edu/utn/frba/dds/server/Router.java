@@ -67,5 +67,10 @@ public class Router {
         Spark.post("/trayecto", trayectosController::agregar); //creo un nuevo trayecto (trayecto-edicion.html)
 
         Spark.get("/home", new HomeController()::inicio, engine); //todo EL LOGUIN DEBE LLEVAR AL MENU
+
+        Spark.get("/reporte", reportesController::darAlta, engine);
+        Spark.post("/reporte", reportesController::generar);
+        Spark.get("/reportes", reportesController::mostrarTodos, engine);
+        Spark.get("/organizacion/:org/reporte/:rep", reportesController::obtener, engine);
     }
 }
