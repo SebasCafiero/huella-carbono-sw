@@ -34,6 +34,7 @@ public class ReportesController {
         int idArea = Integer.parseInt(request.params(("id")));
         AreaSectorial areaSectorial = repoAreas.buscar(idArea);
         if(areaSectorial == null) {
+            response.status(400);
             return new ErrorResponse("La organizacion de id " + idArea + " no existe");
         }
 
@@ -47,6 +48,7 @@ public class ReportesController {
         int idOrganizacion = Integer.parseInt(request.params(("id")));
         Organizacion organizacion = repoOrganizaciones.buscar(idOrganizacion);
         if(organizacion == null) {
+            response.status(400);
             return new ErrorResponse("La organizacion de id " + idOrganizacion + " no existe");
         }
 

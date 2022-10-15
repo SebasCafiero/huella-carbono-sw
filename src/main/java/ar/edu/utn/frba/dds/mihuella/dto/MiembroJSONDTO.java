@@ -1,8 +1,22 @@
 package ar.edu.utn.frba.dds.mihuella.dto;
 
 public class MiembroJSONDTO {
-    public String nombre;
-    public String apellido;
-    public String tipoDocumento;
-    public Integer documento;
+    private String tipoDocumento;
+    private Integer documento;
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    public Integer getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(Integer documento) {
+        this.documento = documento;
+    }
 }

@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Provincia extends AreaSectorial {
-
     private String nombrePais;
     private Set<Municipio> municipios;
 

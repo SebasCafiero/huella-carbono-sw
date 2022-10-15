@@ -12,7 +12,7 @@ public class BatchMedicion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-// @Transient
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "batch_id")
     private List<Medicion> mediciones;

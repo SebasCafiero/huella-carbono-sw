@@ -6,14 +6,14 @@ import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.mapping.FactorEmisionMapper;
 import ar.edu.utn.frba.dds.mapping.OrganizacionMapper;
 import ar.edu.utn.frba.dds.mapping.TransportesMapper;
 import ar.edu.utn.frba.dds.mapping.TrayectosMapper;
-import ar.edu.utn.frba.dds.mihuella.dto.OrganizacionJSONDTO;
-import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
-import ar.edu.utn.frba.dds.mihuella.dto.TransporteJSONDTO;
+import ar.edu.utn.frba.dds.mihuella.dto.*;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaTrayectos;
+import ar.edu.utn.frba.dds.mihuella.fachada.NoExisteMedioException;
 import ar.edu.utn.frba.dds.mihuella.parsers.*;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
@@ -22,12 +22,13 @@ import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
-import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.lang.System.exit;
 
 public class TrayectosHCMiembros {
 
@@ -50,7 +51,7 @@ public class TrayectosHCMiembros {
             ns = parser.parseArgs(args);
         } catch (ArgumentParserException e) {
             parser.handleError(e);
-            System.exit(1);
+            exit(1);
         }
 
         System.out.println("Archivo de parametros: " + ns.get("params"));
@@ -58,25 +59,18 @@ public class TrayectosHCMiembros {
         System.out.println("Archivo de trayectos: " + ns.get("trayectos"));
         System.out.println("Archivo de transportes: " + ns.get("transportes"));
 
-        Map<String,Float> factoresDeEmision;
-        List<Organizacion> organizaciones;
-        FachadaOrganizacion fachada = new FachadaOrganizacion();
-
         FactoryRepositorio.get(Trayecto.class).buscarTodos().forEach(System.out::println);
         FactoryRepositorio.get(Tramo.class).buscarTodos().forEach(System.out::println);
 
         try {
-            factoresDeEmision = cargarFE(ns.getString("params"));
-            organizaciones = cargarOrganizaciones(ns.getString("organizaciones"));
+            cargarFE(ns.getString("params"));
+            cargarOrganizaciones(ns.getString("organizaciones"));
             cargarTransportes(ns.getString("transportes"));
             cargarTrayectos(ns.getString("trayectos"));
-
         } catch (IOException | FechaException | NoExisteMedioException ex) {
             System.out.println(ex.getMessage());
-            return;
+            exit(0);
         }
-
-        fachada.cargarParametros(factoresDeEmision);
 
         //SALIDA 1
         PrintWriter writer = new PrintWriter(SALIDA_1_PATH, "UTF-8");
@@ -85,15 +79,16 @@ public class TrayectosHCMiembros {
         Integer anio = 2020; //TODO
         int mes = 10;
 
-
+        FachadaOrganizacion fachada = new FachadaOrganizacion();
         fachada.mostrarParametros();
+
+        List<Organizacion> organizaciones = FactoryRepositorio.get(Organizacion.class).buscarTodos();
 
         for(Organizacion org : organizaciones) {
             String razonSocial = org.getRazonSocial();
             Set<Miembro> miembros = org.getMiembros();
 
             Float consumoTotalOrganizacion = fachada.calcularImpactoOrganizacion(org, new Periodo(anio, mes));
-//                System.out.println("Consumo total de la organizacion: " + consumoTotalOrganizacion);
             for (Miembro miembro : miembros) {
                 Integer documento = miembro.getNroDocumento();
                 System.out.println("MiembroID: " + documento);
@@ -103,50 +98,68 @@ public class TrayectosHCMiembros {
             }
         }
         writer.close();
-        System.exit(0);
+        exit(0);
     }
 
+    public static void cargarFE(String archFE) throws IOException {
+        FachadaOrganizacion fachada = new FachadaOrganizacion();
+        List<FactorEmisionCSVDTO> factoresDeEmision = new ParserCSV<>(FactorEmisionCSVDTO.class)
+                .parseFileToCollection(archFE);
 
-    public static Map<String,Float> cargarFE(String archFE) throws IOException {
-        Map<String,Float> factoresDeEmision = new ParserParametrosCSV().generarFE(archFE); //TODO parser-mapper
-        return factoresDeEmision;
+        fachada.cargarParametros(
+                factoresDeEmision.stream()
+                .map(FactorEmisionMapper::toEntry)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+        );
     }
 
-    public static List<Organizacion> cargarOrganizaciones(String archOrg) throws IOException, ParseException {
-        List<Organizacion> organizaciones = new ArrayList<>();
+    public static void cargarOrganizaciones(String archOrg) throws IOException {
+        Repositorio<Organizacion> repoOrganizacion = FactoryRepositorio.get(Organizacion.class);
 
-        List<OrganizacionJSONDTO> organizacionesDTO = ParserOrganizacionesJSON.generarOrganizaciones(archOrg);
-        Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
+        List<OrganizacionConMiembrosJSONDTO> organizacionesDTO =
+                new ParserJSON<>(OrganizacionConMiembrosJSONDTO.class).parseFileToCollection(archOrg);
 
-        for(OrganizacionJSONDTO organizacionDTO : organizacionesDTO){
-            Organizacion unaOrg = OrganizacionMapper.toEntity(organizacionDTO);
-            for(Miembro unMiembro : unaOrg.getMiembros()){
-                repoMiembros.agregar(unMiembro);
-            }
-            organizaciones.add(unaOrg);
-        }
-
-        return organizaciones;
+        organizacionesDTO.forEach(organizacionDTO ->
+            repoOrganizacion.agregar(OrganizacionMapper.toEntity(organizacionDTO)));
     }
 
-    public static void cargarTransportes(String archTrans) throws FileNotFoundException {
-        //List<MedioDeTransporte> mediosDeTransporte = new ArrayList<>();
+//    public static List<Organizacion> cargarOrganizaciones(String archOrg) throws IOException {
+//        RepoMiembros repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
+//
+//        List<OrganizacionJSONDTO> organizacionesDTO = new ParserJSON<>(OrganizacionJSONDTO.class).parseFileToCollection(archOrg);
+//
+//        return organizacionesDTO.stream().map(organizacionDTO -> {
+//            Organizacion unaOrg = OrganizacionMapper.toEntity(organizacionDTO);
+//
+//            unaOrg.getSectores().forEach(sector -> {
+//                sector.getListaDeMiembros().forEach(unMiembro -> {
+//                    Optional<Miembro> miembro = repoMiembros
+//                            .findByDocumento(unMiembro.getTipoDeDocumento(), unMiembro.getNroDocumento());
+//                    if(miembro.isPresent()) {
+//                        sector.agregarMiembro(miembro.get());
+//                    } else {
+//                        throw new MiembroException();
+//                    }
+//                });
+//            });
+//            return unaOrg;
+//        }).collect(Collectors.toList());
+//    }
 
-        List<TransporteJSONDTO> transportesDTO = ParserTransportesJSON.generarTransportes(archTrans);
+    public static void cargarTransportes(String archTrans) throws IOException {
+        List<TransporteJSONDTO> transportesDTO = new ParserJSON<>(TransporteJSONDTO.class).parseFileToCollection(archTrans);
         Repositorio<MedioDeTransporte> repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
 
         for(TransporteJSONDTO transporteDTO : transportesDTO){
             MedioDeTransporte unTransporte = TransportesMapper.toEntity(transporteDTO);
-            //mediosDeTransporte.add(unTransporte);
             repoMedios.agregar(unTransporte);
         }
     }
 
-    public static void cargarTrayectos(String archTray) throws FileNotFoundException {
-        List<Tramo> tramos = new ArrayList<>();
+    public static void cargarTrayectos(String archTray) throws IOException {
         FachadaTrayectos fachadaTrayectos = new FachadaTrayectos();
 
-        List<TramoCSVDTO> trayectosDTO = new ParserTrayectos().capturarEntradas(archTray);
+        List<TramoCSVDTO> trayectosDTO = new ParserCSV<>(TramoCSVDTO.class).parseFileToCollection(archTray);
 
         trayectosDTO.forEach(tr -> {
             boolean esCompartidoPasivo = tr.getTrayectoId().equals("0");

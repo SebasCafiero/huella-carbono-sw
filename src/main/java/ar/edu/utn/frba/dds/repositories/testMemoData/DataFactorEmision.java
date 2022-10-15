@@ -14,26 +14,26 @@ public class DataFactorEmision {
     public static <T> List<T> getList() {
         if(factoresDeEmision.size() == 0) {
 
-            FactorEmision f1 = new FactorEmision();
-            Categoria categoria1 = new Categoria("Traslado de Miembros", "Publico - SUBTE");
-            f1.setValor(0.3f);
-            f1.setUnidad("m3");
-            f1.setCategoria(categoria1);
-
-            FactorEmision f2 = new FactorEmision();
-            Categoria categoria2 = new Categoria("Traslado de Miembros", "Particular - GASOIL");
-            f2.setValor(0.5f);
-            f2.setUnidad("lt");
-            f2.setCategoria(categoria2);
-
-            FactorEmision f3 = new FactorEmision();
-            Categoria categoria3 = new Categoria("Traslado de Miembros", "Particular - NAFTA");
-            f3.setValor(0.1f);
-            f3.setUnidad("kg");
-            f3.setCategoria(categoria3);
-
-            addAll(f1,f2,f3);
-            Collections.addAll(DataFactorEmision.categoriasFactores, categoria1, categoria2, categoria3);
+//            FactorEmision f1 = new FactorEmision();
+//            Categoria categoria1 = new Categoria("Traslado de Miembros", "Publico - SUBTE");
+//            f1.setValor(0.3f);
+//            f1.setUnidad("m3");
+//            f1.setCategoria(categoria1);
+//
+//            FactorEmision f2 = new FactorEmision();
+//            Categoria categoria2 = new Categoria("Traslado de Miembros", "Particular - GASOIL");
+//            f2.setValor(0.5f);
+//            f2.setUnidad("lt");
+//            f2.setCategoria(categoria2);
+//
+//            FactorEmision f3 = new FactorEmision();
+//            Categoria categoria3 = new Categoria("Traslado de Miembros", "Particular - NAFTA");
+//            f3.setValor(0.1f);
+//            f3.setUnidad("kg");
+//            f3.setCategoria(categoria3);
+//
+//            addAll(f1,f2,f3);
+//            Collections.addAll(DataFactorEmision.categoriasFactores, categoria1, categoria2, categoria3);
         }
         return (List<T>) factoresDeEmision;
     }

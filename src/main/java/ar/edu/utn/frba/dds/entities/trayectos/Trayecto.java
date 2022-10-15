@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -111,7 +110,7 @@ public class Trayecto {
         return this.calcularDistancia()/tramos.size();
     }
 
-    public void agregarmiembro(Miembro miembro) {
+    public void agregarMiembro(Miembro miembro) {
         this.miembros.add(miembro);
     }
 

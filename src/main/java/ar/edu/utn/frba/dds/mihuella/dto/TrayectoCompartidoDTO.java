@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.mihuella.dto;
 
 public class TrayectoCompartidoDTO {
+    private String tipoDocumento;
     private Integer miembroDNI;
     private Integer trayectoReferencia;
 
@@ -10,6 +11,14 @@ public class TrayectoCompartidoDTO {
     public TrayectoCompartidoDTO(Integer miembroDNI, Integer trayectoReferencia) {
         this.miembroDNI = miembroDNI;
         this.trayectoReferencia = trayectoReferencia;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
     public Integer getMiembroDNI() {

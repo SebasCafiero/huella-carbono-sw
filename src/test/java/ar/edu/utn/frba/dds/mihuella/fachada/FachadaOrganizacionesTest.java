@@ -9,7 +9,6 @@ import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.transportes.TipoTransportePublico;
 import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
-import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
 import org.junit.jupiter.api.Assertions;

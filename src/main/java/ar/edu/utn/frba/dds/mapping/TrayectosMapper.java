@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.mapping;
 
+import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mihuella.dto.NuevoTrayectoDTO;
@@ -31,8 +32,9 @@ public class TrayectosMapper {
     public static TrayectoCompartidoDTO toTrayectoCompartidoDTO(TramoCSVDTO tramo) {
         TrayectoCompartidoDTO trayectoCompartidoDTO = new TrayectoCompartidoDTO();
 
-        trayectoCompartidoDTO.setTrayectoReferencia(Integer.parseInt(tramo.getIdCompartido().trim()));
+        trayectoCompartidoDTO.setTipoDocumento(tramo.getTipoDocumento());
         trayectoCompartidoDTO.setMiembroDNI(Integer.parseInt(tramo.getMiembroDNI().trim()));
+        trayectoCompartidoDTO.setTrayectoReferencia(Integer.parseInt(tramo.getIdCompartido().trim()));
 
         return trayectoCompartidoDTO;
     }
@@ -41,6 +43,7 @@ public class TrayectosMapper {
         NuevoTrayectoDTO nuevoTrayectoDTO = new NuevoTrayectoDTO();
 
         nuevoTrayectoDTO.setTrayectoId(Integer.parseInt(tramo.getTrayectoId().trim()));
+        nuevoTrayectoDTO.setTipoDocumento(tramo.getTipoDocumento().trim());
         nuevoTrayectoDTO.setMiembroDNI(Integer.parseInt(tramo.getMiembroDNI().trim()));
         nuevoTrayectoDTO.setCompartidoPasivo(!tramo.getIdCompartido().trim().equals("0"));
         nuevoTrayectoDTO.setLatitudInicial(Float.parseFloat(tramo.getLatitudInicial().trim()));

@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.servicios.calculadoraDistancias;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.server.SystemProperties;
 
 public class ServicioSimulado implements CalculadoraDistancias {
 
@@ -12,6 +13,10 @@ public class ServicioSimulado implements CalculadoraDistancias {
         Float longitudFinal = ubicacionFinal.getCoordenada().getLongitud();
 
 //        throw new RuntimeException("Servicio Sin Ganas de Trabajar");
-        return Math.abs(latitudFinal-latitudInicial)+Math.abs(longitudFinal-longitudInicial);
+        double coeficiente = SystemProperties.getCoeficienteGradoKm();
+        double distanciaEnGrados = Math.sqrt(
+                Math.pow(latitudFinal - latitudInicial, 2) + Math.pow(longitudFinal - longitudInicial, 2));
+
+        return (float) (coeficiente * distanciaEnGrados);
     }
 }

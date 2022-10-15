@@ -1,9 +1,23 @@
 package ar.edu.utn.frba.dds.entities.lugares.geografia;
 
-public class UbicacionGeografica {
+import javax.persistence.*;
 
+@Entity
+@Table(name = "UBICACION")
+public class UbicacionGeografica {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ubicacion_id")
+    private Integer id;
+
+    @Embedded
     private Coordenada coordenada;
+
+    @Transient
     private Direccion direccion;
+
+    public UbicacionGeografica() {
+    }
 
     public UbicacionGeografica(Direccion direccion, Coordenada coordenada) {
         this.coordenada = coordenada;
@@ -23,6 +37,22 @@ public class UbicacionGeografica {
     public UbicacionGeografica(Coordenada coordenada) { //TODO direccion por defecto
         this.coordenada = coordenada;
         this.direccion = new Direccion();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setCoordenada(Coordenada coordenada) {
+        this.coordenada = coordenada;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
     }
 
     public Direccion getDireccion() {

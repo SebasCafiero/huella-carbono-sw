@@ -22,16 +22,23 @@ public class Miembro {
     @Column
     private String apellido;
 
-    @Transient
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_documento")
     private TipoDeDocumento tipoDeDocumento;
-    @Transient
+
+    @Column(name = "numero_documento")
     private int nroDocumento;
 
     @ManyToMany(mappedBy = "miembros", fetch = FetchType.EAGER)
-    private Set<Sector> sectoresDondeTrabaja; //Los sectores conocen las organizaciones
+    private Set<Sector> sectoresDondeTrabaja;
 
     @Transient
     private List<Trayecto> trayectos;
+
+    public Miembro() {
+        this.sectoresDondeTrabaja = new HashSet<>();
+        this.trayectos = new ArrayList<>();
+    }
 
     public Miembro(String nombre, String apellido, TipoDeDocumento tipoDeDocumento, int nroDocumento) {
         this.nombre = nombre;
@@ -42,9 +49,6 @@ public class Miembro {
         this.trayectos = new ArrayList<>();
     }
 
-    public Miembro() {
-    }
-
     public Set<Sector> getSectoresDondeTrabaja() {
         return this.sectoresDondeTrabaja;
     }
@@ -52,7 +56,7 @@ public class Miembro {
     public Set<Organizacion> organizacionesDondeTrabaja(){
         return this.sectoresDondeTrabaja
                 .stream()
-                .map(sector -> sector.getOrganizacion())
+                .map(Sector::getOrganizacion)
                 .collect(Collectors.toSet());
     }
 
@@ -77,7 +81,7 @@ public class Miembro {
     }
 
     public Integer cantidadDeSectoresDondeTrabaja() {
-        return this.sectoresDondeTrabaja.size();
+        return this.getSectoresDondeTrabaja().size();
     }
 
     public Integer cantidadDeOrganizacionesDondeTrabaja() {

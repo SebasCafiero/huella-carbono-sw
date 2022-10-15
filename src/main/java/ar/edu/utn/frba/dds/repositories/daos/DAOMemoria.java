@@ -40,7 +40,7 @@ public class DAOMemoria<T> implements DAO<T> {
         return this.entidades.stream()
                 .filter(e -> invocarGetter(getId, e).equals(id))
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 
     public List<T> buscar(Predicate<T> condicion) {
@@ -51,10 +51,11 @@ public class DAOMemoria<T> implements DAO<T> {
     }
 
     @Override
-    public void agregar(T unObjeto) {
+    public T agregar(T unObjeto) {
         invocarSetter(obtenerMetodo("setId"), unObjeto, id);
         id++;
         this.entidades.add(unObjeto);
+        return unObjeto;
     }
 
     @Override

@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.mihuella.dto;
 
 public class TramoCSVDTO {
     private String trayectoId;
+    private String tipoDocumento;
     private String miembroDNI;
     private String idCompartido;
     private String latitudInicial;
@@ -38,6 +39,14 @@ public class TramoCSVDTO {
 
     public void setTrayectoId(String trayectoId) {
         this.trayectoId = trayectoId;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
     public String getMiembroDNI() {

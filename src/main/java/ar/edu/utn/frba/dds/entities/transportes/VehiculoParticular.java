@@ -2,11 +2,21 @@ package ar.edu.utn.frba.dds.entities.transportes;
 
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "VEHICULO_PARTICULAR")
+@PrimaryKeyJoinColumn(name = "particular_id")
 public class VehiculoParticular extends MedioDeTransporte {
-    private final TipoVehiculo tipo;
-    private final TipoCombustible combustible;
+    @Enumerated(EnumType.STRING)
+    private TipoVehiculo tipo;
+    @Enumerated(EnumType.STRING)
+    private TipoCombustible combustible;
+
+    public VehiculoParticular() {
+        servicioDistancias = new ServicioSimulado();
+    }
 
     public VehiculoParticular(TipoVehiculo tipo, TipoCombustible combustible){
         this.tipo = tipo;
@@ -42,5 +52,21 @@ public class VehiculoParticular extends MedioDeTransporte {
     @Override
     public String getCategoria() {
         return "Particular - " + combustible.toString();
+    }
+
+    public TipoVehiculo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoVehiculo tipo) {
+        this.tipo = tipo;
+    }
+
+    public TipoCombustible getCombustible() {
+        return combustible;
+    }
+
+    public void setCombustible(TipoCombustible combustible) {
+        this.combustible = combustible;
     }
 }
