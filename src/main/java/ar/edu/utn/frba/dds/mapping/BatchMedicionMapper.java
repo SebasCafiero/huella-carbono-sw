@@ -16,16 +16,11 @@ public class BatchMedicionMapper {
         List<Medicion> collect = batchMedicionDTO.mediciones.stream()
                 .map(MedicionMapper::toEntity).collect(Collectors.toList());
 
-        return new BatchMedicion(collect);
-        /*BatchMedicion batchMedicion = new BatchMedicion(batchMedicionDTO
-                .mediciones
-                .stream()
-                .map(MedicionMapper::toEntity)
-                .collect(Collectors.toList()),
-                LocalDate.now()); //seteo fecha actual
+        BatchMedicion batchMedicion = new BatchMedicion(collect);
         batchMedicion.setOrganizacion(
                 FactoryRepositorio.get(Organizacion.class)
-                .buscar(batchMedicionDTO.organizacion));
-        return batchMedicion;*/
+                        .buscar(batchMedicionDTO.organizacion)); //El batch es de una organizacion indicada que debe existir previamente
+
+        return batchMedicion;
     }
 }

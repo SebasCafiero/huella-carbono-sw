@@ -9,11 +9,11 @@
     {{else}}
     <title>Crear Trayecto</title>
     {{/if}}
-
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/trayecto-edicion.css" >
   </head>
   <body>
-  	<div class="edicion">
+  	<div class="edicion-trayecto">
       <span>ID-Trayecto: {{trayecto.id}}</span> <br /><br />
       <!-- action="/trayecto/#id" al editar particular (method post xq html.form no tiene put) -->
         <form {{#if trayecto}} action="/trayecto/{{trayecto.id}}" {{else}} action="/trayecto" {{/if}} method="post">

@@ -32,12 +32,3 @@ table.particular {
 /*.particular > tbody > tr > th:first-child {
     border: 0px;
 }*/
-
-.edicion {
-    text-align: center;
-}
-
-.edicion span {
-    border: 2px dotted blue;
-    padding: 5px;
-}

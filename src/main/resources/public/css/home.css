@@ -1,15 +1,4 @@
-.titulo h1 {
-    background-color: lightblue;
-}
 
-header * {
-    font-size: 20px;
-}
-
-.menu > ul > li {
-    padding: 5px;
-}
-
-.menu {
+body * {
     font-size: 25px;
 }

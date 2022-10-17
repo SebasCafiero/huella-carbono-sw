@@ -4,9 +4,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" href="/img/logo.png">
     <title>Org{{organizacion.id}}-Rep{{reporte.id}}</title>
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/reporte.css" >
   </head>
   <body>
+  <div class="volver">
+      <span><a href="/reportes">VOLVER</a></span>
+  </div>
+  <br />
   <div class="reporte">
       <ul>
           <li>Organizacion: <i>{{organizacion.razonSocial}}</i></li>
@@ -66,9 +71,6 @@
           {{/each}}
       </table>
       <br />
-  </div>
-  <div class="volver">
-      <span><a href="/reportes">VOLVER</a></span>
   </div>
   </body>
 </html>

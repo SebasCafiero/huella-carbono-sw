@@ -42,7 +42,7 @@ public class BatchMedicionController {
         this.repositorio.agregar(batchMedicion);
         for(Medicion medicion : batchMedicion.getMediciones()) {
             FactoryRepositorio.get(Medicion.class).agregar(medicion);
-            //batchMedicion.getOrganizacion().agregarMediciones(medicion);
+            batchMedicion.getOrganizacion().agregarMediciones(medicion); //Como ahora el batch es de una org, le agrego sus mediciones
         }
         return "BatchMedicion agregado correctamente.";
     }

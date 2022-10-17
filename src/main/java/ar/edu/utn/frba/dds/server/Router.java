@@ -73,15 +73,24 @@ public class Router {
 
         Spark.get("/trayecto/:id", trayectosController::obtener, engine); //muestro el trayecto especifico trayecto.html
         Spark.post("/trayecto/:id", trayectosController::modificar); //modifico un trayecto (trayecto-edicion.html) (PUT no en <form>)
+        Spark.delete("/trayecto/:id", trayectosController::eliminar);
 
         Spark.get("/trayecto", trayectosController::darAlta, engine); //muestro para crear un nuevo trayecto trayecto-edicion.html
         Spark.post("/trayecto", trayectosController::agregar); //creo un nuevo trayecto (trayecto-edicion.html)
 
-        Spark.get("/home", new HomeController()::inicio, engine); //todo EL LOGUIN DEBE LLEVAR AL MENU
+
+        HomeController homeController = new HomeController();
+        Spark.get("/home", homeController::inicio, engine); //todo poner el login y dsp del post redireccionar al menu
+        Spark.get("/menu", homeController::menu, engine );
+        Spark.get("/logout", homeController::inicio, engine); //todo el logout del menu primero desactivar sesion
 
         Spark.get("/reporte", reportesController::darAlta, engine);
         Spark.post("/reporte", reportesController::generar);
         Spark.get("/reportes", reportesController::mostrarTodos, engine);
+        Spark.get("/organizacion/:id/reportes", reportesController::mostrarTodosDeUnaOrganizacion, engine);
         Spark.get("/organizacion/:org/reporte/:rep", reportesController::obtener, engine);
+        Spark.get("/organizacion/:id/reporte", reportesController::darAltaDeUnaOrganizacion, engine);
+
+        Spark.get("/reiniciar", homeController::reiniciar);
     }
 }

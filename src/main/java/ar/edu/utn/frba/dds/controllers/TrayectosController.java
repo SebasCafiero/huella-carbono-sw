@@ -143,7 +143,7 @@ public class TrayectosController {
     public Response eliminar(Request request, Response response) {
         Trayecto trayecto = fachada.obtenerTrayecto(Integer.parseInt(request.params("id")));
         fachada.eliminarTrayecto(trayecto);
-        response.redirect("/trayectos");
+//        response.redirect("/trayectos");
         return response;
     }
     //todo al eliminar, chequear la accion del form que no existiria mas el id?

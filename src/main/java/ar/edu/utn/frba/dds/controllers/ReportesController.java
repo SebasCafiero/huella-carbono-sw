@@ -14,10 +14,7 @@ import spark.Request;
 import spark.Response;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ReportesController {
     private FachadaReportes fachadaReportes;
@@ -67,6 +64,13 @@ public class ReportesController {
         return new ModelAndView(parametros, "reporte-creacion.hbs");
     }
 
+    public ModelAndView darAltaDeUnaOrganizacion(Request request, Response response) {
+        Map<String, Object> parametros = new HashMap<>();
+        Organizacion org = repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
+        parametros.put("organizaciones", Arrays.asList(org));
+        return new ModelAndView(parametros, "reporte-creacion.hbs");
+    }
+
     public Response generar(Request request, Response response) {
         Organizacion organizacion = repoOrganizaciones.buscar(Integer.parseInt(request.queryParams("f-organizacion")));
         if(organizacion == null) {
@@ -90,6 +94,19 @@ public class ReportesController {
            orgs.add(repoMap);
         });
         parametros.put("organizaciones", orgs); //podria omitirse y usar this
+        return new ModelAndView(parametros, "reportes.hbs");
+    }
+
+    public ModelAndView mostrarTodosDeUnaOrganizacion(Request request, Response response) {
+        Map<String, Object> parametros = new HashMap<>();
+        Organizacion organizacion = repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
+        List<Map<String, Object>> orgs = new ArrayList<>(); //para reutilizar #mostrarTodos
+        Map<String, Object> parametrosOrg = new HashMap<>();
+        parametrosOrg.put("id", organizacion.getId());
+        parametrosOrg.put("razon", organizacion.getRazonSocial());
+        parametrosOrg.put("reportes", organizacion.getReportes());
+        orgs.add(parametrosOrg);
+        parametros.put("organizaciones", orgs);
         return new ModelAndView(parametros, "reportes.hbs");
     }
 
