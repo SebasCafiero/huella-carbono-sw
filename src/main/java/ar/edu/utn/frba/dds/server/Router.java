@@ -58,6 +58,7 @@ public class Router {
         Spark.get("/reportes/organizacion/:id", reportesController::generarReporteOrganizacion);
 
         LoginController loginController = new LoginController();
-        Spark.post("/login", loginController::intentarLogear);
+        Spark.post("/login/", loginController::intentarLogear);
+        Spark.post("/login/alta/", loginController::agregar);
     }
 }

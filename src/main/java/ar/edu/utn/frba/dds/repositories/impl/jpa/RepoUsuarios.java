@@ -18,7 +18,7 @@ public class RepoUsuarios implements WithGlobalEntityManager {
     }
 
     public List<User> obtenerUsuarios() {
-        return entityManager().createQuery("from Usuario", User.class)
+        return entityManager().createQuery("from User ", User.class)
                 .getResultList();
     }
 
