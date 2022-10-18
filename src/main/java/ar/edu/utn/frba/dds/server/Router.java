@@ -84,12 +84,12 @@ public class Router {
         Spark.get("/menu", homeController::menu, engine );
         Spark.get("/logout", homeController::inicio, engine); //todo el logout del menu primero desactivar sesion
 
-        Spark.get("/reporte", reportesController::darAlta, engine);
-        Spark.post("/reporte", reportesController::generar);
-        Spark.get("/reportes", reportesController::mostrarTodos, engine);
-        Spark.get("/organizacion/:id/reportes", reportesController::mostrarTodosDeUnaOrganizacion, engine);
-        Spark.get("/organizacion/:org/reporte/:rep", reportesController::obtener, engine);
-        Spark.get("/organizacion/:id/reporte", reportesController::darAltaDeUnaOrganizacion, engine);
+        Spark.get("/reporte", reportesController::darAlta, engine); //CHECK
+        Spark.post("/reporte", reportesController::generar); //CHECK
+        Spark.get("/reportes", reportesController::mostrarTodos, engine); //CHECK
+        Spark.get("/organizacion/:id/reportes", reportesController::mostrarTodosDeUnaOrganizacion, engine); //CHECK
+        Spark.get("/organizacion/:org/reporte/:rep", reportesController::obtener, engine); //OK
+        Spark.get("/organizacion/:id/reporte", reportesController::darAltaDeUnaOrganizacion, engine); //CHECK
 
         Spark.get("/reiniciar", homeController::reiniciar);
     }
