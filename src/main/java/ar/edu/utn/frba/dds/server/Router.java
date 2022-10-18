@@ -70,7 +70,9 @@ public class Router {
 
         LoginController loginController = new LoginController();
         Spark.post("/login", loginController::intentarLogear);
-        Spark.post("/login/alta", loginController::agregar);
+
+        UserController userController = new UserController();
+        Spark.post("/login/alta", userController::agregar);
 
 
         TrayectosController trayectosController = new TrayectosController();

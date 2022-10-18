@@ -16,14 +16,17 @@ import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.login.User;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class SetupInicialJPA {
     private final Repositorio<MedioDeTransporte> repoMedios;
@@ -31,11 +34,14 @@ public class SetupInicialJPA {
     private final RepoOrganizaciones repoOrganizaciones;
     private final Repositorio<Trayecto> repoTrayectos;
 
+    private final Repositorio<User> repoUsuarios;
+
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
         this.repoUbicaciones = FactoryRepositorio.get(UbicacionGeografica.class);
         this.repoOrganizaciones = (RepoOrganizaciones) FactoryRepositorio.get(Organizacion.class);
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
+        this.repoUsuarios = FactoryRepositorio.get(User.class);
     }
 
     public void doSetup() {
@@ -143,6 +149,14 @@ public class SetupInicialJPA {
         trayecto1.agregarMiembro(juanPerez);
 
         this.repoTrayectos.agregar(trayecto1);
+
+        List<Organizacion> organizaciones = new ArrayList<>();
+        organizaciones.add(orgUtnCampus);
+        organizaciones.add(orgUtnMedrano);
+
+        User user = new User("usuario", "1234", organizaciones);
+
+        repoUsuarios.agregar(user);
     }
 
     public void undoSetup() {

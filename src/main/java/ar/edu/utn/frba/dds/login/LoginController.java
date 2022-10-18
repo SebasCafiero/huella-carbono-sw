@@ -23,12 +23,9 @@ public class LoginController {
         model.put("authenticationSucceeded", true);
         request.session().attribute("currentUser", request.queryParams("username"));
         response.redirect("/menu");
+        Session session = request.session();
+        session.attribute("Prueba1234");
+
         return null;
     };
-
-    public Object agregar(Request request, Response response) throws SectorException {
-        User user = new User(request.queryParams("username"), request.queryParams("password"));
-        userUtils.agregar(user);
-        return "Agregaste correctamente el usuario";
-    }
 }
