@@ -6,11 +6,11 @@ import spark.Response;
 
 public class HomeController {
     public ModelAndView inicio(Request request, Response response) {
-        return new ModelAndView(null, "home.html");
+        return new ModelAndView(null, "home.hbs");
     }
 
     public ModelAndView menu(Request request, Response response) {
-        return new ModelAndView(null, "menu.html");
+        return new ModelAndView(null, "menu.hbs");
     }
 
     public Response reiniciar(Request request, Response response) {

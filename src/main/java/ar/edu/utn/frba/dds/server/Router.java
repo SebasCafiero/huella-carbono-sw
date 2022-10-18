@@ -74,7 +74,7 @@ public class Router {
 
 
         TrayectosController trayectosController = new TrayectosController();
-        Spark.get("/trayectos", trayectosController::mostrarTodos, engine); //muestro todos trayectos.html
+        Spark.get("/trayectos", trayectosController::mostrarTodos, engine); //OK
 
         Spark.get("/trayecto/:id", trayectosController::obtener, engine); //OK
         Spark.post("/trayecto/:id", trayectosController::modificar); //CHECK
@@ -85,9 +85,9 @@ public class Router {
 
 
         HomeController homeController = new HomeController();
-        Spark.get("/home", homeController::inicio, engine); //todo poner el login y dsp del post redireccionar al menu
+        Spark.get("/home", homeController::inicio, engine);
         Spark.get("/menu", homeController::menu, engine );
-        Spark.get("/logout", homeController::inicio, engine); //todo el logout del menu primero desactivar sesion
+        Spark.get("/logout", homeController::inicio, engine);
 
         Spark.get("/reporte", reportesController::darAlta, engine); //CHECK
         Spark.post("/reporte", reportesController::generar); //CHECK
