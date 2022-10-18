@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.entities.personas;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
 import javax.persistence.*;
@@ -32,7 +31,7 @@ public class Miembro {
     @ManyToMany(mappedBy = "miembros", fetch = FetchType.EAGER)
     private Set<Sector> sectoresDondeTrabaja;
 
-    @Transient
+    @ManyToMany(mappedBy = "miembros")
     private List<Trayecto> trayectos;
 
     public Miembro() {
@@ -148,25 +147,6 @@ public class Miembro {
     public List<Trayecto> getTrayectos() {
         return trayectos;
     }
-
-//    @Override
-//    public String toString() {
-//        return "Miembro{" +
-//                "nombre='" + nombre + '\'' +
-//                ", apellido='" + apellido + '\'' +
-//                ", tipoDeDocumento=" + tipoDeDocumento +
-//                ", nroDocumento=" + nroDocumento +
-//                ", sectoresDondeTrabaja=" + sectoresDondeTrabaja +
-//                ", trayectos=" + trayectos +
-//                '}';
-//    }
-    /*TO string raro que no quisimos borrar por si era util
-    @Override
-    public String toString() {
-        return "Miembro{<br>" +
-                "&nbsp;&nbsp;&nbsp;&nbsp;nombre='" + nombre + '\'' +
-                "}<br>";
-    }*/
 
     @Override
     public String toString() {
