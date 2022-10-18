@@ -1,18 +1,17 @@
 package ar.edu.utn.frba.dds.mihuella;
 
 import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
-import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.FechaException;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.mapping.FactorEmisionMapper;
 import ar.edu.utn.frba.dds.mapping.MedicionMapper;
+import ar.edu.utn.frba.dds.mihuella.dto.FactorEmisionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.MedicionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
-import ar.edu.utn.frba.dds.mihuella.parsers.ParserMedicionesCSV;
-import ar.edu.utn.frba.dds.mihuella.parsers.ParserParametrosCSV;
+import ar.edu.utn.frba.dds.mihuella.fachada.MedicionSinFactorEmisionException;
+import ar.edu.utn.frba.dds.mihuella.parsers.ParserCSV;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
-import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
-import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -59,7 +58,6 @@ public class CalculadorHU {
             return;
         }
 
-
         mediciones.forEach(repoMediciones::agregar);
 
         FachadaOrganizacion calculadora = new FachadaOrganizacion();
@@ -82,12 +80,18 @@ public class CalculadorHU {
     }
 
     public static Map<String,Float> cargarFE(String archFE) throws IOException {
-        Map<String,Float> factoresDeEmision = new ParserParametrosCSV().generarFE(archFE); //TODO parser-mapper
-        return factoresDeEmision;
+        List<FactorEmisionCSVDTO> factoresDeEmision = new ParserCSV<>(FactorEmisionCSVDTO.class)
+                .parseFileToCollection(archFE);
+
+        Map<String,Float> mapaFactores = factoresDeEmision.stream()
+                .map(FactorEmisionMapper::toEntry)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        return mapaFactores;
     }
 
     public static List<Medicion> cargarMediciones(String archMed) throws IOException {
-        List<MedicionCSVDTO> medicionesDTO = new ParserMedicionesCSV().generarMediciones(archMed);
+        List<MedicionCSVDTO> medicionesDTO = new ParserCSV<>(MedicionCSVDTO.class).parseFileToCollection(archMed);
         return medicionesDTO.stream().map(MedicionMapper::toEntity).collect(Collectors.toList());
     }
 }

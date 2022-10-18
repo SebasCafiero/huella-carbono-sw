@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class AreaSectorialJSONDTO {
     public String nombre;
-    public Set<OrganizacionJSONDTO> organizaciones;
+    public Set<OrganizacionConMiembrosJSONDTO> organizaciones;
     public Set<AgenteSectorialJSONDTO> agentes;
     public List<ReporteJSONDTO> reportes;
 }

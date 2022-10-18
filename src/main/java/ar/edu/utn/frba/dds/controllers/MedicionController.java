@@ -17,12 +17,12 @@ public class MedicionController {
         this.repositorio = FactoryRepositorio.get(Medicion.class);
     }
 
-    public String obtener(Request request, Response response){
-        Medicion medicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+    public String obtener(Request request, Response response) {
+        Medicion medicion = this.repositorio.buscar(Integer.parseInt(request.params("id")));
         return medicion.toString();
     }
 
-    public String mostrarTodos(Request request, Response response){
+    public String mostrarTodos(Request request, Response response) {
         List<Medicion> mediciones = this.repositorio.buscarTodos();
         return mediciones.toString();
     }

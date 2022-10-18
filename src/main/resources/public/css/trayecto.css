@@ -1,0 +1,34 @@
+.particular td, .particular th {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+}
+
+table.particular {
+    border-collapse: separate;
+    border-spacing: 15px 30px;
+    text-align: center;
+    margin: auto;
+}
+
+.particular .tramos {
+    padding: 5px;
+    margin: auto;
+    border-spacing: 3px 10px;
+}
+
+.particular .coordenadas {
+    border-spacing: 2px 5px;
+    margin: auto;
+}
+
+.particular .miembros {
+    margin: auto;
+    border-spacing: 3px 10px;
+    border-collapse: collapse;
+    padding: 10px;
+}
+
+/*.particular > tbody > tr > th:first-child {
+    border: 0px;
+}*/

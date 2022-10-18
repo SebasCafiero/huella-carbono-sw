@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,6 +56,7 @@ public class Trayecto {
 
     public void setTramos(List<Tramo> tramos) {
         this.tramos = tramos;
+        tramos.forEach(tr -> tr.setTrayecto(this)); //todo
     }
 
     public List<Miembro> getMiembros() {
@@ -77,10 +77,12 @@ public class Trayecto {
 
     public void agregarTramos(List<Tramo> tramos){
         this.tramos.addAll(tramos);
+        tramos.forEach(tr -> tr.setTrayecto(this)); //todo
     }
 
     public void agregarTramo(Tramo unTramo){
         this.tramos.add(unTramo);
+        unTramo.setTrayecto(this); //todo
     }
 
     public Integer getCompartido() {
@@ -108,7 +110,7 @@ public class Trayecto {
         return this.calcularDistancia()/tramos.size();
     }
 
-    public void agregarmiembro(Miembro miembro) {
+    public void agregarMiembro(Miembro miembro) {
         this.miembros.add(miembro);
     }
 
@@ -118,5 +120,16 @@ public class Trayecto {
 
     public boolean perteneceAPeriodo(Integer anio, Integer mes) {
         return periodo.incluye(anio, mes);
+    }
+
+    @Override
+    public String toString() {
+        return "\nTrayecto{" +
+                "id=" + id +
+                ", tramos=" + tramos +
+                ", miembros=" + miembros +
+                ", compartido=" + compartido +
+                ", periodo=" + periodo +
+                '}';
     }
 }

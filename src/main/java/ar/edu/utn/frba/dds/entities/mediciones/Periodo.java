@@ -43,4 +43,13 @@ public class Periodo {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "Periodo{" +
+                "periodicidad=" + periodicidad +
+                ", anio=" + anio +
+                ", mes=" + mes +
+                '}';
+    }
 }

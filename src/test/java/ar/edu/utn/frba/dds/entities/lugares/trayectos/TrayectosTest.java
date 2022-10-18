@@ -4,11 +4,9 @@ import ar.edu.utn.frba.dds.entities.lugares.*;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
-import ar.edu.utn.frba.dds.entities.personas.MiembroException;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
-import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
@@ -19,7 +17,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,7 +47,7 @@ public class TrayectosTest {
         unTrayecto.agregarTramo(tramo1);
         unTrayecto.agregarTramo(tramo2);
 
-        unMiembro.registrarTrayecto(unTrayecto);
+        unMiembro.agregarTrayecto(unTrayecto);
         Assertions.assertEquals(26, unTrayecto.calcularDistancia());
     }
 

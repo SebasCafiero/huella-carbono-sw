@@ -13,8 +13,10 @@ import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
+import ar.edu.utn.frba.dds.repositories.impl.memory.RepoMiembrosMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +32,7 @@ public class FachadaTrayectosTest {
     @BeforeAll
     public static void initialize() {
         fachadaTrayectos = new FachadaTrayectos(
-                new RepositorioMemoria<>(new DAOMemoria<>(Miembro.class)),
+                new RepoMiembrosMemoria(new DAOMemoria<>(Miembro.class)),
                 new RepositorioMemoria<>(new DAOMemoria<>(Trayecto.class)),
                 new RepositorioMemoria<>(new DAOMemoria<>(MedioDeTransporte.class)));
 
@@ -105,9 +107,9 @@ public class FachadaTrayectosTest {
         Miembro miembro1 = new Miembro("Carlos", "Tevez", TipoDeDocumento.DNI, 23423423);
         Miembro miembro2 = new Miembro("Esteban", "Tevez", TipoDeDocumento.DNI, 23423424);
         miembro1.agregarTrayecto(trayecto);
-        trayecto.agregarmiembro(miembro1);
+        trayecto.agregarMiembro(miembro1);
         miembro2.agregarTrayecto(trayecto);
-        trayecto.agregarmiembro(miembro2);
+        trayecto.agregarMiembro(miembro2);
 
         Organizacion organizacion = new Organizacion("UTN", TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Facultad"),

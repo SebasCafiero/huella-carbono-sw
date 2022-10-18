@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds.entities.lugares.geografia;
 import java.util.HashSet;
 
 public class Municipio extends AreaSectorial {
-
     private Provincia provincia;
 
     public Municipio(String nombre, String provincia, String pais) {

@@ -5,11 +5,19 @@ import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.AdaptadorServicioDDST
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.CalculadoraDistancias;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "MEDIO_DE_TRANSPORTE")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class MedioDeTransporte {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "medio_id")
     private Integer id;
 
+    @Transient
     protected CalculadoraDistancias servicioDistancias;
-//        CalculadoraDistancias servicioContratado = new AdaptadorServicioDDSTPA();
 
     public Integer getId() {
         return id;
@@ -36,6 +44,8 @@ public abstract class MedioDeTransporte {
 
     @Override
     public abstract String toString();
+
+    public abstract String getClasificacion(); //todo para web
 
     public abstract String getCategoria();
 }

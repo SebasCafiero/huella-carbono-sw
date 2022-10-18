@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.entities.lugares;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.mediciones.ReporteOrganizacion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
@@ -43,7 +44,13 @@ public class Organizacion {
     @Transient
     private List<Integer> contactosTelefono;
 
+    @Transient
+    private List<ReporteOrganizacion> reportes;
+
     public Organizacion() {
+        this.sectores = new HashSet<>();
+        this.mediciones = new ArrayList<>();
+        this.reportes = new ArrayList<>();
     }
 
     public Organizacion(String razonSocial,
@@ -58,6 +65,7 @@ public class Organizacion {
         this.mediciones = new ArrayList<>();
         this.contactosMail = new ArrayList<>();
         this.contactosTelefono = new ArrayList<>();
+        this.reportes = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -162,6 +170,15 @@ public class Organizacion {
 
     public void setRazonSocial(String razonSocial) {
         this.razonSocial = razonSocial;
+    }
+
+    public List<ReporteOrganizacion> getReportes() {
+        return reportes;
+    }
+
+    public void agregarReporte(ReporteOrganizacion reporte) {
+        reporte.setId(this.reportes.size()); //reporte1: id 0 - reporte2: id 1 - reporte3: id 2
+        this.reportes.add(reporte);
     }
 
     @Override

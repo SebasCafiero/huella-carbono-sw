@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.entities.mediciones;
 import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "MEDICION")
@@ -34,6 +35,7 @@ public class Medicion implements Medible {
         this.categoria = categoria;
         this.unidad = unidad;
         this.valor = valor;
+        this.periodo = new Periodo(LocalDate.now().getYear(), LocalDate.now().getMonthValue()); //todo para que no sea null
     }
 
     public Medicion() {} //TODO

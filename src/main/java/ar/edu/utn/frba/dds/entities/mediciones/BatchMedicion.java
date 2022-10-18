@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -10,7 +12,7 @@ public class BatchMedicion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-// @Transient
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "batch_id")
     private List<Medicion> mediciones;
@@ -20,6 +22,9 @@ public class BatchMedicion {
 
     @Column
     private Integer cantidadMediciones;
+
+    @Transient
+    private Organizacion organizacion;
 
     public BatchMedicion() {
     }
@@ -71,9 +76,24 @@ public class BatchMedicion {
         this.cantidadMediciones = cantidadMediciones;
     }
 
+    public Organizacion getOrganizacion() {
+        return organizacion;
+    }
+
+    public void setOrganizacion(Organizacion organizacion) {
+        this.organizacion = organizacion;
+    }
+
+    //    @Override
+//    public String toString() {
+//        return "El batch de mediciones de id " + getId().toString() + " fue cargado en la fecha " + getFecha().toString() + " y tiene " + getCantidadMediciones().toString() + " mediciones." + '\n';
+//    }
+
     @Override
     public String toString() {
-        return "El batch de mediciones de id " + getId().toString() + " fue cargado en la fecha " + getFecha().toString() + " y tiene " + getCantidadMediciones().toString() + " mediciones." + '\n';
+        return "\nBatch id: " + id.toString() +
+                "\nFecha: " + fecha.toString() +
+                "\nMediciones: " + mediciones.toString();
     }
 }
 

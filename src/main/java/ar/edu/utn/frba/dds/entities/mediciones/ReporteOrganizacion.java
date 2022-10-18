@@ -16,6 +16,7 @@ public class ReporteOrganizacion {
     private Map<Miembro, Float> consumoPorMiembro;
     private Float consumoTotal;
     private LocalDate fechaCreacion;
+    private Integer id;
 
     public ReporteOrganizacion() {
     }
@@ -73,5 +74,13 @@ public class ReporteOrganizacion {
 
     public void setFechaCreacion(LocalDate fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public void setId(Integer id) {
+        this.id = id; //el seteo se realizar al agregarlo a la organizacion (Organizacion#agregarReporte)
+    }
+
+    public Integer getId() {
+        return id;
     }
 }

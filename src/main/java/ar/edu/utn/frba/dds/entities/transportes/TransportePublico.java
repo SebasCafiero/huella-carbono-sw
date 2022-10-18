@@ -3,13 +3,27 @@ package ar.edu.utn.frba.dds.entities.transportes;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 
+import javax.persistence.*;
 import java.util.*;
-import java.util.function.ToDoubleFunction;
 
+@Entity
+@Table(name = "TRANSPORTE_PUBLICO")
+@PrimaryKeyJoinColumn(name = "publico_id")
 public class TransportePublico extends MedioDeTransporte {
-    private final TipoTransportePublico tipo;
-    private final LinkedList<Parada> paradas;
-    private final String linea;
+    @Enumerated(EnumType.STRING)
+    private TipoTransportePublico tipo;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderColumn(name = "posicion")
+    @JoinColumn(name = "medio_id")
+    private List<Parada> paradas;
+
+    @Column(name = "linea")
+    private String linea;
+
+    public TransportePublico() {
+        this.paradas = new LinkedList<>();
+    }
 
     public TransportePublico(TipoTransportePublico tipo, String linea) {
         this.tipo = tipo;
@@ -21,24 +35,14 @@ public class TransportePublico extends MedioDeTransporte {
         this.paradas.add(parada);
     }
 
-    public void agregarParadas(Parada... paradas){
-        Collections.addAll(this.paradas,paradas);
+    public void agregarParadas(Parada... paradas) {
+//        Arrays.asList(paradas).forEach(parada -> this.paradas.add(parada));
+        Collections.addAll(this.paradas, paradas);
     }
 
-    public LinkedList<Parada> getParadas() {
+    public List<Parada> getParadas() {
         return paradas;
     }
-
-//    @Override
-//    public Float calcularDistancia(Tramo tramo) { //Quizas una interface que haga el calculo, ver calculadoraDistancias_Objetivo del diagrama
-//        Parada paradaInicial = buscarParada(tramo.getUbicacionInicial().getCoordenada());
-//        if (paradaInicial == null)
-//            System.out.println("ERROR DE COORDENADAS"); //TODO VER DE USAR EXCEPCIONES
-//        //Parada paradaFinal = buscarParada(tramo.getCoordenadaFinal());
-//        //Se podria validar que la distancia proxima de la parada inicial sea igual a la distancia anterior de la parada final.
-//
-//        return paradaInicial.getDistanciaProxima();
-//    }
 
     @Override
     public Float calcularDistancia(Tramo tramo) {
@@ -89,7 +93,32 @@ public class TransportePublico extends MedioDeTransporte {
     }
 
     @Override
+    public String getClasificacion() {
+        return tipo.toString() + " - " + linea;
+    }
+
+    @Override
     public String getCategoria() {
         return "Publico - " + tipo.toString();
+    }
+
+    public TipoTransportePublico getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoTransportePublico tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getLinea() {
+        return linea;
+    }
+
+    public void setLinea(String linea) {
+        this.linea = linea;
+    }
+
+    public void setParadas(LinkedList<Parada> paradas) {
+        this.paradas = paradas;
     }
 }

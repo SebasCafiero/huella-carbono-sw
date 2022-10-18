@@ -1,7 +1,5 @@
 package ar.edu.utn.frba.dds.mihuella.fachada;
 
-import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
-
 import java.util.Collection;
 import java.util.Map;
 

@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.daos;
 
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 public class DAOHibernate<T> implements DAO<T> {
     private Class<T> type;
 
-    public DAOHibernate(Class<T> type){
+    public DAOHibernate(Class<T> type) {
         this.type = type;
     }
 
@@ -33,21 +32,22 @@ public class DAOHibernate<T> implements DAO<T> {
     }
 
     @Override
-    public void agregar(Object unObjeto) {
+    public T agregar(T unObjeto) {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
         EntityManagerHelper.getEntityManager().persist(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();
+        return unObjeto;
     }
 
     @Override
-    public void modificar(Object unObjeto) {
+    public void modificar(T unObjeto) {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
         EntityManagerHelper.getEntityManager().merge(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();
     }
 
     @Override
-    public void eliminar(Object unObjeto) {
+    public void eliminar(T unObjeto) {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
         EntityManagerHelper.getEntityManager().remove(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();

@@ -1,21 +1,11 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
-import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
-import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
-import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
-import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
-import ar.edu.utn.frba.dds.servicios.reportes.NotificadorReportes;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "AGENTE_SECTORIAL")

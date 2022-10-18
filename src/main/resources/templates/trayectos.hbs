@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/img/logo.png">
+    <title>Trayectos</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/trayectos.css">
+</head>
+<body>
+  <div class="volver">
+    <span><a href="/menu">VOLVER AL MENU PRINCIPAL</a></span>
+  </div>
+  <div class="trayectos">
+    <table class="general">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>FECHA</th>
+            <th>MIEMBROS</th>
+            <th>TRANSPORTES</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each trayectos}}
+
+        <tr>
+            <td><i>{{id}}</i></td>
+            <td><i>{{periodo.mes}}/{{periodo.anio}}</i></td>
+            <td>
+                <table>
+                    {{#each miembros}}
+                    <tr><td><i>{{nombre}} {{apellido}}</i></td></tr>
+                    {{/each}}
+                </table>
+            </td>
+            <td>
+                <table>
+                    {{#each tramos}}
+                        <tr><td><i>{{medioDeTransporte.clasificacion}}</i></td></tr>
+                    {{/each}}
+                </table>
+            </td>
+            <td><a href="/trayecto/{{id}}?mode=view">VER</a></td>
+        </tr>
+        {{else}}
+        <tr>
+            <td class="ausente" colspan="4">SIN TRAYECTOS</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+  </div>
+  <div class="generar">
+      <span><a href="/trayecto">Generar Trayecto</a></span>
+  </div>
+</body>
+</html>
