@@ -13,15 +13,17 @@ public class LoginController {
 
     public LoginController() { this.userUtils = new UserUtils();}
 
-    public int intentarLogear(Request request, Response response) {
+    public Void intentarLogear(Request request, Response response) {
         Map<String, Object> model = new HashMap<>();
         if (!userUtils.authenticate(request.queryParams("username"), request.queryParams("password"))) {
             model.put("authenticationFailed", true);
-            return 401;
+            response.redirect("/home");
+            return null;
         }
         model.put("authenticationSucceeded", true);
         request.session().attribute("currentUser", request.queryParams("username"));
-        return 200;
+        response.redirect("/menu");
+        return null;
     };
 
     public Object agregar(Request request, Response response) throws SectorException {
