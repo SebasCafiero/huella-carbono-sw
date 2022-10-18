@@ -13,19 +13,20 @@ import java.util.stream.Collectors;
 public class Miembro {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "miembro_id")
     private Integer id;
 
-    @Column
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column
+    @Column(name = "apellido", nullable = false)
     private String apellido;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_documento")
+    @Column(name = "tipo_documento", nullable = false)
     private TipoDeDocumento tipoDeDocumento;
 
-    @Column(name = "numero_documento")
+    @Column(name = "numero_documento", nullable = false, unique = true)
     private int nroDocumento;
 
     @ManyToMany(mappedBy = "miembros", fetch = FetchType.EAGER)

@@ -40,7 +40,11 @@ public class FachadaReportes {
         Float total = mapaConsumos.values().stream().reduce(Float::sum).orElse(0F);
 
         ReporteAgente reporte = new ReporteAgente(mapaConsumos, area, total);
-        area.agregarReporte(reporte);
+
+        if(area.getAgente() != null) {
+            area.getAgente().agregarReporte(reporte);
+        }
+
         return reporte;
     }
 

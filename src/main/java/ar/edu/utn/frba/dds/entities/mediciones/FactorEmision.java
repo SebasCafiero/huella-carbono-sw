@@ -7,10 +7,9 @@ import javax.persistence.*;
 public class FactorEmision {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "factor_id")
     private Integer id;
 
-//    @JoinColumn(name = "categoria")
-//    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @Embedded
     private Categoria categoria;
 

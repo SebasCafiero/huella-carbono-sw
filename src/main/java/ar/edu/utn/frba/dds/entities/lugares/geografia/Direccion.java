@@ -16,21 +16,21 @@ public class Direccion {
     }
 
     public Direccion(String pais, String provincia, String municipio, String localidad, String calle, Integer numero) {
-        this.municipio = new Municipio(municipio, provincia, pais);
+        this.municipio = new Municipio(municipio, new Provincia(provincia, pais));
         this.localidad = localidad;
         this.calle = calle;
         this.numero = numero;
     }
 
     public Direccion(String barrio, String calle, Integer numero) { //TODO direccion por defecto
-        this.municipio = new Municipio("Ciudad de Buenos Aires", "Ciudad de Buenos Aires", "Argentina");
+        this.municipio = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));
         this.localidad = barrio;
         this.calle = calle;
         this.numero = numero;
     }
 
     public Direccion() { //TODO direccion por defecto
-        this.municipio = new Municipio("Ciudad de Buenos Aires", "Ciudad de Buenos Aires", "Argentina");
+        this.municipio = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));
         this.localidad = "La Boca";
         this.calle = "Brandsen";
         this.numero = 805;

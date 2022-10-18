@@ -12,6 +12,7 @@ import java.util.List;
 public class AgenteSectorial {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "agente_id")
     private Integer id;
 
     @Transient
@@ -32,10 +33,12 @@ public class AgenteSectorial {
     public AgenteSectorial(AreaSectorial areaSectorial) {
         this.reportes = new ArrayList<>();
         this.area = areaSectorial;
+        this.area.setAgente(this);
     }
 
     public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, String telefono) {
         this.area = areaSectorial;
+        this.area.setAgente(this);
         this.contactoMail = contactoMail;
         this.telefono = telefono;
     }
@@ -68,9 +71,25 @@ public class AgenteSectorial {
         this.telefono = telefono;
     }
 
-    public void setArea(AreaSectorial area) {this.area = area;}
+    public void setArea(AreaSectorial area) {
+        this.area = area;
+    }
 
-    public void setReportes(List<ReporteAgente> reportes) {this.reportes = reportes;}
+    public void agregarReporte(ReporteAgente reporte) {
+        this.reportes.add(reporte);
+    }
+
+    public void quitarReporte(ReporteAgente reporte) {
+        this.reportes.remove(reporte);
+    }
+
+    public void setReportes(List<ReporteAgente> reportes) {
+        this.reportes = reportes;
+    }
+
+    public AreaSectorial getArea() {
+        return area;
+    }
 
     @Override
     public String toString() {
