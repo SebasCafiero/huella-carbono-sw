@@ -23,9 +23,6 @@ public class LoginController {
         model.put("authenticationSucceeded", true);
         request.session().attribute("currentUser", request.queryParams("username"));
         response.redirect("/menu");
-        Session session = request.session();
-        session.attribute("Prueba1234");
-
         return null;
     };
 }
