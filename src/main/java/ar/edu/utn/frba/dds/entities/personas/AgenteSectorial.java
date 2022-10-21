@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -18,20 +19,23 @@ public class AgenteSectorial {
     @Transient
     private AreaSectorial area;
 
-    @Transient
-//    @OneToOne(cascade = CascadeType.ALL)
+//    @Transient
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "mail_id", referencedColumnName = "contacto_id")
-    private ContactoMail contactoMail;
+    @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
+    private ContactoMail mail;
 
-    @Transient
-//    @OneToOne(cascade = CascadeType.ALL)
+//    @Transient
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "telefono_id", referencedColumnName = "contacto_id")
+    @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
     private ContactoTelefono telefono;
 
     @Transient
     private List<ReporteAgente> reportes;
 
     public AgenteSectorial() {
+        this.reportes = new ArrayList<>();
     }
 
     public AgenteSectorial(AreaSectorial areaSectorial) {
@@ -43,8 +47,10 @@ public class AgenteSectorial {
     public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, ContactoTelefono telefono) {
         this.area = areaSectorial;
         this.area.setAgente(this);
-        this.contactoMail = contactoMail;
+        this.mail = contactoMail;
+        contactoMail.setAgente(this);
         this.telefono = telefono;
+        telefono.setAgente(this);
     }
 
     public Integer getId() {
@@ -55,24 +61,24 @@ public class AgenteSectorial {
         this.id = id;
     }
 
+    public ContactoMail getMail() {
+        return mail;
+    }
+
+    public void setMail(ContactoMail mail) {
+        this.mail = mail;
+    }
+
     public ContactoTelefono getTelefono() {
         return telefono;
     }
 
-    public List<ReporteAgente> getReportes() {
-        return reportes;
-    }
-
-    public ContactoMail getContactoMail() {
-        return contactoMail;
-    }
-
-    public void setContactoMail(ContactoMail contactoMail) {
-        this.contactoMail = contactoMail;
-    }
-
     public void setTelefono(ContactoTelefono telefono) {
         this.telefono = telefono;
+    }
+
+    public List<ReporteAgente> getReportes() {
+        return reportes;
     }
 
     public void setArea(AreaSectorial area) {

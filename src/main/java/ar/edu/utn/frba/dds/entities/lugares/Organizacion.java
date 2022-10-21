@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.entities.lugares;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteOrganizacion;
+import ar.edu.utn.frba.dds.entities.personas.Contacto;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
 import ar.edu.utn.frba.dds.entities.personas.ContactoTelefono;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class Organizacion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "organizacion_id")
     private Integer id;
 
     @Column (name = "razon_social")
@@ -41,14 +43,22 @@ public class Organizacion {
     @JoinColumn(name = "organizacion_id")
     private List<Medicion> mediciones;
 
-//    @OneToMany(fetch = FetchType.LAZY)
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "organizacion")
 //    @JoinColumn(name = "organizacion_id", referencedColumnName = "organizacion_id")
-    @Transient
+//    @Transient
+//    @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL)
+//    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, targetEntity = Contacto.class)
+//    @JoinColumn(name = "organizacion_id", referencedColumnName = "organizacion_id")
     private List<ContactoMail> contactosMail;
 
-//    @OneToMany(fetch = FetchType.LAZY)
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "organizacion")
 //    @JoinColumn(name = "organizacion_id", referencedColumnName = "organizacion_id")
-    @Transient
+//    @Transient
+//    @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL)
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "organizacion_id", referencedColumnName = "organizacion_id")
+    @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, targetEntity = Contacto.class)
     private List<ContactoTelefono> contactosTelefono;
 
     @Transient
@@ -58,6 +68,8 @@ public class Organizacion {
         this.sectores = new HashSet<>();
         this.mediciones = new ArrayList<>();
         this.reportes = new ArrayList<>();
+        this.contactosTelefono = new ArrayList<>();
+        this.contactosMail = new ArrayList<>();
     }
 
     public Organizacion(String razonSocial,
@@ -154,12 +166,30 @@ public class Organizacion {
         return contactosTelefono;
     }
 
+    public void setMediciones(List<Medicion> mediciones) {
+        this.mediciones = mediciones;
+    }
+
+    public void setContactosMail(List<ContactoMail> contactosMail) {
+        this.contactosMail = contactosMail;
+    }
+
+    public void setContactosTelefono(List<ContactoTelefono> contactosTelefono) {
+        this.contactosTelefono = contactosTelefono;
+    }
+
+    public void setReportes(List<ReporteOrganizacion> reportes) {
+        this.reportes = reportes;
+    }
+
     public void agregarContactoMail(ContactoMail contacto) {
         this.contactosMail.add(contacto);
+        contacto.setOrganizacion(this);
     }
 
     public void agregarContactoTelefono(ContactoTelefono contacto) {
         this.contactosTelefono.add(contacto);
+        contacto.setOrganizacion(this);
     }
 
     public List<Trayecto> trayectosDeMiembros() {

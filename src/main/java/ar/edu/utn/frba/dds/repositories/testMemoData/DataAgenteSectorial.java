@@ -16,11 +16,11 @@ public class DataAgenteSectorial {
         if (agentesSectoriales.size() == 0) {
 
             AgenteSectorial a1 = new AgenteSectorial();
-            a1.setContactoMail(new ContactoMail("mailDePrueba@gmail.com", "password"));
+            a1.setMail(new ContactoMail("mailDePrueba@gmail.com", "password"));
             a1.setTelefono(new ContactoTelefono("4281-8129"));
 
             AgenteSectorial a2 = new AgenteSectorial();
-            a2.setContactoMail(new ContactoMail("mailDePrueba2@gmail.com", "password2.0"));
+            a2.setMail(new ContactoMail("mailDePrueba2@gmail.com", "password2.0"));
             a2.setTelefono(new ContactoTelefono("4290-1234"));
 
             addAll(a1,a2);

@@ -1,13 +1,9 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
-import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
+@DiscriminatorValue("MAIL")
 public class ContactoMail extends Contacto {
 
     @Column(name = "contraseña")

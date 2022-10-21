@@ -28,6 +28,7 @@ public class SetupInicialJPA {
     private final Repositorio<Trayecto> repoTrayectos;
     private final Repositorio<AreaSectorial> repoAreas;
     private final Repositorio<AgenteSectorial> repoAgentes;
+    private final Repositorio<Contacto> repoContactos;
 
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
@@ -36,6 +37,7 @@ public class SetupInicialJPA {
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
+        this.repoContactos = FactoryRepositorio.get(Contacto.class);
     }
 
     public void doSetup() {
@@ -48,8 +50,13 @@ public class SetupInicialJPA {
         Provincia cabaProvincia = new Provincia("CABA", "Argentina");
         Municipio cabaMunicipio = new Municipio("Ciudad Autonoma de Buenos Aires", cabaProvincia);
 
-        AgenteSectorial carlos = new AgenteSectorial(cabaProvincia, new ContactoMail("uncontacto@gmail.com", "123"), new ContactoTelefono("1155443322"));
-        AgenteSectorial esteban = new AgenteSectorial(cabaMunicipio, new ContactoMail("otrocontacto@gmail.com", "321"), new ContactoTelefono("1122334455"));
+        ContactoMail con1 = new ContactoMail("uncontacto@gmail.com", "123");
+        ContactoTelefono con2 = new ContactoTelefono("1155443322");
+        ContactoMail con3 = new ContactoMail("otrocontacto@gmail.com", "321");
+        ContactoTelefono con4 = new ContactoTelefono("1122334455");
+
+        AgenteSectorial carlos = new AgenteSectorial(cabaProvincia, con1, con2);
+        AgenteSectorial esteban = new AgenteSectorial(cabaMunicipio, con3, con4);
 
         UbicacionGeografica ubicacionUtnCampus = new UbicacionGeografica(
                 new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Mozart", 2300),
@@ -64,6 +71,7 @@ public class SetupInicialJPA {
         this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano);
         this.repoAreas.agregar(cabaProvincia, cabaMunicipio);
         this.repoAgentes.agregar(carlos, esteban);
+//        this.repoContactos.agregar(con1, con2, con3, con4);
 
         MedioDeTransporte fitito = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.GNC);
         MedioDeTransporte caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
@@ -98,6 +106,9 @@ public class SetupInicialJPA {
 
         Organizacion orgUtnCampus = new Organizacion("UTN - Campus", TipoDeOrganizacionEnum.INSTITUCION,
                 new ClasificacionOrganizacion("Universidad"), ubicacionUtnCampus);
+
+        orgUtnCampus.agregarContactoMail(new ContactoMail("cuentafalsa123@hotmail.com"));
+        orgUtnCampus.agregarContactoMail(new ContactoMail("cuentafalsa456@hotmail.com"));
 
         Sector sistemasUtnCampus = new Sector("Sistemas", orgUtnCampus);
         Miembro juanPerez = new Miembro("Juan", "Perez", TipoDeDocumento.DNI, 14432234);
@@ -149,7 +160,6 @@ public class SetupInicialJPA {
         trayecto1.agregarMiembro(juanPerez);
 
         this.repoTrayectos.agregar(trayecto1);
-
     }
 
     public void undoSetup() {

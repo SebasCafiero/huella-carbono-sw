@@ -95,7 +95,7 @@ public class EnviadorReportes {
         AgenteSectorial agente = new AgenteSectorial(areaReporte);
         areaReporte.setAgente(agente);
 //        agente.setContactoMail(new ContactoMail("cuentaejemplodds2", ""));
-        agente.setContactoMail(new ContactoMail("cuentaejemplodds1", ns.getString("password")));
+        agente.setMail(new ContactoMail("cuentaejemplodds1", ns.getString("password")));
         FachadaReportes fachadaReportes = new FachadaReportes();
         fachadaReportes
                 .setNotificador(new NotificadorReportesMail())
