@@ -1,25 +1,19 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
-public class ContactoMail extends Contacto {
+//@Entity
+//@DiscriminatorValue("TELEFONO")
+public class ContactoTelefono extends Contacto {
 
-    @Column(name = "contraseña")
-    private String password;
-
-    public ContactoMail() {
+    public ContactoTelefono() {
     }
 
-    public ContactoMail(String direccion, String passsword) {
+    public ContactoTelefono(String direccion) {
         super(direccion);
-        this.password = passsword;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

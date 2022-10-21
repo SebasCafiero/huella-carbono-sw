@@ -3,6 +3,8 @@ package ar.edu.utn.frba.dds.entities.lugares;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteOrganizacion;
+import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
+import ar.edu.utn.frba.dds.entities.personas.ContactoTelefono;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
@@ -39,10 +41,15 @@ public class Organizacion {
     @JoinColumn(name = "organizacion_id")
     private List<Medicion> mediciones;
 
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "organizacion_id", referencedColumnName = "organizacion_id")
     @Transient
-    private List<String> contactosMail;
+    private List<ContactoMail> contactosMail;
+
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "organizacion_id", referencedColumnName = "organizacion_id")
     @Transient
-    private List<Integer> contactosTelefono;
+    private List<ContactoTelefono> contactosTelefono;
 
     @Transient
     private List<ReporteOrganizacion> reportes;
@@ -139,19 +146,19 @@ public class Organizacion {
 
     public void setSectores(Set<Sector> sectores) {this.sectores = sectores;}
 
-    public List<String> getContactosMail() {
+    public List<ContactoMail> getContactosMail() {
         return contactosMail;
     }
 
-    public List<Integer> getContactosTelefono() {
+    public List<ContactoTelefono> getContactosTelefono() {
         return contactosTelefono;
     }
 
-    public void agregarContactoMail(String contacto) {
+    public void agregarContactoMail(ContactoMail contacto) {
         this.contactosMail.add(contacto);
     }
 
-    public void agregarContactoTelefono(Integer contacto) {
+    public void agregarContactoTelefono(ContactoTelefono contacto) {
         this.contactosTelefono.add(contacto);
     }
 

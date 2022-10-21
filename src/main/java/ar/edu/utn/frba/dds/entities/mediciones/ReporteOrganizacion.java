@@ -1,13 +1,10 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
-import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.Set;
 
 public class ReporteOrganizacion {
     private Float consumoMediciones;
@@ -76,11 +73,11 @@ public class ReporteOrganizacion {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public void setId(Integer id) {
-        this.id = id; //el seteo se realizar al agregarlo a la organizacion (Organizacion#agregarReporte)
-    }
-
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

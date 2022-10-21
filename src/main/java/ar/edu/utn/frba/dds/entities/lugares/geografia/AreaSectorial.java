@@ -25,9 +25,18 @@ public abstract class AreaSectorial {
     @JoinColumn(name = "agente_id", referencedColumnName = "agente_id")
     protected AgenteSectorial agente;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Set<Organizacion> getOrganizaciones() {
         return this.organizaciones;
     }
+
     public void agregarOrganizacion(Organizacion unaOrganizacion) {
         this.organizaciones.add(unaOrganizacion);
     }

@@ -19,10 +19,14 @@ public class AgenteSectorial {
     private AreaSectorial area;
 
     @Transient
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "mail_id", referencedColumnName = "contacto_id")
     private ContactoMail contactoMail;
 
     @Transient
-    private String telefono;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "telefono_id", referencedColumnName = "contacto_id")
+    private ContactoTelefono telefono;
 
     @Transient
     private List<ReporteAgente> reportes;
@@ -36,7 +40,7 @@ public class AgenteSectorial {
         this.area.setAgente(this);
     }
 
-    public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, String telefono) {
+    public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, ContactoTelefono telefono) {
         this.area = areaSectorial;
         this.area.setAgente(this);
         this.contactoMail = contactoMail;
@@ -51,7 +55,7 @@ public class AgenteSectorial {
         this.id = id;
     }
 
-    public String getTelefono() {
+    public ContactoTelefono getTelefono() {
         return telefono;
     }
 
@@ -67,7 +71,7 @@ public class AgenteSectorial {
         this.contactoMail = contactoMail;
     }
 
-    public void setTelefono(String telefono) {
+    public void setTelefono(ContactoTelefono telefono) {
         this.telefono = telefono;
     }
 

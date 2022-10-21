@@ -8,10 +8,7 @@ import ar.edu.utn.frba.dds.entities.lugares.geografia.*;
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
-import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
-import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
-import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
+import ar.edu.utn.frba.dds.entities.personas.*;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
@@ -51,8 +48,8 @@ public class SetupInicialJPA {
         Provincia cabaProvincia = new Provincia("CABA", "Argentina");
         Municipio cabaMunicipio = new Municipio("Ciudad Autonoma de Buenos Aires", cabaProvincia);
 
-        AgenteSectorial carlos = new AgenteSectorial(cabaProvincia, new ContactoMail("uncontacto@gmail.com", "123"), "1155443322");
-        AgenteSectorial esteban = new AgenteSectorial(cabaMunicipio, new ContactoMail("otrocontacto@gmail.com", "321"), "1122334455");
+        AgenteSectorial carlos = new AgenteSectorial(cabaProvincia, new ContactoMail("uncontacto@gmail.com", "123"), new ContactoTelefono("1155443322"));
+        AgenteSectorial esteban = new AgenteSectorial(cabaMunicipio, new ContactoMail("otrocontacto@gmail.com", "321"), new ContactoTelefono("1122334455"));
 
         UbicacionGeografica ubicacionUtnCampus = new UbicacionGeografica(
                 new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Mozart", 2300),
@@ -61,7 +58,7 @@ public class SetupInicialJPA {
         UbicacionGeografica sanPedrito = new UbicacionGeografica(new Coordenada(-34.630861F, -58.470063F));
         UbicacionGeografica castroBarros = new UbicacionGeografica(new Coordenada(-34.611624F, -58.421263F));
         UbicacionGeografica ubicacionUtnMedrano = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Medrano", 591),
+                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Medrano", 951),
                 new Coordenada(-34.598412F, -58.420196F));
 
         this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano);

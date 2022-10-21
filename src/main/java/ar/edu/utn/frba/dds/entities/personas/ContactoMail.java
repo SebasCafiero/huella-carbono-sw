@@ -1,30 +1,35 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
-public class ContactoMail {
-    private String direccionesEMail;
-    private String passsword;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 
-    public ContactoMail(String direccionesEMail, String passsword) {
-        this.direccionesEMail = direccionesEMail;
-        this.passsword = passsword;
-    }
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+@Entity
+public class ContactoMail extends Contacto {
+
+    @Column(name = "contraseña")
+    private String password;
 
     public ContactoMail() {
     }
 
-    public String getDireccionEMail() {
-        return direccionesEMail;
+    public ContactoMail(String direccion) {
+        super(direccion);
     }
 
-    public void setDireccionEMail(String direccionesEMail) {
-        this.direccionesEMail = direccionesEMail;
+    public ContactoMail(String direccion, String password) {
+        super(direccion);
+        this.password = password;
     }
 
-    public String getPasssword() {
-        return passsword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasssword(String passsword) {
-        this.passsword = passsword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -45,13 +45,13 @@ public class NotificadorReportesMail implements NotificadorReportes {
         System.out.println(reporte);
         System.out.println(reporte.getOrganizaciones().toString() + reporte.getOrganizaciones().size());
 
-        List<String> destinatarios = reporte.getOrganizaciones().stream()
+        List<ContactoMail> destinatarios = reporte.getOrganizaciones().stream()
                 .flatMap(org -> org.getContactosMail().stream()).collect(Collectors.toList());
 
         System.out.println(destinatarios);
 
-        String remitente = agente.getContactoMail().getDireccionEMail();
-        String contra = agente.getContactoMail().getPasssword();
+        String remitente = agente.getContactoMail().getDireccion();
+        String contra = agente.getContactoMail().getPassword();
 
         Properties props = System.getProperties();
         props.put("mail.smtp.host", "smtp.gmail.com");  //El servidor SMTP de Google
@@ -68,8 +68,8 @@ public class NotificadorReportesMail implements NotificadorReportes {
         try {
             message.setFrom(new InternetAddress(remitente));
 
-            for(String destinatario : destinatarios) {
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+            for(ContactoMail destinatario : destinatarios) {
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario.getDireccion()));
             }
 
             message.setSubject(asunto);

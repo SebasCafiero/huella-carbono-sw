@@ -6,6 +6,8 @@ import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO2;
+import ar.edu.utn.frba.dds.mihuella.fachada.FachadaMedios;
+import ar.edu.utn.frba.dds.mihuella.fachada.NoExisteMedioException;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import org.json.JSONArray;
@@ -51,16 +53,15 @@ public class TramosMapper {
 
     public static Tramo toEntity(TramoCSVDTO2 tramoDTO) {
         Repositorio<MedioDeTransporte> repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
-        MedioDeTransporte medioSolicitado = new MedioFactory().getMedioDeTransporte(tramoDTO.tipoTransporte, tramoDTO.subtipoTransporte, tramoDTO.info);
+        MedioDeTransporte medioSolicitado = new FachadaMedios().obtenerMedio(tramoDTO.getTipoTransporte(), tramoDTO.getSubtipoTransporte(), tramoDTO.getInfo());
 
-        Optional<MedioDeTransporte> posibleTransporte = repoMedios.buscarTodos().stream().filter(m -> m.equals(medioSolicitado)).findFirst();
-        if(!posibleTransporte.isPresent()) {
-            throw new RuntimeException("Medio de Transporte Inexistente");
+        if(medioSolicitado == null) {
+            throw new NoExisteMedioException(tramoDTO.getTipoTransporte(), tramoDTO.getSubtipoTransporte(), tramoDTO.getInfo());
         }
 
-        Tramo tramo = new Tramo(posibleTransporte.get(),
-                new Coordenada(tramoDTO.latInicial, tramoDTO.longInicial),
-                new Coordenada(tramoDTO.latFinal, tramoDTO.longFinal));
+        Tramo tramo = new Tramo(medioSolicitado,
+                new Coordenada(tramoDTO.getLatInicial(), tramoDTO.getLongInicial()),
+                new Coordenada(tramoDTO.getLatFinal(), tramoDTO.getLongFinal()));
 
         return tramo;
     }
@@ -68,20 +69,20 @@ public class TramosMapper {
     public static Map.Entry<Integer, Trayecto> modelarTrayecto(List<TramoCSVDTO2> tramosDTODeUnTrayecto) {
         if(!tramosDTODeUnTrayecto.stream().findFirst().isPresent()) throw new RuntimeException("Error al parsear tramo"); //Nunca deberia obtenerse del CSV un trayecto que no tenga un tramoDTO...
         TramoCSVDTO2 unTramoDTO = tramosDTODeUnTrayecto.stream().findFirst().get();
-        Trayecto unTrayecto = new Trayecto(PeriodoMapper.toEntity(unTramoDTO.periodicidad, unTramoDTO.fecha));
+        Trayecto unTrayecto = new Trayecto(PeriodoMapper.toEntity(unTramoDTO.getPeriodicidad(), unTramoDTO.getFecha()));
 
         Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
-        Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == unTramoDTO.idMiembro).findFirst();
+        Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == unTramoDTO.getIdMiembro()).findFirst();
         if(!posibleMiembro.isPresent()) throw new RuntimeException("Miembro Inexistente");
         unTrayecto.agregarMiembro(posibleMiembro.get());
-        return new AbstractMap.SimpleEntry<>(unTramoDTO.idTrayecto, unTrayecto);
+        return new AbstractMap.SimpleEntry<>(unTramoDTO.getIdTrayecto(), unTrayecto);
     }
 
     public static void mapTrayectoCompartido(Map<Integer, Trayecto> trayectosSegunId, TramoCSVDTO2 tramoDTOCompartido) {
-        if(trayectosSegunId.containsKey(tramoDTOCompartido.idTrayectoCompartido)) {
-            Trayecto trayectoCompartido = trayectosSegunId.get(tramoDTOCompartido.idTrayectoCompartido);
+        if(trayectosSegunId.containsKey(tramoDTOCompartido.getIdTrayectoCompartido())) {
+            Trayecto trayectoCompartido = trayectosSegunId.get(tramoDTOCompartido.getIdTrayectoCompartido());
             Repositorio<Miembro> repoMiembros = FactoryRepositorio.get(Miembro.class);
-            Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == tramoDTOCompartido.idMiembro).findFirst();
+            Optional<Miembro> posibleMiembro = repoMiembros.buscarTodos().stream().filter(m -> m.getNroDocumento() == tramoDTOCompartido.getIdMiembro()).findFirst();
             if (!posibleMiembro.isPresent()) throw new RuntimeException("Miembro Inexistente");
             trayectoCompartido.agregarMiembro(posibleMiembro.get());
             posibleMiembro.get().agregarTrayecto(trayectoCompartido);
