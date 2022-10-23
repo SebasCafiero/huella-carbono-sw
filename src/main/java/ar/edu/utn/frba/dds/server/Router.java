@@ -68,9 +68,7 @@ public class Router {
         Spark.get("/reportes/agente/:id", reportesController::generarReporteAgente);
         Spark.get("/reportes/organizacion/:id", reportesController::generarReporteOrganizacion);
 
-        LoginController loginController = new LoginController();
-        Spark.post("/login", loginController::intentarLogear);
-        Spark.post("/login/alta", loginController::agregar);
+
 
 
         TrayectosController trayectosController = new TrayectosController();
@@ -84,10 +82,8 @@ public class Router {
         Spark.post("/trayecto", trayectosController::agregar); //OK
 
 
-        HomeController homeController = new HomeController();
-        Spark.get("/home", homeController::inicio, engine);
-        Spark.get("/menu", homeController::menu, engine );
-        Spark.get("/logout", homeController::inicio, engine);
+
+
 
         Spark.get("/reporte", reportesController::darAlta, engine); //CHECK
         Spark.post("/reporte", reportesController::generar); //CHECK
@@ -96,6 +92,18 @@ public class Router {
         Spark.get("/organizacion/:org/reporte/:rep", reportesController::obtener, engine); //OK
         Spark.get("/organizacion/:id/reporte", reportesController::darAltaDeUnaOrganizacion, engine); //CHECK
 
-        Spark.get("/reiniciar", homeController::reiniciar);
+//        Spark.get("/reiniciar", homeController::reiniciar);
+
+        /* Endpoints para la GUI */
+        HomeController homeController = new HomeController();
+        LoginController loginController = new LoginController();
+
+        Spark.get("/home", homeController::inicio, engine);
+        Spark.get("/menu", homeController::menu, engine );
+
+        Spark.post("/login", loginController::intentarLogear);
+        Spark.post("/login/alta", loginController::agregar);
+//        Spark.post("/logout", loginController::desloguear);
+
     }
 }

@@ -1,33 +1,52 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <link rel="icon" href="/img/logo.png">
-      {{#if trayecto}}
-      <title>Modificar Trayecto {{trayecto.id}}</title>
-      {{else}}
-      <title>Crear Trayecto</title>
-      {{/if}}
-      <link rel="stylesheet" href="/css/style.css">
-      <link rel="stylesheet" href="/css/trayecto-edicion.css" >
-    </head>
-    <body>
-  	  <div class="edicion-trayecto">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/img/logo.png">
+    {{#if trayecto}}
+    <title>Modificar Trayecto {{trayecto.id}}</title>
+    {{else}}
+    <title>Crear Trayecto</title>
+    {{/if}}
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/trayecto-edicion.css" >
+  </head>
+  <body>
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>{{rol}} - {{user}}</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h1>TRAYECTOS</h1>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="edicion">
         <span>ID-Trayecto: {{trayecto.id}}</span> <br /><br />
-      <!-- action="/trayecto/#id" al editar particular (method post xq html.form no tiene put) -->
-        <form {{#if trayecto}} action="/trayecto/{{trayecto.id}}" {{else}} action="/trayecto" {{/if}} method="post">
-      	  <div class="form-fecha">
+        <!-- Al editar trayecto se usa method post xq html no admite form.put -->
+        <form {{#if trayecto}} action="/miembro/{{miembroID}}/trayecto/{{trayectoID}}" {{else}} action="/miembro/{{miembroID}}/trayecto" {{/if}} method="post">
+          <div class="form-fecha">
             <label for="fecha">Fecha</label>
-<!--      	    <input id="fecha" type="text" name="f-fecha" value="{{trayecto.periodo.mes}}/{{trayecto.periodo.anio}}" required/>-->
-            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.periodo.mes}}/{{trayecto.periodo.anio}}" {{else}} value="10/2022" {{/if}} value="{{trayecto.periodo.mes}}/{{trayecto.periodo.anio}}" required/>
+<!--            <input id="fecha" type="text" name="f-fecha" value="{{trayecto.periodo.mes}}/{{trayecto.periodo.anio}}" required/>-->
+            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.periodo.mes}}/{{trayecto.periodo.anio}}" {{else}} value="MES/AÑO" {{/if}} required/>
           </div>
           <br />
           <div class="form-miembros">
             <fieldset>
               <legend>Miembros</legend>
-              <!--<input id="logueado" type="checkbox" value="m-logueado" name="m-miembro" checked disabled/>
-              <label for="logueado">Miembro Logueado</label><br />-->
-              {{#each miembros}}
+              {{#with miembroLogueado}} <!-- ASEGURARSE DE ATRAPARLO EN POST YA QUE NO ESTARA EN f-miembro -->
+              <input id="logueado" type="checkbox" value="m-logueado" name="m-miembro" checked disabled/>
+              <label for="logueado">{{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</label><br />
+              {{/with}}
+              {{#each miembros}} <!-- NO DEBE ESTAR EL MIEMBRO LOGUEADO -->
               <input id="miembro{{miembro.id}}" type="checkbox" value="{{miembro.id}}" name="f-miembro"  {{#if contieneTrayecto}}checked{{/if}} />
               <label for="miembro{{miembro.id}}">{{miembro.nombre}} {{miembro.apellido}} - {{miembro.tipoDeDocumento}}: {{miembro.nroDocumento}}</label><br />
               {{/each}}
@@ -39,8 +58,8 @@
             {{#each trayecto.tramos}}
             <fieldset>
               <legend>Tramo{{id}}</legend>
-              <label for="transporte">Transporte</label>
-              <select id="transporte" name="f-transporte-{{@index}}" required>
+              <label for="transporte-{{@index}}">Transporte</label>
+              <select id="transporte-{{@index}}" name="f-transporte-{{@index}}" required>
                 <option class="campo-seleccionar" value="{{medioDeTransporte.id}}" selected>{{medioDeTransporte.clasificacion}}</option>
                 {{#each transportesTotales}}
                 <option value="{{id}}">{{clasificacion}}</option>
@@ -67,30 +86,36 @@
               </optgroup>
             </select>-->
               <br /><br />
+              <!-- VER DE PONER UBICACION BIEN, PARADAS EN TRANSPORTE PUBLICO -->
               <fieldset>
                 <legend>Coordenadas Iniciales</legend>
-                <label>Latitud:</label>
-                <input id="lat-inicial" type="text" name="f-lat-inicial-{{@index}}" value="{{ubicacionInicial.coordenada.latitud}}" required/>
-                <label>Longitud:</label>
-                <input id="lon-inicial" type="text" name="f-lon-inicial-{{@index}}" value="{{ubicacionInicial.coordenada.longitud}}" required/>
+                <label for="lat-inicial-{{@index}}">Latitud:</label>
+                <input id="lat-inicial-{{@index}}" type="text" name="f-lat-inicial-{{@index}}" value="{{ubicacionInicial.coordenada.latitud}}" required/>
+                <label for="lon-inicial-{{@index}}">Longitud:</label>
+                <input id="lon-inicial-{{@index}}" type="text" name="f-lon-inicial-{{@index}}" value="{{ubicacionInicial.coordenada.longitud}}" required/>
               </fieldset>
               <br />
               <fieldset>
                 <legend>Coordenadas Finales</legend>
-                <label for="lat-final">Latitud:</label>
-                <input id="lat-final" type="text" name="f-lat-final-{{@index}}" value="{{ubicacionFinal.coordenada.latitud}}" required/>
-                <label for="lon-final">Longitud:</label>
-                <input id="lon-final" type="text" name="f-lon-final-{{@index}}" value="{{ubicacionFinal.coordenada.longitud}}" required/>
+                <label for="lat-final-{{@index}}">Latitud:</label>
+                <input id="lat-final-{{@index}}" type="text" name="f-lat-final-{{@index}}" value="{{ubicacionFinal.coordenada.latitud}}" required/>
+                <label for="lon-final-{{@index}}">Longitud:</label>
+                <input id="lon-final-{{@index}}" type="text" name="f-lon-final-{{@index}}" value="{{ubicacionFinal.coordenada.longitud}}" required/>
               </fieldset>
             </fieldset>
             <br />
             {{/each}}
-
             <div class="tramos-nuevos">
+              {{#if trayecto}}
+              <br />
+              <!-- VER DE HABILITAR/DESHABILITAR EL FIELDSET -->
+              <input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack"/>
+              <label for="tramo-nuevo-ack">Agregar Tramo Nuevo</label><br /><br />
+              {{/if}}
               <fieldset>
                 <legend>Nuevo Tramo</legend>
-                <label for="transporte">Transporte</label>
-                <select id="transporte" name="f-transporte-nuevo" {{#unless trayecto}}required{{/unless}}>
+                <label for="transporte-nuevo">Transporte</label>
+                <select id="transporte-nuevo" name="f-transporte-nuevo" {{#unless trayecto}}required{{/unless}}>
                   <option class="campo-seleccionar" selected disabled>Seleccionar</option>
                   {{#each transportesTotales}}
                   <option value="{{id}}">{{clasificacion}}</option>
@@ -99,29 +124,23 @@
                 <br /><br />
                 <fieldset>
                   <legend>Coordenadas Iniciales</legend>
-                  <label>Latitud:</label>
-                  <input id="lat-inicial" type="text" name="f-lat-inicial-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
-                  <label>Longitud:</label>
-                  <input id="lon-inicial" type="text" name="f-lon-inicial-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
+                  <label for="lat-inicial-nueva">Latitud:</label>
+                  <input id="lat-inicial-nueva" type="text" name="f-lat-inicial-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
+                  <label for="lon-inicial-nueva">Longitud:</label>
+                  <input id="lon-inicial-nueva" type="text" name="f-lon-inicial-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
                 </fieldset>
                 <br />
                 <fieldset>
                   <legend>Coordenadas Finales</legend>
-                  <label for="lat-final">Latitud:</label>
-                  <input id="lat-final" type="text" name="f-lat-final-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
-                  <label for="lon-final">Longitud:</label>
-                  <input id="lon-final" type="text" name="f-lon-final-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
+                  <label for="lat-final-nueva">Latitud:</label>
+                  <input id="lat-final-nueva" type="text" name="f-lat-final-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
+                  <label for="lon-final-nueva">Longitud:</label>
+                  <input id="lon-final-nueva" type="text" name="f-lon-final-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
                 </fieldset>
               </fieldset>
               <br />
             </div>
           </div>
-          {{#if trayecto}}
-          <div class="eliminar">
-            <label for="eliminacion">¿Eliminar Trayecto?</label>
-            <input id="eliminacion" type="checkbox" value="true" name="f-eliminar" />
-          </div>
-          {{/if}}
           <div class="reiniciar">
             <input type="reset" value="Reiniciar"/> <!-- Quizas sacarlo -->
           </div>
@@ -137,10 +156,13 @@
       <br />
       <div class="cancelar">
         {{#if trayecto}}
-        <span><a href="/trayecto/{{trayecto.id}}">CANCELAR</a></span>
+        <span><a href="/miembro/{{miembroID}}/trayecto/{{trayectoID}}">CANCELAR</a></span>
+<!--        <span><a href="/trayecto/{{trayecto.id}}">CANCELAR</a></span>-->
         {{else}}
-        <span><a href="/trayectos">CANCELAR</a></span>
+        <span><a href="/miembro/{{miembroID}}/trayecto?action=list">CANCELAR</a></span>
+<!--        <span><a href="/trayectos">CANCELAR</a></span>-->
         {{/if}}
       </div>
-    </body>
+    </div>
+  </body>
 </html>

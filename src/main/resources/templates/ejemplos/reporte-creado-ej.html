@@ -3,16 +3,72 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" href="/img/logo.png">
-    <title>{{#unless reporte}}Crear {{/unless}}Reporte</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/reporte.css" > <!--FALTAN VER LOS ESTILOS-->
+    <title>Reporte</title>
+    <link rel="stylesheet" href="/css/reporte.css" >
+    <style>
+		form {
+			text-align: center;
+		}
+		
+		.campo-seleccionar {
+			font-style: italic;
+		}
+		
+		.enviar {
+			text-align: center;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			border-bottom: 1px solid black;
+		}
+		
+		.enviar input {
+			color: black;
+			background-color: #22CC22;
+			border: 3px solid orange;
+			border-radius: 20px;
+			font-size: 20px;
+			padding: 5px 15px;
+		}
+		
+		input[type=submit]:hover, input[type=reset]:hover {
+			opacity: 0.8;
+		}
+		
+		input[type=submit]:active {
+			background-color: #22BB22;
+		}
+		
+		.volver {
+			text-align: center;
+			padding: 15px;
+			margin: 5px;
+		}
+		
+		.volver span {
+			border: 2px dotted blue;
+			padding: 5px;
+		}
+		
+		table, th, td {
+			border: 1px solid black;
+			margin: auto;
+			text-align: center;
+			border-collapse: collapse;
+			padding: 5px;
+		}
+		
+		.reporte {
+			border: 2px solid black;
+		}
+	</style>
+    
   </head>
   <body>
-    <header>
+  	<header>
       <div id="header">
         <div class="user">
           <span>Organización: </span>
-          <i>{{rol}} - {{user}}</i>
+          <i>Razón Social</i>
         </div>
         <div class="logout">
           <form action="/logout" method="post">
@@ -26,7 +82,7 @@
     </header>
     <div class="content">
       <div class="info">
-        <span>Se creará el reporte para <i>{{user}}</i></span>
+        <span>Se creará el reporte para <i>Razón Social</i></span>
         <ul>
           <li>Por Año</li>
           <li>Por Mes</li>
@@ -36,23 +92,23 @@
         </ul>
       </div>
       <div class="generar">
-        <form action="/organizacion/{{orgID}}/reporte" method="post">
+        <form action="/organizacion/#id/reporte" method="post">
           <div class="enviar">
             <input type="submit" value="Generar Reporte"/>
           </div>
         </form>
       </div>
-      {{#if reporte}}
+      
       <span>LINEA</span>
       <!-- VER DE REDIRIGIR A LA SECCION #reporte -->
       <!-- VER SI DESCARGA ADENTRO DE REPORTE -->
       <div class="reporte">
         <ul>
-          <li>Organizacion: <i>{{organizacion.razonSocial}}</i></li>
-          <li>Fecha: <i>{{reporte.fechaCreacion}}</i></li>
-          <li>Consumo Mediciones: <i>{{reporte.consumoMediciones}}</i></li>
-          <li>Consumo Trayectos: <i>{{reporte.consumoTrayectos}}</i></li>
-          <li>Consumo Total: <i>{{reporte.consumoTotal}}</i></li>
+          <li>Organizacion: <i>Razón Social</i></li>
+          <li>Fecha: <i>15/10/2022</i></li>
+          <li>Consumo Mediciones: <i>125.6</i></li>
+          <li>Consumo Trayectos: <i>240.5-125.6</i></li>
+          <li>Consumo Total: <i>240.5</i></li>
         </ul>
         <table class="meses">
           <tr>
@@ -61,19 +117,23 @@
             <th>TRAYECTOS</th>
             <th>TOTAL</th>
           </tr>
-          {{#each meses}}
           <tr>
-            <td>{{mes}}</td>
-            <td>{{consumoMediciones}}</td>
-            <td>{{consumoTrayectos}}</td>
-            <td>{{consumoTotal}}</td>
+            <td>Mes1</td>
+            <td>ConsumoMediciones1</td>
+            <td>ConsumoTrayectos1</td>
+            <td>ConsumoTotal1</td>
           </tr>
-          {{/each}}
+          <tr>
+            <td>Mes2</td>
+            <td>ConsumoMediciones2</td>
+            <td>ConsumoTrayectos2</td>
+            <td>ConsumoTotal2</td>
+          </tr>
           <tr>
             <td>Anual</td>
-            <td>{{reporte.consumoMediciones}}</td>
-            <td>{{reporte.consumoTrayectos}}</td>
-            <td>{{reporte.consumoTotal}}</td>
+            <td>ConsumoMedicionesTotal</td>
+            <td>ConsumoTrayectosTotal</td>
+            <td>ConsumoTotal</td>
           </tr>
         </table>
         <br />
@@ -82,16 +142,17 @@
             <th>CATEGORIA</th>
             <th>CONSUMO</th>
           </tr>
-          {{#each reporte.consumoPorCategoria}}
           <tr>
-            <td>{{@key}}</td>
-            <td>{{this}}</td>
+            <td>Categoria1</td>
+            <td>Consumo1</td>
           </tr>
-          {{else}}
+          <tr>
+            <td>Categoria2</td>
+            <td>Consumo2</td>
+          </tr>
           <tr>
             <td colspan="2"><i>SIN CATEGORIAS</i></td>
           </tr>
-          {{/each}}
         </table>
         <br />
         <table class="sectores">
@@ -99,16 +160,17 @@
             <th>SECTOR</th>
             <th>CONSUMO</th>
           </tr>
-          {{#each reporte.consumoPorSector}}
           <tr>
-            <td>{{@key}}</td>
-            <td>{{this}}</td>
+            <td>Sector1</td>
+            <td>Consumo1</td>
           </tr>
-          {{else}}
+          <tr>
+            <td>Sector2</td>
+            <td>Consumo2</td>
+          </tr>
           <tr>
             <td colspan="2"><i>SIN SECTORES</i></td>
           </tr>
-          {{/each}}
         </table>
         <br />
         <table class="miembros">
@@ -116,28 +178,26 @@
             <th>MIEMBRO</th>
             <th>CONSUMO</th>
           </tr>
-          {{#each reporte.consumoPorMiembro}}
           <tr>
-            <td>{{@key}}</td>
-            <td>{{this}}</td>
+            <td>Miembro1</td>
+            <td>Consumo1</td>
           </tr>
-          {{else}}
+          <tr>
+            <td>Miembro2</td>
+            <td>Consumo2</td>
+          </tr>
           <tr>
             <td colspan="2"><i>SIN MIEMBROS</i></td>
           </tr>
-          {{/each}}
         </table>
         <br />
       </div>
-      <div class="descargar"> <!-- VER SI AL GENERARLO Y GUARDARLO EN /public/docs SE ENVIA AL CLIENTE -->
-<!--        <span><a href="/docs/#RAZONSOCIAL-#ANIOMESDIA" download>DESCARGAR</a></span>-->
-        <span><a href="/docs/{{file}}" download>DESCARGAR</a></span>
+      <div class="descargar">
+        <span><a href="/docs/#RAZONSOCIAL-#ANIOMESDIA" download>DESCARGAR</a></span>
       </div>
-      {{/if}}
       <div class="volver">
-        <br />
         <span><a href="/menu">VOLVER</a></span>
       </div>
-    </div>
+    </div>    
   </body>
 </html>
