@@ -24,18 +24,18 @@ public class HomeController {
 
         int id;
 //        id = user.getRolId(); // id del miembro, de la org o del agente
-        id = 555;
+        id = 2;
 
         String rol;
 //        rol = user.getRol(); //miembro, organizacion o agente
-        rol = "miembro";
-//        rol = "organizacion";
+//        rol = "miembro";
+        rol = "organizacion";
 //        rol = "agente";
 
         String name;
 //        name = user.getName();
-        name = "LEO MESSI";
-//        name = "UTN";
+//        name = "LEO MESSI";
+        name = "UTN";
 //        name = "LIONEL SCALONI";
 
         parametros.put("rol", rol.toUpperCase(Locale.ROOT));

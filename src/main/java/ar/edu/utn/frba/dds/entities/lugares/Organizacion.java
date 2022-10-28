@@ -167,10 +167,10 @@ public class Organizacion {
         return reportes;
     }
 
-    public void agregarReporte(ReporteOrganizacion reporte) {
+    /*public void agregarReporte(ReporteOrganizacion reporte) {
         reporte.setId(this.reportes.size()); //reporte1: id 0 - reporte2: id 1 - reporte3: id 2
         this.reportes.add(reporte);
-    }
+    }*/
 
     @Override
     public String toString() {

@@ -43,13 +43,12 @@
         </form>
       </div>
       {{#if reporte}}
-      <span>LINEA</span>
       <!-- VER DE REDIRIGIR A LA SECCION #reporte -->
       <!-- VER SI DESCARGA ADENTRO DE REPORTE -->
       <div class="reporte">
         <ul>
-          <li>Organizacion: <i>{{organizacion.razonSocial}}</i></li>
-          <li>Fecha: <i>{{reporte.fechaCreacion}}</i></li>
+          <li>Organizacion: <i>{{razonSocial}}</i></li>
+          <li>Fecha: <i>{{reporte.fecha}}</i></li>
           <li>Consumo Mediciones: <i>{{reporte.consumoMediciones}}</i></li>
           <li>Consumo Trayectos: <i>{{reporte.consumoTrayectos}}</i></li>
           <li>Consumo Total: <i>{{reporte.consumoTotal}}</i></li>

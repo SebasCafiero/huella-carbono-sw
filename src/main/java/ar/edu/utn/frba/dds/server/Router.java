@@ -85,12 +85,12 @@ public class Router {
 
 
 
-        Spark.get("/reporte", reportesController::darAlta, engine); //CHECK
-        Spark.post("/reporte", reportesController::generar); //CHECK
-        Spark.get("/reportes", reportesController::mostrarTodos, engine); //CHECK
-        Spark.get("/organizacion/:id/reportes", reportesController::mostrarTodosDeUnaOrganizacion, engine); //CHECK
-        Spark.get("/organizacion/:org/reporte/:rep", reportesController::obtener, engine); //OK
-        Spark.get("/organizacion/:id/reporte", reportesController::darAltaDeUnaOrganizacion, engine); //CHECK
+//        Spark.get("/reporte", reportesController::darAlta, engine); //CHECK
+//        Spark.post("/reporte", reportesController::generar); //CHECK
+//        Spark.get("/reportes", reportesController::mostrarTodos, engine); //CHECK
+//        Spark.get("/organizacion/:id/reportes", reportesController::mostrarTodosDeUnaOrganizacion, engine); //CHECK
+//        Spark.get("/organizacion/:org/reporte/:rep", reportesController::obtener, engine); //OK
+//        Spark.get("/organizacion/:id/reporte", reportesController::darAltaDeUnaOrganizacion, engine); //CHECK
 
 //        Spark.get("/reiniciar", homeController::reiniciar);
 
@@ -104,6 +104,9 @@ public class Router {
         Spark.post("/login", loginController::intentarLogear);
         Spark.post("/login/alta", loginController::agregar);
 //        Spark.post("/logout", loginController::desloguear);
+
+        Spark.get("/organizacion/:id/reporte", reportesController::darAltaYMostrar, engine);
+        Spark.post("/organizacion/:id/reporte", reportesController::generar);
 
     }
 }

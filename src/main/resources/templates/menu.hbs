@@ -31,21 +31,21 @@
           {{#if miembro}}
           <li>TRAYECTOS</li>
           <ul>
-            <li><a href="/miembro/{{id}}/trayecto?action=list">VER TRAYECTOS</a>
-            <li><a href="/miembro/{{id}}/trayecto?action=create">CARGAR TRAYECTO</a>
+            <li><a href="/miembro/{{miembro}}/trayecto?action=list">VER TRAYECTOS</a>
+            <li><a href="/miembro/{{miembro}}/trayecto?action=create">CARGAR TRAYECTO</a>
           </ul>
           {{/if}}
           {{#if organizacion}}
           <li>REPORTES</li>
           <ul>
-            <li><a href="/organizacion/{{id}}/reporte">GENERAR REPORTE</a>
+            <li><a href="/organizacion/{{organizacion}}/reporte">GENERAR REPORTE</a>
               <!-- VER DE USAR EL MISMO TEMPLATE CON UN PARAMETRO QUE SE COMPLETE TRAS EL POST -->
           </ul>
           {{/if}}
           {{#if agente}}
           <li>REPORTES</li>
           <ul>
-            <li><a href="/agente/{{id}}/reporte">GENERAR REPORTE</a>
+            <li><a href="/agente/{{agente}}/reporte">GENERAR REPORTE</a>
               <!-- VER DE USAR EL MISMO TEMPLATE CON UN PARAMETRO QUE SE COMPLETE TRAS EL POST -->
           </ul>
           {{/if}}

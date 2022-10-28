@@ -76,11 +76,4 @@ public class ReporteOrganizacion {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public void setId(Integer id) {
-        this.id = id; //el seteo se realizar al agregarlo a la organizacion (Organizacion#agregarReporte)
-    }
-
-    public Integer getId() {
-        return id;
-    }
 }
