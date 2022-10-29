@@ -1,0 +1,12 @@
+
+body * {
+    padding: 5px;
+}
+
+h1, h2, h3 {
+    background-color: #FF8888;
+}
+
+p {
+    font-size: 20px;
+}

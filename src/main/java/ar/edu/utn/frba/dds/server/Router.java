@@ -76,27 +76,27 @@ public class Router {
 
 
         TrayectosController trayectosController = new TrayectosController();
-        Spark.get("/trayectos", trayectosController::mostrarTodos, engine); //muestro todos trayectos.html
+        Spark.get("/trayectos", trayectosController::mostrarTodos, engine); //OK
 
-        Spark.get("/trayecto/:id", trayectosController::obtener, engine); //muestro el trayecto especifico trayecto.html
-        Spark.post("/trayecto/:id", trayectosController::modificar); //modifico un trayecto (trayecto-edicion.html) (PUT no en <form>)
-        Spark.delete("/trayecto/:id", trayectosController::eliminar);
+        Spark.get("/trayecto/:id", trayectosController::obtener, engine); //OK
+        Spark.post("/trayecto/:id", trayectosController::modificar); //CHECK
+        Spark.delete("/trayecto/:id", trayectosController::eliminar); //CHECK
 
-        Spark.get("/trayecto", trayectosController::darAlta, engine); //muestro para crear un nuevo trayecto trayecto-edicion.html
-        Spark.post("/trayecto", trayectosController::agregar); //creo un nuevo trayecto (trayecto-edicion.html)
+        Spark.get("/trayecto", trayectosController::darAlta, engine); //OK
+        Spark.post("/trayecto", trayectosController::agregar); //OK
 
 
         HomeController homeController = new HomeController();
-        Spark.get("/home", homeController::inicio, engine); //todo poner el login y dsp del post redireccionar al menu
+        Spark.get("/home", homeController::inicio, engine);
         Spark.get("/menu", homeController::menu, engine );
-        Spark.get("/logout", homeController::inicio, engine); //todo el logout del menu primero desactivar sesion
+        Spark.get("/logout", homeController::inicio, engine);
 
-        Spark.get("/reporte", reportesController::darAlta, engine);
-        Spark.post("/reporte", reportesController::generar);
-        Spark.get("/reportes", reportesController::mostrarTodos, engine);
-        Spark.get("/organizacion/:id/reportes", reportesController::mostrarTodosDeUnaOrganizacion, engine);
-        Spark.get("/organizacion/:org/reporte/:rep", reportesController::obtener, engine);
-        Spark.get("/organizacion/:id/reporte", reportesController::darAltaDeUnaOrganizacion, engine);
+        Spark.get("/reporte", reportesController::darAlta, engine); //CHECK
+        Spark.post("/reporte", reportesController::generar); //CHECK
+        Spark.get("/reportes", reportesController::mostrarTodos, engine); //CHECK
+        Spark.get("/organizacion/:id/reportes", reportesController::mostrarTodosDeUnaOrganizacion, engine); //CHECK
+        Spark.get("/organizacion/:org/reporte/:rep", reportesController::obtener, engine); //OK
+        Spark.get("/organizacion/:id/reporte", reportesController::darAltaDeUnaOrganizacion, engine); //CHECK
 
         Spark.get("/reiniciar", homeController::reiniciar);
     }

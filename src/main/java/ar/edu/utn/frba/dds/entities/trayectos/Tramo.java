@@ -14,22 +14,23 @@ import javax.persistence.*;
 public class Tramo implements Medible {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "tramo_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "medio_id")
+    @JoinColumn(name = "medio_id", nullable = false)
     private MedioDeTransporte medioDeTransporte;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ubicacion_inicial", referencedColumnName = "ubicacion_id")
+    @JoinColumn(name = "ubicacion_inicial", referencedColumnName = "ubicacion_id", nullable = false)
     private UbicacionGeografica ubicacionInicial;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ubicacion_final", referencedColumnName = "ubicacion_id")
+    @JoinColumn(name = "ubicacion_final", referencedColumnName = "ubicacion_id", nullable = false)
     private UbicacionGeografica ubicacionFinal;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "trayecto_id")
+    @JoinColumn(name = "trayecto_id", nullable = false)
     private Trayecto trayecto;
 
     @Column(name = "valor")

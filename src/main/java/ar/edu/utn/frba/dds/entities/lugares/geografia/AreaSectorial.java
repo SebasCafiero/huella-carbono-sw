@@ -1,19 +1,29 @@
 package ar.edu.utn.frba.dds.entities.lugares.geografia;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 
-import java.util.List;
+import javax.persistence.*;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class AreaSectorial {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "area_id")
+    private Integer id;
+
+    @Column(name = "nombre")
     protected String nombre;
+
+    @Transient
     protected Set<Organizacion> organizaciones;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "agente_id", referencedColumnName = "agente_id")
     protected AgenteSectorial agente;
-    protected List<ReporteAgente> reportes;
 
     public Set<Organizacion> getOrganizaciones() {
         return this.organizaciones;
@@ -22,8 +32,9 @@ public abstract class AreaSectorial {
         this.organizaciones.add(unaOrganizacion);
     }
 
-    public Set<UbicacionGeografica> ubicaciones() {
-        return this.organizaciones.stream().map(o -> o.getUbicacion()).collect(Collectors.toSet());
+    public Set<UbicacionGeografica> getUbicaciones() {
+        return this.organizaciones.stream()
+                .map(Organizacion::getUbicacion).collect(Collectors.toSet());
     }
 
     public AgenteSectorial getAgente() {
@@ -34,17 +45,8 @@ public abstract class AreaSectorial {
         this.agente = agente;
     }
 
-    public void agregarReporte(ReporteAgente unReporte) {
-        this.reportes.add(unReporte);
-    }
-
     public String getNombre() {
         return nombre;
-    }
-
-
-    public List<ReporteAgente> getReportes() {
-        return reportes;
     }
 
     public void setNombre(String nombre) {
@@ -53,9 +55,5 @@ public abstract class AreaSectorial {
 
     public void setOrganizaciones(Set<Organizacion> organizaciones) {
         this.organizaciones = organizaciones;
-    }
-
-    public void setReportes(List<ReporteAgente> reportes) {
-        this.reportes = reportes;
     }
 }

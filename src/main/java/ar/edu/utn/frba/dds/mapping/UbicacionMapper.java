@@ -1,9 +1,6 @@
 package ar.edu.utn.frba.dds.mapping;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Municipio;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.*;
 import ar.edu.utn.frba.dds.mihuella.dto.UbicacionCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.UbicacionJSONDTO;
 import com.google.gson.Gson;
@@ -71,7 +68,7 @@ public class UbicacionMapper {
         String nombreLocalidad = "Dock Sud";
         String calle = "callecita";
         Integer numero = 100;
-        Municipio municipio = new Municipio(nombreMunicipio, nombreProvincia, nombrePais);
+        Municipio municipio = new Municipio(nombreMunicipio, new Provincia(nombreProvincia, nombrePais));
         Direccion direccion = new Direccion(municipio, nombreLocalidad, calle, numero);
         return direccion;
 

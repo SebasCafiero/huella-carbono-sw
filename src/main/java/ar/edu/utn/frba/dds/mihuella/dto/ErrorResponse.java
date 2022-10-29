@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.mihuella.dto;
 
+import spark.ModelAndView;
+
 public class ErrorResponse {
     private String error;
     private String descripcion;
@@ -23,6 +25,10 @@ public class ErrorResponse {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public ModelAndView generarVista(Object parametro) {
+        return new ModelAndView(parametro, "error.hbs");
     }
 
     @Override

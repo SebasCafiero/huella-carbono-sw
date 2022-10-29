@@ -139,15 +139,6 @@ public class Organizacion {
 
     public void setSectores(Set<Sector> sectores) {this.sectores = sectores;}
 
-    public static boolean existeTipoOrganizacion(String tipo) {
-        try {
-            TipoDeOrganizacionEnum tipoDeOrganizacion = TipoDeOrganizacionEnum.valueOf(tipo);
-        } catch(IllegalArgumentException ex) {
-            return false;
-        }
-        return true;
-    }
-
     public List<String> getContactosMail() {
         return contactosMail;
     }
