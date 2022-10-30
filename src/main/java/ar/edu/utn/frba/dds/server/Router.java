@@ -70,13 +70,11 @@ public class Router {
 
         LoginController loginController = new LoginController();
         Spark.post("/login", loginController::intentarLogear);
-
-        UserController userController = new UserController();
-        Spark.post("/login/alta", userController::agregar);
-        Spark.post("/login/alta", loginController::agregar);
         Spark.post("/logout", loginController::cerrarSesion);
         Spark.post("/errorAcceso", loginController::errorAcceso);
 
+        UserController userController = new UserController();
+        Spark.post("/login/alta", userController::agregar);
 
         TrayectosController trayectosController = new TrayectosController();
         Spark.get("/trayectos", trayectosController::mostrarTodos, engine); //OK
