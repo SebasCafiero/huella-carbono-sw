@@ -37,6 +37,11 @@
       </div>
       <div class="generar">
         <form action="/organizacion/{{orgID}}/reporte" method="post">
+          <div class="form-fecha">
+            <label for="fecha">Fecha de Referencia: </label><i>(CHECK)</i>
+            <input id="fecha" type="text" name="f-fecha" value="MES/AÑO" required/>
+          </div>
+          <br />
           <div class="enviar">
             <input type="submit" value="Generar Reporte"/>
           </div>
@@ -130,7 +135,7 @@
       </div>
       <div class="descargar"> <!-- VER SI AL GENERARLO Y GUARDARLO EN /public/docs SE ENVIA AL CLIENTE -->
 <!--        <span><a href="/docs/#RAZONSOCIAL-#ANIOMESDIA" download>DESCARGAR</a></span>-->
-        <span><a href="/docs/{{file}}" download>DESCARGAR</a></span>
+        <span><a href="/docs/{{file}}" download>DESCARGAR</a></span><i>(CHECK)</i>
       </div>
       {{/if}}
       <div class="volver">

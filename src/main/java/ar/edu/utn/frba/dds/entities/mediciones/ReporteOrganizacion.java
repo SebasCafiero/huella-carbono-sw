@@ -17,6 +17,7 @@ public class ReporteOrganizacion {
     private Float consumoTotal;
     private LocalDate fechaCreacion;
     private Integer id;
+    private Periodo periodoReferencia;
 
     public ReporteOrganizacion() {
     }
@@ -76,4 +77,11 @@ public class ReporteOrganizacion {
         this.fechaCreacion = fechaCreacion;
     }
 
+    public Periodo getPeriodoReferencia() {
+        return periodoReferencia;
+    }
+
+    public void setPeriodoReferencia(Periodo periodoReferencia) {
+        this.periodoReferencia = periodoReferencia;
+    }
 }

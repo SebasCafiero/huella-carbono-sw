@@ -157,5 +157,9 @@ public class Miembro {
                 ", apellido='" + apellido + '\'' +
                 '}';
     }
+
+    public void quitarTrayecto(Trayecto trayecto) {
+        this.trayectos.remove(trayecto);
+    }
 }
 

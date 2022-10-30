@@ -69,7 +69,7 @@ public class ReportesController {
 
 
 
-    public Map<String, Object> mapUser(Request request, Response response) {
+    private Map<String, Object> mapUser(Request request, Response response) {
         String username = request.session().attribute("currentUser");
 //        User user = new UserUtils().buscar(username);
         Map<String, Object> parametros = new HashMap<>();
@@ -99,11 +99,15 @@ public class ReportesController {
         int idOrg = Integer.parseInt(request.params("id"));
         try {
             org = repoOrganizaciones.buscar(idOrg); //deberia coincidir con los permisos del usuario
-        } catch (NullPointerException e) {
-            response.status(400);
+        } catch (NullPointerException | SessionException e) {
             parametros = new HashMap<>();
-            parametros.put("codigo", response.status());
+            response.status(400);
             String errorDesc = "Organización de id "+idOrg+" inexistente";
+            if(e instanceof SessionException) {
+                response.status(403);
+                errorDesc = "Acceso no permitido";
+            }
+            parametros.put("codigo", response.status());
             parametros.put("descripcion", errorDesc);
             return new ErrorResponse(errorDesc).generarVista(parametros);
         }
@@ -126,7 +130,7 @@ public class ReportesController {
         return new ModelAndView(parametros, "reporte.hbs");
     }
 
-    public Map<String, Object> mapeoReporte(ReporteOrganizacion reporte) {
+    private Map<String, Object> mapeoReporte(ReporteOrganizacion reporte) {
         Map<String, Object> reporteMap = new HashMap<>();
         reporteMap.put("fecha", reporte.getFechaCreacion());
         reporteMap.put("consumoTotal", reporte.getConsumoTotal());
@@ -141,10 +145,11 @@ public class ReportesController {
     public Response generar(Request request, Response response) {
         int idOrg = Integer.parseInt(request.params("id"));
         Organizacion organizacion = repoOrganizaciones.buscar(idOrg); //todo check error
-        LocalDate fecha = LocalDate.now();//todo
-        Periodo periodo = new Periodo(2020,5);
+        String fechaActual = LocalDate.now().getMonthValue()+"/"+LocalDate.now().getYear();
+        String[] fecha = request.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar fecha
+        Periodo periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
         try {
-            fachadaReportes.generarReporteOrganizacion2(organizacion, new Periodo(fecha.getYear(), fecha.getMonthValue()));
+            fachadaReportes.generarReporteOrganizacion2(organizacion, periodo);
             documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion); //todo no lo toma bien, agarra el viejo o ninguno
             response.redirect("/organizacion/"+organizacion.getId()+"/reporte");
         } catch (NullPointerException | FileNotFoundException | UnsupportedEncodingException e) {
@@ -152,16 +157,23 @@ public class ReportesController {
             response.redirect("/error/"+400);
             return response; //todo check, no puedo retornar vista
             //return new ErrorResponse("Organización de id "+idOrg+" inexistente");
+        } catch (SessionException e) { //todo check
+            response.status(403);
+            response.redirect("/error/"+403);
+            return response;
+//            return new ErrorResponse("Acceso no permitido").generarVista(parametros);
         }
         return response;
     }
 
-    public String documentarReporte(ReporteOrganizacion reporte, Organizacion organizacion) throws FileNotFoundException, UnsupportedEncodingException {
+    private String documentarReporte(ReporteOrganizacion reporte, Organizacion organizacion) throws FileNotFoundException, UnsupportedEncodingException {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
         String arch = organizacion.getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
 
         PrintWriter writer = new PrintWriter("resources/public/docs/"+arch, "UTF-8");
 
+        writer.println("Fecha de Creacion: " + reporte.getFechaCreacion());
+        writer.println("Periodo de Referencia: " + reporte.getPeriodoReferencia());
         writer.println("Total : " + reporte.getConsumoTotal());
         writer.println("Total mediciones : " + reporte.getConsumoMediciones());
 
@@ -181,37 +193,4 @@ public class ReportesController {
 
         return arch;
     }
-
-
-
-    public ModelAndView obtener(Request request, Response response) {
-        int idOrg = Integer.parseInt(request.params("org"));
-        Organizacion organizacion;
-        int idReporte = Integer.parseInt(request.params("rep"));
-        ReporteOrganizacion reporte;
-        Map<String, Object> parametros = new HashMap<>();
-        try {
-            organizacion = repoOrganizaciones.buscar(idOrg);
-            reporte = organizacion.getReportes().get(idReporte);
-        } catch (IndexOutOfBoundsException | NullPointerException e) {
-            response.status(400);
-            parametros.put("codigo", response.status());
-            String errorDesc = "Organización de id "+idOrg+" inexistente";
-            if(e instanceof IndexOutOfBoundsException)
-                errorDesc = "Reporte de id "+idReporte+" inexistente";
-            parametros.put("descripcion", errorDesc);
-
-            return new ErrorResponse(errorDesc).generarVista(parametros);
-        } catch (SessionException e) { //todo check
-            response.status(403);
-            parametros.put("codigo", response.status());
-            parametros.put("descripcion", "Acceso no permitido");
-            return new ErrorResponse("Acceso no permitido").generarVista(parametros);
-        }
-        parametros.put("organizacion", organizacion);
-        parametros.put("reporte", reporte);
-        return new ModelAndView(parametros, "reporte.hbs");
-    }
-
-    //todo al mostrar un reporte en detalle, poner como fue sumando cada medicion
 }

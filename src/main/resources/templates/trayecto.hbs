@@ -5,8 +5,8 @@
     <link rel="icon" href="/img/logo.png">
 
     <title>Trayecto {{trayecto.id}}</title>
-      <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-      <script src="/js/trayecto.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="/js/trayecto.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/trayecto.css">
   </head>
@@ -41,7 +41,7 @@
           </tr>
           <tr>
             <th>FECHA</th>
-            <td><i>{{periodo.mes}}/{{periodo.anio}}</i></td>
+            <td><i>{{mes}}/{{año}}</i></td>
           </tr>
           <tr>
             <th>TRAMOS</th>
@@ -101,7 +101,7 @@
       </div>
       <br />
       <div class="borrar"><!-- JS: DELETE /miembro/#miembro/trayecto/#id -->
-        <span><button onclick="borrarTrayecto({{id}})">BORRAR</button></span>
+        <span><button onclick="borrarTrayecto({{../miembroID}}, {{id}})">BORRAR</button></span>
       </div>
       {{/with}}
     </div>

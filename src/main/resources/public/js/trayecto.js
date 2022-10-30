@@ -21,14 +21,16 @@ function cerrarModal(){
   document.getElementsByClassName("modal")[0].style.display = 'none';
 }
 
-function borrarTrayecto(id){
+function borrarTrayecto(idMiembro, idTrayecto){
     //ENVIAR AJAX AL BACK
     $.ajax({
-        url: "/trayecto/"+id,
+        url: "/miembro/" + idMiembro + "/trayecto/" + idTrayecto,
         type: "DELETE",
         success: function(result){
-          location.href= "/trayectos"
+          location.href = "/miembro/" + idMiembro + "/trayecto?action=list"
         }
     });
     //document.getElementsByClassName("modal"+id)[0].innerHTML = id;
 }
+
+<input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack"/>

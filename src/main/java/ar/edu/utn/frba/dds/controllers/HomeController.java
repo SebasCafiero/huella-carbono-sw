@@ -28,14 +28,14 @@ public class HomeController {
 
         String rol;
 //        rol = user.getRol(); //miembro, organizacion o agente
-//        rol = "miembro";
-        rol = "organizacion";
+        rol = "miembro";
+//        rol = "organizacion";
 //        rol = "agente";
 
         String name;
 //        name = user.getName();
-//        name = "LEO MESSI";
-        name = "UTN";
+        name = "LEO MESSI";
+//        name = "UTN";
 //        name = "LIONEL SCALONI";
 
         parametros.put("rol", rol.toUpperCase(Locale.ROOT));
@@ -53,10 +53,4 @@ public class HomeController {
         return new ModelAndView(parametros, "menu.hbs");
     }
 
-    public Response reiniciar(Request request, Response response) {
-
-        //todo eliminar todo para que la DB o la Memoria vuelvan al estado inicial
-        response.redirect("/home");
-        return response;
-    }
 }

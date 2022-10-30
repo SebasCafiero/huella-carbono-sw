@@ -5,6 +5,8 @@
     <link rel="icon" href="/img/logo.png">
     {{#if trayecto}}
     <title>Modificar Trayecto {{trayecto.id}}</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="/js/trayecto.js"></script>
     {{else}}
     <title>Crear Trayecto</title>
     {{/if}}
@@ -32,23 +34,24 @@
       <div class="edicion">
         <span>ID-Trayecto: {{trayecto.id}}</span> <br /><br />
         <!-- Al editar trayecto se usa method post xq html no admite form.put -->
-        <form {{#if trayecto}} action="/miembro/{{miembroID}}/trayecto/{{trayectoID}}" {{else}} action="/miembro/{{miembroID}}/trayecto" {{/if}} method="post">
+        <form {{#if trayecto}} action="/miembro/{{miembroID}}/trayecto/{{trayecto.id}}" {{else}} action="/miembro/{{miembroID}}/trayecto" {{/if}} method="post">
           <div class="form-fecha">
             <label for="fecha">Fecha</label>
-<!--            <input id="fecha" type="text" name="f-fecha" value="{{trayecto.periodo.mes}}/{{trayecto.periodo.anio}}" required/>-->
-            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.periodo.mes}}/{{trayecto.periodo.anio}}" {{else}} value="MES/AÑO" {{/if}} required/>
+<!--            <input id="fecha" type="text" name="f-fecha" value="{{trayecto.mes}}/{{trayecto.año}}" required/>-->
+            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.mes}}/{{trayecto.año}}" {{else}} value="MES/AÑO" {{/if}} required/>
           </div>
           <br />
           <div class="form-miembros">
             <fieldset>
               <legend>Miembros</legend>
-              {{#with miembroLogueado}} <!-- ASEGURARSE DE ATRAPARLO EN POST YA QUE NO ESTARA EN f-miembro -->
-              <input id="logueado" type="checkbox" value="m-logueado" name="m-miembro" checked disabled/>
+              {{#with miembroLogueado}}
+              <input id="logueado" type="checkbox" value="{{id}}" name="f-logueado" checked disabled/>
               <label for="logueado">{{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</label><br />
+              <input id="logueado-data" type="hidden" value="{{id}}" name="f-logueado-data"/> <!-- Puede omitirse si lo atrapo con la session -->
               {{/with}}
               {{#each miembros}} <!-- NO DEBE ESTAR EL MIEMBRO LOGUEADO -->
-              <input id="miembro{{miembro.id}}" type="checkbox" value="{{miembro.id}}" name="f-miembro"  {{#if contieneTrayecto}}checked{{/if}} />
-              <label for="miembro{{miembro.id}}">{{miembro.nombre}} {{miembro.apellido}} - {{miembro.tipoDeDocumento}}: {{miembro.nroDocumento}}</label><br />
+              <input id="miembro{{id}}" type="checkbox" value="{{id}}" name="f-miembro"  {{#if contieneTrayecto}}checked{{/if}} />
+              <label for="miembro{{id}}">{{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</label><br />
               {{/each}}
               <!-- ver si name="m-miembro[]" como PHP -->
             </fieldset>
@@ -116,7 +119,7 @@
                 <legend>Nuevo Tramo</legend>
                 <label for="transporte-nuevo">Transporte</label>
                 <select id="transporte-nuevo" name="f-transporte-nuevo" {{#unless trayecto}}required{{/unless}}>
-                  <option class="campo-seleccionar" selected disabled>Seleccionar</option>
+                  <option class="campo-seleccionar" selected disabled>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
                   {{#each transportesTotales}}
                   <option value="{{id}}">{{clasificacion}}</option>
                   {{/each}}
@@ -156,7 +159,7 @@
       <br />
       <div class="cancelar">
         {{#if trayecto}}
-        <span><a href="/miembro/{{miembroID}}/trayecto/{{trayectoID}}">CANCELAR</a></span>
+        <span><a href="/miembro/{{miembroID}}/trayecto/{{trayecto.id}}">CANCELAR</a></span>
 <!--        <span><a href="/trayecto/{{trayecto.id}}">CANCELAR</a></span>-->
         {{else}}
         <span><a href="/miembro/{{miembroID}}/trayecto?action=list">CANCELAR</a></span>
