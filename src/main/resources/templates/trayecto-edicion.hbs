@@ -112,10 +112,10 @@
               {{#if trayecto}}
               <br />
               <!-- VER DE HABILITAR/DESHABILITAR EL FIELDSET -->
-              <input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack"/>
+              <input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack" onclick="trayectoNuevoHabilitacion()"/>
               <label for="tramo-nuevo-ack">Agregar Tramo Nuevo</label><br /><br />
               {{/if}}
-              <fieldset>
+              <fieldset {{#if trayecto}}disabled{{/if}}>
                 <legend>Nuevo Tramo</legend>
                 <label for="transporte-nuevo">Transporte</label>
                 <select id="transporte-nuevo" name="f-transporte-nuevo" {{#unless trayecto}}required{{/unless}}>

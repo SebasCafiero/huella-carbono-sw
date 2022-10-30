@@ -10,18 +10,21 @@ $(document).ready(function(){
 */
 
 
-function confirmarEliminacion(id){
-  document.getElementById("IDTRAYECTO").value = id;
-  document.getElementById("modalEliminar").style.display = 'block';
-}
-
-function cerrarModal(){
+function cancelarBorradoTrayecto(){
 //    var elements = document.getElementsByClassName("modal");
 //    Array.from(elements).forEach(function(elem){elem.style.display='none'});
-  document.getElementsByClassName("modal")[0].style.display = 'none';
+//  document.getElementsByClassName("confirmar")[0].style.display = 'none';
+  document.getElementById("confirmacion").style.display = 'none';
 }
 
 function borrarTrayecto(idMiembro, idTrayecto){
+    document.getElementById("confirmacion").style.display = 'block';
+    document.getElementById("accion-borrado").onclick = () => concretarBorradoTrayecto(idMiembro, idTrayecto);
+//    document.getElementById("borrar-id-miembro").value = idMiembro;
+//    document.getElementById("borrar-id-trayecto").value = idTrayecto;
+}
+
+function concretarBorradoTrayecto(idMiembro, idTrayecto) {
     //ENVIAR AJAX AL BACK
     $.ajax({
         url: "/miembro/" + idMiembro + "/trayecto/" + idTrayecto,
@@ -33,4 +36,13 @@ function borrarTrayecto(idMiembro, idTrayecto){
     //document.getElementsByClassName("modal"+id)[0].innerHTML = id;
 }
 
-<input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack"/>
+function trayectoNuevoHabilitacion() {
+    if(document.getElementById("tramo-nuevo-ack").checked)
+        document.getElementsByClassName("tramos-nuevos")[0]
+        .getElementsByTagName("fieldset")[0]
+        .disabled = false;
+    else
+        document.getElementsByClassName("tramos-nuevos")[0]
+        .getElementsByTagName("fieldset")[0]
+        .disabled = true;
+}

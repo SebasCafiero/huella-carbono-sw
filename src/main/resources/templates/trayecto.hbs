@@ -103,6 +103,16 @@
       <div class="borrar"><!-- JS: DELETE /miembro/#miembro/trayecto/#id -->
         <span><button onclick="borrarTrayecto({{../miembroID}}, {{id}})">BORRAR</button></span>
       </div>
+      <div class="confirmar" id="confirmacion" style="display: none">
+        <div class="confirmar-botones">
+          <div class="confirmar-texto">
+<!--            <span><label>¿Confirmar borrado de trayecto?</label></span>-->
+            <span><label>¿CONFIRMAR BORRADO DEL TRAYECTO?</label></span>
+          </div>
+          <span><button id="accion-borrado" onclick="">CONFIRMAR</button></span>
+          <span><button onclick="cancelarBorradoTrayecto()">CANCELAR</button></span>
+        </div>
+      </div>
       {{/with}}
     </div>
   </body>
