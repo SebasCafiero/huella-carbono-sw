@@ -36,7 +36,7 @@ function concretarBorradoTrayecto(idMiembro, idTrayecto) {
     //document.getElementsByClassName("modal"+id)[0].innerHTML = id;
 }
 
-function trayectoNuevoHabilitacion() {
+function tramoNuevoHabilitacion() {
     if(document.getElementById("tramo-nuevo-ack").checked)
         document.getElementsByClassName("tramos-nuevos")[0]
         .getElementsByTagName("fieldset")[0]
@@ -45,4 +45,20 @@ function trayectoNuevoHabilitacion() {
         document.getElementsByClassName("tramos-nuevos")[0]
         .getElementsByTagName("fieldset")[0]
         .disabled = true;
+}
+
+function trayectoCompartido() {
+    if(document.getElementById("trayecto-compartido-ack").checked) {
+        document.getElementById("trayecto-id").disabled = false;
+        document.getElementById("fecha").disabled = true;
+        document.getElementsByClassName("tramos-nuevos")[0]
+                .getElementsByTagName("fieldset")[0]
+                .disabled = true;
+    } else {
+        document.getElementById("trayecto-id").disabled = true;
+        document.getElementById("fecha").disabled = false;
+        document.getElementsByClassName("tramos-nuevos")[0]
+                .getElementsByTagName("fieldset")[0]
+                .disabled = false;
+    }
 }

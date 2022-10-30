@@ -58,7 +58,8 @@ public class TrayectosController {
     public ModelAndView mostrarTodosYCrear(Request request, Response response) {
         String modo = request.queryParamOrDefault("action", "list");
         if(modo.equals("create"))
-            return darAlta(request, response);
+            return darAlta2(request, response);
+//            return darAlta(request, response);
         return mostrarTodos(request, response); //por default es ?action=list
     }
 
@@ -66,7 +67,7 @@ public class TrayectosController {
         Map<String, Object> parametros = mapUser(req, res);
         int idMiembro = Integer.parseInt(req.params("id"));
         Miembro miembro = fachada.obtenerMiembro(idMiembro);
-        parametros.put("trayectos", miembro.getTrayectos());
+        parametros.put("trayectos", miembro.getTrayectos()); //TODO ver de abstraer
         parametros.put("miembroID", idMiembro);
         return new ModelAndView(parametros, "trayectos.hbs");
     }
@@ -179,7 +180,8 @@ public class TrayectosController {
     public ModelAndView mostrarYEditar(Request req, Response res) {
         String modo = req.queryParamOrDefault("action", "view");
         if(modo.equals("edit")) {
-            return editar(req, res);
+            return editar2(req, res);
+//            return editar(req, res);
         }
         return obtener(req, res);
     }
@@ -289,28 +291,6 @@ public class TrayectosController {
     }
 
 
-    /*public ModelAndView obtener(Request request, Response response) {
-        Map<String, Object> parametros = new HashMap<>();
-        int idTrayecto = Integer.parseInt(request.params("id"));
-
-        try {
-            Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
-            parametros.put("trayecto", trayecto);
-            String modo = request.queryParamOrDefault("mode", "view"); //todo evitar querystring y usar JS?
-            if(modo.equals("edit")) {
-                setearCampos(trayecto, parametros);
-                return new ModelAndView(parametros,"trayecto-edicion.hbs");
-            } else {
-                return new ModelAndView(parametros, "trayecto.hbs");
-            }
-        } catch (NullPointerException e) {
-            response.status(400);
-            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
-            parametros.put("descripcion", errorDesc);
-            parametros.put("codigo", response.status());
-            return new ErrorResponse(errorDesc).generarVista(parametros);
-        }
-    }*/
 
     /*private void setearCampos(Trayecto trayecto, Map<String, Object> parametros) {
         List<Miembro> miembrosTrayecto = trayecto.getMiembros();
@@ -350,42 +330,52 @@ public class TrayectosController {
 
     }*/
 
-    /*public Response modificar(Request request, Response response) {
-        Integer id = Integer.parseInt(request.params("id"));
 
-        try {
-            Trayecto trayecto = fachada.obtenerTrayecto(id);
-            if(request.queryParams("f-eliminar") != null)
-                if(request.queryParams("f-eliminar").equals("true")) //innecesario quizas
-                    return this.eliminar(request, response); //todo lo deje para mostrar a Eze pero ya está el boton con JS para DELETE
-            asignarCampos(trayecto, request);
-            fachada.modificarTrayecto(trayecto);
-        } catch (NullPointerException e) {
-            response.status(400);
-            String errorDesc = "Trayecto de id "+id+" inexistente";
-            //parametros.put("descripcion", errorDesc);
-            //parametros.put("codigo", response.status());
-            //return new ErrorResponse(errorDesc).generarVista(parametros);
-            response.redirect("/error/"+400);
-            return response; //todo check, no puedo retornar vista
+    public ModelAndView darAlta2(Request req, Response res) {
+        Map<String, Object> parametros = mapUser(req, res);
+        int idMiembro = Integer.parseInt(req.params("id"));
+        Miembro miembro = fachada.obtenerMiembro(idMiembro);
+        parametros.put("miembroID", idMiembro);
+
+        parametros.put("miembroLogueado", mapeoMiembro(miembro));
+
+        parametros.put("transportesTotales", fachada.obtenerTransportes()); //todo separar transportes, y en publicos las paradas
+//        List<Map<String, Object>> miembros = new ArrayList<>();
+//        miembrosTotales.forEach(m -> {
+//            Map<String, Object> miembroMap = new HashMap<>();
+//            miembroMap.put("miembro", m);
+//            miembroMap.put("contieneTrayecto", false);
+//            miembros.add(miembroMap);
+//        });
+//        parametros.put("miembros", miembros);
+//        parametros.put("transportesTotales",fachada.obtenerTransportes());
+
+        //TODO VER DE REUTILIZAR setearCampos()
+        return new ModelAndView(parametros, "/trayecto-edicion2.hbs");
+    }
+
+    public Response agregar2(Request req, Response res) {
+        Trayecto trayecto = new Trayecto();
+
+        if(req.queryParams("f-trayecto-compartido-ack") != null) {
+            int idTrayecto = Integer.parseInt(req.queryParams("f-trayecto-id")); //todo validar
+            trayecto = this.fachada.obtenerTrayecto(idTrayecto); //todo el miembro puede duplicar su mismo trayecto
+        } else {
+            asignarCampos2(trayecto, req);
+            this.fachada.cargarTrayecto(trayecto);
         }
+        int idMiembro = Integer.parseInt(req.params("id"));
+        Miembro miembro = fachada.obtenerMiembro(idMiembro);
+        miembro.agregarTrayecto(trayecto);
+        trayecto.agregarMiembro(miembro);
+        res.redirect("/miembro/" + req.params("id") + "/trayecto/" + trayecto.getId());
+        return res;
+    }
 
-        response.redirect("/trayecto/"+id);
-        return response;
-    }*/
-
-/*    private void asignarCampos(Trayecto trayecto, Request req) {
+    private void asignarCampos2(Trayecto trayecto, Request req) {
         String fechaActual = LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear();
         String[] fecha = req.queryParamOrDefault("f-fecha", fechaActual).split("/"); //TODO VALIDAR
         trayecto.setPeriodo(new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0])));
-
-        if(req.queryParamsValues("f-miembro") != null) {
-            List<Miembro> miembros = Arrays.stream(req.queryParamsValues("f-miembro")) //todo validar
-                    .map(m -> fachada.obtenerMiembro(Integer.parseInt(m)))
-                    .collect(Collectors.toList());
-            trayecto.setMiembros(miembros);
-        } else
-            trayecto.setMiembros(new ArrayList<>());
 
         List<Tramo> tramos = new ArrayList<>();
         int cant = 0; //index de cantidad tramos
@@ -417,25 +407,97 @@ public class TrayectosController {
             tramos.add(tramoNuevo);
             //cant++;
         }
-    }*/
+    }
 
-    /*public Response eliminar(Request request, Response response) {
-        int id = Integer.parseInt(request.params("id"));
+    public ModelAndView editar2(Request req, Response res) {
+        Map<String, Object> parametros = mapUser(req, res);
+        int idTrayecto = Integer.parseInt(req.params("trayecto"));
+        int idMiembro = Integer.parseInt(req.params("miembro"));
+        Miembro miembro = fachada.obtenerMiembro(idMiembro);
         try {
-            Trayecto trayecto = fachada.obtenerTrayecto(id);
-            fachada.eliminarTrayecto(trayecto);
+            Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+            parametros.put("trayecto", mapeoTrayecto(trayecto));
+            parametros.put("miembroID", idMiembro);
+//            parametros.put("miembroLogueado", mapeoMiembro(miembro));
+
+            List<Miembro> miembrosTrayecto = trayecto.getMiembros();
+
+            List<Map<String, Object>> miembros = new ArrayList<>();
+            miembrosTrayecto.forEach(m -> miembros.add(mapeoMiembro(m)));
+            parametros.put("miembros", miembros);
+
+            parametros.put("transportesTotales", fachada.obtenerTransportes()); //todo separar transportes, y en publicos las paradas
+            return new ModelAndView(parametros, "trayecto-edicion2.hbs");
         } catch (NullPointerException e) {
-            String errorDesc = "Trayecto de id "+id+" inexistente.";
-            response.status(400);
-            response.redirect("/error/"+400);
-            //return new ErrorResponse(errorDesc).generarVista(parametros); //todo no puedo retornar vista
+            res.status(400);
+            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
+            parametros.put("descripcion", errorDesc);
+            parametros.put("codigo", res.status());
+            return new ErrorResponse(errorDesc).generarVista(parametros);
         }
-//        response.redirect("/trayectos"); //redirijo desde JS
-        return response;
-    }*/
+    }
 
+    public Response modificar2(Request req, Response res) {
+        Integer idTrayecto = Integer.parseInt(req.params("trayecto"));
+        Integer idMiembro = Integer.parseInt(req.params("miembro"));
+        Miembro miembro = fachada.obtenerMiembro(idMiembro);
+        try {
+            Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+            asignarCampos2(trayecto, req);
+            fachada.modificarTrayecto(trayecto);
+        } catch (NullPointerException e) {
+            res.status(400);
+            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
+            //parametros.put("descripcion", errorDesc);
+            //parametros.put("codigo", response.status());
+            //return new ErrorResponse(errorDesc).generarVista(parametros);
+            res.redirect("/error/"+400);
+            return res; //todo check, no puedo retornar vista
+        }
 
+        res.redirect("/miembro/" + idMiembro + "/trayecto/" + idTrayecto);
+        return res;
+    }
 
+    public Response eliminar2(Request req, Response res) { //todo ver CONFIRMACION
+        Integer idTrayecto = Integer.parseInt(req.params("trayecto"));
+        Integer idMiembro = Integer.parseInt(req.params("miembro"));
+        Miembro miembro = fachada.obtenerMiembro(idMiembro);
+        try {
+            Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+            miembro.quitarTrayecto(trayecto);
+            trayecto.quitarMiembro(miembro);
+        } catch (NullPointerException e) {
+            res.status(400);
+            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
+            //parametros.put("descripcion", errorDesc);
+            //parametros.put("codigo", response.status());
+            //return new ErrorResponse(errorDesc).generarVista(parametros);
+            res.redirect("/error/"+400);
+//            return res; //todo check, no puedo retornar vista
+        }
+
+//        res.redirect("/miembro/" + idMiembro + "/trayecto?action=list"); //redirijo desde JS
+        return res;
+    }
+
+    public Response borrar(Request req, Response res) {
+        Integer idTrayecto = Integer.parseInt(req.params("id"));
+        try {
+            Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+            this.fachada.eliminarTrayecto(trayecto);
+            //todo y sacar de cada miembro
+        } catch (NullPointerException e) {
+            res.status(400);
+            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
+            //parametros.put("descripcion", errorDesc);
+            //parametros.put("codigo", response.status());
+            //return new ErrorResponse(errorDesc).generarVista(parametros);
+            res.redirect("/error/"+400);
+//            return res; //todo check, no puedo retornar vista
+        }
+        return res;
+    }
 
 
 }

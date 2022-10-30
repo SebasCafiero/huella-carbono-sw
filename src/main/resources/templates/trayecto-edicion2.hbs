@@ -5,11 +5,11 @@
     <link rel="icon" href="/img/logo.png">
     {{#if trayecto}}
     <title>Modificar Trayecto {{trayecto.id}}</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="/js/trayecto.js"></script>
     {{else}}
     <title>Crear Trayecto</title>
     {{/if}}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="/js/trayecto.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/trayecto-edicion.css" >
   </head>
@@ -31,30 +31,38 @@
       </div>
     </header>
     <div class="content">
+      <div class="info">
+        {{#if trayecto}}
+        <span>ID-Trayecto: {{trayecto.id}}</span><br />
+        <span>Miembros: </span>
+        <ul>
+          {{#each miembros}}
+          <li>{{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</li>
+          {{/each}}
+        </ul>
+        {{/if}}
+        {{#with miembroLogueado}}
+        <span>Miembro: {{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</span>
+        {{/with}}
+        <br/><br/>
+      </div>
       <div class="edicion">
-        <span>ID-Trayecto: {{trayecto.id}}</span> <br /><br />
         <!-- Al editar trayecto se usa method post xq html no admite form.put -->
         <form {{#if trayecto}} action="/miembro/{{miembroID}}/trayecto/{{trayecto.id}}" {{else}} action="/miembro/{{miembroID}}/trayecto" {{/if}} method="post">
+          {{#unless trayecto}}
+          <label for="trayecto-compartido-ack">¿Es Trayecto Compartido?</label>
+          <input id="trayecto-compartido-ack" type="checkbox" value="true" name="f-trayecto-compartido-ack" onclick="trayectoCompartido()" />
+          <br/><br/>
+          <div class="form-compartido">
+            <label for="trayecto-id">Ingrese el ID del trayecto compartido: </label>
+            <input id="trayecto-id" type="text" name="f-trayecto-id" value="" disabled/><br/><br/>
+          </div>
+          {{/unless}}
+
           <div class="form-fecha">
             <label for="fecha">Fecha</label>
 <!--            <input id="fecha" type="text" name="f-fecha" value="{{trayecto.mes}}/{{trayecto.año}}" required/>-->
             <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.mes}}/{{trayecto.año}}" {{else}} value="MES/AÑO" {{/if}} required/>
-          </div>
-          <br />
-          <div class="form-miembros">
-            <fieldset>
-              <legend>Miembros</legend>
-              {{#with miembroLogueado}}
-              <input id="logueado" type="checkbox" value="{{id}}" name="f-logueado" checked disabled/>
-              <label for="logueado">{{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</label><br />
-              <input id="logueado-data" type="hidden" value="{{id}}" name="f-logueado-data"/> <!-- Puede omitirse si lo atrapo con la session -->
-              {{/with}}
-              {{#each miembros}} <!-- NO DEBE ESTAR EL MIEMBRO LOGUEADO -->
-              <input id="miembro{{id}}" type="checkbox" value="{{id}}" name="f-miembro"  {{#if contieneTrayecto}}checked{{/if}} />
-              <label for="miembro{{id}}">{{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</label><br />
-              {{/each}}
-              <!-- ver si name="m-miembro[]" como PHP -->
-            </fieldset>
           </div>
           <br />
           <div class="form-tramos">

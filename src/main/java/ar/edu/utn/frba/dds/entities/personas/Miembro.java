@@ -141,6 +141,10 @@ public class Miembro {
         trayectos.add(trayecto); //todo ver si trayecto.agregarMiembro(miembro) y miembro.agregarTrayecto(trayecto) en misma operacion
     }
 
+    public void quitarTrayecto(Trayecto trayecto) {
+        this.trayectos.remove(trayecto);
+    }
+
     public Integer cantidadTrayectos() {
         return trayectos.size();
     }
@@ -156,10 +160,6 @@ public class Miembro {
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 '}';
-    }
-
-    public void quitarTrayecto(Trayecto trayecto) {
-        this.trayectos.remove(trayecto);
     }
 }
 

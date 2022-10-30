@@ -117,6 +117,10 @@ public class Trayecto {
         this.miembros.add(miembro);
     }
 
+    public void quitarMiembro(Miembro miembro) {
+        this.miembros.remove(miembro);
+    }
+
     public Integer cantidadDeMiembros() {
         return miembros.size();
     }
