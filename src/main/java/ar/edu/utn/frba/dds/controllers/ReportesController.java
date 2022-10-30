@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteOrganizacion;
+import ar.edu.utn.frba.dds.login.LoginController;
 import ar.edu.utn.frba.dds.mihuella.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaReportes;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
@@ -21,14 +22,19 @@ public class ReportesController {
     private FachadaReportes fachadaReportes;
     private Repositorio<AreaSectorial> repoAreas;
     private Repositorio<Organizacion> repoOrganizaciones;
+    private LoginController loginController;
 
     public ReportesController() {
         this.fachadaReportes = new FachadaReportes();
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
         this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
+        this.loginController = new LoginController();
     }
 
     public Object generarReporteAgente(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
         int idArea = Integer.parseInt(request.params(("id")));
         AreaSectorial areaSectorial = repoAreas.buscar(idArea);
         if(areaSectorial == null) {
@@ -43,6 +49,9 @@ public class ReportesController {
     }
 
     public Object generarReporteOrganizacion(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
         int idOrganizacion = Integer.parseInt(request.params(("id")));
         Organizacion organizacion = repoOrganizaciones.buscar(idOrganizacion);
         if(organizacion == null) {
@@ -60,12 +69,19 @@ public class ReportesController {
 
 
     public ModelAndView darAlta(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("organizaciones", repoOrganizaciones.buscarTodos()); //podria omitirse y usar this
         return new ModelAndView(parametros, "reporte-creacion.hbs");
     }
     //TODO FUSIONAR DAR ALTA REPORTE
     public ModelAndView darAltaDeUnaOrganizacion(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
         Map<String, Object> parametros = new HashMap<>();
         Organizacion org = repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
         parametros.put("organizaciones", Arrays.asList(org));
@@ -73,6 +89,9 @@ public class ReportesController {
     }
 
     public Response generar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
         int idOrg = Integer.parseInt(request.queryParams("f-organizacion"));
         Organizacion organizacion = repoOrganizaciones.buscar(idOrg);
         LocalDate fecha = LocalDate.now();
@@ -90,6 +109,10 @@ public class ReportesController {
     }
 
     public ModelAndView mostrarTodos(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
         Map<String, Object> parametros = new HashMap<>();
         List<Map<String, Object>> orgs = new ArrayList<>();
         repoOrganizaciones.buscarTodos().forEach(org -> {
@@ -104,6 +127,10 @@ public class ReportesController {
     }
     //TODO FUSIONAR MOSTRAR TODOS
     public ModelAndView mostrarTodosDeUnaOrganizacion(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
         Map<String, Object> parametros = new HashMap<>();
         Organizacion organizacion = repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
         List<Map<String, Object>> orgs = new ArrayList<>(); //para reutilizar #mostrarTodos
@@ -117,6 +144,10 @@ public class ReportesController {
     }
 
     public ModelAndView obtener(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
         int idOrg = Integer.parseInt(request.params("org"));
         Organizacion organizacion;
         int idReporte = Integer.parseInt(request.params("rep"));

@@ -9,6 +9,7 @@ import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.login.LoginController;
 import ar.edu.utn.frba.dds.mihuella.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaTrayectos;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
@@ -24,18 +25,28 @@ import java.util.stream.Collectors;
 public class TrayectosController {
 
     private FachadaTrayectos fachada;
+    private LoginController loginController;
 
     public TrayectosController() {
         this.fachada = new FachadaTrayectos();
+        this.loginController = new LoginController();
     }
 
     public ModelAndView mostrarTodos(Request req, Response res) {
+        if (loginController.chequearValidezAcceso(req, res, true) != null){
+            return loginController.chequearValidezAcceso(req, res, true);
+        }
+
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("trayectos", fachada.obtenerTrayectos());
         return new ModelAndView(parametros, "trayectos.hbs");
     }
 
     public ModelAndView obtener(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
         Map<String, Object> parametros = new HashMap<>();
         int idTrayecto = Integer.parseInt(request.params("id"));
 
@@ -181,6 +192,10 @@ public class TrayectosController {
     }
 
     public ModelAndView darAlta(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
         Map<String, Object> parametros = new HashMap<>();
 
         //todo ver si agregar org al trayecto para filtrar miembros

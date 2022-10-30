@@ -19,6 +19,10 @@ public class MiembroController {
     }
 
     public Object obtener(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
+
         Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id")));
 
         if(miembro == null) {
@@ -30,6 +34,10 @@ public class MiembroController {
     }
 
     public Object eliminar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
+
         Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id")));
 
         if(miembro == null) {
@@ -42,10 +50,17 @@ public class MiembroController {
     }
 
     public Object modificar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
         return "Modificacion de miembros no implementada";
     }
 
     public Object agregar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
+
         MiembroCSVDTO miembroCSVDTO = new ParserJSON<>(MiembroCSVDTO.class).parseElement(request.body());
 
         Miembro miembro = MiembrosMapper.toEntity(miembroCSVDTO);
@@ -61,6 +76,10 @@ public class MiembroController {
     }
 
     public String mostrarTodos(Request request, Response response){
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
+
         List<Miembro> organizaciones = this.repoMiembros.buscarTodos();
         return organizaciones.toString();
     }
