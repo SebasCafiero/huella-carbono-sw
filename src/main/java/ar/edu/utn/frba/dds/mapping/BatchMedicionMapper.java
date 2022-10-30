@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 
 public class BatchMedicionMapper {
     public static BatchMedicion toEntity(BatchMedicionJSONDTO batchMedicionDTO) {
-        List<Medicion> collect = batchMedicionDTO.mediciones.stream()
+        List<Medicion> collect = batchMedicionDTO.getMediciones().stream()
                 .map(MedicionMapper::toEntity).collect(Collectors.toList());
 
         BatchMedicion batchMedicion = new BatchMedicion(collect);
         batchMedicion.setOrganizacion(
                 FactoryRepositorio.get(Organizacion.class)
-                        .buscar(batchMedicionDTO.organizacion)); //El batch es de una organizacion indicada que debe existir previamente
+                        .buscar(batchMedicionDTO.getOrganizacion())); //El batch es de una organizacion indicada que debe existir previamente
 
         return batchMedicion;
     }

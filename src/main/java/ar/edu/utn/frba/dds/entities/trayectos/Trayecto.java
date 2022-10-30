@@ -17,12 +17,16 @@ public class Trayecto {
     private Integer id;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trayecto", cascade = CascadeType.ALL)
     private List<Tramo> tramos;
-    @Transient
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "MIEMBRO_POR_TRAYECTO",
+            joinColumns = { @JoinColumn(name = "trayectp_id") },
+            inverseJoinColumns = { @JoinColumn(name = "miembro_id") }
+    )
     private List<Miembro> miembros;
     @Column
     private Integer compartido;
     @Embedded
-//    @Transient
     private Periodo periodo;
 
     public Trayecto() {
@@ -94,12 +98,11 @@ public class Trayecto {
     }
 
     public Coordenada obtenerPuntoInicial(){
-        return tramos.get(0).getUbicacionInicial().getCoordenada(); //PONER EXCEPCION SI LISTA VACIA O USAR OPTIONAL
-//        return tramos.stream().findFirst().map(t -> t.getUbicacionInicial().getCoordenada()).orElse();
+        return tramos.get(0).getUbicacionInicial().getCoordenada();
     }
 
     public Coordenada obtenerPuntoFinal(){
-        return tramos.get(tramos.size()-1).getUbicacionFinal().getCoordenada(); //PONER EXCEPCION SI LISTA VACIA O USAR OPTIONAL
+        return tramos.get(tramos.size()-1).getUbicacionFinal().getCoordenada();
     }
 
     public Float calcularDistancia(){

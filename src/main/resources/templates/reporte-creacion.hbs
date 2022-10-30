@@ -23,8 +23,8 @@
         <form action="/reporte" method="post">
             <div class="organizaciones">
                 <label for="organizacion">Seleccione la Organizacion:</label>
-                <select id="organizacion" name="f-organizacion">
-                    <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+                <select id="organizacion" name="f-organizacion" required>
+                    <option class="campo-seleccionar" value="" selected disabled>Seleccionar</option>
                     {{#each organizaciones}}
                     <option value="{{id}}">{{razonSocial}}</option>
                 {{/each}}

@@ -4,38 +4,47 @@ import ar.edu.utn.frba.dds.entities.lugares.ClasificacionOrganizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Municipio;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.*;
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
+import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
+import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.login.User;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class SetupInicialJPA {
     private final Repositorio<MedioDeTransporte> repoMedios;
     private final Repositorio<UbicacionGeografica> repoUbicaciones;
     private final RepoOrganizaciones repoOrganizaciones;
     private final Repositorio<Trayecto> repoTrayectos;
+    private final Repositorio<AreaSectorial> repoAreas;
+    private final Repositorio<AgenteSectorial> repoAgentes;
+
+    private final Repositorio<User> repoUsuarios;
 
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
         this.repoUbicaciones = FactoryRepositorio.get(UbicacionGeografica.class);
         this.repoOrganizaciones = (RepoOrganizaciones) FactoryRepositorio.get(Organizacion.class);
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
+        this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
+        this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
+        this.repoUsuarios = FactoryRepositorio.get(User.class);
     }
 
     public void doSetup() {
@@ -45,19 +54,25 @@ public class SetupInicialJPA {
 
         // Medios de transporte y ubicaciones
 
-        Municipio caba = new Municipio("Ciudad Autonoma de Buenos Aires", "Ciudad Autonoma de Buenos Aires", "Argentina");
+        Provincia cabaProvincia = new Provincia("CABA", "Argentina");
+        Municipio cabaMunicipio = new Municipio("Ciudad Autonoma de Buenos Aires", cabaProvincia);
+
+        AgenteSectorial carlos = new AgenteSectorial(cabaProvincia, new ContactoMail("uncontacto@gmail.com", "123"), "1155443322");
+        AgenteSectorial esteban = new AgenteSectorial(cabaMunicipio, new ContactoMail("otrocontacto@gmail.com", "321"), "1122334455");
 
         UbicacionGeografica ubicacionUtnCampus = new UbicacionGeografica(
-                new Direccion(caba, "Ciudad Autonoma de Buenos Aires", "Mozart", 2300),
+                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Mozart", 2300),
                 new Coordenada(-34.659932F, -58.468397F));
         UbicacionGeografica mirallaAlberdi = new UbicacionGeografica(new Coordenada(-34.649292F, -58.499945F));
         UbicacionGeografica sanPedrito = new UbicacionGeografica(new Coordenada(-34.630861F, -58.470063F));
         UbicacionGeografica castroBarros = new UbicacionGeografica(new Coordenada(-34.611624F, -58.421263F));
         UbicacionGeografica ubicacionUtnMedrano = new UbicacionGeografica(
-                new Direccion(caba, "Ciudad Autonoma de Buenos Aires", "Av. Medrano", 591),
+                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Medrano", 591),
                 new Coordenada(-34.598412F, -58.420196F));
 
         this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano);
+        this.repoAreas.agregar(cabaProvincia, cabaMunicipio);
+        this.repoAgentes.agregar(carlos, esteban);
 
         MedioDeTransporte fitito = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.GNC);
         MedioDeTransporte caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
@@ -143,6 +158,15 @@ public class SetupInicialJPA {
         trayecto1.agregarMiembro(juanPerez);
 
         this.repoTrayectos.agregar(trayecto1);
+
+
+        List<Organizacion> organizaciones = new ArrayList<>();
+        organizaciones.add(orgUtnCampus);
+        organizaciones.add(orgUtnMedrano);
+
+        User user = new User("usuario", "1234", organizaciones);
+
+        repoUsuarios.agregar(user);
     }
 
     public void undoSetup() {

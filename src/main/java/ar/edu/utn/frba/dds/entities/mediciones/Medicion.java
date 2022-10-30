@@ -10,10 +10,9 @@ import java.time.LocalDate;
 public class Medicion implements Medible {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "medicion_id")
     private Integer id;
 
-//    @ManyToOne(fetch = FetchType.EAGER, optional = true)
-//    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     @Embedded
     private Categoria categoria;
 
@@ -24,12 +23,11 @@ public class Medicion implements Medible {
     private Float valor;
     
     @Embedded
-    @AttributeOverride(name = "periodicidad",column = @Column(name = "periodicidad"))
+    @AttributeOverride(name = "periodicidad", column = @Column(name = "periodicidad"))
     private Periodo periodo;
 
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "batch_id", referencedColumnName = "id")
-//    private BatchMedicion batchMedicion;
+    public Medicion() {
+    }
 
     public Medicion(Categoria categoria, String unidad, Float valor) {
         this.categoria = categoria;
@@ -37,8 +35,6 @@ public class Medicion implements Medible {
         this.valor = valor;
         this.periodo = new Periodo(LocalDate.now().getYear(), LocalDate.now().getMonthValue()); //todo para que no sea null
     }
-
-    public Medicion() {} //TODO
 
     public Medicion(Categoria categoria, String unidad, float valor, Periodo periodo) {
         this.categoria = categoria;
@@ -97,9 +93,5 @@ public class Medicion implements Medible {
     @Override
     public String toString() {
         return  '\n' + "Medicion { " + "valor = " + valor.toString() + ", unidad = " + unidad + " }";
-    }
-
-    public boolean perteneceAPeriodo(Integer anio, Integer mes) {
-        return periodo.incluye(anio, mes);
     }
 }

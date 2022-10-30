@@ -9,6 +9,7 @@ import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.mihuella.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaTrayectos;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
@@ -16,6 +17,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,18 +37,25 @@ public class TrayectosController {
 
     public ModelAndView obtener(Request request, Response response) {
         Map<String, Object> parametros = new HashMap<>();
-        Trayecto trayecto = fachada.obtenerTrayecto(Integer.parseInt(request.params("id")));
-        parametros.put("trayecto", trayecto);
-        String modo = request.queryParamOrDefault("mode", "view"); //todo evitar querystring y usar JS?
-        if(modo.equals("edit")) {
-            setearCampos(trayecto, parametros);
-            return new ModelAndView(parametros,"trayecto-edicion.hbs");
-        }
-        else if(modo.equals("view")){
-            return new ModelAndView(parametros, "trayecto.hbs");
-        } else
-            return new ModelAndView(null,"ERROR"); //todo no llega por default
+        int idTrayecto = Integer.parseInt(request.params("id"));
 
+        try {
+            Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+            parametros.put("trayecto", trayecto);
+            String modo = request.queryParamOrDefault("mode", "view"); //todo evitar querystring y usar JS?
+            if(modo.equals("edit")) {
+                setearCampos(trayecto, parametros);
+                return new ModelAndView(parametros,"trayecto-edicion.hbs");
+            } else {
+                return new ModelAndView(parametros, "trayecto.hbs");
+            }
+        } catch (NullPointerException e) {
+            response.status(400);
+            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
+            parametros.put("descripcion", errorDesc);
+            parametros.put("codigo", response.status());
+            return new ErrorResponse(errorDesc).generarVista(parametros);
+        }
     }
 
     private void setearCampos(Trayecto trayecto, Map<String, Object> parametros) {
@@ -89,24 +98,40 @@ public class TrayectosController {
 
     public Response modificar(Request request, Response response) {
         Integer id = Integer.parseInt(request.params("id"));
-        Trayecto trayecto = fachada.obtenerTrayecto(id);
-        if(request.queryParams("f-eliminar") != null)
-            if(request.queryParams("f-eliminar").equals("true")) //innecesario quizas
-                return this.eliminar(request, response); //todo crear JS method DELETE desde la pagina
-        asignarCampos(trayecto, request);
-        fachada.modificarTrayecto(trayecto);
+
+        try {
+            Trayecto trayecto = fachada.obtenerTrayecto(id);
+            if(request.queryParams("f-eliminar") != null)
+                if(request.queryParams("f-eliminar").equals("true")) //innecesario quizas
+                    return this.eliminar(request, response); //todo lo deje para mostrar a Eze pero ya está el boton con JS para DELETE
+            asignarCampos(trayecto, request);
+            fachada.modificarTrayecto(trayecto);
+        } catch (NullPointerException e) {
+            response.status(400);
+            String errorDesc = "Trayecto de id "+id+" inexistente";
+            //parametros.put("descripcion", errorDesc);
+            //parametros.put("codigo", response.status());
+            //return new ErrorResponse(errorDesc).generarVista(parametros);
+            response.redirect("/error/"+400);
+            return response; //todo check, no puedo retornar vista
+        }
+
         response.redirect("/trayecto/"+id);
         return response;
     }
 
     private void asignarCampos(Trayecto trayecto, Request req) {
-        String[] fecha = req.queryParams("f-fecha").split("/"); //TODO VALIDAR
+        String fechaActual = LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear();
+        String[] fecha = req.queryParamOrDefault("f-fecha", fechaActual).split("/"); //TODO VALIDAR
         trayecto.setPeriodo(new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0])));
 
-        List<Miembro> miembros = Arrays.stream(req.queryParamsValues("f-miembro")) //todo validar
-                .map(m -> fachada.obtenerMiembro(Integer.parseInt(m)))
-                .collect(Collectors.toList());
-        trayecto.setMiembros(miembros);
+        if(req.queryParamsValues("f-miembro") != null) {
+            List<Miembro> miembros = Arrays.stream(req.queryParamsValues("f-miembro")) //todo validar
+                    .map(m -> fachada.obtenerMiembro(Integer.parseInt(m)))
+                    .collect(Collectors.toList());
+            trayecto.setMiembros(miembros);
+        } else
+            trayecto.setMiembros(new ArrayList<>());
 
         List<Tramo> tramos = new ArrayList<>();
         int cant = 0; //index de cantidad tramos
@@ -125,7 +150,7 @@ public class TrayectosController {
         }
         trayecto.setTramos(tramos);
 
-        if(req.queryParams("f-transporte-nuevo") != null) {
+        if(req.queryParams("f-transporte-nuevo") != null) { //todo faltan validar los campos xq no son required (o poner default)
             MedioDeTransporte transporte = fachada.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-nuevo")));
             Coordenada coorInicial = new Coordenada(
                     Float.parseFloat(req.queryParams("f-lat-inicial-nueva")),
@@ -141,12 +166,19 @@ public class TrayectosController {
     }
 
     public Response eliminar(Request request, Response response) {
-        Trayecto trayecto = fachada.obtenerTrayecto(Integer.parseInt(request.params("id")));
-        fachada.eliminarTrayecto(trayecto);
-//        response.redirect("/trayectos");
+        int id = Integer.parseInt(request.params("id"));
+        try {
+            Trayecto trayecto = fachada.obtenerTrayecto(id);
+            fachada.eliminarTrayecto(trayecto);
+        } catch (NullPointerException e) {
+            String errorDesc = "Trayecto de id "+id+" inexistente.";
+            response.status(400);
+            response.redirect("/error/"+400);
+            //return new ErrorResponse(errorDesc).generarVista(parametros); //todo no puedo retornar vista
+        }
+//        response.redirect("/trayectos"); //redirijo desde JS
         return response;
     }
-    //todo al eliminar, chequear la accion del form que no existiria mas el id?
 
     public ModelAndView darAlta(Request request, Response response) {
         Map<String, Object> parametros = new HashMap<>();
@@ -174,6 +206,5 @@ public class TrayectosController {
         response.redirect("/trayecto/"+trayecto.getId());
         return response;
     }
-
 
 }

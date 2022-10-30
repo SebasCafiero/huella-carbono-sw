@@ -9,6 +9,7 @@ import ar.edu.utn.frba.dds.mihuella.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaReportes;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
+import org.hibernate.SessionException;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -63,7 +64,7 @@ public class ReportesController {
         parametros.put("organizaciones", repoOrganizaciones.buscarTodos()); //podria omitirse y usar this
         return new ModelAndView(parametros, "reporte-creacion.hbs");
     }
-
+    //TODO FUSIONAR DAR ALTA REPORTE
     public ModelAndView darAltaDeUnaOrganizacion(Request request, Response response) {
         Map<String, Object> parametros = new HashMap<>();
         Organizacion org = repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
@@ -72,14 +73,19 @@ public class ReportesController {
     }
 
     public Response generar(Request request, Response response) {
-        Organizacion organizacion = repoOrganizaciones.buscar(Integer.parseInt(request.queryParams("f-organizacion")));
-        if(organizacion == null) {
-            //return new ErrorResponse("La organizacion no existe");
-        }
+        int idOrg = Integer.parseInt(request.queryParams("f-organizacion"));
+        Organizacion organizacion = repoOrganizaciones.buscar(idOrg);
         LocalDate fecha = LocalDate.now();
-        ReporteOrganizacion reporte = fachadaReportes
-                .generarReporteOrganizacion(organizacion, new Periodo(fecha.getYear(), fecha.getMonthValue()));
-        response.redirect("/organizacion/"+organizacion.getId()+"/reporte/"+reporte.getId()); //todo check
+        try {
+            ReporteOrganizacion reporte = fachadaReportes
+                    .generarReporteOrganizacion(organizacion, new Periodo(fecha.getYear(), fecha.getMonthValue()));
+            response.redirect("/organizacion/"+organizacion.getId()+"/reporte/"+reporte.getId());
+        } catch (NullPointerException e) {
+            response.status(400);
+            response.redirect("/error/"+400);
+            return response; //todo check, no puedo retornar vista
+            //return new ErrorResponse("Organización de id "+idOrg+" inexistente");
+        }
         return response;
     }
 
@@ -96,7 +102,7 @@ public class ReportesController {
         parametros.put("organizaciones", orgs); //podria omitirse y usar this
         return new ModelAndView(parametros, "reportes.hbs");
     }
-
+    //TODO FUSIONAR MOSTRAR TODOS
     public ModelAndView mostrarTodosDeUnaOrganizacion(Request request, Response response) {
         Map<String, Object> parametros = new HashMap<>();
         Organizacion organizacion = repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
@@ -111,18 +117,31 @@ public class ReportesController {
     }
 
     public ModelAndView obtener(Request request, Response response) {
-        Organizacion organizacion = repoOrganizaciones.buscar(Integer.parseInt(request.params("org")));
-        Integer idReporte = Integer.parseInt(request.params("rep"));
+        int idOrg = Integer.parseInt(request.params("org"));
+        Organizacion organizacion;
+        int idReporte = Integer.parseInt(request.params("rep"));
         ReporteOrganizacion reporte;
-        try {
-            reporte = organizacion.getReportes().get(idReporte);
-        } catch (IndexOutOfBoundsException e) {
-            throw new RuntimeException("Reporte inexistente"); //todo
-        }
         Map<String, Object> parametros = new HashMap<>();
+        try {
+            organizacion = repoOrganizaciones.buscar(idOrg);
+            reporte = organizacion.getReportes().get(idReporte);
+        } catch (IndexOutOfBoundsException | NullPointerException e) {
+            response.status(400);
+            parametros.put("codigo", response.status());
+            String errorDesc = "Organización de id "+idOrg+" inexistente";
+            if(e instanceof IndexOutOfBoundsException)
+                errorDesc = "Reporte de id "+idReporte+" inexistente";
+            parametros.put("descripcion", errorDesc);
+
+            return new ErrorResponse(errorDesc).generarVista(parametros);
+        } catch (SessionException e) { //todo check
+            response.status(403);
+            parametros.put("codigo", response.status());
+            parametros.put("descripcion", "Acceso no permitido");
+            return new ErrorResponse("Acceso no permitido").generarVista(parametros);
+        }
         parametros.put("organizacion", organizacion);
         parametros.put("reporte", reporte);
-
         return new ModelAndView(parametros, "reporte.hbs");
     }
 

@@ -27,7 +27,6 @@ import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 
 public class FactoryRepositorio {
     private static HashMap<String, Repositorio> repos;

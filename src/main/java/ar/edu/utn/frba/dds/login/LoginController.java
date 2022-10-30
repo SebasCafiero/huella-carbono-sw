@@ -58,6 +58,4 @@ public class LoginController {
         }
         return null;
     }
-
-
 }

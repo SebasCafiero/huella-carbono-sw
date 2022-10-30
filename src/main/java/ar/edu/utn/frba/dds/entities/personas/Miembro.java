@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.entities.personas;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
 import javax.persistence.*;
@@ -14,25 +13,26 @@ import java.util.stream.Collectors;
 public class Miembro {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "miembro_id")
     private Integer id;
 
-    @Column
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column
+    @Column(name = "apellido", nullable = false)
     private String apellido;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_documento")
+    @Column(name = "tipo_documento", nullable = false)
     private TipoDeDocumento tipoDeDocumento;
 
-    @Column(name = "numero_documento")
+    @Column(name = "numero_documento", nullable = false, unique = true)
     private int nroDocumento;
 
     @ManyToMany(mappedBy = "miembros", fetch = FetchType.EAGER)
     private Set<Sector> sectoresDondeTrabaja;
 
-    @Transient
+    @ManyToMany(mappedBy = "miembros")
     private List<Trayecto> trayectos;
 
     public Miembro() {
@@ -148,25 +148,6 @@ public class Miembro {
     public List<Trayecto> getTrayectos() {
         return trayectos;
     }
-
-//    @Override
-//    public String toString() {
-//        return "Miembro{" +
-//                "nombre='" + nombre + '\'' +
-//                ", apellido='" + apellido + '\'' +
-//                ", tipoDeDocumento=" + tipoDeDocumento +
-//                ", nroDocumento=" + nroDocumento +
-//                ", sectoresDondeTrabaja=" + sectoresDondeTrabaja +
-//                ", trayectos=" + trayectos +
-//                '}';
-//    }
-    /*TO string raro que no quisimos borrar por si era util
-    @Override
-    public String toString() {
-        return "Miembro{<br>" +
-                "&nbsp;&nbsp;&nbsp;&nbsp;nombre='" + nombre + '\'' +
-                "}<br>";
-    }*/
 
     @Override
     public String toString() {

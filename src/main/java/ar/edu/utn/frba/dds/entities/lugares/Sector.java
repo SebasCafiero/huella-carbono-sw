@@ -15,7 +15,7 @@ public class Sector {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
