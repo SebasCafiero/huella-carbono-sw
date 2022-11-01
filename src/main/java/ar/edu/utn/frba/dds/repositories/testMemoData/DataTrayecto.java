@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.repositories.testMemoData;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
@@ -42,6 +43,24 @@ public class DataTrayecto {
             Coordenada coor2 = new Coordenada(100F, 130F);
             Coordenada coor3 = new Coordenada(200F, 300F);
             Coordenada coor4 = new Coordenada(500F, 480F);
+
+            UbicacionGeografica ubicacion1 = new UbicacionGeografica(new Direccion(), coor1);
+            UbicacionGeografica ubicacion2 = new UbicacionGeografica("Belgrano", "Juramento", 123, coor2);
+            UbicacionGeografica ubicacion3 = new UbicacionGeografica("Balvanera", "Lavalle", 456, coor3);
+            UbicacionGeografica ubicacion4 = new UbicacionGeografica("San Telmo", "Carlos Calvo", 9876, coor4);
+            UbicacionGeografica ubicacion5 = new UbicacionGeografica("Flores", "Varela", 555, coor1);
+
+            Parada parada1subteA = new Parada(ubicacion1, 10F, 0F);
+            Parada parada2subteA = new Parada(ubicacion2, 10F, 10F);
+            Parada parada3subteA = new Parada(ubicacion3, 10F, 10F);
+            Parada parada1bondi47 = new Parada(ubicacion4, 5F, 0F);
+            Parada parada2bondi47 = new Parada(ubicacion1, 5F, 5F);
+            Parada parada1tren = new Parada(ubicacion5, 1F, 0F);
+
+            ((TransportePublico) subteA).agregarParadas(parada1subteA, parada2subteA, parada3subteA);
+            ((TransportePublico) bondi47).agregarParadas(parada1bondi47, parada2bondi47);
+            ((TransportePublico) trenSarmiento).agregarParada(parada1tren);
+
 
             Trayecto t1 = new Trayecto();
             Tramo t11 = new Tramo(subteA, coor1, coor2);

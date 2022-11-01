@@ -114,7 +114,8 @@ public class Trayecto {
     }
 
     public void agregarMiembro(Miembro miembro) {
-        this.miembros.add(miembro);
+        if(!miembros.contains(miembro))
+            this.miembros.add(miembro);
     }
 
     public void quitarMiembro(Miembro miembro) {

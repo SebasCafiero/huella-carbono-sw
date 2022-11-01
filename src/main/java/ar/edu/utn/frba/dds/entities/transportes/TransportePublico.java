@@ -79,12 +79,12 @@ public class TransportePublico extends MedioDeTransporte {
         return linea.equals(other.linea);
     }
 
-    private Parada buscarParada(Coordenada coordenada) {
-        //TODO Por el momento busca la parada que coincida, quizás debería buscar la mas cercana
+    public Parada buscarParada(Coordenada coordenada) {
+        Parada paradaRandom = new Parada(new Coordenada(0F, 0F), 0F, 0F);
         return this.paradas.stream()
                 .filter(parada -> parada.getCoordenada().esIgualAOtraCoordenada(coordenada))
                 .findFirst()
-                .orElse(null);
+                .orElse(paradaRandom); //TODO lo puse para pruebas web, si afecta a otra cosa sacarlo
     }
 
     @Override
