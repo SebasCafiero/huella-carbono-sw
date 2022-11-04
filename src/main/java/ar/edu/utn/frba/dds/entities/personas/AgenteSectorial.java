@@ -1,7 +1,9 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
+import ar.edu.utn.frba.dds.login.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +16,10 @@ public class AgenteSectorial {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "agente_id")
     private Integer id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    protected User usuario;
 
     @Transient
     private AreaSectorial area;
@@ -90,6 +96,10 @@ public class AgenteSectorial {
     public AreaSectorial getArea() {
         return area;
     }
+
+    public User getUsuario() {return usuario;}
+
+    public void setUsuario(User usuario) {this.usuario = usuario;}
 
     @Override
     public String toString() {

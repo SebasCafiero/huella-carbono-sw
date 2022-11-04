@@ -16,18 +16,10 @@ public class User {
     String username;
     @Column (name = "password")
     String password;
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Organizacion> organizaciones;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public User(String username, String password, List<Organizacion> organizaciones) {
-        this.username = username;
-        this.password = password;
-        this.organizaciones = organizaciones;
     }
 
     public User() {}
@@ -41,8 +33,4 @@ public class User {
     public String getPassword() {
         return password;
     }
-
-    public List<Organizacion> getOrganizaciones() {return organizaciones;}
-
-    public void setOrganizaciones(List<Organizacion> organizaciones) {this.organizaciones = organizaciones;}
 }
