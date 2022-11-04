@@ -69,6 +69,7 @@ public class Router {
         Spark.get("/reportes/organizacion/:id", reportesController::generarReporteOrganizacion);
 
 
+
         /* Endpoints para la GUI */
         HomeController homeController = new HomeController();
         LoginController loginController = new LoginController();
@@ -85,11 +86,10 @@ public class Router {
         Spark.post("/organizacion/:id/reporte", reportesController::generar);
 
         Spark.get("/miembro/:id/trayecto", trayectosController::mostrarTodosYCrear, engine);
-//        Spark.post("/miembro/:id/trayecto", trayectosController::agregar);
-        Spark.post("/miembro/:id/trayecto", trayectosController::agregar2);
+        Spark.post("/miembro/:id/trayecto", trayectosController::agregar);
         Spark.get("/miembro/:miembro/trayecto/:trayecto", trayectosController::mostrarYEditar, engine); //TODO NO VALIDA EL MIEMBRO
-        Spark.post("/miembro/:miembro/trayecto/:trayecto", trayectosController::modificar2);
-        Spark.delete("/miembro/:miembro/trayecto/:trayecto", trayectosController::eliminar2);
+        Spark.post("/miembro/:miembro/trayecto/:trayecto", trayectosController::modificar);
+        Spark.delete("/miembro/:miembro/trayecto/:trayecto", trayectosController::eliminar);
 
         Spark.delete("trayecto/:id", trayectosController::borrar); //Para eliminar definitivamente el trayecto (admin)
 

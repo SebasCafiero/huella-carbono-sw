@@ -49,30 +49,55 @@
               <table class="tramos">
                 <tr>
                   <th>ID</th>
-                  <th>COORDENADAS</th>
                   <th>TRANSPORTE</th>
+                  <th>UBICACION INICIAL</th>
+                  <th>UBICACION FINAL</th>
                 </tr>
                 {{#each tramos}}
-                <tr>
-                  <td>{{id}}</td>
-                  <td> <!-- VER DE PONER UBICACION -->
-                    <table class="coordenadas">
-                      <tr>
-                        <th colspan="2">INICIALES</th>
-                        <th colspan="2">FINALES</th>
-                      </tr>
-                      <tr>
-                        <td>LATITUD</td><td><i>{{ubicacionInicial.coordenada.latitud}}</i></td>
-                        <td>LATITUD</td><td><i>{{ubicacionFinal.coordenada.latitud}}</i></td>
-                      </tr>
-                      <tr>
-                        <td>LONGITUD</td><td><i>{{ubicacionInicial.coordenada.longitud}}</i></td>
-                        <td>LONGITUD</td><td><i>{{ubicacionFinal.coordenada.longitud}}</i></td>
-                      </tr>
-                    </table>
-                  </td>
-                  <td><i>{{medioDeTransporte.clasificacion}}</i></td>
-                </tr>
+                  <tr>
+                    <td>{{id}}</td>
+                    <td><i>{{transporteCLASIFICACION}}</i></td>
+                    <td>
+                      <table class="ubicaciones">
+                        <tr>
+                          <th>DIRECCION</th>
+                          <th>COORDENADAS</th>
+                        </tr>
+                        <tr>
+                          <td>
+                            {{#if paradaInicialID}}<p><i>Parada {{paradaInicialID}} - {{direccionInicial.localidad}}</i></p>{{/if}}
+                            <p><i>{{direccionInicial.calle}} {{direccionInicial.numero}}</i></p>
+                          </td>
+                          <td>
+                            <table class="coordenadas">
+                              <tr><td>LATITUD</td><td><i>{{latitudInicial}}</i></td></tr>
+                              <tr><td>LONGITUD</td><td><i>{{longitudInicial}}</i></td></tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td>
+                      <table class="ubicaciones">
+                        <tr>
+                          <th>DIRECCION</th>
+                          <th>COORDENADAS</th>
+                        </tr>
+                        <tr>
+                          <td>
+                            {{#if paradaFinalID}}<p><i>Parada {{paradaFinalID}} - {{direccionFinal.localidad}}</i></p>{{/if}}
+                            <p><i>{{direccionFinal.calle}} {{direccionFinal.numero}}</i></p>
+                          </td>
+                          <td>
+                            <table class="coordenadas">
+                              <tr><td>LATITUD</td><td><i>{{latitudFinal}}</i></td></tr>
+                              <tr><td>LONGITUD</td><td><i>{{longitudFinal}}</i></td></tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
                 {{/each}}
               </table>
             </td>
