@@ -14,11 +14,15 @@ table.particular {
 .particular .tramos {
     padding: 5px;
     margin: auto;
-    border-spacing: 3px 10px;
+    border-spacing: 3px 15px;
 }
 
 .particular .coordenadas {
     border-spacing: 2px 5px;
+    margin: auto;
+}
+
+.particular .ubicaciones {
     margin: auto;
 }
 
@@ -27,6 +31,11 @@ table.particular {
     border-spacing: 3px 10px;
     border-collapse: collapse;
     padding: 10px;
+}
+
+.particular > tbody > tr > th, .particular > tbody > tr > td {
+    /*border: 1px solid black;*/
+    border-radius:12px;
 }
 
 /*.particular > tbody > tr > th:first-child {

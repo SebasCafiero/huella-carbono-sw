@@ -40,7 +40,7 @@ public class RepoTrayectosMemoria<T> extends RepositorioMemoria<Trayecto> {
                 List<Parada> paradas = ((TransportePublico) mt).getParadas();
                 paradas.forEach(p -> {
                     if(!repoParadas.buscarTodos().contains(p))
-                        repoParadas.agregar(p);
+                        repoParadas.agregar(p); //todo quizas sacar de acá y que las ids se establezcan por cada transporte!
                 });
             }
         });

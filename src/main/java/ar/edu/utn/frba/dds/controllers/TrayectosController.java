@@ -184,7 +184,8 @@ public class TrayectosController {
             return editar2(req, res);
 //            return editar(req, res);
         }
-        return obtener(req, res);
+//        return obtener(req, res);
+        return obtener2(req, res);
     }
 
     public ModelAndView obtener(Request req, Response res) {
@@ -341,10 +342,10 @@ public class TrayectosController {
         parametros.put("miembroLogueado", mapeoMiembro(miembro));
 
         List<Map<String, Object>> transportes = new ArrayList<>();
-        transportes.add(mapeoTranspotes("publico"));
-        transportes.add(mapeoTranspotes("particular"));
-        transportes.add(mapeoTranspotes("ecologico"));
-        transportes.add(mapeoTranspotes("contratado"));
+        transportes.add(mapeoTransportes("publico"));
+        transportes.add(mapeoTransportes("particular"));
+        transportes.add(mapeoTransportes("ecologico"));
+        transportes.add(mapeoTransportes("contratado"));
 
         parametros.put("transportesTotales", transportes);
 //        List<Map<String, Object>> miembros = new ArrayList<>();
@@ -361,7 +362,7 @@ public class TrayectosController {
         return new ModelAndView(parametros, "/trayecto-edicion2.hbs");
     }
 
-    private Map<String, Object> mapeoTranspotes(String type) {
+    private Map<String, Object> mapeoTransportes(String type) {
         Map<String, Object> transportesMap = new HashMap<>();
         List<MedioDeTransporte> transportes = this.fachada.obtenerTransportes();
 
@@ -436,15 +437,15 @@ public class TrayectosController {
         List<Tramo> tramos = new ArrayList<>();
         int cant = 0; //index de cantidad tramos
         while(req.queryParams("f-transporte-"+cant) != null) { //uso transporte, pero podria ser cualquier campo
-            MedioDeTransporte transporte = fachada.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-"+cant)));
-            Coordenada coorInicial;
-            Coordenada coorFinal;
-
+            Tramo tramo;
             if((req.queryParams("f-transporte-parada-inicial-"+cant) != null) || (req.queryParams("f-lat-inicial-"+cant) != null)) {
+                MedioDeTransporte transporte = fachada.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-"+cant)));
+                Coordenada coorInicial;
+                Coordenada coorFinal;
                 if(transporte instanceof TransportePublico) {
                     int idInicial = Integer.parseInt(req.queryParams("f-transporte-parada-inicial-"+cant));
                     int idFinal = Integer.parseInt(req.queryParams("f-transporte-parada-final-"+cant));
-
+                    //todo poner try o validar que las ids sean del transporte correspondiente
                     Parada paradaInicial = ((TransportePublico) transporte).getParadas().stream().filter(p -> p.getId() == idInicial).findFirst().get(); //TRY
                     Parada paradaFinal = ((TransportePublico) transporte).getParadas().stream().filter(p -> p.getId() == idFinal).findFirst().get();
 
@@ -458,12 +459,12 @@ public class TrayectosController {
                             Float.parseFloat(req.queryParams("f-lat-final-"+cant)),
                             Float.parseFloat(req.queryParams("f-lon-final-"+cant)));
                 }
+                tramo = new Tramo(transporte, coorInicial, coorFinal);
             } else { //Cuando se deja sin modificar el tramo
-                coorInicial = trayecto.getTramos().get(cant).getUbicacionInicial().getCoordenada(); //TODO así como ver el seteo del id, ver el orden de la lista (indice es cant?) o cómo buscarlo
-                coorFinal = trayecto.getTramos().get(cant).getUbicacionFinal().getCoordenada();
+//                coorInicial = trayecto.getTramos().get(cant).getUbicacionInicial().getCoordenada(); //TODO así como ver el seteo del id, ver el orden de la lista (indice es cant?) o cómo buscarlo
+//                coorFinal = trayecto.getTramos().get(cant).getUbicacionFinal().getCoordenada();
+                tramo = trayecto.getTramos().get(cant);
             }
-
-            Tramo tramo = new Tramo(transporte, coorInicial, coorFinal);
             tramo.setId(cant); //TODO VER COMO SETEAR EL ID (es propio de cada trayecto?)
             tramos.add(tramo);
             cant++;
@@ -474,6 +475,7 @@ public class TrayectosController {
             MedioDeTransporte transporte = fachada.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-nuevo")));
             Coordenada coorInicial;
             Coordenada coorFinal;
+            Tramo tramoNuevo;
 
             if(transporte instanceof TransportePublico) {
                 int idInicial = Integer.parseInt(req.queryParams("f-transporte-parada-inicial-nueva"));
@@ -482,8 +484,10 @@ public class TrayectosController {
                 Parada paradaInicial = ((TransportePublico) transporte).getParadas().stream().filter(p -> p.getId() == idInicial).findFirst().get(); //TRY
                 Parada paradaFinal = ((TransportePublico) transporte).getParadas().stream().filter(p -> p.getId() == idFinal).findFirst().get();
 
-                coorInicial = paradaInicial.getCoordenada(); //todo cambiar que el tramo tenga la parada
-                coorFinal = paradaFinal.getCoordenada();
+                UbicacionGeografica ubicacionInicial = paradaInicial.getUbicacion(); //todo cambiar que el tramo tenga la parada
+                UbicacionGeografica ubicacionFinal = paradaFinal.getUbicacion();
+
+                tramoNuevo = new Tramo(transporte, ubicacionInicial, ubicacionFinal);
 
             } else {
                 coorInicial = new Coordenada(
@@ -492,9 +496,9 @@ public class TrayectosController {
                 coorFinal = new Coordenada(
                         Float.parseFloat(req.queryParams("f-lat-final-nueva")),
                         Float.parseFloat(req.queryParams("f-lon-final-nueva")));
+                tramoNuevo = new Tramo(transporte, coorInicial, coorFinal); //todo falta obtener direccion
             }
 
-            Tramo tramoNuevo = new Tramo(transporte, coorInicial, coorFinal);
             tramoNuevo.setId(cant);
             tramos.add(tramoNuevo);
             //cant++;
@@ -519,10 +523,10 @@ public class TrayectosController {
             parametros.put("miembros", miembros);
 
             List<Map<String, Object>> transportes = new ArrayList<>();
-            transportes.add(mapeoTranspotes("publico"));
-            transportes.add(mapeoTranspotes("particular"));
-            transportes.add(mapeoTranspotes("ecologico"));
-            transportes.add(mapeoTranspotes("contratado"));
+            transportes.add(mapeoTransportes("publico"));
+            transportes.add(mapeoTransportes("particular"));
+            transportes.add(mapeoTransportes("ecologico"));
+            transportes.add(mapeoTransportes("contratado"));
             parametros.put("transportesTotales", transportes);
 
             return new ModelAndView(parametros, "trayecto-edicion2.hbs");
@@ -613,6 +617,25 @@ public class TrayectosController {
 //        res.redirect("/miembro/" + idMiembro + "/trayecto?action=list"); //redirijo desde JS
         return res;
     }
+
+    public ModelAndView obtener2(Request req, Response res) {
+        Map<String, Object> parametros = mapUser(req, res);
+        int idTrayecto = Integer.parseInt(req.params("trayecto"));
+        int idMiembro = Integer.parseInt(req.params("miembro"));
+        try { //todo no se valida que el trayecto sea del miembro (xq falta validar el user)
+            Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+            parametros.put("trayecto", mapeoTrayecto2(trayecto));
+            parametros.put("miembroID", idMiembro);
+            return new ModelAndView(parametros, "trayecto2.hbs");
+        } catch (NullPointerException e) {
+            res.status(400);
+            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
+            parametros.put("descripcion", errorDesc);
+            parametros.put("codigo", res.status());
+            return new ErrorResponse(errorDesc).generarVista(parametros);
+        }
+    }
+
 
     public Response borrar(Request req, Response res) {
         Integer idTrayecto = Integer.parseInt(req.params("id"));
