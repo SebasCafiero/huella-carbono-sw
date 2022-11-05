@@ -6,47 +6,143 @@ import com.opencsv.bean.processor.PreAssignmentProcessor;
 public class TramoCSVDTO2 {
 
     @CsvBindByName(column = "TrayectoId")
-    public int idTrayecto;
+    private int idTrayecto;
 
     @CsvBindByName(column = "MiembroDNI")
-    public int idMiembro;
+    private int idMiembro;
 
     @CsvBindByName(column = "IdCompartido")
-    public int idTrayectoCompartido;
+    private int idTrayectoCompartido;
 
     @CsvBindByName(column = "LatitudInicial")
-    public float latInicial;
+    private float latInicial;
 
     @CsvBindByName(column = "LongitudInicial")
-    public float longInicial;
+    private float longInicial;
 
     @CsvBindByName(column = "LatitudFinal")
-    public float latFinal;
+    private float latFinal;
 
     @CsvBindByName(column = "LongitudFinal")
-    public float longFinal;
+    private float longFinal;
 
     @PreAssignmentProcessor(processor = ProcesarEspacios.class)
     @CsvBindByName(column = "Tipo")
-    public String tipoTransporte;
+    private String tipoTransporte;
 
     @PreAssignmentProcessor(processor = ProcesarEspacios.class)
     @CsvBindByName(column = "Atributo1")
-    public String subtipoTransporte;
+    private String subtipoTransporte;
 
     @PreAssignmentProcessor(processor = ProcesarEspacios.class)
     @CsvBindByName(column = "Atributo2")
-    public String info;
+    private String info;
 
     @CsvBindByName(column = "Periodicidad")
-    public char periodicidad;
+    private char periodicidad;
 
     @PreAssignmentProcessor(processor = ProcesarEspacios.class)
     @CsvBindByName(column = "Fecha")
-    public String fecha;
+    private String fecha;
 
     public TramoCSVDTO2() {
 
+    }
+
+    public int getIdTrayecto() {
+        return idTrayecto;
+    }
+
+    public void setIdTrayecto(int idTrayecto) {
+        this.idTrayecto = idTrayecto;
+    }
+
+    public int getIdMiembro() {
+        return idMiembro;
+    }
+
+    public void setIdMiembro(int idMiembro) {
+        this.idMiembro = idMiembro;
+    }
+
+    public int getIdTrayectoCompartido() {
+        return idTrayectoCompartido;
+    }
+
+    public void setIdTrayectoCompartido(int idTrayectoCompartido) {
+        this.idTrayectoCompartido = idTrayectoCompartido;
+    }
+
+    public float getLatInicial() {
+        return latInicial;
+    }
+
+    public void setLatInicial(float latInicial) {
+        this.latInicial = latInicial;
+    }
+
+    public float getLongInicial() {
+        return longInicial;
+    }
+
+    public void setLongInicial(float longInicial) {
+        this.longInicial = longInicial;
+    }
+
+    public float getLatFinal() {
+        return latFinal;
+    }
+
+    public void setLatFinal(float latFinal) {
+        this.latFinal = latFinal;
+    }
+
+    public float getLongFinal() {
+        return longFinal;
+    }
+
+    public void setLongFinal(float longFinal) {
+        this.longFinal = longFinal;
+    }
+
+    public String getTipoTransporte() {
+        return tipoTransporte;
+    }
+
+    public void setTipoTransporte(String tipoTransporte) {
+        this.tipoTransporte = tipoTransporte;
+    }
+
+    public String getSubtipoTransporte() {
+        return subtipoTransporte;
+    }
+
+    public void setSubtipoTransporte(String subtipoTransporte) {
+        this.subtipoTransporte = subtipoTransporte;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public char getPeriodicidad() {
+        return periodicidad;
+    }
+
+    public void setPeriodicidad(char periodicidad) {
+        this.periodicidad = periodicidad;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     @Override

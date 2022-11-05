@@ -15,8 +15,10 @@ public class Trayecto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trayecto", cascade = CascadeType.ALL)
     private List<Tramo> tramos;
+
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "MIEMBRO_POR_TRAYECTO",
@@ -24,8 +26,10 @@ public class Trayecto {
             inverseJoinColumns = { @JoinColumn(name = "miembro_id") }
     )
     private List<Miembro> miembros;
+
     @Column
     private Integer compartido;
+
     @Embedded
     private Periodo periodo;
 

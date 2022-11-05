@@ -10,12 +10,12 @@ import java.util.List;
 public class RepositorioPersistente<T> implements Repositorio<T> {
     private final DAOHibernate<T> dao;
 
-    public DAOHibernate<T> getDao() {
-        return dao;
-    }
-
     public RepositorioPersistente(DAOHibernate<T> dao) {
         this.dao = dao;
+    }
+
+    public DAOHibernate<T> getDao() {
+        return dao;
     }
 
     @Override

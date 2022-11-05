@@ -86,8 +86,8 @@ public class EnviadorReportes {
         }
 
         AreaSectorial areaReporte = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));
-        organizaciones.get(0).agregarContactoMail("cuentaejemplodds2@gmail.com");
-        organizaciones.get(1).agregarContactoMail("rumplestilskink@gmail.com");
+        organizaciones.get(0).agregarContactoMail(new ContactoMail("cuentaejemplodds2@gmail.com"));
+        organizaciones.get(1).agregarContactoMail(new ContactoMail("rumplestilskink@gmail.com"));
 
         areaReporte.agregarOrganizacion(organizaciones.get(0));
         areaReporte.agregarOrganizacion(organizaciones.get(1));
@@ -95,7 +95,7 @@ public class EnviadorReportes {
         AgenteSectorial agente = new AgenteSectorial(areaReporte);
         areaReporte.setAgente(agente);
 //        agente.setContactoMail(new ContactoMail("cuentaejemplodds2", ""));
-        agente.setContactoMail(new ContactoMail("cuentaejemplodds1", ns.getString("password")));
+        agente.setMail(new ContactoMail("cuentaejemplodds1", ns.getString("password")));
         FachadaReportes fachadaReportes = new FachadaReportes();
         fachadaReportes
                 .setNotificador(new NotificadorReportesMail())

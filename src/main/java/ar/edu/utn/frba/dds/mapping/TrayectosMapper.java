@@ -1,33 +1,10 @@
 package ar.edu.utn.frba.dds.mapping;
 
-import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
-import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mihuella.dto.NuevoTrayectoDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.TramoCSVDTO;
 import ar.edu.utn.frba.dds.mihuella.dto.TrayectoCompartidoDTO;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.text.CharacterIterator;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TrayectosMapper {
-
-    public static void map(JSONArray trayectosDTO, List<Trayecto> trayectos){
-        trayectosDTO.forEach(itemTrayecto -> {
-            JSONObject trayectoDTO = (JSONObject) itemTrayecto;
-
-            Trayecto trayecto = new Trayecto();
-            List<Tramo> tramos = new ArrayList<>();
-
-            TramosMapper.map(trayectoDTO.optJSONArray("tramos"), tramos);
-
-            trayecto.setId(trayectoDTO.optInt("id"));
-            trayecto.setTramos(tramos);
-        });
-    }
 
     public static TrayectoCompartidoDTO toTrayectoCompartidoDTO(TramoCSVDTO tramo) {
         TrayectoCompartidoDTO trayectoCompartidoDTO = new TrayectoCompartidoDTO();

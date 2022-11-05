@@ -19,7 +19,7 @@ public class FactorEmisionController {
         this.repositorio = FactoryRepositorio.get(FactorEmision.class);
     }
 
-    public Object modificar(Request request, Response response){
+    public Object modificar(Request request, Response response) {
         FactorEmision factorEmision = FactorEmisionMapper.toEntity(new ParserJSON<>(FactorEmisionJSONDTO.class).parseElement(request.body()));
         this.repositorio.modificar(Integer.parseInt(request.params("id")), factorEmision);
         return "Factor de emision de id : " + request.params("id") + " modificado correctamente.";

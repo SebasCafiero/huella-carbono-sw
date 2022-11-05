@@ -7,9 +7,7 @@ import ar.edu.utn.frba.dds.mihuella.dto.BatchMedicionJSONDTO;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 
 import java.util.List;
-import java.time.LocalDate;
 import java.util.stream.Collectors;
-
 
 public class BatchMedicionMapper {
     public static BatchMedicion toEntity(BatchMedicionJSONDTO batchMedicionDTO) {

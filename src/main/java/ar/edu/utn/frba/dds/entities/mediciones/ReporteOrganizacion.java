@@ -1,13 +1,10 @@
 package ar.edu.utn.frba.dds.entities.mediciones;
 
-import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.Set;
 
 public class ReporteOrganizacion {
     private Float consumoMediciones;
@@ -16,7 +13,6 @@ public class ReporteOrganizacion {
     private Map<Miembro, Float> consumoPorMiembro;
     private Float consumoTotal;
     private LocalDate fechaCreacion;
-    private Integer id;
     private Periodo periodoReferencia;
 
     public ReporteOrganizacion() {
@@ -77,11 +73,13 @@ public class ReporteOrganizacion {
         this.fechaCreacion = fechaCreacion;
     }
 
+
     public Periodo getPeriodoReferencia() {
         return periodoReferencia;
     }
 
     public void setPeriodoReferencia(Periodo periodoReferencia) {
         this.periodoReferencia = periodoReferencia;
+
     }
 }

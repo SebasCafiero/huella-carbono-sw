@@ -34,7 +34,6 @@ public class BatchMedicionController {
         return json;
     }
 
-
     public Object agregar(Request request, Response response){
         BatchMedicion batchMedicion = BatchMedicionMapper.toEntity(
                 new ParserJSON<>(BatchMedicionJSONDTO.class).parseElement(request.body()));
@@ -46,7 +45,6 @@ public class BatchMedicionController {
         }
         return "BatchMedicion agregado correctamente.";
     }
-
 
     public Object eliminar(Request request, Response response){
         BatchMedicion batchMedicion = this.repositorio.buscar(Integer.parseInt(request.params("id")));
