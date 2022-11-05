@@ -18,13 +18,10 @@ public class HomeController {
 
     private final Repositorio<AgenteSectorial> repoAgente;
 
-    private UserUtils userUtils;
-
     public HomeController(){
         this.loginController = new LoginController();
         this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
         this.repoAgente = FactoryRepositorio.get(AgenteSectorial.class);
-        this.userUtils = new UserUtils();
     }
 
     public ModelAndView inicio(Request request, Response response) {
@@ -34,9 +31,6 @@ public class HomeController {
     public ModelAndView menu(Request request, Response response) {
         if (loginController.chequearValidezAcceso(request, response, true) != null){
             return loginController.chequearValidezAcceso(request, response, true);
-        }
-        if(repoMiembros.findByUser(userUtils.getUsuarioLogueado(request).getId()).isPresent()){
-            return new ModelAndView(null, "error.hbs");
         }
 
         return new ModelAndView(null, "menu.hbs");
