@@ -21,11 +21,6 @@ public class RepoMiembrosMemoria<T> extends RepositorioMemoria<Miembro> implemen
         return this.getDao().buscar(condicionDocumento(tipoDeDocumento, nroDocumento)).stream().findFirst();
     }
 
-    @Override
-    public Optional<Miembro> findByUser(Integer id) {
-        return Optional.empty();
-    }
-
     private Predicate<Miembro> condicionDocumento(TipoDeDocumento tipoDeDocumento, Integer nroDocumento) {
         return miembro -> miembro.getTipoDeDocumento() != null && miembro.getNroDocumento() != null &&
                 Objects.equals(miembro.getTipoDeDocumento(), tipoDeDocumento) &&

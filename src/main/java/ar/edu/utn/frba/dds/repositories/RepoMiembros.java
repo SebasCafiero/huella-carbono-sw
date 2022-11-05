@@ -8,6 +8,4 @@ import java.util.Optional;
 
 public interface RepoMiembros extends Repositorio<Miembro> {
     Optional<Miembro> findByDocumento(TipoDeDocumento tipoDeDocumento, Integer nroDocumento);
-
-    Optional<Miembro> findByUser(Integer id);
 }

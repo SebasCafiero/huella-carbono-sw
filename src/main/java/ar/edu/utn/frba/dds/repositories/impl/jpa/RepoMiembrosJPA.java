@@ -23,10 +23,6 @@ public class RepoMiembrosJPA<T> extends RepositorioPersistente<Miembro> implemen
     public Optional<Miembro> findByDocumento(TipoDeDocumento tipoDeDocumento, Integer nroDocumento) {
         return this.getDao().buscar(condicionDocumento(tipoDeDocumento, nroDocumento)).stream().findFirst();
     }
-    @Override
-    public Optional<Miembro> findByUser(Integer id) {
-        return this.getDao().buscar(condicionUserId(id)).stream().findFirst();
-    }
 
     private CriteriaQuery<Miembro> condicionDocumento(TipoDeDocumento tipoDeDocumento, Integer nroDocumento) {
         CriteriaBuilder criteriaBuilder = criteriaBuilder();
@@ -39,19 +35,6 @@ public class RepoMiembrosJPA<T> extends RepositorioPersistente<Miembro> implemen
         Predicate condicionMiembro = criteriaBuilder.and(condicionTipo, condicionNro);
 
         categoriaQuery.where(condicionMiembro);
-
-        return categoriaQuery;
-    }
-
-    public CriteriaQuery<Miembro> condicionUserId(Integer id){
-        CriteriaBuilder criteriaBuilder = criteriaBuilder();
-        CriteriaQuery<Miembro> categoriaQuery = criteriaBuilder.createQuery(Miembro.class);
-
-        Root<Miembro> condicionRaiz = categoriaQuery.from(Miembro.class);
-
-        Predicate condicionId = criteriaBuilder.equal(condicionRaiz.get("usuario"), id);
-
-        categoriaQuery.where(condicionId);
 
         return categoriaQuery;
     }

@@ -164,18 +164,9 @@ public class SetupInicialJPA {
         organizaciones.add(orgUtnCampus);
         organizaciones.add(orgUtnMedrano);
 
-        User user1 = new User("usuario1", "1234");
-        User user2 = new User("usuario2", "1234");
-        User user3 = new User("usuario3", "1234");
+        User user = new User("usuario", "1234", organizaciones);
 
-        //Agente Sectorial
-        esteban.setUsuario(user1);
-        //Miembro
-        juanPerez.setUsuario(user2);
-
-        repoUsuarios.agregar(user1);
-        repoUsuarios.agregar(user2);
-        repoUsuarios.agregar(user3);
+        repoUsuarios.agregar(user);
     }
 
     public void undoSetup() {

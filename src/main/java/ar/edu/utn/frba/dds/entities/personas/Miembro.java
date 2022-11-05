@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds.entities.personas;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
-import ar.edu.utn.frba.dds.login.User;
 
 import javax.persistence.*;
 import java.util.*;
@@ -16,10 +15,6 @@ public class Miembro {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "miembro_id")
     private Integer id;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    protected User usuario;
 
     @Column(name = "nombre", nullable = false)
     private String nombre;
@@ -153,10 +148,6 @@ public class Miembro {
     public List<Trayecto> getTrayectos() {
         return trayectos;
     }
-
-    public User getUsuario() {return usuario;}
-
-    public void setUsuario(User usuario) {this.usuario = usuario;}
 
     @Override
     public String toString() {
