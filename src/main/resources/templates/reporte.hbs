@@ -26,7 +26,7 @@
     </header>
     <div class="content">
       <div class="info">
-        <span>Se creará el reporte para <i>{{user}}</i></span>
+        <span>Se creará el reporte para <i>{{organizacion.razonSocial}}</i></span>
         <ul>
           <li>Por Año</li>
           <li>Por Mes</li>
@@ -36,7 +36,7 @@
         </ul>
       </div>
       <div class="generar">
-        <form action="/organizacion/{{orgID}}/reporte" method="post">
+        <form action="/organizacion/{{organizacion.id}}/reporte" method="post">
           <div class="form-fecha">
             <label for="fecha">Fecha de Referencia: </label><i>(CHECK)</i>
             <input id="fecha" type="text" name="f-fecha" value="MES/AÑO" required/>
@@ -52,13 +52,15 @@
       <!-- VER SI DESCARGA ADENTRO DE REPORTE -->
       <div class="reporte">
         <ul>
-          <li>Organizacion: <i>{{razonSocial}}</i></li>
-          <li>Fecha: <i>{{reporte.fecha}}</i></li>
+          <li>Organizacion: <i>{{organizacion.razonSocial}}</i></li>
+          <li>Fecha: <i>{{reporte.fechaCreacion}}</i></li>
+          <li>Fecha Referencia: <i>{{reporte.fechaReferencia}}</i></li>
+          <br/>
           <li>Consumo Mediciones: <i>{{reporte.consumoMediciones}}</i></li>
           <li>Consumo Trayectos: <i>{{reporte.consumoTrayectos}}</i></li>
           <li>Consumo Total: <i>{{reporte.consumoTotal}}</i></li>
         </ul>
-        <table class="meses">
+        <!--<table class="meses">
           <tr>
             <th>MES</th>
             <th>MEDICIONES</th>
@@ -79,8 +81,7 @@
             <td>{{reporte.consumoTrayectos}}</td>
             <td>{{reporte.consumoTotal}}</td>
           </tr>
-        </table>
-        <br />
+        </table>-->
         <table class="categorias">
           <tr>
             <th>CATEGORIA</th>
@@ -88,8 +89,8 @@
           </tr>
           {{#each reporte.consumoPorCategoria}}
           <tr>
-            <td>{{@key}}</td>
-            <td>{{this}}</td>
+            <td>{{concepto}}</td>
+            <td>{{consumo}}</td>
           </tr>
           {{else}}
           <tr>
@@ -105,8 +106,8 @@
           </tr>
           {{#each reporte.consumoPorSector}}
           <tr>
-            <td>{{@key}}</td>
-            <td>{{this}}</td>
+            <td>{{concepto}}</td>
+            <td>{{consumo}}</td>
           </tr>
           {{else}}
           <tr>
@@ -122,8 +123,8 @@
           </tr>
           {{#each reporte.consumoPorMiembro}}
           <tr>
-            <td>{{@key}}</td>
-            <td>{{this}}</td>
+            <td>{{concepto}}</td>
+            <td>{{consumo}}</td>
           </tr>
           {{else}}
           <tr>

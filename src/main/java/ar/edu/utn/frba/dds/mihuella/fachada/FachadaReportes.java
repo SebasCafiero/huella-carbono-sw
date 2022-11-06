@@ -12,7 +12,6 @@ import ar.edu.utn.frba.dds.servicios.reportes.NotificadorReportes;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class FachadaReportes {
     private NotificadorReportes notificadorReportes;
@@ -150,6 +149,11 @@ public class FachadaReportes {
     public ReporteOrganizacion getReporteOrganizacion() {
         return reporteOrganizacion;
     }
+
+    public void quitarReporteOrganizacion() {
+        this.reporteOrganizacion = null;
+    }
+
 }
 
 // Implementing collectors

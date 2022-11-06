@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import ar.edu.utn.frba.dds.api.mapper.OrganizacionMapperHBS;
+import ar.edu.utn.frba.dds.api.mapper.ReporteMapperHBS;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
@@ -113,16 +115,21 @@ public class ReportesController {
         }
 
         parametros = mapUser(request, response);
-        parametros.put("razonSocial", org.getRazonSocial());
-        parametros.put("orgID", org.getId());
-
+        parametros.put("organizacion", OrganizacionMapperHBS.toDTO(org));
+        /*parametros.put("razonSocial", org.getRazonSocial());
+        parametros.put("orgID", org.getId());*/
         reporte = fachadaReportes.getReporteOrganizacion();
-        if(reporte != null){
-            parametros.put("reporte", mapeoReporte(reporte));
+        if(reporte != null) {
+            parametros.put("reporte", ReporteMapperHBS.toDTO(reporte));
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
             String file = org.getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
             parametros.put("file", file);
 //            parametros.put("file", "reporte"+org.getId());
+
+            fachadaReportes.quitarReporteOrganizacion();
+
+            //todo ver session.refresh(entity) o entityManager.refresh(entity) para no usar cache
+            //todo https://sparkjava.com/documentation#examples-and-faq
         }
 
 //        List<Map<String, Object>> meses = new ArrayList<>(); //todo
@@ -130,7 +137,7 @@ public class ReportesController {
         return new ModelAndView(parametros, "reporte.hbs");
     }
 
-    private Map<String, Object> mapeoReporte(ReporteOrganizacion reporte) {
+    /*private Map<String, Object> mapeoReporte(ReporteOrganizacion reporte) {
         Map<String, Object> reporteMap = new HashMap<>();
         reporteMap.put("fecha", reporte.getFechaCreacion());
         reporteMap.put("consumoTotal", reporte.getConsumoTotal());
@@ -140,7 +147,7 @@ public class ReportesController {
         reporteMap.put("consumoPorSector", reporte.getConsumoPorSector());
         reporteMap.put("consumoPorMiembro", reporte.getConsumoPorMiembro());
         return reporteMap;
-    }
+    }*/
 
     public Response generar(Request request, Response response) {
         int idOrg = Integer.parseInt(request.params("id"));
