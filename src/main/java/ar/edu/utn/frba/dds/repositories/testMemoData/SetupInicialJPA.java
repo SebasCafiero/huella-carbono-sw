@@ -64,12 +64,21 @@ public class SetupInicialJPA {
                 new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Medrano", 591),
                 new Coordenada(-34.598412F, -58.420196F));
 
+        UbicacionGeografica ubicacionMcObelisco = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Av: Corrientes",992),
+                new Coordenada(-34.603825f,-58.380681f));
+
+
         this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano);
         this.repoAreas.agregar(cabaProvincia, cabaMunicipio);
         this.repoAgentes.agregar(carlos, esteban);
 
         MedioDeTransporte fitito = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.GNC);
         MedioDeTransporte caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
+        MedioDeTransporte bicicleta = new TransporteEcologico(TipoTransporteEcologico.BICICLETA);
+
+        TransportePublico colectivo39 = new TransportePublico(TipoTransportePublico.COLECTIVO, "39");
+        //colectivo39.agregarParadas();
 
         TransportePublico colectivo63 = new TransportePublico(TipoTransportePublico.COLECTIVO, "63");
         colectivo63.agregarParadas(
@@ -95,7 +104,7 @@ public class SetupInicialJPA {
                 new Parada(new Coordenada(-34.610144F, -58.406930F), 0.7F, 0F) // plaza miserere
         );
 
-        this.repoMedios.agregar(fitito, colectivo63, subteA, caminata);
+        this.repoMedios.agregar(fitito, colectivo63,colectivo39, subteA, caminata,bicicleta);
 
         // Organizaciones, sectores y miembros
 
@@ -104,15 +113,29 @@ public class SetupInicialJPA {
 
         Sector sistemasUtnCampus = new Sector("Sistemas", orgUtnCampus);
         Miembro juanPerez = new Miembro("Juan", "Perez", TipoDeDocumento.DNI, 14432234);
-        Miembro fernandoCoppola = new Miembro("Guillermo", "Cóppola", TipoDeDocumento.PASAPORTE, 11332223);
+        Miembro guillermoCoppola = new Miembro("Guillermo", "Cóppola", TipoDeDocumento.PASAPORTE, 11332223);
+        Miembro manuGinobili = new Miembro("Emanuel", "Ginobili", TipoDeDocumento.DNI, 32123456);
         sistemasUtnCampus.agregarMiembro(juanPerez);
-        sistemasUtnCampus.agregarMiembro(fernandoCoppola);
+        sistemasUtnCampus.agregarMiembro(guillermoCoppola);
+        sistemasUtnCampus.agregarMiembro(manuGinobili);
+
 
         Sector rrhhUtnCampus = new Sector("Capital Humano", orgUtnCampus);
         Miembro sebaSosa = new Miembro("Sebastián", "Sosa", TipoDeDocumento.DNI, 11233223);
         Miembro martinTagliafico = new Miembro("Martin", "Tagliafico", TipoDeDocumento.DNI, 30324522);
+        Miembro papuGomez = new Miembro("Alejandro", "Gomez", TipoDeDocumento.DNI, 35789065);
         rrhhUtnCampus.agregarMiembro(sebaSosa);
         rrhhUtnCampus.agregarMiembro(martinTagliafico);
+        rrhhUtnCampus.agregarMiembro(papuGomez);
+
+        Sector adminUtnCampus = new Sector("Administracio", orgUtnCampus);
+        Miembro elDoctor = new Miembro("Carlos","Bilardo",TipoDeDocumento.DNI,27145367);
+        Miembro laPulga = new Miembro("Lionel","Messi",TipoDeDocumento.DNI,34674393);
+        Miembro elDiego = new Miembro("Diego", "Maradona", TipoDeDocumento.DNI, 20345654);
+        adminUtnCampus.agregarMiembro(elDoctor);
+        adminUtnCampus.agregarMiembro(laPulga);
+        adminUtnCampus.agregarMiembro(elDiego);
+
 
         Organizacion orgUtnMedrano = new Organizacion("UTN - Medrano", TipoDeOrganizacionEnum.INSTITUCION,
                 new ClasificacionOrganizacion("Universidad"), ubicacionUtnMedrano);
@@ -120,17 +143,59 @@ public class SetupInicialJPA {
         Sector tesoreriaUtnMedrano = new Sector("Tesoreria", orgUtnMedrano);
         Miembro laSaeta = new Miembro("Alfredo", "Di Stéfano", TipoDeDocumento.DNI, 2232122);
         Miembro fitoPaez = new Miembro("Roberto", "Páez", TipoDeDocumento.DNI, 34432233);
+        Miembro charlyGarcia = new Miembro("Carlos", "Garcia", TipoDeDocumento.DNI, 34432233);
         tesoreriaUtnMedrano.agregarMiembro(laSaeta);
         tesoreriaUtnMedrano.agregarMiembro(fitoPaez);
+        tesoreriaUtnMedrano.agregarMiembro(charlyGarcia);
 
         Sector administracionUtnMedrano = new Sector("Administracion", orgUtnMedrano);
         Miembro elVirrey = new Miembro("Carlos", "Bianchi", TipoDeDocumento.DNI, 22222222);
         Miembro elTitan = new Miembro("Martin", "Palermo", TipoDeDocumento.DNI, 30366666);
         administracionUtnMedrano.agregarMiembro(elVirrey);
         administracionUtnMedrano.agregarMiembro(elTitan);
+        administracionUtnMedrano.agregarMiembro(elDiego);
+
+        Sector mantenimientoUtnMedrano = new Sector("Mantenimiento", orgUtnMedrano);
+        Miembro albertEinstein = new Miembro("Albert", "Einstein", TipoDeDocumento.DNI, 10101010);
+        Miembro isaacNewton = new Miembro("Isaac", "Newton", TipoDeDocumento.DNI, 20202020);
+        Miembro nikolaTesla = new Miembro("Nikola", "Tesla", TipoDeDocumento.DNI, 30303030);
+        mantenimientoUtnMedrano.agregarMiembro(albertEinstein);
+        mantenimientoUtnMedrano.agregarMiembro(isaacNewton);
+        mantenimientoUtnMedrano.agregarMiembro(nikolaTesla);
+
+        Organizacion mcObelisco = new Organizacion("McDonald", TipoDeOrganizacionEnum.EMPRESA,
+                new ClasificacionOrganizacion("Restaurante"), ubicacionMcObelisco);
+
+        Sector cocinaMc = new Sector("Tesoreria", mcObelisco);
+        Miembro gordonRamsey = new Miembro("Gordon", "Ramsey", TipoDeDocumento.DNI, 30000129);
+        Miembro jackGusto = new Miembro("Jack", "Gusto", TipoDeDocumento.DNI, 26345554);
+        Miembro marioBatali = new Miembro("Mario", "Batali", TipoDeDocumento.DNI, 31666666);
+        cocinaMc.agregarMiembro(gordonRamsey);
+        cocinaMc.agregarMiembro(jackGusto);
+        cocinaMc.agregarMiembro(marioBatali);
+
+        Sector mantenimientoMc = new Sector("Administracion", mcObelisco);
+        Miembro elonMusk = new Miembro("Elon", "Musk", TipoDeDocumento.DNI, 27345900);
+        Miembro billGates = new Miembro("Bill", "Gates", TipoDeDocumento.DNI, 23100698);
+        mantenimientoMc.agregarMiembro(elonMusk);
+        mantenimientoMc.agregarMiembro(billGates);
+        mantenimientoMc.agregarMiembro(albertEinstein);
+
+        Sector limpiezaMc = new Sector("Mantenimiento", mcObelisco);
+        Miembro walterWhite = new Miembro("Walter", "White", TipoDeDocumento.DNI, 26456890);
+        Miembro jessePinkman = new Miembro("Jesse", "Pinkman", TipoDeDocumento.DNI, 40398652);
+        Miembro saulGoodman = new Miembro("Saul", "Goodman", TipoDeDocumento.DNI, 31567908);
+        limpiezaMc.agregarMiembro(walterWhite);
+        limpiezaMc.agregarMiembro(jessePinkman);
+        limpiezaMc.agregarMiembro(saulGoodman);
+
 
         this.repoOrganizaciones.agregar(orgUtnCampus);
         this.repoOrganizaciones.agregar(orgUtnMedrano);
+        this.repoOrganizaciones.agregar(mcObelisco);
+
+
+        // Tramos y trayectos
 
         Tramo fiat600 = new Tramo(fitito, ubicacionUtnCampus, mirallaAlberdi);
         fiat600.setValor();
