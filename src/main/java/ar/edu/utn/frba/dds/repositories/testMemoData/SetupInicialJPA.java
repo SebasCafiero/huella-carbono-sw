@@ -46,7 +46,7 @@ public class SetupInicialJPA {
 
         this.inicializarFactores();
 
-        // Medios de transporte y ubicaciones
+        //  Ubicaciones, Agenstes Sectoriales y medios de transporte
 
         Provincia cabaProvincia = new Provincia("CABA", "Argentina");
         Municipio cabaMunicipio = new Municipio("Ciudad Autonoma de Buenos Aires", cabaProvincia);
@@ -57,19 +57,21 @@ public class SetupInicialJPA {
         UbicacionGeografica ubicacionUtnCampus = new UbicacionGeografica(
                 new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Mozart", 2300),
                 new Coordenada(-34.659932F, -58.468397F));
-        UbicacionGeografica mirallaAlberdi = new UbicacionGeografica(new Coordenada(-34.649292F, -58.499945F));
-        UbicacionGeografica sanPedrito = new UbicacionGeografica(new Coordenada(-34.630861F, -58.470063F));
-        UbicacionGeografica castroBarros = new UbicacionGeografica(new Coordenada(-34.611624F, -58.421263F));
         UbicacionGeografica ubicacionUtnMedrano = new UbicacionGeografica(
                 new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Medrano", 591),
                 new Coordenada(-34.598412F, -58.420196F));
-
         UbicacionGeografica ubicacionMcObelisco = new UbicacionGeografica(
                 new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Av: Corrientes",992),
                 new Coordenada(-34.603825f,-58.380681f));
 
+        UbicacionGeografica mirallaAlberdi = new UbicacionGeografica(new Coordenada(-34.649292F, -58.499945F));
+        UbicacionGeografica sanPedrito = new UbicacionGeografica(new Coordenada(-34.630861F, -58.470063F));
+        UbicacionGeografica castroBarros = new UbicacionGeografica(new Coordenada(-34.611624F, -58.421263F));
+        UbicacionGeografica cordobaY9deJulio = new UbicacionGeografica(new Coordenada(-34.599001f,-58380794f));
+        UbicacionGeografica cordobaYEcuador = new UbicacionGeografica(new Coordenada(-34.597991f,-58405410f));
+        UbicacionGeografica cordobaYMedrano = new UbicacionGeografica(new Coordenada(-34.597810f,-58420118f));
 
-        this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano);
+        this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano,cordobaY9deJulio,cordobaYEcuador,cordobaYMedrano);
         this.repoAreas.agregar(cabaProvincia, cabaMunicipio);
         this.repoAgentes.agregar(carlos, esteban);
 
@@ -77,8 +79,15 @@ public class SetupInicialJPA {
         MedioDeTransporte caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
         MedioDeTransporte bicicleta = new TransporteEcologico(TipoTransporteEcologico.BICICLETA);
 
-        TransportePublico colectivo39 = new TransportePublico(TipoTransportePublico.COLECTIVO, "39");
-        //colectivo39.agregarParadas();
+        TransportePublico colectivo109 = new TransportePublico(TipoTransportePublico.COLECTIVO, "39");
+        colectivo109.agregarParadas(
+                new Parada( cordobaY9deJulio,0f,0.45f),
+                new Parada( new Coordenada(-34.599298f,-58387400f),0.45f,0.4f),//av cordoba y uruguay
+                new Parada( new Coordenada(-34.599554f,-58394166f),0.4f,1.2f),//av cordoba y riobamba
+                new Parada( cordobaYEcuador,1.2f,0.5f),//av cordoba y ecuador
+                new Parada( new Coordenada(-34.597935f,-58413103f),0.5f,0.6f),//av cordoba y bustamante
+                new Parada( cordobaYMedrano,0.6f,0f)//av cordoba y av medrano
+        );
 
         TransportePublico colectivo63 = new TransportePublico(TipoTransportePublico.COLECTIVO, "63");
         colectivo63.agregarParadas(
@@ -104,7 +113,7 @@ public class SetupInicialJPA {
                 new Parada(new Coordenada(-34.610144F, -58.406930F), 0.7F, 0F) // plaza miserere
         );
 
-        this.repoMedios.agregar(fitito, colectivo63,colectivo39, subteA, caminata,bicicleta);
+        this.repoMedios.agregar(fitito, colectivo63,colectivo109, subteA, caminata,bicicleta);
 
         // Organizaciones, sectores y miembros
 
