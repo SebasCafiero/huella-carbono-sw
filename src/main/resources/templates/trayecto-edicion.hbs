@@ -72,11 +72,11 @@
                 <legend>Tramo{{id}}</legend>
                 <label for="transporte-{{@index}}">Transporte</label>
                 <select id="transporte-{{@index}}" name="f-transporte-{{@index}}" onchange="transporteSeleccionado('tramo-{{@index}}')" required>
-                  <option class="campo-seleccionar" value="{{transporteID}}" selected>{{transporteCLASIFICACION}}</option>
+                  <option class="campo-seleccionar" value="{{transporte.id}}" selected>{{transporte.info}}</option>
                   {{#each ../transportesTotales}}
                   <optgroup label="{{tipo}}">
                     {{#each transportes}}
-                    <option value="{{id}}">{{clasificacion}}</option>
+                    <option value="{{id}}">{{info}}</option>
                     {{/each}}
                   </optgroup>
                   {{/each}}
@@ -87,13 +87,13 @@
                     <legend>Paradas</legend>
                     <label for="transporte-parada-inicial-{{@index}}">Partida:</label>
                     <select id="transporte-parada-inicial-{{@index}}" name="f-transporte-parada-inicial-{{@index}}">
-                      <option class="campo-seleccionar" value="{{paradaInicialID}}" selected>{{direccionInicial.calle}} {{direccionInicial.numero}} ({{direccionInicial.localidad}})</option>
+                      <option class="campo-seleccionar" value="{{idParadaInicial}}" selected>{{ubicacionInicial.calle}} {{ubicacionInicial.numero}} ({{ubicacionInicial.localidad}})</option>
                       {{#each ../transportesTotales}}
-                      {{#if publico}}
+                      {{#if esPublico}}
                       {{#each transportes}}
-                      <optgroup label="{{clasificacion}}">
+                      <optgroup label="{{info}}">
                         {{#each paradas}}
-                        <option value="{{id}}">{{direccion.calle}} {{direccion.numero}} ({{direccion.localidad}})</option>
+                        <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
                         {{/each}}
                       </optgroup>
                       {{/each}}
@@ -102,13 +102,13 @@
                     </select>
                     <label for="transporte-parada-final-{{@index}}">Llegada:</label>
                     <select id="transporte-parada-final-{{@index}}" name="f-transporte-parada-final-{{@index}}">
-                      <option class="campo-seleccionar" value="{{paradaFinalID}}" selected>{{direccionFinal.calle}} {{direccionFinal.numero}} ({{direccionFinal.localidad}})</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
+                      <option class="campo-seleccionar" value="{{idParadaFinal}}" selected>{{ubicacionFinal.calle}} {{ubicacionFinal.numero}} ({{ubicacionFinal.localidad}})</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
                       {{#each ../transportesTotales}}
-                      {{#if publico}}
+                      {{#if esPublico}}
                       {{#each transportes}}
-                      <optgroup label="{{clasificacion}}">
+                      <optgroup label="{{info}}">
                         {{#each paradas}}
-                        <option value="{{id}}">{{direccion.calle}} {{direccion.numero}} ({{direccion.localidad}})</option>
+                        <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
                         {{/each}}
                       </optgroup>
                       {{/each}}
@@ -122,17 +122,17 @@
                   <fieldset disabled>
                     <legend>Coordenadas Iniciales</legend>
                     <label for="lat-inicial-{{@index}}">Latitud:</label>
-                    <input id="lat-inicial-{{@index}}" type="text" name="f-lat-inicial-{{@index}}" value="{{latitudInicial}}" required/>
+                    <input id="lat-inicial-{{@index}}" type="text" name="f-lat-inicial-{{@index}}" value="{{ubicacionInicial.latitud}}" required/>
                     <label for="lon-inicial-{{@index}}">Longitud:</label>
-                    <input id="lon-inicial-{{@index}}" type="text" name="f-lon-inicial-{{@index}}" value="{{longitudInicial}}" required/>
+                    <input id="lon-inicial-{{@index}}" type="text" name="f-lon-inicial-{{@index}}" value="{{ubicacionInicial.longitud}}" required/>
                   </fieldset>
                   <br />
                   <fieldset disabled>
                     <legend>Coordenadas Finales</legend>
                     <label for="lat-final-{{@index}}">Latitud:</label>
-                    <input id="lat-final-{{@index}}" type="text" name="f-lat-final-{{@index}}" value="{{latitudFinal}}" required/>
+                    <input id="lat-final-{{@index}}" type="text" name="f-lat-final-{{@index}}" value="{{ubicacionFinal.latitud}}" required/>
                     <label for="lon-final-{{@index}}">Longitud:</label>
-                    <input id="lon-final-{{@index}}" type="text" name="f-lon-final-{{@index}}" value="{{longitudFinal}}" required/>
+                    <input id="lon-final-{{@index}}" type="text" name="f-lon-final-{{@index}}" value="{{ubicacionFinal.longitud}}" required/>
                   </fieldset>
                 </div>
               </fieldset>
@@ -153,7 +153,7 @@
                   {{#each transportesTotales}}
                   <optgroup label="{{tipo}}">
                     {{#each transportes}}
-                      <option value="{{id}}">{{clasificacion}}</option>
+                      <option value="{{id}}">{{info}}</option>
                     {{/each}}
                   </optgroup>
                   {{/each}}
@@ -166,11 +166,11 @@
                     <select id="transporte-parada-inicial-nueva" name="f-transporte-parada-inicial-nueva" required>
                       <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
                       {{#each transportesTotales}}
-                      {{#if publico}}
+                      {{#if esPublico}}
                       {{#each transportes}}
-                      <optgroup label="{{clasificacion}}">
+                      <optgroup label="{{info}}">
                         {{#each paradas}}
-                        <option value="{{id}}">{{direccion.calle}} {{direccion.numero}} ({{direccion.localidad}})</option>
+                        <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
                         {{/each}}
                       </optgroup>
                       {{/each}}
@@ -181,11 +181,11 @@
                     <select id="transporte-parada-final-nueva" name="f-transporte-parada-final-nueva" required>
                       <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
                       {{#each transportesTotales}}
-                      {{#if publico}}
+                      {{#if esPublico}}
                       {{#each transportes}}
-                        <optgroup label="{{clasificacion}}">
+                        <optgroup label="{{info}}">
                           {{#each paradas}}
-                          <option value="{{id}}">{{direccion.calle}} {{direccion.numero}} ({{direccion.localidad}})</option>
+                          <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
                           {{/each}}
                         </optgroup>
                       {{/each}}
