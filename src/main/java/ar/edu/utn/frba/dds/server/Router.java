@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.server;
 
 import ar.edu.utn.frba.dds.controllers.*;
+import ar.edu.utn.frba.dds.login.Filtrador;
 import ar.edu.utn.frba.dds.login.LoginController;
 import ar.edu.utn.frba.dds.spark.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.spark.utils.HandlebarsTemplateEngineBuilder;
@@ -24,7 +25,7 @@ public class Router {
         Router.configure();
     }
 
-    private static void configure(){
+    private static void configure() {
         Spark.get("/", ((request, response) -> "Api HC DDS - 2022"));
 
         OrganizacionController organizacionController = new OrganizacionController();
