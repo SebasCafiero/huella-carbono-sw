@@ -31,5 +31,12 @@ public class TrayectoMapperHBS {
         trayectoDTO.setMiembros(trayecto.getMiembros().stream().map(MiembroMapperHBS::toDTOLazy).collect(Collectors.toList()));
         return trayectoDTO;
     }
+
+    public static TrayectoHBS toDTOEditable(Trayecto trayecto) {
+        TrayectoHBS trayectoDTO = toDTO(trayecto);
+        trayectoDTO.setTramos(trayecto.getTramos().stream().map(TramoMapperHBS::toDTOEditable).collect(Collectors.toList()));
+        return trayectoDTO;
+    }
+
 }
 

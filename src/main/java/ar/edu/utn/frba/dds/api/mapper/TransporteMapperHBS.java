@@ -35,6 +35,7 @@ public class TransporteMapperHBS {
         TransporteHBS transporteDTO = new TransporteHBS();
         transporteDTO.setId(transporte.getId());
         transporteDTO.setInfo(transporte.getClasificacion());
+        transporteDTO.setEsPublico(transporte instanceof TransportePublico);
         return transporteDTO;
     }
 }

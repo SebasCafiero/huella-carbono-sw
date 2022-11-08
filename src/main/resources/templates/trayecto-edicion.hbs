@@ -61,84 +61,99 @@
 
           <div class="form-fecha">
             <label for="fecha">Fecha</label>
-<!--            <input id="fecha" type="text" name="f-fecha" value="{{trayecto.mes}}/{{trayecto.año}}" required/>-->
-            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.mes}}/{{trayecto.año}}" {{else}} value="MES/AÑO" {{/if}} required/>
+            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayectoBuff.mes}}/{{trayectoBuff.año}}" {{else}} value="{{fecha}}" {{/if}} required/>
           </div>
           <br />
           <div class="form-tramos">
-            {{#each trayecto.tramos}}
-            <div class="tramo-{{@index}}">
-              <fieldset>
-                <legend>Tramo{{id}}</legend>
-                <label for="transporte-{{@index}}">Transporte</label>
-                <select id="transporte-{{@index}}" name="f-transporte-{{@index}}" onchange="transporteSeleccionado('tramo-{{@index}}')" required>
-                  <option class="campo-seleccionar" value="{{transporte.id}}" selected>{{transporte.info}}</option>
-                  {{#each ../transportesTotales}}
-                  <optgroup label="{{tipo}}">
-                    {{#each transportes}}
-                    <option value="{{id}}">{{info}}</option>
+            <div id="tramos-editables">
+              {{#each trayectoBuff.tramos}}
+              <div class="tramo-{{@index}}"><!-- deberia ser id en vez de class -->
+                <fieldset>
+                  <legend>Tramo {{id}}</legend>
+                  <label for="transporte-{{@index}}">Transporte</label>
+                  <select class="transporte-editable" id="transporte-{{@index}}" name="f-transporte-{{@index}}" onchange="transporteSeleccionado2({{miembroID}}, 'tramo-{{@index}}')" required>
+                    <option class="campo-seleccionar" value="{{transporte.id}}" selected>{{transporte.info}}</option>
+                    {{#each ../transportesTotales}}
+                    <optgroup label="{{tipo}}">
+                      {{#each transportes}}
+                      <option value="{{id}}">{{info}}</option>
+                      {{/each}}
+                    </optgroup>
                     {{/each}}
-                  </optgroup>
-                  {{/each}}
-                </select>
-                <br /><br />
-                <div class="paradas">
-                  <fieldset disabled>
-                    <legend>Paradas</legend>
-                    <label for="transporte-parada-inicial-{{@index}}">Partida:</label>
-                    <select id="transporte-parada-inicial-{{@index}}" name="f-transporte-parada-inicial-{{@index}}">
-                      <option class="campo-seleccionar" value="{{idParadaInicial}}" selected>{{ubicacionInicial.calle}} {{ubicacionInicial.numero}} ({{ubicacionInicial.localidad}})</option>
-                      {{#each ../transportesTotales}}
-                      {{#if esPublico}}
-                      {{#each transportes}}
-                      <optgroup label="{{info}}">
-                        {{#each paradas}}
+                  </select>
+                  <br /><br />
+                  {{#if transporte.esPublico}}
+                  <div class="paradas">
+                    <fieldset>
+                      <legend>Paradas</legend>
+                      <label for="transporte-parada-inicial-{{@index}}">Partida:</label>
+                      <select id="transporte-parada-inicial-{{@index}}" name="f-transporte-parada-inicial-{{@index}}" required>
+                        {{#if idParadaInicial}}
+                        <option class="campo-seleccionar" value="{{idParadaInicial}}" selected>{{ubicacionInicial.calle}} {{ubicacionInicial.numero}} ({{ubicacionInicial.localidad}})</option>
+                        {{else}}
+                        <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+                        {{/if}}
+                        {{#each transporte.paradas}}
                         <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
                         {{/each}}
-                      </optgroup>
-                      {{/each}}
-                      {{/if}}
-                      {{/each}}
-                    </select>
-                    <label for="transporte-parada-final-{{@index}}">Llegada:</label>
-                    <select id="transporte-parada-final-{{@index}}" name="f-transporte-parada-final-{{@index}}">
-                      <option class="campo-seleccionar" value="{{idParadaFinal}}" selected>{{ubicacionFinal.calle}} {{ubicacionFinal.numero}} ({{ubicacionFinal.localidad}})</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
-                      {{#each ../transportesTotales}}
-                      {{#if esPublico}}
-                      {{#each transportes}}
-                      <optgroup label="{{info}}">
-                        {{#each paradas}}
+                      </select>
+                      <label for="transporte-parada-final-{{@index}}">Llegada:</label>
+                      <select id="transporte-parada-final-{{@index}}" name="f-transporte-parada-final-{{@index}}" required>
+                        {{#if idParadaFinal}}
+                        <option class="campo-seleccionar" value="{{idParadaFinal}}" selected>{{ubicacionFinal.calle}} {{ubicacionFinal.numero}} ({{ubicacionFinal.localidad}})</option>
+                        {{else}}
+                        <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+                        {{/if}}
+                        {{#each transporte.paradas}}
                         <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
                         {{/each}}
-                      </optgroup>
-                      {{/each}}
-                      {{/if}}
-                      {{/each}}
-                    </select>
-                  </fieldset>
-                </div>
-                <br /><br />
-                <div class="coordenadas">
-                  <fieldset disabled>
-                    <legend>Coordenadas Iniciales</legend>
-                    <label for="lat-inicial-{{@index}}">Latitud:</label>
-                    <input id="lat-inicial-{{@index}}" type="text" name="f-lat-inicial-{{@index}}" value="{{ubicacionInicial.latitud}}" required/>
-                    <label for="lon-inicial-{{@index}}">Longitud:</label>
-                    <input id="lon-inicial-{{@index}}" type="text" name="f-lon-inicial-{{@index}}" value="{{ubicacionInicial.longitud}}" required/>
-                  </fieldset>
-                  <br />
-                  <fieldset disabled>
-                    <legend>Coordenadas Finales</legend>
-                    <label for="lat-final-{{@index}}">Latitud:</label>
-                    <input id="lat-final-{{@index}}" type="text" name="f-lat-final-{{@index}}" value="{{ubicacionFinal.latitud}}" required/>
-                    <label for="lon-final-{{@index}}">Longitud:</label>
-                    <input id="lon-final-{{@index}}" type="text" name="f-lon-final-{{@index}}" value="{{ubicacionFinal.longitud}}" required/>
-                  </fieldset>
-                </div>
-              </fieldset>
-              <br />
+                      </select>
+                    </fieldset>
+                  </div>
+                  {{else}}
+                  <div class="ubicaciones">
+                    <fieldset>
+                      <legend>Ubicación Inicial</legend>
+                      <label for="provincia-inicial-{{@index}}">Provincia:</label>
+                      <input id="provincia-inicial-{{@index}}" type="text" name="f-provincia-inicial-{{@index}}" value="{{ubicacionInicial.provincia}}" required/>
+                      <label for="municipio-inicial-{{@index}}">Municipio:</label>
+                      <input id="municipio-inicial-{{@index}}" type="text" name="f-municipio-inicial-{{@index}}" value="{{ubicacionInicial.municipio}}" required/>
+                      <label for="localidad-inicial-{{@index}}">Localidad:</label>
+                      <input id="localidad-inicial-{{@index}}" type="text" name="f-localidad-inicial-{{@index}}" value="{{ubicacionInicial.localidad}}" required/>
+                      <label for="calle-inicial-{{@index}}">Calle:</label>
+                      <input id="calle-inicial-{{@index}}" type="text" name="f-calle-inicial-{{@index}}" value="{{ubicacionInicial.calle}}" required/>
+                      <label for="numero-inicial-{{@index}}">Numero:</label>
+                      <input id="numero-inicial-{{@index}}" type="text" name="f-numero-inicial-{{@index}}" value="{{ubicacionInicial.numero}}" required/>
+                      <label for="lat-inicial-{{@index}}">Latitud:</label>
+                      <input id="lat-inicial-{{@index}}" type="text" name="f-lat-inicial-{{@index}}" value="{{ubicacionInicial.latitud}}" required/>
+                      <label for="lon-inicial-{{@index}}">Longitud:</label>
+                      <input id="lon-inicial-{{@index}}" type="text" name="f-lon-inicial-{{@index}}" value="{{ubicacionInicial.longitud}}" required/>
+                    </fieldset>
+                    <br />
+                    <fieldset>
+                      <legend>Ubicación Final</legend>
+                      <label for="provincia-final-{{@index}}">Provincia:</label>
+                      <input id="provincia-final-{{@index}}" type="text" name="f-provincia-final-{{@index}}" value="{{ubicacionFinal.provincia}}" required/>
+                      <label for="municipio-final-{{@index}}">Municipio:</label>
+                      <input id="municipio-final-{{@index}}" type="text" name="f-municipio-final-{{@index}}" value="{{ubicacionFinal.municipio}}" required/>
+                      <label for="localidad-final-{{@index}}">Localidad:</label>
+                      <input id="localidad-final-{{@index}}" type="text" name="f-localidad-final-{{@index}}" value="{{ubicacionFinal.localidad}}" required/>
+                      <label for="calle-final-{{@index}}">Calle:</label>
+                      <input id="calle-final-{{@index}}" type="text" name="f-calle-final-{{@index}}" value="{{ubicacionFinal.calle}}" required/>
+                      <label for="numero-final-{{@index}}">Numero:</label>
+                      <input id="numero-final-{{@index}}" type="text" name="f-numero-final-{{@index}}" value="{{ubicacionFinal.numero}}" required/>
+                      <label for="lat-final-{{@index}}">Latitud:</label>
+                      <input id="lat-final-{{@index}}" type="text" name="f-lat-final-{{@index}}" value="{{ubicacionFinal.latitud}}" required/>
+                      <label for="lon-final-{{@index}}">Longitud:</label>
+                      <input id="lon-final-{{@index}}" type="text" name="f-lon-final-{{@index}}" value="{{ubicacionFinal.longitud}}" required/>
+                    </fieldset>
+                  </div>
+                  {{/if}}
+                </fieldset>
+                <br />
+              </div>
+              {{/each}}
             </div>
-            {{/each}}
             <div class="tramo-nuevo">
               {{#if trayecto}}
               <br />
@@ -148,55 +163,44 @@
               <fieldset {{#if trayecto}}disabled{{/if}}>
                 <legend>Nuevo Tramo</legend>
                 <label for="transporte-nuevo">Transporte</label>
-                <select id="transporte-nuevo" name="f-transporte-nuevo" onchange="transporteSeleccionado('tramo-nuevo')" required>
+                <select id="transporte-nuevo" name="f-transporte-nuevo" onchange="transporteSeleccionado2({{miembroID}}, 'tramo-nuevo')" required>
+                  {{#if transporteNuevo}}
+                  <option class="campo-seleccionar" value="{{transporteNuevo.id}}" selected>{{transporteNuevo.info}}</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
+                  {{else}}
                   <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
+                  {{/if}}
                   {{#each transportesTotales}}
                   <optgroup label="{{tipo}}">
                     {{#each transportes}}
-                      <option value="{{id}}">{{info}}</option>
+                    <option value="{{id}}">{{info}}</option>
                     {{/each}}
                   </optgroup>
                   {{/each}}
                 </select>
                 <br /><br />
+                {{#if transporteNuevo.esPublico}}
                 <div class="paradas">
-                  <fieldset disabled>
+                  <fieldset>
                     <legend>Paradas</legend>
                     <label for="transporte-parada-inicial-nueva">Partida:</label>
                     <select id="transporte-parada-inicial-nueva" name="f-transporte-parada-inicial-nueva" required>
                       <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
-                      {{#each transportesTotales}}
-                      {{#if esPublico}}
-                      {{#each transportes}}
-                      <optgroup label="{{info}}">
-                        {{#each paradas}}
-                        <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
-                        {{/each}}
-                      </optgroup>
-                      {{/each}}
-                      {{/if}}
+                      {{#each transporteNuevo.paradas}}
+                      <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
                       {{/each}}
                     </select>
                     <label for="transporte-parada-final-nueva">Llegada:</label>
                     <select id="transporte-parada-final-nueva" name="f-transporte-parada-final-nueva" required>
                       <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
-                      {{#each transportesTotales}}
-                      {{#if esPublico}}
-                      {{#each transportes}}
-                        <optgroup label="{{info}}">
-                          {{#each paradas}}
-                          <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
-                          {{/each}}
-                        </optgroup>
-                      {{/each}}
-                      {{/if}}
+                      {{#each transporteNuevo.paradas}}
+                      <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
                       {{/each}}
                     </select>
                   </fieldset>
                 </div>
-                <br /><br />
-                <div class="coordenadas">
-                  <fieldset disabled>
+                {{else}}
+                <div class="coordenadas"> <!-- ver de cambiar por ubicacion o algo asi -->
+                  <fieldset>
                     <legend>Coordenadas Iniciales</legend>
                     <label for="lat-inicial-nueva">Latitud:</label>
                     <input id="lat-inicial-nueva" type="text" name="f-lat-inicial-nueva" value="" required/>
@@ -204,7 +208,7 @@
                     <input id="lon-inicial-nueva" type="text" name="f-lon-inicial-nueva" value="" required/>
                   </fieldset>
                   <br />
-                  <fieldset disabled>
+                  <fieldset>
                     <legend>Coordenadas Finales</legend>
                     <label for="lat-final-nueva">Latitud:</label>
                     <input id="lat-final-nueva" type="text" name="f-lat-final-nueva" value="" required/>
@@ -212,6 +216,7 @@
                     <input id="lon-final-nueva" type="text" name="f-lon-final-nueva" value="" required/>
                   </fieldset>
                 </div>
+                {{/if}}
               </fieldset>
               <br />
             </div>

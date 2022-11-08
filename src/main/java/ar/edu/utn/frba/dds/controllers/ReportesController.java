@@ -94,6 +94,7 @@ public class ReportesController {
         return parametros;
     }
 
+
     public ModelAndView darAltaYMostrar(Request request, Response response) {
         Map<String, Object> parametros;
         Organizacion org;
@@ -116,8 +117,6 @@ public class ReportesController {
 
         parametros = mapUser(request, response);
         parametros.put("organizacion", OrganizacionMapperHBS.toDTO(org));
-        /*parametros.put("razonSocial", org.getRazonSocial());
-        parametros.put("orgID", org.getId());*/
         reporte = fachadaReportes.getReporteOrganizacion();
         if(reporte != null) {
             parametros.put("reporte", ReporteMapperHBS.toDTO(reporte));
@@ -132,22 +131,8 @@ public class ReportesController {
             //todo https://sparkjava.com/documentation#examples-and-faq
         }
 
-//        List<Map<String, Object>> meses = new ArrayList<>(); //todo
-
         return new ModelAndView(parametros, "reporte.hbs");
     }
-
-    /*private Map<String, Object> mapeoReporte(ReporteOrganizacion reporte) {
-        Map<String, Object> reporteMap = new HashMap<>();
-        reporteMap.put("fecha", reporte.getFechaCreacion());
-        reporteMap.put("consumoTotal", reporte.getConsumoTotal());
-        reporteMap.put("consumoMediciones", reporte.getConsumoMediciones());
-        reporteMap.put("consumoTrayectos", reporte.getConsumoTotal()-reporte.getConsumoMediciones());
-        reporteMap.put("consumoPorCategoria", reporte.getConsumoPorCategoria());
-        reporteMap.put("consumoPorSector", reporte.getConsumoPorSector());
-        reporteMap.put("consumoPorMiembro", reporte.getConsumoPorMiembro());
-        return reporteMap;
-    }*/
 
     public Response generar(Request request, Response response) {
         int idOrg = Integer.parseInt(request.params("id"));

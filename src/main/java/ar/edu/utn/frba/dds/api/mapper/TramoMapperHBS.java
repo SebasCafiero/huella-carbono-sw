@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.api.mapper;
 
 import ar.edu.utn.frba.dds.api.dto.TramoHBS;
+import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 
@@ -27,6 +28,17 @@ public class TramoMapperHBS {
     public static TramoHBS toDTOLazy(Tramo tramo) {
         TramoHBS tramoDTO = new TramoHBS();
         tramoDTO.setTransporte(TransporteMapperHBS.toDTOLazy(tramo.getMedioDeTransporte()));
+        return tramoDTO;
+    }
+
+    public static TramoHBS setDTOTransporte(TramoHBS tramoDTO, MedioDeTransporte transporte) {
+        tramoDTO.setTransporte(TransporteMapperHBS.toDTO(transporte));
+        return tramoDTO;
+    }
+
+    public static TramoHBS toDTOEditable(Tramo tramo) {
+        TramoHBS tramoDTO = toDTO(tramo);
+        tramoDTO.setTransporte(TransporteMapperHBS.toDTO(tramo.getMedioDeTransporte()));
         return tramoDTO;
     }
 }

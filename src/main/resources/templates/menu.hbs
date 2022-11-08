@@ -39,14 +39,16 @@
           <li>REPORTES</li>
           <ul>
             <li><a href="/organizacion/{{organizacion}}/reporte">GENERAR REPORTE</a>
-              <!-- VER DE USAR EL MISMO TEMPLATE CON UN PARAMETRO QUE SE COMPLETE TRAS EL POST -->
           </ul>
           {{/if}}
           {{#if agente}}
           <li>REPORTES</li>
           <ul>
             <li><a href="/agente/{{agente}}/reporte">GENERAR REPORTE</a>
-              <!-- VER DE USAR EL MISMO TEMPLATE CON UN PARAMETRO QUE SE COMPLETE TRAS EL POST -->
+          </ul>
+          <li>ORGANIZACIONES</li>
+          <ul>
+            <li><a href="/agente/{{agente}}/organizacion">VER ORGANIZACIONES</a></li>
           </ul>
           {{/if}}
         </ul>

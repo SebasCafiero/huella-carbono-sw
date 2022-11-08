@@ -63,11 +63,11 @@ function trayectoCompartido() {
     }
 }
 
-function transporteSeleccionado(clase_tramo) {
+function transporteSeleccionado(idMiembro, clase_tramo) {
     var div = document.getElementsByClassName(clase_tramo)[0];
     var optgroups = div.getElementsByTagName("optgroup");
 
-    var options_publico
+    var options_publico;
     for(var i = 0; i < optgroups.length; i++){
         if(optgroups[i].getAttribute('label') == "Públicos")
             options_publico = (optgroups[i].getElementsByTagName("option"));
@@ -121,4 +121,64 @@ function transporteSeleccionado(clase_tramo) {
             }
         }
     }*/
+}
+
+function transporteSeleccionado2(id_miembro, clase_tramo) {
+    var div = document.getElementsByClassName(clase_tramo)[0];
+//    var option_selected = div.getElementsByTagName("select")[0].value;
+    var select_transporte_cambiado = div.getElementsByTagName("select")[0];
+    div.style.backgroundColor  = 'pink';
+    var fecha = document.getElementById("fecha").value;
+
+    var div_tramo_nuevo = document.getElementsByClassName("tramo-nuevo")[0];
+    var div_tramos_editables = document.getElementById("tramos-editables");
+
+    var path_actual = window.location.origin + window.location.pathname;
+    var accion = "?action=" + new URLSearchParams(window.location.search).get("action");
+    var fecha_trayecto = "&fecha=" + fecha
+
+    var selects_transportes = div_tramos_editables.getElementsByClassName("transporte-editable");
+    var transportes_editables = "";
+    for(var k = 0; k < selects_transportes.length; k++) {
+        transportes_editables += "&transporte" + k + "=" + selects_transportes[k].value;
+    }
+
+    var divs_paradas = div_tramos_editables.getElementsByClassName("paradas");
+    var paradas_editables = "";
+    for(var l = 0; l < divs_paradas.length; l++) {
+        var selects_paradas = divs_paradas[l].getElementsByTagName("select");
+        paradas_editables += "&parada-inicial" + l + "=" + selects_paradas[0].value;
+        paradas_editables += "&parada-final" + l + "=" + selects_paradas[1].value;
+    }
+
+    var divs_ubicaciones = div_tramos_editables.getElementsByClassName("ubicaciones");
+    var ubicaciones_editables = "";
+    for(var m = 0; m < divs_ubicaciones.length; m++) {
+        var inputs_ubicaciones = divs_ubicaciones[m].getElementsByTagName("input");
+        ubicaciones_editables += "&prov-inicial" + m + "=" + inputs_ubicaciones[0].value;
+        ubicaciones_editables += "&mun-inicial" + m + "=" + inputs_ubicaciones[1].value;
+        ubicaciones_editables += "&loc-inicial" + m + "=" + inputs_ubicaciones[2].value;
+        ubicaciones_editables += "&calle-inicial" + m + "=" + inputs_ubicaciones[3].value;
+        ubicaciones_editables += "&num-inicial" + m + "=" + inputs_ubicaciones[4].value;
+        ubicaciones_editables += "&lat-inicial" + m + "=" + inputs_ubicaciones[5].value;
+        ubicaciones_editables += "&lon-inicial" + m + "=" + inputs_ubicaciones[6].value;
+
+        ubicaciones_editables += "&prov-final" + m + "=" + inputs_ubicaciones[7].value;
+        ubicaciones_editables += "&mun-final" + m + "=" + inputs_ubicaciones[8].value;
+        ubicaciones_editables += "&loc-final" + m + "=" + inputs_ubicaciones[9].value;
+        ubicaciones_editables += "&calle-final" + m + "=" + inputs_ubicaciones[10].value;
+        ubicaciones_editables += "&num-final" + m + "=" + inputs_ubicaciones[11].value;
+        ubicaciones_editables += "&lat-final" + m + "=" + inputs_ubicaciones[12].value;
+        ubicaciones_editables += "&lon-final" + m + "=" + inputs_ubicaciones[13].value;
+    }
+
+    var transporte_nuevo = "&transporte-nuevo=" + id_transporte_nuevo;
+
+    $.ajax({
+        type: "GET",
+        success: function(result) {
+          location.href = path_actual + accion + transporte_nuevo + fecha_trayecto + transportes_editables + paradas_editables + ubicaciones_editables
+//          location.href = "/miembro/" + idMiembro + "/trayecto?action=list"
+        }
+    });
 }
