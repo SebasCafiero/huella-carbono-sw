@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.*;
 import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
+import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
@@ -67,25 +68,31 @@ public class SetupInicialJPA {
         UbicacionGeografica mirallaAlberdi = new UbicacionGeografica(new Coordenada(-34.649292F, -58.499945F));
         UbicacionGeografica sanPedrito = new UbicacionGeografica(new Coordenada(-34.630861F, -58.470063F));
         UbicacionGeografica castroBarros = new UbicacionGeografica(new Coordenada(-34.611624F, -58.421263F));
-        UbicacionGeografica cordobaY9deJulio = new UbicacionGeografica(new Coordenada(-34.599001f,-58380794f));
-        UbicacionGeografica cordobaYEcuador = new UbicacionGeografica(new Coordenada(-34.597991f,-58405410f));
-        UbicacionGeografica cordobaYMedrano = new UbicacionGeografica(new Coordenada(-34.597810f,-58420118f));
+        UbicacionGeografica cordobaY9deJulio = new UbicacionGeografica(new Coordenada(-34.599001f,-58.380794f));
+        UbicacionGeografica cordobaYEcuador = new UbicacionGeografica(new Coordenada(-34.597991f,-58.405410f));
+        UbicacionGeografica cordobaYMedrano = new UbicacionGeografica(new Coordenada(-34.597810f,-58.420118f));
 
-        this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano,cordobaY9deJulio,cordobaYEcuador,cordobaYMedrano);
+        UbicacionGeografica casaDePapuGomez = new UbicacionGeografica(new Coordenada(-34.675744f,-58.455509f));//Av Escalada y Alberto Zorrilla
+        UbicacionGeografica casaDeManu = new UbicacionGeografica(new Coordenada(-34.618784f,-58.403749f));//Av Jujuy y Av Independencia
+
+
+
+        this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano,cordobaY9deJulio,cordobaYEcuador,cordobaYMedrano,casaDePapuGomez,casaDeManu);
         this.repoAreas.agregar(cabaProvincia, cabaMunicipio);
         this.repoAgentes.agregar(carlos, esteban);
 
         MedioDeTransporte fitito = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.GNC);
+        MedioDeTransporte autoDeManu = new VehiculoParticular(TipoVehiculo.AUTOMOVIL,TipoCombustible.NAFTA);
         MedioDeTransporte caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
         MedioDeTransporte bicicleta = new TransporteEcologico(TipoTransporteEcologico.BICICLETA);
 
         TransportePublico colectivo109 = new TransportePublico(TipoTransportePublico.COLECTIVO, "39");
         colectivo109.agregarParadas(
                 new Parada( cordobaY9deJulio,0f,0.45f),
-                new Parada( new Coordenada(-34.599298f,-58387400f),0.45f,0.4f),//av cordoba y uruguay
-                new Parada( new Coordenada(-34.599554f,-58394166f),0.4f,1.2f),//av cordoba y riobamba
+                new Parada( new Coordenada(-34.599298f,-58.387400f),0.45f,0.4f),//av cordoba y uruguay
+                new Parada( new Coordenada(-34.599554f,-58.394166f),0.4f,1.2f),//av cordoba y riobamba
                 new Parada( cordobaYEcuador,1.2f,0.5f),//av cordoba y ecuador
-                new Parada( new Coordenada(-34.597935f,-58413103f),0.5f,0.6f),//av cordoba y bustamante
+                new Parada( new Coordenada(-34.597935f,-58.413103f),0.5f,0.6f),//av cordoba y bustamante
                 new Parada( cordobaYMedrano,0.6f,0f)//av cordoba y av medrano
         );
 
@@ -113,7 +120,7 @@ public class SetupInicialJPA {
                 new Parada(new Coordenada(-34.610144F, -58.406930F), 0.7F, 0F) // plaza miserere
         );
 
-        this.repoMedios.agregar(fitito, colectivo63,colectivo109, subteA, caminata,bicicleta);
+        this.repoMedios.agregar(fitito, colectivo63,colectivo109, subteA, caminata,bicicleta,autoDeManu);
 
         // Organizaciones, sectores y miembros
 
@@ -124,9 +131,9 @@ public class SetupInicialJPA {
         Miembro juanPerez = new Miembro("Juan", "Perez", TipoDeDocumento.DNI, 14432234);
         Miembro guillermoCoppola = new Miembro("Guillermo", "Cóppola", TipoDeDocumento.PASAPORTE, 11332223);
         Miembro manuGinobili = new Miembro("Emanuel", "Ginobili", TipoDeDocumento.DNI, 32123456);
-        sistemasUtnCampus.agregarMiembro(juanPerez);
+        sistemasUtnCampus.agregarMiembro(juanPerez);//llega con auto,bondi,sube y a pata
         sistemasUtnCampus.agregarMiembro(guillermoCoppola);
-        sistemasUtnCampus.agregarMiembro(manuGinobili);
+        sistemasUtnCampus.agregarMiembro(manuGinobili);///llega en auto particular
 
 
         Sector rrhhUtnCampus = new Sector("Capital Humano", orgUtnCampus);
@@ -135,7 +142,7 @@ public class SetupInicialJPA {
         Miembro papuGomez = new Miembro("Alejandro", "Gomez", TipoDeDocumento.DNI, 35789065);
         rrhhUtnCampus.agregarMiembro(sebaSosa);
         rrhhUtnCampus.agregarMiembro(martinTagliafico);
-        rrhhUtnCampus.agregarMiembro(papuGomez);
+        rrhhUtnCampus.agregarMiembro(papuGomez);//llega en bici
 
         Sector adminUtnCampus = new Sector("Administracio", orgUtnCampus);
         Miembro elDoctor = new Miembro("Carlos","Bilardo",TipoDeDocumento.DNI,27145367);
@@ -155,7 +162,7 @@ public class SetupInicialJPA {
         Miembro charlyGarcia = new Miembro("Carlos", "Garcia", TipoDeDocumento.DNI, 34432233);
         tesoreriaUtnMedrano.agregarMiembro(laSaeta);
         tesoreriaUtnMedrano.agregarMiembro(fitoPaez);
-        tesoreriaUtnMedrano.agregarMiembro(charlyGarcia);
+        tesoreriaUtnMedrano.agregarMiembro(charlyGarcia);//en bondi y caminando
 
         Sector administracionUtnMedrano = new Sector("Administracion", orgUtnMedrano);
         Miembro elVirrey = new Miembro("Carlos", "Bianchi", TipoDeDocumento.DNI, 22222222);
@@ -199,12 +206,36 @@ public class SetupInicialJPA {
         limpiezaMc.agregarMiembro(saulGoodman);
 
 
+
         this.repoOrganizaciones.agregar(orgUtnCampus);
         this.repoOrganizaciones.agregar(orgUtnMedrano);
         this.repoOrganizaciones.agregar(mcObelisco);
 
 
         // Tramos y trayectos
+        Tramo bici = new Tramo(bicicleta,casaDePapuGomez,ubicacionUtnCampus);
+        Trayecto trayectoPapu = new Trayecto(new Periodo(2022));
+        trayectoPapu.agregarTramo(bici);
+        bici.setTrayecto(trayectoPapu);
+        papuGomez.agregarTrayecto(trayectoPapu);
+        trayectoPapu.agregarMiembro(papuGomez);
+
+        Tramo autoParticular = new Tramo(autoDeManu,casaDePapuGomez,ubicacionUtnCampus);
+        Trayecto trayectoManu = new Trayecto(new Periodo(2022));
+        trayectoManu.agregarTramo(autoParticular);
+        autoParticular.setTrayecto(trayectoManu);
+        manuGinobili.agregarTrayecto(trayectoManu);
+        trayectoManu.agregarMiembro(manuGinobili);
+
+        Tramo bondiCharly = new Tramo(colectivo109,cordobaY9deJulio,cordobaYMedrano);
+        Tramo caminataDeCharly = new Tramo(caminata,cordobaYMedrano,ubicacionUtnMedrano);
+        Trayecto trayectoCharly = new Trayecto(new Periodo(2021));
+        trayectoCharly.agregarTramos(Arrays.asList(bondiCharly,caminataDeCharly));
+        bondiCharly.setTrayecto(trayectoCharly);
+        caminataDeCharly.setTrayecto(trayectoCharly);
+        charlyGarcia.agregarTrayecto(trayectoCharly);
+        trayectoCharly.agregarMiembro(charlyGarcia);
+
 
         Tramo fiat600 = new Tramo(fitito, ubicacionUtnCampus, mirallaAlberdi);
         fiat600.setValor();
@@ -215,18 +246,46 @@ public class SetupInicialJPA {
         Tramo aPata = new Tramo(caminata, castroBarros, ubicacionUtnMedrano);
         aPata.setValor();
 
-        Trayecto trayecto1 = new Trayecto(new Periodo(2022));
-        trayecto1.agregarTramos(Arrays.asList(fiat600, bondi, subte, aPata));
-        fiat600.setTrayecto(trayecto1);
-        bondi.setTrayecto(trayecto1);
-        subte.setTrayecto(trayecto1);
-        aPata.setTrayecto(trayecto1);
+        Trayecto trayectoJuan = new Trayecto(new Periodo(2022));
+        trayectoJuan.agregarTramos(Arrays.asList(fiat600, bondi, subte, aPata));
+        fiat600.setTrayecto(trayectoJuan);
+        bondi.setTrayecto(trayectoJuan);
+        subte.setTrayecto(trayectoJuan);
+        aPata.setTrayecto(trayectoJuan);
 
-        juanPerez.agregarTrayecto(trayecto1);
-        trayecto1.agregarMiembro(juanPerez);
+        juanPerez.agregarTrayecto(trayectoJuan);
+        trayectoJuan.agregarMiembro(juanPerez);
 
-        this.repoTrayectos.agregar(trayecto1);
 
+        this.repoTrayectos.agregar(trayectoJuan);
+
+
+        // Mediciones
+
+        orgUtnCampus.agregarMediciones(
+                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",3f,new Periodo(2022,9)),
+                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",5f,new Periodo(2022,8)),
+                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",4.7f,new Periodo(2022,8)),
+                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",10f,new Periodo(2022,7)),
+                new Medicion( new Categoria("Combustion Fija","Diesel"),"lt",4f,new Periodo(2022,7)),
+                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",22f,new Periodo(2022,6)),
+                new Medicion( new Categoria("Combustion Movil","Gasoil"),"lt",2.2f,new Periodo(2022,6)),
+                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",4.6f,new Periodo(2022,6)),
+                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",2f,new Periodo(2022,5)),
+                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",4f,new Periodo(2022,5)),
+                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",14f,new Periodo(2022,4)),
+                new Medicion( new Categoria("Combustion Fija","Diesel"),"lt",4.7f,new Periodo(2022,3)),
+                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",23.6f,new Periodo(2022,3)),
+                new Medicion( new Categoria("Combustion Movil","Gasoil"),"lt",24f,new Periodo(2022,2)),
+                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",3f,new Periodo(2021,12)),
+                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",5f,new Periodo(2021,10)),
+                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",4.7f,new Periodo(2021,8)),
+                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",10f,new Periodo(2021,7)),
+                new Medicion( new Categoria("Combustion Fija","Diesel"),"lt",6.8f,new Periodo(2021,7)),
+                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",7f,new Periodo(2021,6)),
+                new Medicion( new Categoria("Combustion Movil","Gasoil"),"lt",5.3f,new Periodo(2021,6))
+                //la huella de carbono de todas estas meddiciones tendria que dar 548.1
+        );
     }
 
     public void undoSetup() {
