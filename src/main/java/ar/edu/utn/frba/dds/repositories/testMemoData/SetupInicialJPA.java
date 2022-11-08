@@ -74,15 +74,18 @@ public class SetupInicialJPA {
 
         UbicacionGeografica casaDePapuGomez = new UbicacionGeografica(new Coordenada(-34.675744f,-58.455509f));//Av Escalada y Alberto Zorrilla
         UbicacionGeografica casaDeManu = new UbicacionGeografica(new Coordenada(-34.618784f,-58.403749f));//Av Jujuy y Av Independencia
+        UbicacionGeografica estacionamientoDeWalter = new UbicacionGeografica(new Coordenada(-34.584197f,-58.420833f));//Virasoro 2367
+        UbicacionGeografica casaDeWalter = new UbicacionGeografica(new Coordenada(-34.587201f,-58.423048f));//Guatemala 1425
 
 
 
-        this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano,cordobaY9deJulio,cordobaYEcuador,cordobaYMedrano,casaDePapuGomez,casaDeManu);
+        this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano,cordobaY9deJulio,cordobaYEcuador,cordobaYMedrano,casaDePapuGomez,casaDeManu,casaDeWalter,estacionamientoDeWalter);
         this.repoAreas.agregar(cabaProvincia, cabaMunicipio);
         this.repoAgentes.agregar(carlos, esteban);
 
         MedioDeTransporte fitito = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.GNC);
-        MedioDeTransporte autoDeManu = new VehiculoParticular(TipoVehiculo.AUTOMOVIL,TipoCombustible.NAFTA);
+        MedioDeTransporte autoDeManu = new VehiculoParticular(TipoVehiculo.AUTOMOVIL,TipoCombustible.GASOIL);
+        MedioDeTransporte autoDeWalter = new VehiculoParticular(TipoVehiculo.AUTOMOVIL,TipoCombustible.NAFTA);
         MedioDeTransporte caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
         MedioDeTransporte bicicleta = new TransporteEcologico(TipoTransporteEcologico.BICICLETA);
 
@@ -120,7 +123,7 @@ public class SetupInicialJPA {
                 new Parada(new Coordenada(-34.610144F, -58.406930F), 0.7F, 0F) // plaza miserere
         );
 
-        this.repoMedios.agregar(fitito, colectivo63,colectivo109, subteA, caminata,bicicleta,autoDeManu);
+        this.repoMedios.agregar(fitito, colectivo63,colectivo109, subteA, caminata,bicicleta,autoDeManu,autoDeWalter);
 
         // Organizaciones, sectores y miembros
 
@@ -245,19 +248,40 @@ public class SetupInicialJPA {
         subte.setValor();
         Tramo aPata = new Tramo(caminata, castroBarros, ubicacionUtnMedrano);
         aPata.setValor();
-
         Trayecto trayectoJuan = new Trayecto(new Periodo(2022));
         trayectoJuan.agregarTramos(Arrays.asList(fiat600, bondi, subte, aPata));
         fiat600.setTrayecto(trayectoJuan);
         bondi.setTrayecto(trayectoJuan);
         subte.setTrayecto(trayectoJuan);
         aPata.setTrayecto(trayectoJuan);
-
         juanPerez.agregarTrayecto(trayectoJuan);
         trayectoJuan.agregarMiembro(juanPerez);
 
+        Tramo bondi109 = new Tramo(colectivo109,cordobaYEcuador,cordobaYMedrano);
+        Tramo caminandoJuntos = new Tramo(caminata,cordobaYMedrano,ubicacionUtnMedrano);
+        Trayecto trayectoEcuadorAMedrano = new Trayecto(new Periodo(2022));
+        trayectoEcuadorAMedrano.agregarTramos(Arrays.asList(bondi109,caminandoJuntos));
+        bondi109.setTrayecto(trayectoEcuadorAMedrano);
+        caminandoJuntos.setTrayecto(trayectoEcuadorAMedrano);
+        elVirrey.agregarTrayecto(trayectoEcuadorAMedrano);
+        elTitan.agregarTrayecto(trayectoEcuadorAMedrano);
+        trayectoEcuadorAMedrano.agregarMiembro(elVirrey);
+        trayectoEcuadorAMedrano.agregarMiembro(elTitan);
 
-        this.repoTrayectos.agregar(trayectoJuan);
+        Tramo caminataDe3 = new Tramo(caminata,casaDeWalter,estacionamientoDeWalter);
+        Tramo autoDe3 = new Tramo(autoDeWalter,estacionamientoDeWalter,ubicacionMcObelisco);
+        Trayecto trayectoDeA3 = new Trayecto(new Periodo(2022));
+        trayectoDeA3.agregarTramos(Arrays.asList(caminataDe3,autoDe3));
+        caminataDe3.setTrayecto(trayectoDeA3);
+        autoDe3.setTrayecto(trayectoDeA3);
+        walterWhite.agregarTrayecto(trayectoDeA3);
+        jessePinkman.agregarTrayecto(trayectoDeA3);
+        saulGoodman.agregarTrayecto(trayectoDeA3);
+        trayectoDeA3.agregarMiembro(walterWhite);
+        trayectoDeA3.agregarMiembro(jessePinkman);
+        trayectoDeA3.agregarMiembro(saulGoodman);
+
+        this.repoTrayectos.agregar(trayectoManu,trayectoPapu,trayectoCharly,trayectoJuan,trayectoEcuadorAMedrano,trayectoDeA3);
 
 
         // Mediciones
@@ -284,7 +308,7 @@ public class SetupInicialJPA {
                 new Medicion( new Categoria("Combustion Fija","Diesel"),"lt",6.8f,new Periodo(2021,7)),
                 new Medicion( new Categoria("Electricidad","Electricidad"),"kw",7f,new Periodo(2021,6)),
                 new Medicion( new Categoria("Combustion Movil","Gasoil"),"lt",5.3f,new Periodo(2021,6))
-                //la huella de carbono de todas estas meddiciones tendria que dar 548.1
+                //la huella de carbono de todas estas mediciones tendria que dar 548.1
         );
     }
 
