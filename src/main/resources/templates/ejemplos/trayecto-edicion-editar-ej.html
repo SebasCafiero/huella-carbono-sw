@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/img/logo.png">
+    <title>Modificar Trayecto #id</title>
+    <style>
+	  
+	  .campo-seleccionar {
+		  font-style: italic;
+	  }
+	  
+	  .reiniciar {
+		  text-align: right;
+	  }
+	  
+	  
+	  .reiniciar input {
+		  color: black;
+		  background-color: #DDAA22;
+		  border-radius: 20px;
+		  margin: 10px 10px;
+	  }
+	  
+	  .enviar {
+		  text-align: center;
+		  padding-bottom: 10px;
+		  border-bottom: 1px solid black;
+	  }
+	  
+	  .enviar input {
+		  color: black;
+		  background-color: #22CC22;
+		  border: 3px solid orange;
+		  border-radius: 20px;
+		  font-size: 20px;
+		  padding: 5px 15px;
+		  margin-top: -15px;
+	  }
+	  
+	  input[type=submit]:hover, input[type=reset]:hover {
+		  opacity: 0.8;
+	  }
+	  
+	  input[type=submit]:active {
+		  background-color: #22BB22;
+	  }
+	  
+	  .cancelar {
+		  text-align: center;
+		  padding: 10px;
+	  }
+	  
+	  .cancelar span {
+		  border: 2px dotted blue;
+		  padding: 10px;
+	  }
+    </style>
+    
+  </head>
+  <body>
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>Leo Messi</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h1>TRAYECTOS</h1>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="edicion">
+        <span>ID-Trayecto: 1</span> <br /><br />
+        <!-- Al editar trayecto se usa method post xq html no admite form.put -->
+        <form action="/miembro/#miembro/trayecto/#trayecto" method="post">
+          <div class="form-fecha">
+            <label for="fecha">Fecha</label>
+            <input id="fecha" type="month" name="fecha" value="10/2020"/>
+          </div>
+          <br />
+          <div class="form-miembros">
+            <fieldset>
+              <legend>Miembros</legend>
+              <input id="logueado" type="checkbox" value="m-logueado" name="m-miembro" checked disabled/>
+              <label for="logueado">Leo Messi - DNI: 10</label><br />
+              <input id="miembro1" type="checkbox" value="1" name="f-miembro" checked/>
+              <label for="miembro1">Leo Paredes - DNI: 123</label><br />
+              <input id="miembro2" type="checkbox" value="2" name="f-miembro" checked/>
+              <label for="miembro2">Ángel Di María - DNI: 987</label><br />
+              <input id="miembro3" type="checkbox" value="3" name="f-miembro"/>
+              <label for="miembro3">Rodrigo De Paul - DNI: 545</label><br />
+              <!-- ver si name="f-miembro[]" como PHP -->
+            </fieldset>
+          </div>
+          <br />
+          <div class="form-tramos">
+            <fieldset>
+              <legend>Tramo1</legend>
+              <label for="transporte1">Transporte</label>
+              <select id="transporte1" name="f-transporte-1" required>
+                <option class="campo-seleccionar" value="idActual" selected>Tren Sarmiento</option>
+                <optgroup label="Público">
+                  <option value="idSubteA">Subte A</option>
+                  <option value="idBondi47">Colectivo 47</option>
+                </optgroup>
+                <optgroup label="Particular">
+                  <option value="idNafta">Nafta</option>
+                  <option value="idGnc">GNC</option>
+                </optgroup>
+                <optgroup label="Ecológico">
+                  <option value="idPie">A Pie</option>
+                  <option value="idBicicleta">Bicicleta</option>
+                </optgroup>
+                <optgroup label="Contratado">
+                  <option value="idUber">Uber</option>
+                  <option value="idTaxi">Taxi</option>
+                  <option value="idDidi">DiDi</option>
+                </optgroup>
+              </select>
+              <br /><br />
+              <!-- VER DE PONER UBICACION BIEN, PARADAS EN TRANSPORTE PUBLICO -->
+              <fieldset>
+                <legend>Coordenadas Iniciales</legend>
+                <label for="lat-inicial-1">Latitud:</label>
+                <input id="lat-inicial-1" type="text" name="f-lat-inicial-1" value="10.5" />
+                <label for="lon-inicial-1">Longitud:</label>
+                <input id="lon-inicial-1" type="text" name="f-lon-inicial-1" value="15.0" />
+              </fieldset>
+              <br />
+              <fieldset>
+                <legend>Coordenadas Finales</legend>
+                <label for="lat-final-1">Latitud:</label>
+                <input id="lat-final-1" type="text" name="f-lat-final-1" value="-10.3" />
+                <label for="lon-final-1">Longitud:</label>
+                <input id="lon-final-1" type="text" name="f-lon-final-1" value="-25.7" />
+              </fieldset>
+            </fieldset>
+            <br />
+            <fieldset>
+              <legend>Tramo2</legend>
+              <label for="transporte2">Transporte</label>
+              <select id="transporte2" name="f-transporte-2" required>
+                <option class="campo-seleccionar" value="idActual" selected>Colectivo 47</option>
+                <optgroup label="Público">
+                  <option value="idSubteA">Subte A</option>
+                  <option value="idBondi47">Colectivo 47</option>
+                </optgroup>
+                <optgroup label="Particular">
+                  <option value="idNafta">Nafta</option>
+                  <option value="idGnc">GNC</option>
+                </optgroup>
+                <optgroup label="Ecológico">
+                  <option value="idPie">A Pie</option>
+                  <option value="idBicicleta">Bicicleta</option>
+                </optgroup>
+                <optgroup label="Contratado">
+                  <option value="idUber">Uber</option>
+                  <option value="idTaxi">Taxi</option>
+                  <option value="idDidi">DiDi</option>
+                </optgroup>
+              </select>
+              <br /><br />
+              <!-- VER DE PONER UBICACION BIEN, PARADAS EN TRANSPORTE PUBLICO -->
+              <fieldset>
+                <legend>Coordenadas Iniciales</legend>
+                <label for="lat-inicial-2">Latitud:</label>
+                <input id="lat-inicial-2" type="text" name="f-lat-inicial-2" value="-10.3" />
+                <label for="lon-inicial-2">Longitud:</label>
+                <input id="lon-inicial-2" type="text" name="f-lon-inicial-2" value="-25.7" />
+              </fieldset>
+              <br />
+              <fieldset>
+                <legend>Coordenadas Finales</legend>
+                <label for="lat-final-2">Latitud:</label>
+                <input id="lat-final-2" type="text" name="f-lat-final-2" value="-10" />
+                <label for="lon-final-2">Longitud:</label>
+                <input id="lon-final-2" type="text" name="f-lon-final-2" value="-17.8" />
+              </fieldset>
+            </fieldset>
+            <br />
+            <div class="tramos-nuevos">
+              <!-- VER DE HABILITAR/DESHABILITAR EL FIELDSET -->
+              <input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack"/>
+              <label for="tramo-nuevo-ack">Agregar Tramo Nuevo</label><br />
+              <fieldset>
+                <legend>Nuevo Tramo</legend>
+                <label for="transporte-nuevo">Transporte</label>
+                <select id="transporte-nuevo" name="f-transporte-nuevo">
+                  <option class="campo-seleccionar" selected disabled>Seleccionar</option>
+                  <optgroup label="Público">
+                    <option value="idSubteA">Subte A</option>
+                    <option value="idBondi47">Colectivo 47</option>
+                  </optgroup>
+                  <optgroup label="Particular">
+                    <option value="idNafta">Nafta</option>
+                    <option value="idGnc">GNC</option>
+                  </optgroup>
+                  <optgroup label="Ecológico">
+                    <option value="idPie">A Pie</option>
+                    <option value="idBicicleta">Bicicleta</option>
+                  </optgroup>
+                  <optgroup label="Contratado">
+                    <option value="idUber">Uber</option>
+                    <option value="idTaxi">Taxi</option>
+                    <option value="idDidi">DiDi</option>
+                  </optgroup>
+                </select>
+                <br /><br />
+                <fieldset>
+                  <legend>Coordenadas Iniciales</legend>
+                  <label for="lat-inicial-nueva">Latitud:</label>
+                  <input id="lat-inicial-nueva" type="text" name="f-lat-inicial-nueva" value="" />
+                  <label for="lon-inicial-nueva">Longitud:</label>
+                  <input id="lon-inicial-nueva" type="text" name="f-lon-inicial-nueva" value="" />
+                </fieldset>
+                <br />
+                <fieldset>
+                  <legend>Coordenadas Finales</legend>
+                  <label for="lat-final-nueva">Latitud:</label>
+                  <input id="lat-final-nueva" type="text" name="f-lat-final-nueva" value="" />
+                  <label for="lon-final-nueva">Longitud:</label>
+                  <input id="lon-final-nueva" type="text" name="f-lon-final-nueva" value="" />
+                </fieldset>
+              </fieldset>
+              <br />
+            </div>
+          </div>
+          <div class="reiniciar">
+            <input type="reset" value="Reiniciar"/> <!-- Quizas sacarlo -->
+          </div>
+          <div class="enviar"> 
+            <input type="submit" value="Guardar Cambios" />
+          </div>
+        </form>
+      </div>
+      <br />
+      <div class="cancelar">
+        <span><a href="/miembro/#miembro/trayecto/#trayecto">CANCELAR</a></span>
+      </div>
+    </div>
+  </body>
+</html>

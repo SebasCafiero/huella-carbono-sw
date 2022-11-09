@@ -9,10 +9,7 @@ import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
-import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
-import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
-import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
+import ar.edu.utn.frba.dds.entities.personas.*;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
@@ -21,12 +18,9 @@ import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class SetupInicialJPA {
     private final Repositorio<MedioDeTransporte> repoMedios;
@@ -35,6 +29,7 @@ public class SetupInicialJPA {
     private final Repositorio<Trayecto> repoTrayectos;
     private final Repositorio<AreaSectorial> repoAreas;
     private final Repositorio<AgenteSectorial> repoAgentes;
+    private final Repositorio<Contacto> repoContactos;
 
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
@@ -43,6 +38,7 @@ public class SetupInicialJPA {
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
+        this.repoContactos = FactoryRepositorio.get(Contacto.class);
     }
 
     public void doSetup() {
@@ -55,14 +51,19 @@ public class SetupInicialJPA {
         Provincia cabaProvincia = new Provincia("CABA", "Argentina");
         Municipio cabaMunicipio = new Municipio("Ciudad Autonoma de Buenos Aires", cabaProvincia);
 
-        AgenteSectorial carlos = new AgenteSectorial(cabaProvincia, new ContactoMail("uncontacto@gmail.com", "123"), "1155443322");
-        AgenteSectorial esteban = new AgenteSectorial(cabaMunicipio, new ContactoMail("otrocontacto@gmail.com", "321"), "1122334455");
+        ContactoMail con1 = new ContactoMail("uncontacto@gmail.com", "123");
+        ContactoTelefono con2 = new ContactoTelefono("1155443322");
+        ContactoMail con3 = new ContactoMail("otrocontacto@gmail.com", "321");
+        ContactoTelefono con4 = new ContactoTelefono("1122334455");
+
+        AgenteSectorial carlos = new AgenteSectorial(cabaProvincia, con1, con2);
+        AgenteSectorial esteban = new AgenteSectorial(cabaMunicipio, con3, con4);
 
         UbicacionGeografica ubicacionUtnCampus = new UbicacionGeografica(
                 new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Mozart", 2300),
                 new Coordenada(-34.659932F, -58.468397F));
         UbicacionGeografica ubicacionUtnMedrano = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Medrano", 591),
+                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Medrano", 951),
                 new Coordenada(-34.598412F, -58.420196F));
         UbicacionGeografica ubicacionMcObelisco = new UbicacionGeografica(
                 new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Av: Corrientes",992),
@@ -85,21 +86,22 @@ public class SetupInicialJPA {
         this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano,cordobaY9deJulio,cordobaYEcuador,cordobaYMedrano,casaDePapuGomez,casaDeManu,casaDeWalter,estacionamientoDeWalter);
         this.repoAreas.agregar(cabaProvincia, cabaMunicipio);
         this.repoAgentes.agregar(carlos, esteban);
+//        this.repoContactos.agregar(con1, con2, con3, con4);
 
         MedioDeTransporte fitito = new ServicioContratado(new TipoServicio("Taxi"));
-        MedioDeTransporte autoDeManu = new VehiculoParticular(TipoVehiculo.AUTOMOVIL,TipoCombustible.GASOIL);
-        MedioDeTransporte autoDeWalter = new VehiculoParticular(TipoVehiculo.AUTOMOVIL,TipoCombustible.NAFTA);
+        MedioDeTransporte autoDeManu = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.GASOIL);
+        MedioDeTransporte autoDeWalter = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.NAFTA);
         MedioDeTransporte caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
         MedioDeTransporte bicicleta = new TransporteEcologico(TipoTransporteEcologico.BICICLETA);
 
         TransportePublico colectivo109 = new TransportePublico(TipoTransportePublico.COLECTIVO, "109");
         colectivo109.agregarParadas(
-                new Parada( cordobaY9deJulio,0f,0.45f),
-                new Parada( new Coordenada(-34.599298f,-58.387400f),0.45f,0.4f),//av cordoba y uruguay
-                new Parada( new Coordenada(-34.599554f,-58.394166f),0.4f,1.2f),//av cordoba y riobamba
-                new Parada( cordobaYEcuador,1.2f,0.5f),//av cordoba y ecuador
-                new Parada( new Coordenada(-34.597935f,-58.413103f),0.5f,0.6f),//av cordoba y bustamante
-                new Parada( cordobaYMedrano,0.6f,0f)//av cordoba y av medrano
+                new Parada(cordobaY9deJulio, 0f, 0.45f),
+                new Parada(new Coordenada(-34.599298f, -58.387400f), 0.45f, 0.4f),//av cordoba y uruguay
+                new Parada(new Coordenada(-34.599554f, -58.394166f), 0.4f, 1.2f),//av cordoba y riobamba
+                new Parada(cordobaYEcuador, 1.2f, 0.5f),//av cordoba y ecuador
+                new Parada(new Coordenada(-34.597935f, -58.413103f), 0.5f, 0.6f),//av cordoba y bustamante
+                new Parada(cordobaYMedrano, 0.6f, 0f)//av cordoba y av medrano
         );
 
         TransportePublico colectivo63 = new TransportePublico(TipoTransportePublico.COLECTIVO, "63");
@@ -133,6 +135,9 @@ public class SetupInicialJPA {
         Organizacion orgUtnCampus = new Organizacion("UTN - Campus", TipoDeOrganizacionEnum.INSTITUCION,
                 new ClasificacionOrganizacion("Universidad"), ubicacionUtnCampus);
 
+        orgUtnCampus.agregarContactoMail(new ContactoMail("cuentafalsa123@hotmail.com"));
+        orgUtnCampus.agregarContactoMail(new ContactoMail("cuentafalsa456@hotmail.com"));
+
         Sector sistemasUtnCampus = new Sector("Sistemas", orgUtnCampus);
         Miembro juanPerez = new Miembro("Juan", "Perez", TipoDeDocumento.DNI, 14432234);
         Miembro guillermoCoppola = new Miembro("Guillermo", "Cóppola", TipoDeDocumento.PASAPORTE, 11332223);
@@ -150,9 +155,9 @@ public class SetupInicialJPA {
         rrhhUtnCampus.agregarMiembro(martinTagliafico);
         rrhhUtnCampus.agregarMiembro(papuGomez);//llega en bici
 
-        Sector adminUtnCampus = new Sector("Administracio", orgUtnCampus);
-        Miembro elDoctor = new Miembro("Carlos","Bilardo",TipoDeDocumento.DNI,27145367);
-        Miembro laPulga = new Miembro("Lionel","Messi",TipoDeDocumento.DNI,34674393);
+        Sector adminUtnCampus = new Sector("Administracion", orgUtnCampus);
+        Miembro elDoctor = new Miembro("Carlos", "Bilardo", TipoDeDocumento.DNI,27145367);
+        Miembro laPulga = new Miembro("Lionel", "Messi", TipoDeDocumento.DNI,34674393);
         Miembro elDiego = new Miembro("Diego", "Maradona", TipoDeDocumento.DNI, 20345654);
         adminUtnCampus.agregarMiembro(elDoctor);
         adminUtnCampus.agregarMiembro(laPulga);
@@ -218,18 +223,18 @@ public class SetupInicialJPA {
 
         // Tramos y trayectos
         Trayecto trayectoPapu = new Trayecto(new Periodo(2022),
-                new Tramo(bicicleta,casaDePapuGomez,ubicacionUtnCampus));
+                new Tramo(bicicleta, casaDePapuGomez, ubicacionUtnCampus));
         papuGomez.agregarTrayecto(trayectoPapu);
         trayectoPapu.agregarMiembro(papuGomez);
 
         Trayecto trayectoManu = new Trayecto(new Periodo(2022),
-                new Tramo(autoDeManu,casaDeManu,ubicacionUtnCampus));
+                new Tramo(autoDeManu, casaDeManu, ubicacionUtnCampus));
         manuGinobili.agregarTrayecto(trayectoManu);
         trayectoManu.agregarMiembro(manuGinobili);
 
         Trayecto trayectoCharly = new Trayecto(new Periodo(2021),
-                new Tramo(colectivo109,cordobaY9deJulio,cordobaYMedrano),
-                new Tramo(caminata,cordobaYMedrano,ubicacionUtnMedrano));
+                new Tramo(colectivo109, cordobaY9deJulio, cordobaYMedrano),
+                new Tramo(caminata, cordobaYMedrano, ubicacionUtnMedrano));
         charlyGarcia.agregarTrayecto(trayectoCharly);
         trayectoCharly.agregarMiembro(charlyGarcia);
 
@@ -242,16 +247,16 @@ public class SetupInicialJPA {
         trayectoJuan.agregarMiembro(juanPerez);
 
         Trayecto trayectoEcuadorAMedrano = new Trayecto(new Periodo(2022),
-                new Tramo(colectivo109,cordobaYEcuador,cordobaYMedrano),
-                new Tramo(caminata,cordobaYMedrano,ubicacionUtnMedrano));
+                new Tramo(colectivo109, cordobaYEcuador, cordobaYMedrano),
+                new Tramo(caminata, cordobaYMedrano, ubicacionUtnMedrano));
         elVirrey.agregarTrayecto(trayectoEcuadorAMedrano);
         elTitan.agregarTrayecto(trayectoEcuadorAMedrano);
         trayectoEcuadorAMedrano.agregarMiembro(elVirrey);
         trayectoEcuadorAMedrano.agregarMiembro(elTitan);
 
         Trayecto trayectoDeA3 = new Trayecto(new Periodo(2022),
-                new Tramo(caminata,casaDeWalter,estacionamientoDeWalter),
-                new Tramo(autoDeWalter,estacionamientoDeWalter,ubicacionMcObelisco));
+                new Tramo(caminata, casaDeWalter, estacionamientoDeWalter),
+                new Tramo(autoDeWalter, estacionamientoDeWalter, ubicacionMcObelisco));
         walterWhite.agregarTrayecto(trayectoDeA3);
         jessePinkman.agregarTrayecto(trayectoDeA3);
         saulGoodman.agregarTrayecto(trayectoDeA3);
@@ -269,27 +274,27 @@ public class SetupInicialJPA {
         // Mediciones
 
         orgUtnCampus.agregarMediciones(
-                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",3f,new Periodo(2022,9)),
-                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",5f,new Periodo(2022,8)),
-                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",4.7f,new Periodo(2022,8)),
-                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",10f,new Periodo(2022,7)),
-                new Medicion( new Categoria("Combustion Fija","Diesel"),"lt",4f,new Periodo(2022,7)),
-                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",22f,new Periodo(2022,6)),
-                new Medicion( new Categoria("Combustion Movil","Gasoil"),"lt",2.2f,new Periodo(2022,6)),
-                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",4.6f,new Periodo(2022,6)),
-                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",2f,new Periodo(2022,5)),
-                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",4f,new Periodo(2022,5)),
-                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",14f,new Periodo(2022,4)),
-                new Medicion( new Categoria("Combustion Fija","Diesel"),"lt",4.7f,new Periodo(2022,3)),
-                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",23.6f,new Periodo(2022,3)),
-                new Medicion( new Categoria("Combustion Movil","Gasoil"),"lt",24f,new Periodo(2022,2)),
-                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",3f,new Periodo(2021,12)),
-                new Medicion( new Categoria("Combustion fija","Gas Natural"),"m3",5f,new Periodo(2021,10)),
-                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",4.7f,new Periodo(2021,8)),
-                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",10f,new Periodo(2021,7)),
-                new Medicion( new Categoria("Combustion Fija","Diesel"),"lt",6.8f,new Periodo(2021,7)),
-                new Medicion( new Categoria("Electricidad","Electricidad"),"kw",7f,new Periodo(2021,6)),
-                new Medicion( new Categoria("Combustion Movil","Gasoil"),"lt",5.3f,new Periodo(2021,6))
+                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 3f,new Periodo(2022,9)),
+                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 5f,new Periodo(2022,8)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 4.7f,new Periodo(2022,8)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 10f,new Periodo(2022,7)),
+                new Medicion(new Categoria("Combustion Fija", "Diesel"),         "lt", 4f,new Periodo(2022,7)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 22f,new Periodo(2022,6)),
+                new Medicion(new Categoria("Combustion Movil", "Gasoil"),        "lt", 2.2f,new Periodo(2022,6)),
+                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 4.6f,new Periodo(2022,6)),
+                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 2f,new Periodo(2022,5)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 4f,new Periodo(2022,5)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 14f,new Periodo(2022,4)),
+                new Medicion(new Categoria("Combustion Fija", "Diesel"),         "lt", 4.7f,new Periodo(2022,3)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 23.6f,new Periodo(2022,3)),
+                new Medicion(new Categoria("Combustion Movil", "Gasoil"),        "lt", 24f,new Periodo(2022,2)),
+                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 3f,new Periodo(2021,12)),
+                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 5f,new Periodo(2021,10)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 4.7f,new Periodo(2021,8)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 10f,new Periodo(2021,7)),
+                new Medicion(new Categoria("Combustion Fija", "Diesel"),         "lt", 6.8f,new Periodo(2021,7)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 7f,new Periodo(2021,6)),
+                new Medicion(new Categoria("Combustion Movil", "Gasoil"),        "lt", 5.3f,new Periodo(2021,6))
                 //la huella de carbono de todas estas mediciones tendria que dar 548.1
         );
     }

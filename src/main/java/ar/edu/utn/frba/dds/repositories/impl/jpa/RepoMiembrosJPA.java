@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.impl.jpa;
 
-import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;

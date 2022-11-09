@@ -13,7 +13,7 @@ public class UbicacionGeografica {
     @Embedded
     private Coordenada coordenada;
 
-    @Transient
+    @Embedded
     private Direccion direccion;
 
     public UbicacionGeografica() {
@@ -29,15 +29,21 @@ public class UbicacionGeografica {
         this.direccion = new Direccion(pais, provincia, municipio, localidad, calle, numero);
     }
 
-    public UbicacionGeografica(String localidad, String calle, Integer numero, Coordenada coordenada) {
+    public UbicacionGeografica(Municipio municipio, String localidad, String calle, Integer numero, Coordenada coordenada) {
         this.coordenada = coordenada;
-        this.direccion = new Direccion(localidad, calle, numero); //TODO direccion por defecto
+        this.direccion = new Direccion(municipio, localidad, calle, numero);
     }
 
     public UbicacionGeografica(Coordenada coordenada) { //TODO direccion por defecto
         this.coordenada = coordenada;
+//        this.direccion = mapearCoordenada(coordenada);
         this.direccion = new Direccion();
     }
+
+    /*public UbicacionGeografica(Direccion direccion) {
+        this.coordenada = mapearDireccion(direccion);
+        this.direccion = direccion;
+    }*/
 
     public Integer getId() {
         return id;
@@ -61,6 +67,16 @@ public class UbicacionGeografica {
 
     public Coordenada getCoordenada() {
         return coordenada;
+    }
+
+    public Coordenada mapearDireccion(Direccion direccion) {
+        Coordenada coordenada = null; //TODO
+        return coordenada;
+    }
+
+    public Direccion mapearCoordenada(Coordenada coordenada) {
+        Direccion direccion = null; //TODO
+        return direccion;
     }
 
     @Override

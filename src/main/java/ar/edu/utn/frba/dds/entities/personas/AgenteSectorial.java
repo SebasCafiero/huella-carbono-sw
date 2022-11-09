@@ -15,19 +15,20 @@ public class AgenteSectorial {
     @Column(name = "agente_id")
     private Integer id;
 
-    @Transient
+    @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
     private AreaSectorial area;
 
-    @Transient
-    private ContactoMail contactoMail;
+    @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
+    private ContactoMail mail;
 
-    @Transient
-    private String telefono;
+    @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
+    private ContactoTelefono telefono;
 
     @Transient
     private List<ReporteAgente> reportes;
 
     public AgenteSectorial() {
+        this.reportes = new ArrayList<>();
     }
 
     public AgenteSectorial(AreaSectorial areaSectorial) {
@@ -36,11 +37,13 @@ public class AgenteSectorial {
         this.area.setAgente(this);
     }
 
-    public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, String telefono) {
+    public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, ContactoTelefono telefono) {
         this.area = areaSectorial;
         this.area.setAgente(this);
-        this.contactoMail = contactoMail;
+        this.mail = contactoMail;
+        contactoMail.setAgente(this);
         this.telefono = telefono;
+        telefono.setAgente(this);
     }
 
     public Integer getId() {
@@ -51,24 +54,24 @@ public class AgenteSectorial {
         this.id = id;
     }
 
-    public String getTelefono() {
+    public ContactoMail getMail() {
+        return mail;
+    }
+
+    public void setMail(ContactoMail mail) {
+        this.mail = mail;
+    }
+
+    public ContactoTelefono getTelefono() {
         return telefono;
+    }
+
+    public void setTelefono(ContactoTelefono telefono) {
+        this.telefono = telefono;
     }
 
     public List<ReporteAgente> getReportes() {
         return reportes;
-    }
-
-    public ContactoMail getContactoMail() {
-        return contactoMail;
-    }
-
-    public void setContactoMail(ContactoMail contactoMail) {
-        this.contactoMail = contactoMail;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
     }
 
     public void setArea(AreaSectorial area) {

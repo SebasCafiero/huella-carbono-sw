@@ -7,7 +7,6 @@ import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.MiembroException;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
-import ar.edu.utn.frba.dds.entities.transportes.MedioFactory;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mihuella.dto.NuevoTrayectoDTO;
@@ -23,17 +22,20 @@ public class FachadaTrayectos {
     private final RepoMiembros repoMiembros;
     private final Repositorio<Trayecto> repoTrayectos;
     private final Repositorio<MedioDeTransporte> repoMedios;
+    private final FachadaMedios fachadaMedios;
 
     public FachadaTrayectos() {
         this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
+        this.fachadaMedios = new FachadaMedios();
     }
 
     public FachadaTrayectos(RepoMiembros repoMiembros, Repositorio<Trayecto> repoTrayectos, Repositorio<MedioDeTransporte> repoMedios) {
         this.repoMiembros = repoMiembros;
         this.repoTrayectos = repoTrayectos;
         this.repoMedios = repoMedios;
+        this.fachadaMedios = new FachadaMedios();
     }
 
     public void cargarTrayecto(Trayecto unTrayecto) {
@@ -82,14 +84,13 @@ public class FachadaTrayectos {
                 .orElseThrow(MiembroException::new);
 
         Trayecto trayecto = repoTrayectos.buscarTodos().stream()
-                .filter(tr -> tr.getCompartido().equals(trayectoDTO.getTrayectoId()))
+                .filter(tr -> tr.getId().equals(trayectoDTO.getTrayectoId()))
                 .findFirst().orElseGet(() -> {
                     Periodo periodo = trayectoDTO.getPeriodicidad().equals('A')
                             ? new Periodo(trayectoDTO.getAnio())
                             : new Periodo(trayectoDTO.getAnio(), trayectoDTO.getMes());
 
                     Trayecto nuevoTrayecto = new Trayecto(periodo);
-                    nuevoTrayecto.setCompartido(trayectoDTO.getTrayectoId());
                     unMiembro.agregarTrayecto(nuevoTrayecto);
                     repoTrayectos.agregar(nuevoTrayecto);
 
@@ -97,13 +98,11 @@ public class FachadaTrayectos {
                 });
         trayecto.agregarMiembro(unMiembro);
 
-        MedioDeTransporte medioSolicitado = new MedioFactory()
-                .getMedioDeTransporte(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
-        MedioDeTransporte medio = repoMedios.buscarTodos().stream()
-                .filter((me) -> {
-                    return me.equals(medioSolicitado);
-                }).findFirst()
-                .orElseThrow(() -> new NoExisteMedioException(medioSolicitado));
+        MedioDeTransporte medio = fachadaMedios.obtenerMedio(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
+
+        if(medio == null) {
+            throw new NoExisteMedioException(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
+        }
 
         Coordenada coordenadaInicial = new Coordenada(trayectoDTO.getLatitudInicial(), trayectoDTO.getLongitudInicial());
         Coordenada coordenadaFinal = new Coordenada(trayectoDTO.getLatitudFinal(), trayectoDTO.getLongitudFinal());
@@ -119,19 +118,17 @@ public class FachadaTrayectos {
     }
 
     public void cargarTrayectoPasivo(TrayectoCompartidoDTO trayectoCompartidoDTO) {
-        Miembro miembro = repoMiembros.buscarTodos().stream()
-                .filter(mi -> mi.getNroDocumento().equals(trayectoCompartidoDTO.getMiembroDNI()))
-                .findFirst().orElseThrow(() ->
-                    new NoSuchElementException("El miembro con DNI: " + trayectoCompartidoDTO.getMiembroDNI() + "no existe en el sistema")
+        Miembro miembro = repoMiembros.findByDocumento(TipoDeDocumento.DNI, trayectoCompartidoDTO.getMiembroDNI())
+                .orElseThrow(() ->
+                    new NoSuchElementException("El miembro con DNI: "
+                            + trayectoCompartidoDTO.getMiembroDNI() + "no existe en el sistema")
                 );
 
-        // Si da error el get es porque se intentó referenciar con un trayecto
-        // compartido a un lider de trayecto que no existe
-        Trayecto trayecto = repoTrayectos.buscarTodos().stream()
-                .filter(tr -> tr.getCompartido().equals(trayectoCompartidoDTO.getTrayectoReferencia()))
-                .findFirst().orElseThrow(() ->
-                        new NoExisteTrayectoCompartidoException(trayectoCompartidoDTO.getTrayectoReferencia())
-                );
+        // Si da error el get es porque se intentó referenciar con un trayecto que no existe
+        Trayecto trayecto = repoTrayectos.buscar(trayectoCompartidoDTO.getTrayectoReferencia());
+        if(trayecto == null) {
+            throw new NoExisteTrayectoCompartidoException(trayectoCompartidoDTO.getTrayectoReferencia());
+        }
 
         trayecto.agregarMiembro(miembro);
         miembro.agregarTrayecto(trayecto);

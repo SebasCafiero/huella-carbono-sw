@@ -1,20 +1,30 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import ar.edu.utn.frba.dds.api.mapper.OrganizacionMapperHBS;
+import ar.edu.utn.frba.dds.api.mapper.ReporteMapperHBS;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
+import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteOrganizacion;
+import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.mihuella.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaReportes;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
+import ar.edu.utn.frba.dds.server.SystemProperties;
 import org.hibernate.SessionException;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ReportesController {
@@ -59,91 +69,135 @@ public class ReportesController {
 
 
 
-    public ModelAndView darAlta(Request request, Response response) {
+
+
+    private Map<String, Object> mapUser(Request request, Response response) {
+        String username = request.session().attribute("currentUser");
+//        User user = new UserUtils().buscar(username);
         Map<String, Object> parametros = new HashMap<>();
-        parametros.put("organizaciones", repoOrganizaciones.buscarTodos()); //podria omitirse y usar this
-        return new ModelAndView(parametros, "reporte-creacion.hbs");
-    }
-    //TODO FUSIONAR DAR ALTA REPORTE
-    public ModelAndView darAltaDeUnaOrganizacion(Request request, Response response) {
-        Map<String, Object> parametros = new HashMap<>();
-        Organizacion org = repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
-        parametros.put("organizaciones", Arrays.asList(org));
-        return new ModelAndView(parametros, "reporte-creacion.hbs");
+
+        int id;
+//        id = user.getRolId(); // id de la org
+        id = 2;
+
+        String rol;
+//        rol = user.getRol(); //organizacion
+        rol = "organizacion";
+
+        String name;
+//        name = user.getName();
+        name = "Fifa";
+
+        parametros.put("rol", rol.toUpperCase(Locale.ROOT));
+        parametros.put(rol, id);
+        parametros.put("user", name);
+        return parametros;
     }
 
-    public Response generar(Request request, Response response) {
-        int idOrg = Integer.parseInt(request.queryParams("f-organizacion"));
-        Organizacion organizacion = repoOrganizaciones.buscar(idOrg);
-        LocalDate fecha = LocalDate.now();
+    public ModelAndView darAltaYMostrar(Request request, Response response) {
+        Map<String, Object> parametros;
+        Organizacion org;
+        ReporteOrganizacion reporte;
+        int idOrg = Integer.parseInt(request.params("id"));
         try {
-            ReporteOrganizacion reporte = fachadaReportes
-                    .generarReporteOrganizacion(organizacion, new Periodo(fecha.getYear(), fecha.getMonthValue()));
-            response.redirect("/organizacion/"+organizacion.getId()+"/reporte/"+reporte.getId());
-        } catch (NullPointerException e) {
+            org = repoOrganizaciones.buscar(idOrg); //deberia coincidir con los permisos del usuario
+        } catch (NullPointerException | SessionException e) {
+            parametros = new HashMap<>();
+            response.status(400);
+            String errorDesc = "Organización de id "+idOrg+" inexistente";
+            if(e instanceof SessionException) {
+                response.status(403);
+                errorDesc = "Acceso no permitido";
+            }
+            parametros.put("codigo", response.status());
+            parametros.put("descripcion", errorDesc);
+            return new ErrorResponse(errorDesc).generarVista(parametros);
+        }
+
+        parametros = mapUser(request, response);
+        parametros.put("organizacion", OrganizacionMapperHBS.toDTO(org));
+        /*parametros.put("razonSocial", org.getRazonSocial());
+        parametros.put("orgID", org.getId());*/
+        reporte = fachadaReportes.getReporteOrganizacion();
+        if(reporte != null) {
+            parametros.put("reporte", ReporteMapperHBS.toDTO(reporte));
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
+            String file = org.getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
+            parametros.put("file", file);
+//            parametros.put("file", "reporte"+org.getId());
+
+            fachadaReportes.quitarReporteOrganizacion();
+
+            //todo ver session.refresh(entity) o entityManager.refresh(entity) para no usar cache
+            //todo https://sparkjava.com/documentation#examples-and-faq
+        }
+
+//        List<Map<String, Object>> meses = new ArrayList<>(); //todo
+
+        return new ModelAndView(parametros, "reporte.hbs");
+    }
+
+    /*private Map<String, Object> mapeoReporte(ReporteOrganizacion reporte) {
+        Map<String, Object> reporteMap = new HashMap<>();
+        reporteMap.put("fecha", reporte.getFechaCreacion());
+        reporteMap.put("consumoTotal", reporte.getConsumoTotal());
+        reporteMap.put("consumoMediciones", reporte.getConsumoMediciones());
+        reporteMap.put("consumoTrayectos", reporte.getConsumoTotal()-reporte.getConsumoMediciones());
+        reporteMap.put("consumoPorCategoria", reporte.getConsumoPorCategoria());
+        reporteMap.put("consumoPorSector", reporte.getConsumoPorSector());
+        reporteMap.put("consumoPorMiembro", reporte.getConsumoPorMiembro());
+        return reporteMap;
+    }*/
+
+    public Response generar(Request request, Response response) {
+        int idOrg = Integer.parseInt(request.params("id"));
+        Organizacion organizacion = repoOrganizaciones.buscar(idOrg); //todo check error
+        String fechaActual = LocalDate.now().getMonthValue()+"/"+LocalDate.now().getYear();
+        String[] fecha = request.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar fecha
+        Periodo periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
+        try {
+            fachadaReportes.generarReporteOrganizacion2(organizacion, periodo);
+            documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion); //todo no lo toma bien, agarra el viejo o ninguno
+            response.redirect("/organizacion/"+organizacion.getId()+"/reporte");
+        } catch (NullPointerException | FileNotFoundException | UnsupportedEncodingException e) {
             response.status(400);
             response.redirect("/error/"+400);
             return response; //todo check, no puedo retornar vista
             //return new ErrorResponse("Organización de id "+idOrg+" inexistente");
+        } catch (SessionException e) { //todo check
+            response.status(403);
+            response.redirect("/error/"+403);
+            return response;
+//            return new ErrorResponse("Acceso no permitido").generarVista(parametros);
         }
         return response;
     }
 
-    public ModelAndView mostrarTodos(Request request, Response response) {
-        Map<String, Object> parametros = new HashMap<>();
-        List<Map<String, Object>> orgs = new ArrayList<>();
-        repoOrganizaciones.buscarTodos().forEach(org -> {
-           Map<String, Object> repoMap = new HashMap<>();
-           repoMap.put("id", org.getId());
-           repoMap.put("razon", org.getRazonSocial());
-           repoMap.put("reportes", org.getReportes());
-           orgs.add(repoMap);
-        });
-        parametros.put("organizaciones", orgs); //podria omitirse y usar this
-        return new ModelAndView(parametros, "reportes.hbs");
-    }
-    //TODO FUSIONAR MOSTRAR TODOS
-    public ModelAndView mostrarTodosDeUnaOrganizacion(Request request, Response response) {
-        Map<String, Object> parametros = new HashMap<>();
-        Organizacion organizacion = repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
-        List<Map<String, Object>> orgs = new ArrayList<>(); //para reutilizar #mostrarTodos
-        Map<String, Object> parametrosOrg = new HashMap<>();
-        parametrosOrg.put("id", organizacion.getId());
-        parametrosOrg.put("razon", organizacion.getRazonSocial());
-        parametrosOrg.put("reportes", organizacion.getReportes());
-        orgs.add(parametrosOrg);
-        parametros.put("organizaciones", orgs);
-        return new ModelAndView(parametros, "reportes.hbs");
-    }
+    private String documentarReporte(ReporteOrganizacion reporte, Organizacion organizacion) throws FileNotFoundException, UnsupportedEncodingException {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String arch = organizacion.getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
 
-    public ModelAndView obtener(Request request, Response response) {
-        int idOrg = Integer.parseInt(request.params("org"));
-        Organizacion organizacion;
-        int idReporte = Integer.parseInt(request.params("rep"));
-        ReporteOrganizacion reporte;
-        Map<String, Object> parametros = new HashMap<>();
-        try {
-            organizacion = repoOrganizaciones.buscar(idOrg);
-            reporte = organizacion.getReportes().get(idReporte);
-        } catch (IndexOutOfBoundsException | NullPointerException e) {
-            response.status(400);
-            parametros.put("codigo", response.status());
-            String errorDesc = "Organización de id "+idOrg+" inexistente";
-            if(e instanceof IndexOutOfBoundsException)
-                errorDesc = "Reporte de id "+idReporte+" inexistente";
-            parametros.put("descripcion", errorDesc);
+        PrintWriter writer = new PrintWriter("resources/public/docs/"+arch, "UTF-8");
 
-            return new ErrorResponse(errorDesc).generarVista(parametros);
-        } catch (SessionException e) { //todo check
-            response.status(403);
-            parametros.put("codigo", response.status());
-            parametros.put("descripcion", "Acceso no permitido");
-            return new ErrorResponse("Acceso no permitido").generarVista(parametros);
+        writer.println("Fecha de Creacion: " + reporte.getFechaCreacion());
+        writer.println("Periodo de Referencia: " + reporte.getPeriodoReferencia());
+        writer.println("Total : " + reporte.getConsumoTotal());
+        writer.println("Total mediciones : " + reporte.getConsumoMediciones());
+
+        for (Map.Entry<Miembro, Float> miembro : reporte.getConsumoPorMiembro().entrySet()) {
+            writer.println("Miembro : " + miembro.getKey().getNroDocumento() + " :-> " + miembro.getValue());
         }
-        parametros.put("organizacion", organizacion);
-        parametros.put("reporte", reporte);
-        return new ModelAndView(parametros, "reporte.hbs");
-    }
 
-    //todo al mostrar un reporte en detalle, poner como fue sumando cada medicion
+        for (Map.Entry<Sector, Float> sector : reporte.getConsumoPorSector().entrySet()) {
+            writer.println("Sector : " + sector.getKey().getNombre() + " :-> " + sector.getValue());
+        }
+
+        for(Map.Entry<Categoria, Float> categoria : reporte.getConsumoPorCategoria().entrySet()) {
+            writer.println("Categoria : " + categoria.getKey().toString() + " :-> " + categoria.getValue());
+        }
+
+        writer.close();
+
+        return arch;
+    }
 }

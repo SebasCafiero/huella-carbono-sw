@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/img/logo.png">
+    <title>Org{{organizacion.id}}-Rep{{reporte.id}}</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/reporte.css" >
+  </head>
+  <body>
+  <div class="volver">
+      <span><a href="/reportes">VOLVER</a></span>
+  </div>
+  <br />
+  <div class="reporte">
+      <ul>
+          <li>Organizacion: <i>{{organizacion.razonSocial}}</i></li>
+          <li>Reporte Nro: <i>{{reporte.id}}</i></li>
+          <li>Fecha: <i>{{reporte.fechaCreacion}}</i></li>
+          <li>Consumo Mediciones: <i>{{reporte.consumoMediciones}}</i></li>
+          <li>Consumo Total: <i>{{reporte.consumoTotal}}</i></li>
+      </ul>
+      <table class="categorias">
+          <tr>
+              <th>CATEGORIA</th>
+              <th>CONSUMO</th>
+          </tr>
+          {{#each reporte.consumoPorCategoria}}
+          <tr>
+              <td>{{@key}}</td>
+              <td>{{this}}</td>
+          </tr>
+          {{else}}
+          <tr>
+              <td colspan="2"><i>SIN CATEGORIAS</i></td>
+          </tr>
+          {{/each}}
+      </table>
+      <br />
+      <table>
+          <tr>
+              <th>SECTOR</th>
+              <th>CONSUMO</th>
+          </tr>
+          {{#each reporte.consumoPorSector}}
+          <tr>
+              <td>{{@key}}</td>
+              <td>{{this}}</td>
+          </tr>
+          {{else}}
+          <tr>
+              <td colspan="2"><i>SIN SECTORES</i></td>
+          </tr>
+          {{/each}}
+      </table>
+      <br />
+      <table>
+          <tr>
+              <th>MIEMBRO</th>
+              <th>CONSUMO</th>
+          </tr>
+          {{#each reporte.consumoPorMiembro}}
+          <tr>
+              <td>{{@key}}</td>
+              <td>{{this}}</td>
+          </tr>
+          {{else}}
+          <tr>
+              <td colspan="2"><i>SIN MIEMBROS</i></td>
+          </tr>
+          {{/each}}
+      </table>
+      <br />
+  </div>
+  </body>
+</html>

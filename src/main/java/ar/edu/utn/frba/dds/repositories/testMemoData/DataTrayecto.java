@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.repositories.testMemoData;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.*;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
@@ -38,15 +37,40 @@ public class DataTrayecto {
             MedioDeTransporte motoNafta = new VehiculoParticular(TipoVehiculo.MOTOCICLETA, TipoCombustible.NAFTA);
             MedioDeTransporte caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
 
-            Coordenada coor1 = new Coordenada(50F, 70F);
-            Coordenada coor2 = new Coordenada(100F, 130F);
-            Coordenada coor3 = new Coordenada(200F, 300F);
-            Coordenada coor4 = new Coordenada(500F, 480F);
+            Municipio caba = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));
+
+            Coordenada coorSubte1 = new Coordenada(50F, 70F);
+            UbicacionGeografica ubicacionSubte1 = new UbicacionGeografica(new Direccion(), coorSubte1);
+
+            Coordenada coorSubte2 = new Coordenada(100F, 130F);
+            UbicacionGeografica ubicacionSubte2 = new UbicacionGeografica(caba, "Belgrano", "Juramento", 123, coorSubte2);
+
+            Coordenada coorSubte3Bondi1 = new Coordenada(200F, 300F);
+            UbicacionGeografica ubicacionSubte3Bondi1 = new UbicacionGeografica(caba, "Balvanera", "Lavalle", 456, coorSubte3Bondi1);
+
+            Coordenada coorBondi2Tren2 = new Coordenada(500F, 480F);
+            UbicacionGeografica ubicacionBondi2Tren2 = new UbicacionGeografica(caba, "San Telmo", "Carlos Calvo", 9876, coorBondi2Tren2);
+
+            Coordenada coorTren1 = new Coordenada(46.5F, 73.2F);
+            UbicacionGeografica ubicacionTren1 = new UbicacionGeografica(caba, "Flores", "Varela", 555, coorTren1);
+
+            Parada paradaSubte1 = new Parada(ubicacionSubte1, 0F, 10F);
+            Parada paradaSubte2 = new Parada(ubicacionSubte2, 10F, 12F);
+            Parada paradaSubte3 = new Parada(ubicacionSubte3Bondi1, 12F, 0F);
+            Parada paradaBondi1 = new Parada(ubicacionSubte3Bondi1, 0F, 8F);
+            Parada paradaBondi2 = new Parada(ubicacionBondi2Tren2, 8F, 0F);
+            Parada paradaTren1= new Parada(ubicacionTren1, 0F, 18F);
+            Parada paradaTren2= new Parada(ubicacionBondi2Tren2, 18F, 0F);
+
+            ((TransportePublico) subteA).agregarParadas(paradaSubte1, paradaSubte2, paradaSubte3);
+            ((TransportePublico) bondi47).agregarParadas(paradaBondi1, paradaBondi2);
+            ((TransportePublico) trenSarmiento).agregarParadas(paradaTren1, paradaTren2);
+
 
             Trayecto t1 = new Trayecto();
-            Tramo t11 = new Tramo(subteA, coor1, coor2);
-            Tramo t12 = new Tramo(bondi47, coor2, coor3);
-            Tramo t13 = new Tramo(caminata, coor3, coor4);
+            Tramo t11 = new Tramo(subteA, ubicacionSubte1, ubicacionSubte3Bondi1);
+            Tramo t12 = new Tramo(bondi47, ubicacionSubte3Bondi1, ubicacionBondi2Tren2);
+            Tramo t13 = new Tramo(caminata, ubicacionBondi2Tren2, ubicacionTren1);
             t11.setId(11);
             t12.setId(12);
             t13.setId(13);
@@ -57,8 +81,8 @@ public class DataTrayecto {
             m1.agregarTrayecto(t1);
 
             Trayecto t2 = new Trayecto();
-            Tramo t21 = new Tramo(trenSarmiento, coor3, coor4);
-            Tramo t22 = new Tramo(autoElectrico, coor4, coor2);
+            Tramo t21 = new Tramo(trenSarmiento, ubicacionTren1, ubicacionBondi2Tren2);
+            Tramo t22 = new Tramo(autoElectrico, ubicacionBondi2Tren2, ubicacionSubte2);
             t21.setId(21);
             t22.setId(22);
             t2.agregarTramo(t21);
@@ -75,7 +99,7 @@ public class DataTrayecto {
             m4.agregarTrayecto(t2);
 
             Trayecto t3 = new Trayecto();
-            Tramo t31 = new Tramo(motoNafta, coor3, coor1);
+            Tramo t31 = new Tramo(motoNafta, ubicacionBondi2Tren2, ubicacionTren1);
             t31.setId(31);
             t3.agregarTramo(t31);
             t3.setPeriodo(new Periodo(2022,11));

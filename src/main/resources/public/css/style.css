@@ -1,5 +1,19 @@
 /* Archivo generico para todos los templates */
 
+header .user {
+    font-size: 20px;
+}
+
+header .logout {
+    margin: 5px 0px;
+    font-size: 10px;
+}
+
+header .titulo h2 {
+    background-color: lightblue;
+    font-size: 30px;
+}
+
 div.cancelar {
     text-align: center;
     padding: 10px;
@@ -10,12 +24,12 @@ div.cancelar span {
     padding: 7px;
 }
 
-div.edicion {
+div.editar {
     text-align: center;
     padding: 10px;
 }
 
-div.edicion span {
+div.editar span {
     border: 2px dotted blue;
     padding: 7px;
 }

@@ -8,8 +8,8 @@ public class ContactoMailMapper {
         ContactoMail contactoMail = new ContactoMail();
 
         if(contactoMailDTO != null){
-            contactoMail.setDireccionEMail(contactoMailDTO.direccionesEMail);
-            contactoMail.setPasssword(contactoMailDTO.password);
+            contactoMail.setDireccion(contactoMailDTO.direccionesEMail);
+            contactoMail.setPassword(contactoMailDTO.password);
         }
 
         return contactoMail;

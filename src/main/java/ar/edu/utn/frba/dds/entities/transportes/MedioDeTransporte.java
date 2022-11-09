@@ -28,7 +28,6 @@ public abstract class MedioDeTransporte {
     }
 
     public Float calcularDistancia(Tramo tramo) {
-//        throw new RuntimeException("Dead.");
         return this.servicioDistancias.calcularDistancia(tramo.getUbicacionInicial(), tramo.getUbicacionFinal());
     }
 

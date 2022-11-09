@@ -3,6 +3,9 @@ package ar.edu.utn.frba.dds.entities.lugares;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.mediciones.ReporteOrganizacion;
+import ar.edu.utn.frba.dds.entities.personas.Contacto;
+import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
+import ar.edu.utn.frba.dds.entities.personas.ContactoTelefono;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 
@@ -16,6 +19,7 @@ import java.util.stream.Collectors;
 public class Organizacion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "organizacion_id")
     private Integer id;
 
     @Column (name = "razon_social")
@@ -27,9 +31,8 @@ public class Organizacion {
     @Transient
     private UbicacionGeografica ubicacion;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
-    @Transient
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private ClasificacionOrganizacion clasificacionOrganizacion;
 
     @OneToMany(mappedBy = "organizacion", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
@@ -39,10 +42,11 @@ public class Organizacion {
     @JoinColumn(name = "organizacion_id")
     private List<Medicion> mediciones;
 
-    @Transient
-    private List<String> contactosMail;
-    @Transient
-    private List<Integer> contactosTelefono;
+    @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, targetEntity = Contacto.class)
+    private List<ContactoMail> contactosMail;
+
+    @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, targetEntity = Contacto.class)
+    private List<ContactoTelefono> contactosTelefono;
 
     @Transient
     private List<ReporteOrganizacion> reportes;
@@ -51,6 +55,8 @@ public class Organizacion {
         this.sectores = new HashSet<>();
         this.mediciones = new ArrayList<>();
         this.reportes = new ArrayList<>();
+        this.contactosTelefono = new ArrayList<>();
+        this.contactosMail = new ArrayList<>();
     }
 
     public Organizacion(String razonSocial,
@@ -139,20 +145,38 @@ public class Organizacion {
 
     public void setSectores(Set<Sector> sectores) {this.sectores = sectores;}
 
-    public List<String> getContactosMail() {
+    public List<ContactoMail> getContactosMail() {
         return contactosMail;
     }
 
-    public List<Integer> getContactosTelefono() {
+    public List<ContactoTelefono> getContactosTelefono() {
         return contactosTelefono;
     }
 
-    public void agregarContactoMail(String contacto) {
-        this.contactosMail.add(contacto);
+    public void setMediciones(List<Medicion> mediciones) {
+        this.mediciones = mediciones;
     }
 
-    public void agregarContactoTelefono(Integer contacto) {
+    public void setContactosMail(List<ContactoMail> contactosMail) {
+        this.contactosMail = contactosMail;
+    }
+
+    public void setContactosTelefono(List<ContactoTelefono> contactosTelefono) {
+        this.contactosTelefono = contactosTelefono;
+    }
+
+    public void setReportes(List<ReporteOrganizacion> reportes) {
+        this.reportes = reportes;
+    }
+
+    public void agregarContactoMail(ContactoMail contacto) {
+        this.contactosMail.add(contacto);
+        contacto.setOrganizacion(this);
+    }
+
+    public void agregarContactoTelefono(ContactoTelefono contacto) {
         this.contactosTelefono.add(contacto);
+        contacto.setOrganizacion(this);
     }
 
     public List<Trayecto> trayectosDeMiembros() {
@@ -167,10 +191,10 @@ public class Organizacion {
         return reportes;
     }
 
-    public void agregarReporte(ReporteOrganizacion reporte) {
+    /*public void agregarReporte(ReporteOrganizacion reporte) {
         reporte.setId(this.reportes.size()); //reporte1: id 0 - reporte2: id 1 - reporte3: id 2
         this.reportes.add(reporte);
-    }
+    }*/
 
     @Override
     public String toString() {

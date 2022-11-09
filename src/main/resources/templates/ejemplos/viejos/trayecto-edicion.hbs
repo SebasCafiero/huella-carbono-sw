@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/img/logo.png">
+    {{#if trayecto}}
+    <title>Modificar Trayecto {{trayecto.id}}</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="/js/trayecto.js"></script>
+    {{else}}
+    <title>Crear Trayecto</title>
+    {{/if}}
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/trayecto-edicion.css" >
+  </head>
+  <body>
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>{{rol}} - {{user}}</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h1>TRAYECTOS</h1>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="edicion">
+        <span>ID-Trayecto: {{trayecto.id}}</span> <br /><br />
+        <!-- Al editar trayecto se usa method post xq html no admite form.put -->
+        <form {{#if trayecto}} action="/miembro/{{miembroID}}/trayecto/{{trayecto.id}}" {{else}} action="/miembro/{{miembroID}}/trayecto" {{/if}} method="post">
+          <div class="form-fecha">
+            <label for="fecha">Fecha</label>
+<!--            <input id="fecha" type="text" name="f-fecha" value="{{trayecto.mes}}/{{trayecto.año}}" required/>-->
+            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.mes}}/{{trayecto.año}}" {{else}} value="MES/AÑO" {{/if}} required/>
+          </div>
+          <br />
+          <div class="form-miembros">
+            <fieldset>
+              <legend>Miembros</legend>
+              {{#with miembroLogueado}}
+              <input id="logueado" type="checkbox" value="{{id}}" name="f-logueado" checked disabled/>
+              <label for="logueado">{{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</label><br />
+              <input id="logueado-data" type="hidden" value="{{id}}" name="f-logueado-data"/> <!-- Puede omitirse si lo atrapo con la session -->
+              {{/with}}
+              {{#each miembros}} <!-- NO DEBE ESTAR EL MIEMBRO LOGUEADO -->
+              <input id="miembro{{id}}" type="checkbox" value="{{id}}" name="f-miembro"  {{#if contieneTrayecto}}checked{{/if}} />
+              <label for="miembro{{id}}">{{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</label><br />
+              {{/each}}
+              <!-- ver si name="m-miembro[]" como PHP -->
+            </fieldset>
+          </div>
+          <br />
+          <div class="form-tramos">
+            {{#each trayecto.tramos}}
+            <fieldset>
+              <legend>Tramo{{id}}</legend>
+              <label for="transporte-{{@index}}">Transporte</label>
+              <select id="transporte-{{@index}}" name="f-transporte-{{@index}}" required>
+                <option class="campo-seleccionar" value="{{medioDeTransporte.id}}" selected>{{medioDeTransporte.clasificacion}}</option>
+                {{#each transportesTotales}}
+                <option value="{{id}}">{{clasificacion}}</option>
+                {{/each}}
+              </select>
+
+            <!--<select id="transporte" name="transporte" required>
+              <optgroup label="Público">
+                <option value="subteA">Subte A</option>
+                <option value="bondi47">Colectivo 47</option>
+              </optgroup>
+              <optgroup label="Particular">
+                <option value="nafta">Nafta</option>
+                <option value="gnc">GNC</option>
+              </optgroup>
+              <optgroup label="Ecológico">
+                <option value="pie">A Pie</option>
+                <option value="bicicleta">Bicicleta</option>
+              </optgroup>
+              <optgroup label="Contratado">
+                <option value="uber">Uber</option>
+                <option value="taxi">Taxi</option>
+                <option value="didi">DiDi</option>
+              </optgroup>
+            </select>-->
+              <br /><br />
+              <!-- VER DE PONER UBICACION BIEN, PARADAS EN TRANSPORTE PUBLICO -->
+              <fieldset>
+                <legend>Coordenadas Iniciales</legend>
+                <label for="lat-inicial-{{@index}}">Latitud:</label>
+                <input id="lat-inicial-{{@index}}" type="text" name="f-lat-inicial-{{@index}}" value="{{ubicacionInicial.coordenada.latitud}}" required/>
+                <label for="lon-inicial-{{@index}}">Longitud:</label>
+                <input id="lon-inicial-{{@index}}" type="text" name="f-lon-inicial-{{@index}}" value="{{ubicacionInicial.coordenada.longitud}}" required/>
+              </fieldset>
+              <br />
+              <fieldset>
+                <legend>Coordenadas Finales</legend>
+                <label for="lat-final-{{@index}}">Latitud:</label>
+                <input id="lat-final-{{@index}}" type="text" name="f-lat-final-{{@index}}" value="{{ubicacionFinal.coordenada.latitud}}" required/>
+                <label for="lon-final-{{@index}}">Longitud:</label>
+                <input id="lon-final-{{@index}}" type="text" name="f-lon-final-{{@index}}" value="{{ubicacionFinal.coordenada.longitud}}" required/>
+              </fieldset>
+            </fieldset>
+            <br />
+            {{/each}}
+            <div class="tramos-nuevos">
+              {{#if trayecto}}
+              <br />
+              <input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack" onclick="tramoNuevoHabilitacion()"/>
+              <label for="tramo-nuevo-ack">Agregar Tramo Nuevo</label><br /><br />
+              {{/if}}
+              <fieldset {{#if trayecto}}disabled{{/if}}>
+                <legend>Nuevo Tramo</legend>
+                <label for="transporte-nuevo">Transporte</label>
+                <select id="transporte-nuevo" name="f-transporte-nuevo" {{#unless trayecto}}required{{/unless}}>
+                  <option class="campo-seleccionar" selected disabled>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
+                  {{#each transportesTotales}}
+                  <option value="{{id}}">{{clasificacion}}</option>
+                  {{/each}}
+                </select>
+                <br /><br />
+                <fieldset>
+                  <legend>Coordenadas Iniciales</legend>
+                  <label for="lat-inicial-nueva">Latitud:</label>
+                  <input id="lat-inicial-nueva" type="text" name="f-lat-inicial-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
+                  <label for="lon-inicial-nueva">Longitud:</label>
+                  <input id="lon-inicial-nueva" type="text" name="f-lon-inicial-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
+                </fieldset>
+                <br />
+                <fieldset>
+                  <legend>Coordenadas Finales</legend>
+                  <label for="lat-final-nueva">Latitud:</label>
+                  <input id="lat-final-nueva" type="text" name="f-lat-final-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
+                  <label for="lon-final-nueva">Longitud:</label>
+                  <input id="lon-final-nueva" type="text" name="f-lon-final-nueva" value="" {{#unless trayecto}}required{{/unless}}/>
+                </fieldset>
+              </fieldset>
+              <br />
+            </div>
+          </div>
+          <div class="reiniciar">
+            <input type="reset" value="Reiniciar"/> <!-- Quizas sacarlo -->
+          </div>
+          <div class="enviar">
+            {{#if trayecto}}
+            <input type="submit" value="Guardar Cambios" />
+            {{else}}
+            <input type="submit" value="Crear" />
+            {{/if}}
+          </div>
+        </form>
+      </div>
+      <br />
+      <div class="cancelar">
+        {{#if trayecto}}
+        <span><a href="/miembro/{{miembroID}}/trayecto/{{trayecto.id}}">CANCELAR</a></span>
+<!--        <span><a href="/trayecto/{{trayecto.id}}">CANCELAR</a></span>-->
+        {{else}}
+        <span><a href="/miembro/{{miembroID}}/trayecto?action=list">CANCELAR</a></span>
+<!--        <span><a href="/trayectos">CANCELAR</a></span>-->
+        {{/if}}
+      </div>
+    </div>
+  </body>
+</html>

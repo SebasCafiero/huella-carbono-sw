@@ -4,95 +4,141 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" href="/img/logo.png">
 
-    <title>Trayecto{{trayecto.id}}</title>
-      <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-      <script src="/js/trayecto.js"></script>
+    <title>Trayecto {{trayecto.id}}</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="/js/trayecto.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/trayecto.css">
   </head>
   <body>
-    <div class="volver">
-      <span><a href="/trayectos">VOLVER</a></span>
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>{{rol}} - {{user}}</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h1>TRAYECTOS</h1>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="volver">
+        <span><a href="/miembro/{{miembroID}}/trayecto?action=list">VOLVER</a></span>
+<!--        <span><a href="/trayectos">VOLVER</a></span>-->
+      </div>
+      {{#with trayecto}}
+      <div class="trayecto">
+        <table class="particular">
+      	  <tr>
+            <th>ID</th>
+            <td><i>{{id}}</i></td>
+          </tr>
+          <tr>
+            <th>FECHA</th>
+            <td><i>{{mes}}/{{año}}</i></td>
+          </tr>
+          <tr>
+            <th>TRAMOS</th>
+            <td>
+              <table class="tramos">
+                <tr>
+                  <th>ID</th>
+                  <th>TRANSPORTE</th>
+                  <th>UBICACION INICIAL</th>
+                  <th>UBICACION FINAL</th>
+                </tr>
+                {{#each tramos}}
+                  <tr>
+                    <td>{{id}}</td>
+                    <td><i>{{transporte.info}}</i></td>
+                    <td>
+                      <table class="ubicaciones">
+                        <tr>
+                          <th>DIRECCION</th>
+                          <th>COORDENADAS</th>
+                        </tr>
+                        <tr>
+                          <td>
+                            {{#if idParadaInicial}}<p><i>Parada {{idParadaInicial}} - {{ubicacionInicial.localidad}}</i></p>{{/if}}
+                            <p><i>{{ubicacionInicial.calle}} {{ubicacionInicial.numero}}</i></p>
+                          </td>
+                          <td>
+                            <table class="coordenadas">
+                              <tr><td>LATITUD</td><td><i>{{ubicacionInicial.latitud}}</i></td></tr>
+                              <tr><td>LONGITUD</td><td><i>{{ubicacionInicial.longitud}}</i></td></tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td>
+                      <table class="ubicaciones">
+                        <tr>
+                          <th>DIRECCION</th>
+                          <th>COORDENADAS</th>
+                        </tr>
+                        <tr>
+                          <td>
+                            {{#if idParadaFinal}}<p><i>Parada {{idParadaFinal}} - {{ubicacionFinal.localidad}}</i></p>{{/if}}
+                            <p><i>{{ubicacionFinal.calle}} {{ubicacionFinal.numero}}</i></p>
+                          </td>
+                          <td>
+                            <table class="coordenadas">
+                              <tr><td>LATITUD</td><td><i>{{ubicacionFinal.latitud}}</i></td></tr>
+                              <tr><td>LONGITUD</td><td><i>{{ubicacionFinal.longitud}}</i></td></tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                {{/each}}
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th>MIEMBROS</th>
+            <td>
+          	  <table class="miembros">
+                <tr><th>ID</th><th>NOMBRE</th><th>APELLIDO</th><th>DOCUMENTO</th></tr>
+                {{#each miembros}}
+                <tr>
+                  <td><i>{{id}}</i></td>
+                  <td><i>{{nombre}}</i></td>
+                  <td><i>{{apellido}}</i></td>
+                  <td><i>{{tipoDeDocumento}} - {{nroDocumento}}</i></td>
+                </tr>
+                {{/each}}
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="editar">
+        <span><a href="/miembro/{{../miembroID}}/trayecto/{{id}}?action=edit">EDITAR</a></span>
+<!--        <span><a href="?mode=edit">EDITAR</a></span>-->
+      </div>
+      <br />
+      <div class="borrar"><!-- JS: DELETE /miembro/#miembro/trayecto/#id -->
+        <span><button onclick="borrarTrayecto({{../miembroID}}, {{id}})">BORRAR</button></span>
+      </div>
+      <div class="confirmar" id="confirmacion" style="display: none">
+        <div class="confirmar-botones">
+          <div class="confirmar-texto">
+<!--            <span><label>¿Confirmar borrado de trayecto?</label></span>-->
+            <span><label>¿CONFIRMAR BORRADO DEL TRAYECTO?</label></span>
+          </div>
+          <span><button id="accion-borrado" onclick="">CONFIRMAR</button></span>
+          <span><button onclick="cancelarBorradoTrayecto()">CANCELAR</button></span>
+        </div>
+      </div>
+      {{/with}}
     </div>
-  {{#with trayecto}}
-    <div>
-      <table class="particular">
-      	<tr>
-          <th>ID</th>
-          <td><i>{{id}}</i></td>
-        </tr>
-        <tr>
-          <th>FECHA</th>
-          <td><i>{{periodo.mes}}/{{periodo.anio}}</i></td>
-        </tr>
-        <tr>
-          <th>TRAMOS</th>
-          <td>
-            <table class="tramos">
-              <tr>
-                <th>ID</th>
-                <th>COORDENADAS</th>
-                <th>TRANSPORTE</th>
-              </tr>
-              {{#each tramos}}
-              <tr>
-                <td>{{id}}</td>
-                <td>
-                  <table class="coordenadas">
-                    <tr>
-                      <th colspan="2">INICIALES</th>
-                      <th colspan="2">FINALES</th>
-                    </tr>
-                    <tr>
-                      <td>LATITUD</td><td><i>{{ubicacionInicial.coordenada.latitud}}</i></td>
-                      <td>LATITUD</td><td><i>{{ubicacionFinal.coordenada.latitud}}</i></td>
-                    </tr>
-                    <tr>
-                      <td>LONGITUD</td><td><i>{{ubicacionInicial.coordenada.longitud}}</i></td>
-                      <td>LONGITUD</td><td><i>{{ubicacionFinal.coordenada.longitud}}</i></td>
-                    </tr>
-                  </table>
-                </td>
-                <td><i>{{medioDeTransporte.clasificacion}}</i></td>
-              </tr>
-              {{/each}}
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <th>MIEMBROS</th>
-          <td>
-          	<table class="miembros">
-              <tr><th>ID</th><th>NOMBRE</th><th>APELLIDO</th><th>DOCUMENTO</th></tr>
-              {{#each miembros}}
-              <tr>
-                <td><i>{{id}}</i></td>
-                <td><i>{{nombre}}</i></td>
-                <td><i>{{apellido}}</i></td>
-                <td><i>{{tipoDeDocumento}} - {{nroDocumento}}</i></td>
-              </tr>
-              {{/each}}
-            </table>
-          </td>
-        </tr>
-        <!--<tr>
-          <th>TRANSPORTE</th>
-          <td>
-          	<table align="center">
-              <tr><th>TIPO</th><td><i>tipo transporte</i></td></tr>
-              <tr><th>VEHICULO</th><td><i>datos transporte</i></td></tr>
-            </table>
-          </td>
-        </tr>-->
-      </table>
-    </div>
-    <div class="edicion">
-      <span><a href="?mode=edit">EDITAR</a></span>
-    </div>
-    <br />
-    <div class="borrar">
-        <span><button onclick="borrarTrayecto({{id}})">BORRAR</button></span>
-    </div>
-  {{/with}}
   </body>
 </html>

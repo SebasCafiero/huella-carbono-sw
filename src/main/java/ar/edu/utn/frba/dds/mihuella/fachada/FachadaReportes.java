@@ -16,6 +16,7 @@ import java.util.*;
 public class FachadaReportes {
     private NotificadorReportes notificadorReportes;
     private final FachadaOrganizacion fachadaOrganizacion;
+    private ReporteOrganizacion reporteOrganizacion = null;
 
     public FachadaReportes() {
         this.fachadaOrganizacion = new FachadaOrganizacion();
@@ -90,10 +91,67 @@ public class FachadaReportes {
         reporte.setConsumoTotal(totalTrayectos + totalMediciones);
         reporte.setConsumoMediciones(totalMediciones);
         reporte.setFechaCreacion(LocalDate.now());
-        organizacion.agregarReporte(reporte);
+//        organizacion.agregarReporte(reporte);
 
         return reporte;
 //        this.notificadorReportes.notificarReporteOrganizacion(area.getAgente(), reporte);
+    }
+
+    public void generarReporteOrganizacion2(Organizacion organizacion, Periodo periodo) {
+        ReporteOrganizacion reporte = new ReporteOrganizacion();
+
+        Map<Categoria, Float> consumoPorCategoria = new HashMap<>();
+        Map<Sector, Float> consumoPorSector = new HashMap<>();
+        Map<Miembro, Float> consumoPorMiembro = new HashMap<>();
+
+        Float totalTrayectos = organizacion.getSectores().stream().map(sector -> {
+            Float consumoSector = sector.getListaDeMiembros().stream().map(miembro -> {
+                Float consumoMiembro = miembro.getTrayectos().stream()
+                        .flatMap(trayecto -> trayecto.getTramos().stream()).map(tramo -> {
+                            final float consumoTramo = fachadaOrganizacion.obtenerHU(Collections.singletonList(tramo)) /
+                                    fachadaOrganizacion.factorProporcionalTrayecto(tramo.getTrayecto(), miembro, periodo);
+
+                            consumoPorCategoria.putIfAbsent(tramo.getMiCategoria(), 0F);
+                            consumoPorCategoria.compute(tramo.getMiCategoria(), (anterior, nuevo) -> +consumoTramo);
+
+                            return consumoTramo;
+                        }).reduce(Float::sum).orElse(0F);
+                consumoPorMiembro.put(miembro, consumoMiembro);
+                return consumoMiembro;
+            }).reduce(Float::sum).orElse(0F);
+            consumoPorSector.put(sector, consumoSector);
+            return consumoSector;
+        }).reduce(Float::sum).orElse(0F);
+
+        Float totalMediciones = organizacion.getMediciones().stream().map(me -> {
+            final float consumoMedicion = fachadaOrganizacion.obtenerHU(Collections.singletonList(me)) *
+                    fachadaOrganizacion.factorEquivalenciaPeriodos(periodo, me.getPeriodo());
+
+            consumoPorCategoria.putIfAbsent(me.getMiCategoria(), 0F);
+            consumoPorCategoria.compute(me.getMiCategoria(), (anterior, nuevo) -> +consumoMedicion);
+
+            return consumoMedicion;
+        }).reduce(Float::sum).orElse(0F);
+
+        reporte.setConsumoPorSector(consumoPorSector);
+        reporte.setConsumoPorMiembro(consumoPorMiembro);
+        reporte.setConsumoPorCategoria(consumoPorCategoria);
+        reporte.setConsumoTotal(totalTrayectos + totalMediciones);
+        reporte.setConsumoMediciones(totalMediciones);
+        reporte.setFechaCreacion(LocalDate.now());
+        reporte.setPeriodoReferencia(periodo);
+//        organizacion.agregarReporte(reporte);
+
+        this.reporteOrganizacion = reporte;
+//        this.notificadorReportes.notificarReporteOrganizacion(area.getAgente(), reporte);
+    }
+
+    public ReporteOrganizacion getReporteOrganizacion() {
+        return reporteOrganizacion;
+    }
+
+    public void quitarReporteOrganizacion() {
+        this.reporteOrganizacion = null;
     }
 
 }

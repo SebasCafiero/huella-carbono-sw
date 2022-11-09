@@ -137,7 +137,11 @@ public class Miembro {
     }
 
     public void agregarTrayecto(Trayecto trayecto) {
-        trayectos.add(trayecto); //todo ver si trayecto.agregarMiembro(miembro) y miembro.agregarTrayecto(trayecto) en misma operacion
+        trayectos.add(trayecto);
+    }
+
+    public void quitarTrayecto(Trayecto trayecto) {
+        this.trayectos.remove(trayecto);
     }
 
     public Integer cantidadTrayectos() {

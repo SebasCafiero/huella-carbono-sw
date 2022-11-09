@@ -36,7 +36,6 @@ public class TransportePublico extends MedioDeTransporte {
     }
 
     public void agregarParadas(Parada... paradas) {
-//        Arrays.asList(paradas).forEach(parada -> this.paradas.add(parada));
         Collections.addAll(this.paradas, paradas);
     }
 
@@ -48,7 +47,10 @@ public class TransportePublico extends MedioDeTransporte {
     public Float calcularDistancia(Tramo tramo) {
         Parada paradaInicial = buscarParada(tramo.getUbicacionInicial().getCoordenada());
         Parada paradaFinal = buscarParada(tramo.getUbicacionFinal().getCoordenada());
-        if (paradaInicial == null || paradaFinal == null) {
+//        if (paradaInicial == null || paradaFinal == null) {
+//            throw new TransportePublicoSinParadaException();
+//        }
+        if (paradaInicial.getCoordenada().getLatitud().equals(0F) || paradaFinal.getCoordenada().getLatitud().equals(0F)) {
             throw new TransportePublicoSinParadaException();
         }
 
@@ -65,26 +67,26 @@ public class TransportePublico extends MedioDeTransporte {
     }
 
     @Override
-    public int hashCode() {
-        return 0;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (!(o instanceof TransportePublico)) return false;
+        TransportePublico that = (TransportePublico) o;
+        return getTipo() == that.getTipo() && Objects.equals(getLinea(), that.getLinea());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        TransportePublico other = (TransportePublico) obj;
-        if (!Objects.equals(tipo, other.tipo)) return false;
-        return linea.equals(other.linea);
+    public int hashCode() {
+        return Objects.hash(getTipo(), getLinea());
     }
 
-    private Parada buscarParada(Coordenada coordenada) {
-        //TODO Por el momento busca la parada que coincida, quizás debería buscar la mas cercana
+    public Parada buscarParada(Coordenada coordenada) {
+        Parada paradaRandom = new Parada(new Coordenada(0F, 0F), 0F, 0F);
         return this.paradas.stream()
                 .filter(parada -> parada.getCoordenada().esIgualAOtraCoordenada(coordenada))
                 .findFirst()
-                .orElse(null);
+                .orElse(paradaRandom);
+        //TODO lo puse para pruebas web, si afecta a otra cosa sacarlo -> Esto está feo, lo dejo cambiando algo mio para que no rompa
     }
 
     @Override

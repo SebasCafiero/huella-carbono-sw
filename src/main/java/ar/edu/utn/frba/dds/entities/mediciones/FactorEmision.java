@@ -19,14 +19,13 @@ public class FactorEmision {
     @Column(name = "valor")
     private Float valor;
 
+    public FactorEmision() {
+    }
+
     public FactorEmision(Categoria categoria, String unidad, Float valor) {
         this.categoria = categoria;
         this.unidad = unidad;
         this.valor = valor;
-    }
-
-    public FactorEmision() {
-
     }
 
     public Integer getId() {

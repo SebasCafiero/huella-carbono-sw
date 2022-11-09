@@ -1,152 +1,183 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Trayectos</title>
-
-  <style>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Trayecto #id</title>
+    
+    <style>
 	  .particular td, .particular th {
 		  border: 1px solid black;
 		  padding: 5px;
 		  text-align: center;
 	  }
-
+	  
 	  table.particular {
 		  border-collapse: separate;
 		  border-spacing: 15px 30px;
 		  text-align: center;
 		  margin: auto;
 	  }
-
+	  
 	  .particular .tramos {
 		  padding: 5px;
 		  margin: auto;
 		  border-spacing: 3px 10px;
 	  }
-
+	  
 	  .particular .coordenadas {
 		  border-spacing: 2px 5px;
 		  margin: auto;
 	  }
-
+	  
 	  .particular .miembros {
 		  margin: auto;
 		  border-spacing: 3px 10px;
 		  border-collapse: collapse;
 		  padding: 10px;
 	  }
-
+	  
 	  /*.particular > tbody > tr > th:first-child {
 		  border: 0px;
 	  }*/
-
+	  
 	  .edicion {
 		  text-align: center;
 	  }
-
+	  
 	  .edicion span {
 		  border: 2px dotted blue;
 		  padding: 5px;
 	  }
     </style>
-
-</head>
-<body>
-<div>
-  <table class="particular">
-    <tr>
-      <th>ID</th>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>FECHA</th>
-      <td>11/2021</td>
-    </tr>
-    <tr>
-      <th>TRAMOS</th>
-      <td>
-        <table class="tramos">
+    
+  </head>
+  <body>
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>Leo Messi</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h1>TRAYECTOS</h1>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="volver">
+        <span><a href="/miembro/#id/trayecto?action=list">VOLVER</a></span>
+      </div>
+      <div class="trayecto">
+        <table class="particular">
           <tr>
             <th>ID</th>
-            <th>COORDENADAS</th>
+            <td>1</td>
+          </tr>
+          <tr>
+            <th>FECHA</th>
+            <td>10/2020</td>
+          </tr>
+          <tr>
+            <th>TRAMOS</th>
+            <td>
+              <table class="tramos">
+                <tr>
+                  <th>ID</th>
+                  <th>COORDENADAS</th>
+                  <th>TRANSPORTE</th>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>
+                    <table class="coordenadas">
+                      <tr>
+                        <th colspan="2">INICIALES</th>
+                        <th colspan="2">FINALES</th>
+                      </tr>
+                      <tr>
+                        <td>LATITUD</td><td><i>10.5</i></td>
+                        <td>LATITUD</td><td><i>-10.3</i></td>
+                      </tr>
+                      <tr>
+                        <td>LONGITUD</td><td><i>15.0</i></td>
+                        <td>LONGITUD</td><td><i>-25.7</i></td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td><i>Tren - Sarmiento</i></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>
+                    <table class="coordenadas">
+                      <tr>
+                        <th colspan="2">INICIALES</th>
+                        <th colspan="2">FINALES</th>
+                      </tr>
+                      <tr>
+                        <td>LATITUD</td><td><i>-10.3</i></td>
+                        <td>LATITUD</td><td><i>-10</i></td>
+                      </tr>
+                      <tr>
+                        <td>LONGITUD</td><td><i>-25.7</i></td>
+                        <td>LONGITUD</td><td><i>-17.8</i></td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td><i>Colectivo - 47</i></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th>MIEMBROS</th>
+            <td>
+              <table class="miembros">
+                <tr><th>ID</th><th>NOMBRE</th><th>APELLIDO</th><th>DOCUMENTO</th></tr>
+                <tr>
+                  <td><i>1</i></td>
+                  <td><i>Leo</i></td>
+                  <td><i>Messi</i></td>
+                  <td><i>DNI - 10</i></td>
+                </tr>
+                <tr>
+                  <td><i>2</i></td>
+                  <td><i>Leo</i></td>
+                  <td><i>Paredes</i></td>
+                  <td><i>DNI - 123</i></td>
+                </tr>
+                <tr>
+                  <td><i>3</i></td>
+                  <td><i>Ángel</i></td>
+                  <td><i>Di María</i></td>
+                  <td><i>DNI - 987</i></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!--<tr>
             <th>TRANSPORTE</th>
-          </tr>
-          <tr>
-            <td>21</td>
             <td>
-              <table class="coordenadas">
-                <tr>
-                  <th colspan="2">INICIALES</th>
-                  <th colspan="2">FINALES</th>
-                </tr>
-                <tr>
-                  <td>LATITUD</td><td><i>105</i></td>
-                  <td>LATITUD</td><td><i>50.7</i></td>
-                </tr>
-                <tr>
-                  <td>LONGITUD</td><td><i>90.5</i></td>
-                  <td>LONGITUD</td><td><i>75.3</i></td>
-                </tr>
+              <table align="center">
+                <tr><th>TIPO</th><td><i>tipo transporte</i></td></tr>
+                <tr><th>VEHICULO</th><td><i>datos transporte</i></td></tr>
               </table>
             </td>
-            <td><i>Tren - Sarmiento</i></td>
-          </tr>
-          <tr>
-            <td>22</td>
-            <td>
-              <table class="coordenadas">
-                <tr>
-                  <th colspan="2">INICIALES</th>
-                  <th colspan="2">FINALES</th>
-                </tr>
-                <tr>
-                  <td>LATITUD</td><td><i>50.7</i></td>
-                  <td>LATITUD</td><td><i>55</i></td>
-                </tr>
-                <tr>
-                  <td>LONGITUD</td><td><i>75.3</i></td>
-                  <td>LONGITUD</td><td><i>75</i></td>
-                </tr>
-              </table>
-            </td>
-            <td><i>PIE</i></td>
-          </tr>
+          </tr>-->
         </table>
-      </td>
-    </tr>
-    <tr>
-      <th>MIEMBROS</th>
-      <td>
-        <table class="miembros">
-          <tr><th>ID</th><th>NOMBRE</th><th>APELLIDO</th><th>DOCUMENTO</th></tr>
-          <tr>
-            <td><i>1</i></td>
-            <td><i>Leo</i></td>
-            <td><i>Messi</i></td>
-            <td><i>DNI - 10</i></td>
-          </tr>
-          <tr>
-            <td><i>2</i></td>
-            <td><i>Leo</i></td>
-            <td><i>Paredes</i></td>
-            <td><i>DNI - 123</i></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <!--<tr>
-      <th>TRANSPORTE</th>
-      <td>
-          <table align="center">
-          <tr><th>TIPO</th><td><i>tipo transporte</i></td></tr>
-          <tr><th>VEHICULO</th><td><i>datos transporte</i></td></tr>
-        </table>
-      </td>
-    </tr>-->
-  </table>
-</div>
-<div class="edicion">
-  <span><a href="#">EDITAR</a></span>
-</div>
-</body>
+      </div>
+      <div class="editar">
+        <span><a href="/miembro/#miembro/trayecto/#id?action=edit">EDITAR</a></span>
+      </div>
+      <br />
+      <div class="borrar"><!-- JS: DELETE /miembro/#miembro/trayecto/#id -->
+        <span><button onclick="borrarTrayecto(#id)">BORRAR</button></span>
+      </div>
+    </div>
+  </body>
 </html>

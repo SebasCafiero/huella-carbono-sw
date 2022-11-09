@@ -68,34 +68,30 @@ public class Router {
         Spark.get("/reportes/agente/:id", reportesController::generarReporteAgente);
         Spark.get("/reportes/organizacion/:id", reportesController::generarReporteOrganizacion);
 
-        LoginController loginController = new LoginController();
-        Spark.post("/login", loginController::intentarLogear);
-        Spark.post("/login/alta", loginController::agregar);
 
 
-        TrayectosController trayectosController = new TrayectosController();
-        Spark.get("/trayectos", trayectosController::mostrarTodos, engine); //OK
-
-        Spark.get("/trayecto/:id", trayectosController::obtener, engine); //OK
-        Spark.post("/trayecto/:id", trayectosController::modificar); //CHECK
-        Spark.delete("/trayecto/:id", trayectosController::eliminar); //CHECK
-
-        Spark.get("/trayecto", trayectosController::darAlta, engine); //OK
-        Spark.post("/trayecto", trayectosController::agregar); //OK
-
-
+        /* Endpoints para la GUI */
         HomeController homeController = new HomeController();
+        LoginController loginController = new LoginController();
+        TrayectosController trayectosController = new TrayectosController();
+
         Spark.get("/home", homeController::inicio, engine);
         Spark.get("/menu", homeController::menu, engine );
-        Spark.get("/logout", homeController::inicio, engine);
 
-        Spark.get("/reporte", reportesController::darAlta, engine); //CHECK
-        Spark.post("/reporte", reportesController::generar); //CHECK
-        Spark.get("/reportes", reportesController::mostrarTodos, engine); //CHECK
-        Spark.get("/organizacion/:id/reportes", reportesController::mostrarTodosDeUnaOrganizacion, engine); //CHECK
-        Spark.get("/organizacion/:org/reporte/:rep", reportesController::obtener, engine); //OK
-        Spark.get("/organizacion/:id/reporte", reportesController::darAltaDeUnaOrganizacion, engine); //CHECK
+        Spark.post("/login", loginController::intentarLogear);
+        Spark.post("/login/alta", loginController::agregar);
+//        Spark.post("/logout", loginController::desloguear);
 
-        Spark.get("/reiniciar", homeController::reiniciar);
+        Spark.get("/organizacion/:id/reporte", reportesController::darAltaYMostrar, engine);
+        Spark.post("/organizacion/:id/reporte", reportesController::generar);
+
+        Spark.get("/miembro/:id/trayecto", trayectosController::mostrarTodosYCrear, engine);
+        Spark.post("/miembro/:id/trayecto", trayectosController::agregar);
+        Spark.get("/miembro/:miembro/trayecto/:trayecto", trayectosController::mostrarYEditar, engine); //TODO NO VALIDA EL MIEMBRO
+        Spark.post("/miembro/:miembro/trayecto/:trayecto", trayectosController::modificar);
+        Spark.delete("/miembro/:miembro/trayecto/:trayecto", trayectosController::eliminar);
+
+        Spark.delete("trayecto/:id", trayectosController::borrar); //Para eliminar definitivamente el trayecto (admin)
+
     }
 }

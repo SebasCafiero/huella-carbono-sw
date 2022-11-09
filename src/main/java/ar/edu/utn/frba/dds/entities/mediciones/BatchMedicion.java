@@ -17,13 +17,14 @@ public class BatchMedicion {
     @JoinColumn(name = "batch_id")
     private List<Medicion> mediciones;
 
-    @Column
+    @Column(name = "fecha_carga")
     private LocalDate fecha;
 
-    @Column
+    @Column(name = "cantidad")
     private Integer cantidadMediciones;
 
-    @Transient
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizacion_id")
     private Organizacion organizacion;
 
     public BatchMedicion() {

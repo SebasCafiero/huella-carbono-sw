@@ -1,49 +1,56 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head>
+  <head>
     <meta charset="utf-8">
-
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <script src="https://kit.fontawesome.com/27517fada0.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Lexend+Deca&display=swap" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="/js/generales.js"></script>
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/home-styles.css">-->
-
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
     <link rel="icon" href="/img/logo.png">
     <title>Menú</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/menu.css">
-
-</head>
-<body id="body">
-<header>
-    <div><span>GRUPO 06</span></div>
-</header>
-<div class="main_container">
-    <div class="titulo">
-        <h1>MENÚ DE INICIO</h1>
-    </div>
-
-    <div class="menu">
+  </head>
+  <body id="body">
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>{{rol}} - {{user}}</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h2>MENÚ DE INICIO</h2>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="menu">
         <ul>
-            <li>TRAYECTOS</li>
-            <ul>
-                <li><a href="/trayectos">VER TRAYECTOS</a>
-                <li><a href="/trayecto">CARGAR TRAYECTO</a>
-            </ul>
-            <br />
-            <li>REPORTES</li>
-            <ul>
-                <li><a href="/reportes">VER REPORTES</a></li>
-                <li><a href="/reporte">GENERAR REPORTE</a></li>
-            </ul>
+          {{#if miembro}}
+          <li>TRAYECTOS</li>
+          <ul>
+            <li><a href="/miembro/{{miembro}}/trayecto?action=list">VER TRAYECTOS</a>
+            <li><a href="/miembro/{{miembro}}/trayecto?action=create">CARGAR TRAYECTO</a>
+          </ul>
+          {{/if}}
+          {{#if organizacion}}
+          <li>REPORTES</li>
+          <ul>
+            <li><a href="/organizacion/{{organizacion}}/reporte">GENERAR REPORTE</a>
+              <!-- VER DE USAR EL MISMO TEMPLATE CON UN PARAMETRO QUE SE COMPLETE TRAS EL POST -->
+          </ul>
+          {{/if}}
+          {{#if agente}}
+          <li>REPORTES</li>
+          <ul>
+            <li><a href="/agente/{{agente}}/reporte">GENERAR REPORTE</a>
+              <!-- VER DE USAR EL MISMO TEMPLATE CON UN PARAMETRO QUE SE COMPLETE TRAS EL POST -->
+          </ul>
+          {{/if}}
         </ul>
+      </div>
     </div>
-</div>
-<div class="logout">
-    <a href="/logout">Desconectar (falta)</a>
-</div>
-</body>
+  </body>
 </html>
