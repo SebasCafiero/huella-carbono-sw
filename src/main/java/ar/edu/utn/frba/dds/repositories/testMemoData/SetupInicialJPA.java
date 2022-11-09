@@ -21,9 +21,12 @@ import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class SetupInicialJPA {
     private final Repositorio<MedioDeTransporte> repoMedios;
@@ -83,13 +86,13 @@ public class SetupInicialJPA {
         this.repoAreas.agregar(cabaProvincia, cabaMunicipio);
         this.repoAgentes.agregar(carlos, esteban);
 
-        MedioDeTransporte fitito = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.GNC);
+        MedioDeTransporte fitito = new ServicioContratado(new TipoServicio("Taxi"));
         MedioDeTransporte autoDeManu = new VehiculoParticular(TipoVehiculo.AUTOMOVIL,TipoCombustible.GASOIL);
         MedioDeTransporte autoDeWalter = new VehiculoParticular(TipoVehiculo.AUTOMOVIL,TipoCombustible.NAFTA);
         MedioDeTransporte caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
         MedioDeTransporte bicicleta = new TransporteEcologico(TipoTransporteEcologico.BICICLETA);
 
-        TransportePublico colectivo109 = new TransportePublico(TipoTransportePublico.COLECTIVO, "39");
+        TransportePublico colectivo109 = new TransportePublico(TipoTransportePublico.COLECTIVO, "109");
         colectivo109.agregarParadas(
                 new Parada( cordobaY9deJulio,0f,0.45f),
                 new Parada( new Coordenada(-34.599298f,-58.387400f),0.45f,0.4f),//av cordoba y uruguay
@@ -155,13 +158,12 @@ public class SetupInicialJPA {
         adminUtnCampus.agregarMiembro(laPulga);
         adminUtnCampus.agregarMiembro(elDiego);
 
-
         Organizacion orgUtnMedrano = new Organizacion("UTN - Medrano", TipoDeOrganizacionEnum.INSTITUCION,
                 new ClasificacionOrganizacion("Universidad"), ubicacionUtnMedrano);
 
         Sector tesoreriaUtnMedrano = new Sector("Tesoreria", orgUtnMedrano);
         Miembro laSaeta = new Miembro("Alfredo", "Di Stéfano", TipoDeDocumento.DNI, 2232122);
-        Miembro fitoPaez = new Miembro("Roberto", "Páez", TipoDeDocumento.DNI, 34432233);
+        Miembro fitoPaez = new Miembro("Roberto", "Páez", TipoDeDocumento.DNI, 34432237);
         Miembro charlyGarcia = new Miembro("Carlos", "Garcia", TipoDeDocumento.DNI, 34432233);
         tesoreriaUtnMedrano.agregarMiembro(laSaeta);
         tesoreriaUtnMedrano.agregarMiembro(fitoPaez);
@@ -172,7 +174,7 @@ public class SetupInicialJPA {
         Miembro elTitan = new Miembro("Martin", "Palermo", TipoDeDocumento.DNI, 30366666);
         administracionUtnMedrano.agregarMiembro(elVirrey);
         administracionUtnMedrano.agregarMiembro(elTitan);
-        administracionUtnMedrano.agregarMiembro(elDiego);
+        administracionUtnMedrano.agregarMiembro(elDiego);//tambien trabaja en sector : adminUtnCampus
 
         Sector mantenimientoUtnMedrano = new Sector("Mantenimiento", orgUtnMedrano);
         Miembro albertEinstein = new Miembro("Albert", "Einstein", TipoDeDocumento.DNI, 10101010);
@@ -182,10 +184,10 @@ public class SetupInicialJPA {
         mantenimientoUtnMedrano.agregarMiembro(isaacNewton);
         mantenimientoUtnMedrano.agregarMiembro(nikolaTesla);
 
-        Organizacion mcObelisco = new Organizacion("McDonald", TipoDeOrganizacionEnum.EMPRESA,
+        Organizacion orgMcObelisco = new Organizacion("McDonald", TipoDeOrganizacionEnum.EMPRESA,
                 new ClasificacionOrganizacion("Restaurante"), ubicacionMcObelisco);
 
-        Sector cocinaMc = new Sector("Tesoreria", mcObelisco);
+        Sector cocinaMc = new Sector("Tesoreria", orgMcObelisco);
         Miembro gordonRamsey = new Miembro("Gordon", "Ramsey", TipoDeDocumento.DNI, 30000129);
         Miembro jackGusto = new Miembro("Jack", "Gusto", TipoDeDocumento.DNI, 26345554);
         Miembro marioBatali = new Miembro("Mario", "Batali", TipoDeDocumento.DNI, 31666666);
@@ -193,14 +195,14 @@ public class SetupInicialJPA {
         cocinaMc.agregarMiembro(jackGusto);
         cocinaMc.agregarMiembro(marioBatali);
 
-        Sector mantenimientoMc = new Sector("Administracion", mcObelisco);
+        Sector mantenimientoMc = new Sector("Administracion", orgMcObelisco);
         Miembro elonMusk = new Miembro("Elon", "Musk", TipoDeDocumento.DNI, 27345900);
         Miembro billGates = new Miembro("Bill", "Gates", TipoDeDocumento.DNI, 23100698);
         mantenimientoMc.agregarMiembro(elonMusk);
         mantenimientoMc.agregarMiembro(billGates);
-        mantenimientoMc.agregarMiembro(albertEinstein);
+        mantenimientoMc.agregarMiembro(albertEinstein);//tambien trabaja en mantenimiento de medrano
 
-        Sector limpiezaMc = new Sector("Mantenimiento", mcObelisco);
+        Sector limpiezaMc = new Sector("Mantenimiento", orgMcObelisco);
         Miembro walterWhite = new Miembro("Walter", "White", TipoDeDocumento.DNI, 26456890);
         Miembro jessePinkman = new Miembro("Jesse", "Pinkman", TipoDeDocumento.DNI, 40398652);
         Miembro saulGoodman = new Miembro("Saul", "Goodman", TipoDeDocumento.DNI, 31567908);
@@ -209,71 +211,47 @@ public class SetupInicialJPA {
         limpiezaMc.agregarMiembro(saulGoodman);
 
 
-
         this.repoOrganizaciones.agregar(orgUtnCampus);
         this.repoOrganizaciones.agregar(orgUtnMedrano);
-        this.repoOrganizaciones.agregar(mcObelisco);
+        this.repoOrganizaciones.agregar(orgMcObelisco);
 
 
         // Tramos y trayectos
-        Tramo bici = new Tramo(bicicleta,casaDePapuGomez,ubicacionUtnCampus);
-        Trayecto trayectoPapu = new Trayecto(new Periodo(2022));
-        trayectoPapu.agregarTramo(bici);
-        bici.setTrayecto(trayectoPapu);
+        Trayecto trayectoPapu = new Trayecto(new Periodo(2022),
+                new Tramo(bicicleta,casaDePapuGomez,ubicacionUtnCampus));
         papuGomez.agregarTrayecto(trayectoPapu);
         trayectoPapu.agregarMiembro(papuGomez);
 
-        Tramo autoParticular = new Tramo(autoDeManu,casaDePapuGomez,ubicacionUtnCampus);
-        Trayecto trayectoManu = new Trayecto(new Periodo(2022));
-        trayectoManu.agregarTramo(autoParticular);
-        autoParticular.setTrayecto(trayectoManu);
+        Trayecto trayectoManu = new Trayecto(new Periodo(2022),
+                new Tramo(autoDeManu,casaDeManu,ubicacionUtnCampus));
         manuGinobili.agregarTrayecto(trayectoManu);
         trayectoManu.agregarMiembro(manuGinobili);
 
-        Tramo bondiCharly = new Tramo(colectivo109,cordobaY9deJulio,cordobaYMedrano);
-        Tramo caminataDeCharly = new Tramo(caminata,cordobaYMedrano,ubicacionUtnMedrano);
-        Trayecto trayectoCharly = new Trayecto(new Periodo(2021));
-        trayectoCharly.agregarTramos(Arrays.asList(bondiCharly,caminataDeCharly));
-        bondiCharly.setTrayecto(trayectoCharly);
-        caminataDeCharly.setTrayecto(trayectoCharly);
+        Trayecto trayectoCharly = new Trayecto(new Periodo(2021),
+                new Tramo(colectivo109,cordobaY9deJulio,cordobaYMedrano),
+                new Tramo(caminata,cordobaYMedrano,ubicacionUtnMedrano));
         charlyGarcia.agregarTrayecto(trayectoCharly);
         trayectoCharly.agregarMiembro(charlyGarcia);
 
-
-        Tramo fiat600 = new Tramo(fitito, ubicacionUtnCampus, mirallaAlberdi);
-        fiat600.setValor();
-        Tramo bondi = new Tramo(colectivo63, mirallaAlberdi, sanPedrito);
-        bondi.setValor();
-        Tramo subte = new Tramo(subteA, sanPedrito, castroBarros);
-        subte.setValor();
-        Tramo aPata = new Tramo(caminata, castroBarros, ubicacionUtnMedrano);
-        aPata.setValor();
-        Trayecto trayectoJuan = new Trayecto(new Periodo(2022));
-        trayectoJuan.agregarTramos(Arrays.asList(fiat600, bondi, subte, aPata));
-        fiat600.setTrayecto(trayectoJuan);
-        bondi.setTrayecto(trayectoJuan);
-        subte.setTrayecto(trayectoJuan);
-        aPata.setTrayecto(trayectoJuan);
+        Trayecto trayectoJuan = new Trayecto(new Periodo(2022),
+                new Tramo(fitito, ubicacionUtnCampus, mirallaAlberdi),
+                new Tramo(colectivo63, mirallaAlberdi, sanPedrito),
+                new Tramo(subteA, sanPedrito, castroBarros),
+                new Tramo(caminata, castroBarros, ubicacionUtnMedrano));
         juanPerez.agregarTrayecto(trayectoJuan);
         trayectoJuan.agregarMiembro(juanPerez);
 
-        Tramo bondi109 = new Tramo(colectivo109,cordobaYEcuador,cordobaYMedrano);
-        Tramo caminandoJuntos = new Tramo(caminata,cordobaYMedrano,ubicacionUtnMedrano);
-        Trayecto trayectoEcuadorAMedrano = new Trayecto(new Periodo(2022));
-        trayectoEcuadorAMedrano.agregarTramos(Arrays.asList(bondi109,caminandoJuntos));
-        bondi109.setTrayecto(trayectoEcuadorAMedrano);
-        caminandoJuntos.setTrayecto(trayectoEcuadorAMedrano);
+        Trayecto trayectoEcuadorAMedrano = new Trayecto(new Periodo(2022),
+                new Tramo(colectivo109,cordobaYEcuador,cordobaYMedrano),
+                new Tramo(caminata,cordobaYMedrano,ubicacionUtnMedrano));
         elVirrey.agregarTrayecto(trayectoEcuadorAMedrano);
         elTitan.agregarTrayecto(trayectoEcuadorAMedrano);
         trayectoEcuadorAMedrano.agregarMiembro(elVirrey);
         trayectoEcuadorAMedrano.agregarMiembro(elTitan);
 
-        Tramo caminataDe3 = new Tramo(caminata,casaDeWalter,estacionamientoDeWalter);
-        Tramo autoDe3 = new Tramo(autoDeWalter,estacionamientoDeWalter,ubicacionMcObelisco);
-        Trayecto trayectoDeA3 = new Trayecto(new Periodo(2022));
-        trayectoDeA3.agregarTramos(Arrays.asList(caminataDe3,autoDe3));
-        caminataDe3.setTrayecto(trayectoDeA3);
-        autoDe3.setTrayecto(trayectoDeA3);
+        Trayecto trayectoDeA3 = new Trayecto(new Periodo(2022),
+                new Tramo(caminata,casaDeWalter,estacionamientoDeWalter),
+                new Tramo(autoDeWalter,estacionamientoDeWalter,ubicacionMcObelisco));
         walterWhite.agregarTrayecto(trayectoDeA3);
         jessePinkman.agregarTrayecto(trayectoDeA3);
         saulGoodman.agregarTrayecto(trayectoDeA3);
@@ -281,7 +259,11 @@ public class SetupInicialJPA {
         trayectoDeA3.agregarMiembro(jessePinkman);
         trayectoDeA3.agregarMiembro(saulGoodman);
 
-        this.repoTrayectos.agregar(trayectoManu,trayectoPapu,trayectoCharly,trayectoJuan,trayectoEcuadorAMedrano,trayectoDeA3);
+        Trayecto[] trayectos = {trayectoManu,trayectoPapu,trayectoCharly,trayectoJuan,trayectoEcuadorAMedrano,trayectoDeA3};
+
+        Arrays.stream(trayectos).flatMap(trayecto -> trayecto.getTramos().stream()).forEach(Tramo::setValor);
+
+        this.repoTrayectos.agregar(trayectos);
 
 
         // Mediciones

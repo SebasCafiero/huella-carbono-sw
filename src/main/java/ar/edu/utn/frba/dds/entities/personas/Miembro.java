@@ -137,7 +137,6 @@ public class Miembro {
     }
 
     public void agregarTrayecto(Trayecto trayecto) {
-        if(trayectos.contains(trayecto)) System.out.println("TRAYECTO REPETIDO EN MIEMBRO ("+nroDocumento+").");
         trayectos.add(trayecto); //todo ver si trayecto.agregarMiembro(miembro) y miembro.agregarTrayecto(trayecto) en misma operacion
     }
 

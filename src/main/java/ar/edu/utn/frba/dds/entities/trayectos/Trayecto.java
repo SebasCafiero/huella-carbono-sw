@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,10 +41,12 @@ public class Trayecto {
         this.tramos = new ArrayList<>();
     }
 
-    public Trayecto(Tramo... tramos){
+    public Trayecto(Periodo periodo,Tramo... tramos){
+        this.periodo = periodo;
         this.miembros = new ArrayList<>();
         this.tramos = new ArrayList<>();
         Collections.addAll(this.tramos,tramos);
+        Arrays.asList(tramos).forEach(tramo -> tramo.setTrayecto(this));
     }
 
     public Integer getId() {
