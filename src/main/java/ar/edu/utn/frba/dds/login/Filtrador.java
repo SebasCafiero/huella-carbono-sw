@@ -10,6 +10,7 @@ public class Filtrador {
 
     }
 
+    /*
     public static void filtrar(Request request, Response response) throws RuntimeException {
         String path = request.pathInfo();
         UserUtils userUtils = new UserUtils();
@@ -41,18 +42,22 @@ public class Filtrador {
             return;
         }
         if()
-    }
+    }*/
 
     private static boolean filtrarPorRol(String rolDeAceptacion, String rolProvisto){
         return rolDeAceptacion.equals(rolProvisto);
     }
+
     public static void filtrarPorRol(Request req, Response res, String rolDeAceptacion) throws ForbiddenException{
-        String rol = userRepository.getRol(req.session().id());
+        UserUtils userUtils = new UserUtils();
+        String rol = userUtils.getUsuarioLogueado(req).getRol();
         if(!rolDeAceptacion.equals(rol)) {
             res.status(403);
             throw new ForbiddenException();
         };
     }
+
+
     private static boolean filtrarPorId(int idDeAceptacion, int idProvista) throws ForbiddenException{
         return idDeAceptacion == idProvista;
     }

@@ -30,9 +30,7 @@ public class OrganizacionController {
     }
 
     public Object obtener(Request request, Response response) {
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }TODO todo esto agregar una vez que tengamos la vista*/
+
         Organizacion organizacion = this.repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
 
         if(organizacion == null) {
@@ -45,9 +43,7 @@ public class OrganizacionController {
     }
 
     public Object eliminar(Request request, Response response) {
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }TODO todo esto agregar una vez que tengamos la vista*/
+
         Organizacion organizacion = this.repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
 
         if(organizacion == null) {
@@ -60,17 +56,13 @@ public class OrganizacionController {
     }
 
     public Object modificar(Request request, Response response) {
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }TODO todo esto agregar una vez que tengamos la vista*/
+
         response.status(400);
         return "Modificacion de organizaciones no está implementada";
     }
 
     public Object agregar(Request request, Response response) {
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }TODO todo esto agregar una vez que tengamos la vista*/
+
         OrganizacionJSONDTO organizacionJSONDTO = new ParserJSON<>(OrganizacionJSONDTO.class)
                 .parseElement(request.body());
 
@@ -100,9 +92,7 @@ public class OrganizacionController {
     }
 
     public String mostrarTodos(Request request, Response response){
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }TODO todo esto agregar una vez que tengamos la vista*/
+
         List<Organizacion> organizaciones = this.repoOrganizaciones.buscarTodos();
         return organizaciones.toString();
     }

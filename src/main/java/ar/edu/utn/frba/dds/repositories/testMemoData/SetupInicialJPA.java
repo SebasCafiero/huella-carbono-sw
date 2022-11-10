@@ -159,14 +159,15 @@ public class SetupInicialJPA {
 
         this.repoTrayectos.agregar(trayecto1);
 
+        User user1 = new User("usuario1", "123", null, null, carlos);
+        User user2 = new User("usuario2", "123", null, juanPerez, null);
+        User user3 = new User("usuario3", "123", orgUtnMedrano, null, null);
+        User user4 = new User("usuario4", "123");
 
-        List<Organizacion> organizaciones = new ArrayList<>();
-        organizaciones.add(orgUtnCampus);
-        organizaciones.add(orgUtnMedrano);
-
-        User user = new User("usuario", "1234", organizaciones);
-
-        repoUsuarios.agregar(user);
+        repoUsuarios.agregar(user1);
+        repoUsuarios.agregar(user2);
+        repoUsuarios.agregar(user3);
+        repoUsuarios.agregar(user4);
     }
 
     public void undoSetup() {
