@@ -61,17 +61,17 @@
 
           <div class="form-fecha">
             <label for="fecha">Fecha</label>
-            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayectoBuff.mes}}/{{trayectoBuff.año}}" {{else}} value="{{fecha}}" {{/if}} required/>
+            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.mes}}/{{trayecto.año}}" {{else}} value="{{fecha}}" {{/if}} required/>
           </div>
           <br />
           <div class="form-tramos">
             <div id="tramos-editables">
-              {{#each trayectoBuff.tramos}}
-              <div class="tramo-{{@index}}"><!-- deberia ser id en vez de class -->
+              {{#each trayecto.tramos}}
+              <div id="tramo-{{@index}}" class="tramo">
                 <fieldset>
                   <legend>Tramo {{id}}</legend>
                   <label for="transporte-{{@index}}">Transporte</label>
-                  <select class="transporte-editable" id="transporte-{{@index}}" name="f-transporte-{{@index}}" onchange="transporteSeleccionado2({{miembroID}}, 'tramo-{{@index}}')" required>
+                  <select id="transporte-{{@index}}" name="f-transporte-{{@index}}" onchange="transporteCambiado()" required>
                     <option class="campo-seleccionar" value="{{transporte.id}}" selected>{{transporte.info}}</option>
                     {{#each ../transportesTotales}}
                     <optgroup label="{{tipo}}">
@@ -154,18 +154,18 @@
               </div>
               {{/each}}
             </div>
-            <div class="tramo-nuevo">
+            <div id="tramo-nuevo">
               {{#if trayecto}}
               <br />
-              <input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack" onclick="tramoNuevoHabilitacion()"/>
+              <input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack" onclick="tramoNuevoHabilitacion()" {{#if tramoNuevo}}checked{{/if}}/>
               <label for="tramo-nuevo-ack">Agregar Tramo Nuevo</label><br /><br />
               {{/if}}
-              <fieldset {{#if trayecto}}disabled{{/if}}>
+              <fieldset {{#if trayecto}}{{#unless tramoNuevo}}disabled{{/unless}}{{/if}}>
                 <legend>Nuevo Tramo</legend>
                 <label for="transporte-nuevo">Transporte</label>
-                <select id="transporte-nuevo" name="f-transporte-nuevo" onchange="transporteSeleccionado2({{miembroID}}, 'tramo-nuevo')" required>
-                  {{#if transporteNuevo}}
-                  <option class="campo-seleccionar" value="{{transporteNuevo.id}}" selected>{{transporteNuevo.info}}</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
+                <select id="transporte-nuevo" name="f-transporte-nuevo" onchange="transporteCambiado()" required>
+                  {{#if tramoNuevo}}
+                  <option class="campo-seleccionar" value="{{tramoNuevo.transporte.id}}" selected>{{tramoNuevo.transporte.info}}</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
                   {{else}}
                   <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
                   {{/if}}
@@ -178,44 +178,66 @@
                   {{/each}}
                 </select>
                 <br /><br />
-                {{#if transporteNuevo.esPublico}}
+                {{#if tramoNuevo}}
+                {{#if tramoNuevo.transporte.esPublico}}
                 <div class="paradas">
                   <fieldset>
                     <legend>Paradas</legend>
                     <label for="transporte-parada-inicial-nueva">Partida:</label>
                     <select id="transporte-parada-inicial-nueva" name="f-transporte-parada-inicial-nueva" required>
                       <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
-                      {{#each transporteNuevo.paradas}}
+                      {{#each tramoNuevo.transporte.paradas}}
                       <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
                       {{/each}}
                     </select>
                     <label for="transporte-parada-final-nueva">Llegada:</label>
                     <select id="transporte-parada-final-nueva" name="f-transporte-parada-final-nueva" required>
                       <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
-                      {{#each transporteNuevo.paradas}}
+                      {{#each tramoNuevo.transporte.paradas}}
                       <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
                       {{/each}}
                     </select>
                   </fieldset>
                 </div>
                 {{else}}
-                <div class="coordenadas"> <!-- ver de cambiar por ubicacion o algo asi -->
+                <div class="ubicaciones">
                   <fieldset>
-                    <legend>Coordenadas Iniciales</legend>
+                    <legend>Ubicación Inicial</legend>
+                    <label for="provincia-inicial-nueva">Provincia:</label>
+                    <input id="provincia-inicial-nueva" type="text" name="f-provincia-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.provincia}}" required/>
+                    <label for="municipio-inicial-nueva">Municipio:</label>
+                    <input id="municipio-inicial-nueva" type="text" name="f-municipio-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.municipio}}" required/>
+                    <label for="localidad-inicial-nueva">Localidad:</label>
+                    <input id="localidad-inicial-nueva" type="text" name="f-localidad-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.localidad}}" required/>
+                    <label for="calle-inicial-nueva">Calle:</label>
+                    <input id="calle-inicial-nueva" type="text" name="f-calle-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.calle}}" required/>
+                    <label for="numero-inicial-nueva">Numero:</label>
+                    <input id="numero-inicial-nueva" type="text" name="f-numero-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.numero}}" required/>
                     <label for="lat-inicial-nueva">Latitud:</label>
-                    <input id="lat-inicial-nueva" type="text" name="f-lat-inicial-nueva" value="" required/>
+                    <input id="lat-inicial-nueva" type="text" name="f-lat-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.latitud}}" required/>
                     <label for="lon-inicial-nueva">Longitud:</label>
-                    <input id="lon-inicial-nueva" type="text" name="f-lon-inicial-nueva" value="" required/>
+                    <input id="lon-inicial-nueva" type="text" name="f-lon-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.longitud}}" required/>
                   </fieldset>
                   <br />
                   <fieldset>
-                    <legend>Coordenadas Finales</legend>
+                    <legend>Ubicación Final</legend>
+                    <label for="provincia-final-nueva">Provincia:</label>
+                    <input id="provincia-final-nueva" type="text" name="f-provincia-final-nueva" value="{{tramoNuevo.ubicacionFinal.provincia}}" required/>
+                    <label for="municipio-final-nueva">Municipio:</label>
+                    <input id="municipio-final-nueva" type="text" name="f-municipio-final-nueva" value="{{tramoNuevo.ubicacionFinal.municipio}}" required/>
+                    <label for="localidad-final-nueva">Localidad:</label>
+                    <input id="localidad-final-nueva" type="text" name="f-localidad-final-nueva" value="{{tramoNuevo.ubicacionFinal.localidad}}" required/>
+                    <label for="calle-final-nueva">Calle:</label>
+                    <input id="calle-final-nueva" type="text" name="f-calle-final-nueva" value="{{tramoNuevo.ubicacionFinal.calle}}" required/>
+                    <label for="numero-final-nueva">Numero:</label>
+                    <input id="numero-final-nueva" type="text" name="f-numero-final-nueva" value="{{tramoNuevo.ubicacionFinal.numero}}" required/>
                     <label for="lat-final-nueva">Latitud:</label>
-                    <input id="lat-final-nueva" type="text" name="f-lat-final-nueva" value="" required/>
+                    <input id="lat-final-nueva" type="text" name="f-lat-final-nueva" value="{{tramoNuevo.ubicacionFinal.latitud}}" required/>
                     <label for="lon-final-nueva">Longitud:</label>
-                    <input id="lon-final-nueva" type="text" name="f-lon-final-nueva" value="" required/>
+                    <input id="lon-final-nueva" type="text" name="f-lon-final-nueva" value="{{tramoNuevo.ubicacionFinal.longitud}}" required/>
                   </fieldset>
                 </div>
+                {{/if}}
                 {{/if}}
               </fieldset>
               <br />
@@ -237,10 +259,8 @@
       <div class="cancelar">
         {{#if trayecto}}
         <span><a href="/miembro/{{miembroID}}/trayecto/{{trayecto.id}}">CANCELAR</a></span>
-<!--        <span><a href="/trayecto/{{trayecto.id}}">CANCELAR</a></span>-->
         {{else}}
         <span><a href="/miembro/{{miembroID}}/trayecto?action=list">CANCELAR</a></span>
-<!--        <span><a href="/trayectos">CANCELAR</a></span>-->
         {{/if}}
       </div>
     </div>

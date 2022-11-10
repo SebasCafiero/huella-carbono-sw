@@ -6,7 +6,14 @@ import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 
 public class TramoMapperHBS {
+
     public static TramoHBS toDTO(Tramo tramo) {
+        TramoHBS tramoDTO = toDTOTransporteLazy(tramo);
+        tramoDTO.setTransporte(TransporteMapperHBS.toDTO(tramo.getMedioDeTransporte()));
+        return tramoDTO;
+    }
+
+    public static TramoHBS toDTOTransporteLazy(Tramo tramo) {
         Integer idParadaInicial = null;
         Integer idParadaFinal = null;
         if(tramo.getMedioDeTransporte() instanceof TransportePublico) { //todo check busqueda de idParada
@@ -25,20 +32,9 @@ public class TramoMapperHBS {
         return tramoDTO;
     }
 
-    public static TramoHBS toDTOLazy(Tramo tramo) {
+    public static TramoHBS toDTOLazy(MedioDeTransporte transporte) {
         TramoHBS tramoDTO = new TramoHBS();
-        tramoDTO.setTransporte(TransporteMapperHBS.toDTOLazy(tramo.getMedioDeTransporte()));
-        return tramoDTO;
-    }
-
-    public static TramoHBS setDTOTransporte(TramoHBS tramoDTO, MedioDeTransporte transporte) {
-        tramoDTO.setTransporte(TransporteMapperHBS.toDTO(transporte));
-        return tramoDTO;
-    }
-
-    public static TramoHBS toDTOEditable(Tramo tramo) {
-        TramoHBS tramoDTO = toDTO(tramo);
-        tramoDTO.setTransporte(TransporteMapperHBS.toDTO(tramo.getMedioDeTransporte()));
+        tramoDTO.setTransporte(TransporteMapperHBS.toDTOLazy(transporte));
         return tramoDTO;
     }
 }

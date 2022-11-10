@@ -16,7 +16,7 @@ public class TransporteMapperHBS {
 
     public static TransporteHBS toDTO(MedioDeTransporte transporte) {
         List<ParadaHBS> paradas = null;
-        Boolean esPublico = false;
+        boolean esPublico = false;
         if(transporte instanceof TransportePublico) {
             paradas = ((TransportePublico) transporte).getParadas().stream().map(ParadaMapperHBS::toDTO).collect(Collectors.toList());
             esPublico = true;
