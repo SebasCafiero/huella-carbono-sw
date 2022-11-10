@@ -28,7 +28,8 @@ public class Organizacion {
     @Enumerated(EnumType.STRING)
     private TipoDeOrganizacionEnum tipo;
 
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ubicacion_id", referencedColumnName = "ubicacion_id")
     private UbicacionGeografica ubicacion;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

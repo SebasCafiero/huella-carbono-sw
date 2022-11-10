@@ -5,10 +5,7 @@ import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.*;
-import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
-import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
-import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
-import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
+import ar.edu.utn.frba.dds.entities.mediciones.*;
 import ar.edu.utn.frba.dds.entities.personas.*;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
@@ -19,8 +16,11 @@ import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class SetupInicialJPA {
     private final Repositorio<MedioDeTransporte> repoMedios;
@@ -30,6 +30,7 @@ public class SetupInicialJPA {
     private final Repositorio<AreaSectorial> repoAreas;
     private final Repositorio<AgenteSectorial> repoAgentes;
     private final Repositorio<Contacto> repoContactos;
+    private final Repositorio<BatchMedicion> repoBatchMediciones;
 
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
@@ -39,6 +40,7 @@ public class SetupInicialJPA {
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
         this.repoContactos = FactoryRepositorio.get(Contacto.class);
+        this.repoBatchMediciones = FactoryRepositorio.get(BatchMedicion.class);
     }
 
     public void doSetup() {
@@ -80,8 +82,6 @@ public class SetupInicialJPA {
         UbicacionGeografica casaDeManu = new UbicacionGeografica(new Coordenada(-34.618784f,-58.403749f));//Av Jujuy y Av Independencia
         UbicacionGeografica estacionamientoDeWalter = new UbicacionGeografica(new Coordenada(-34.584197f,-58.420833f));//Virasoro 2367
         UbicacionGeografica casaDeWalter = new UbicacionGeografica(new Coordenada(-34.587201f,-58.423048f));//Guatemala 1425
-
-
 
         this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano,cordobaY9deJulio,cordobaYEcuador,cordobaYMedrano,casaDePapuGomez,casaDeManu,casaDeWalter,estacionamientoDeWalter);
         this.repoAreas.agregar(cabaProvincia, cabaMunicipio);
@@ -132,8 +132,10 @@ public class SetupInicialJPA {
 
         // Organizaciones, sectores y miembros
 
+        ClasificacionOrganizacion universidad = new ClasificacionOrganizacion("Universidad");
+
         Organizacion orgUtnCampus = new Organizacion("UTN - Campus", TipoDeOrganizacionEnum.INSTITUCION,
-                new ClasificacionOrganizacion("Universidad"), ubicacionUtnCampus);
+                universidad, ubicacionUtnCampus);
 
         orgUtnCampus.agregarContactoMail(new ContactoMail("cuentafalsa123@hotmail.com"));
         orgUtnCampus.agregarContactoMail(new ContactoMail("cuentafalsa456@hotmail.com"));
@@ -164,7 +166,7 @@ public class SetupInicialJPA {
         adminUtnCampus.agregarMiembro(elDiego);
 
         Organizacion orgUtnMedrano = new Organizacion("UTN - Medrano", TipoDeOrganizacionEnum.INSTITUCION,
-                new ClasificacionOrganizacion("Universidad"), ubicacionUtnMedrano);
+                universidad, ubicacionUtnMedrano);
 
         Sector tesoreriaUtnMedrano = new Sector("Tesoreria", orgUtnMedrano);
         Miembro laSaeta = new Miembro("Alfredo", "Di Stéfano", TipoDeDocumento.DNI, 2232122);
@@ -215,13 +217,12 @@ public class SetupInicialJPA {
         limpiezaMc.agregarMiembro(jessePinkman);
         limpiezaMc.agregarMiembro(saulGoodman);
 
-
         this.repoOrganizaciones.agregar(orgUtnCampus);
         this.repoOrganizaciones.agregar(orgUtnMedrano);
         this.repoOrganizaciones.agregar(orgMcObelisco);
 
-
         // Tramos y trayectos
+
         Trayecto trayectoPapu = new Trayecto(new Periodo(2022),
                 new Tramo(bicicleta, casaDePapuGomez, ubicacionUtnCampus));
         papuGomez.agregarTrayecto(trayectoPapu);
@@ -264,7 +265,7 @@ public class SetupInicialJPA {
         trayectoDeA3.agregarMiembro(jessePinkman);
         trayectoDeA3.agregarMiembro(saulGoodman);
 
-        Trayecto[] trayectos = {trayectoManu,trayectoPapu,trayectoCharly,trayectoJuan,trayectoEcuadorAMedrano,trayectoDeA3};
+        Trayecto[] trayectos = {trayectoManu, trayectoPapu, trayectoCharly, trayectoJuan, trayectoEcuadorAMedrano, trayectoDeA3};
 
         Arrays.stream(trayectos).flatMap(trayecto -> trayecto.getTramos().stream()).forEach(Tramo::setValor);
 
@@ -273,30 +274,37 @@ public class SetupInicialJPA {
 
         // Mediciones
 
-        orgUtnCampus.agregarMediciones(
-                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 3f,new Periodo(2022,9)),
-                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 5f,new Periodo(2022,8)),
-                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 4.7f,new Periodo(2022,8)),
-                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 10f,new Periodo(2022,7)),
-                new Medicion(new Categoria("Combustion Fija", "Diesel"),         "lt", 4f,new Periodo(2022,7)),
-                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 22f,new Periodo(2022,6)),
-                new Medicion(new Categoria("Combustion Movil", "Gasoil"),        "lt", 2.2f,new Periodo(2022,6)),
-                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 4.6f,new Periodo(2022,6)),
-                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 2f,new Periodo(2022,5)),
-                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 4f,new Periodo(2022,5)),
-                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 14f,new Periodo(2022,4)),
-                new Medicion(new Categoria("Combustion Fija", "Diesel"),         "lt", 4.7f,new Periodo(2022,3)),
-                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 23.6f,new Periodo(2022,3)),
-                new Medicion(new Categoria("Combustion Movil", "Gasoil"),        "lt", 24f,new Periodo(2022,2)),
-                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 3f,new Periodo(2021,12)),
-                new Medicion(new Categoria("Combustion fija", "Gas Natural"),    "m3", 5f,new Periodo(2021,10)),
-                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 4.7f,new Periodo(2021,8)),
-                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 10f,new Periodo(2021,7)),
-                new Medicion(new Categoria("Combustion Fija", "Diesel"),         "lt", 6.8f,new Periodo(2021,7)),
-                new Medicion(new Categoria("Electricidad", "Electricidad"),      "kw", 7f,new Periodo(2021,6)),
-                new Medicion(new Categoria("Combustion Movil", "Gasoil"),        "lt", 5.3f,new Periodo(2021,6))
+        Medicion[] medicionesIniciales = {
+                new Medicion(new Categoria("Combustion Fija", "Gas Natural"), "m3", 3f, new Periodo(2022, 9)),
+                new Medicion(new Categoria("Combustion Fija", "Gas Natural"), "m3", 5f, new Periodo(2022, 8)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"), "kw", 4.7f, new Periodo(2022, 8)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"), "kw", 10f, new Periodo(2022, 7)),
+                new Medicion(new Categoria("Combustion Fija", "Diesel"), "lt", 4f, new Periodo(2022, 7)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"), "kw", 22f, new Periodo(2022, 6)),
+                new Medicion(new Categoria("Combustion Movil", "Gasoil"), "lt", 2.2f, new Periodo(2022, 6)),
+                new Medicion(new Categoria("Combustion Fija", "Gas Natural"), "m3", 4.6f, new Periodo(2022, 6)),
+                new Medicion(new Categoria("Combustion Fija", "Gas Natural"), "m3", 2f, new Periodo(2022, 5)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"), "kw", 4f, new Periodo(2022, 5)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"), "kw", 14f, new Periodo(2022, 4)),
+                new Medicion(new Categoria("Combustion Fija", "Diesel"), "lt", 4.7f, new Periodo(2022, 3)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"), "kw", 23.6f, new Periodo(2022, 3)),
+                new Medicion(new Categoria("Combustion Movil", "Gasoil"), "lt", 24f, new Periodo(2022, 2)),
+                new Medicion(new Categoria("Combustion Fija", "Gas Natural"), "m3", 3f, new Periodo(2021, 12)),
+                new Medicion(new Categoria("Combustion Fija", "Gas Natural"), "m3", 5f, new Periodo(2021, 10)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"), "kw", 4.7f, new Periodo(2021, 8)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"), "kw", 10f, new Periodo(2021, 7)),
+                new Medicion(new Categoria("Combustion Fija", "Diesel"), "lt", 6.8f, new Periodo(2021, 7)),
+                new Medicion(new Categoria("Electricidad", "Electricidad"), "kw", 7f, new Periodo(2021, 6)),
+                new Medicion(new Categoria("Combustion Movil", "Gasoil"), "lt", 5.3f, new Periodo(2021, 6))
                 //la huella de carbono de todas estas mediciones tendria que dar 548.1
-        );
+        };
+
+
+        BatchMedicion batchMediciones = new BatchMedicion(Arrays.asList(medicionesIniciales), LocalDate.now());
+        batchMediciones.setOrganizacion(orgUtnCampus);
+        orgUtnCampus.agregarMediciones(medicionesIniciales);
+
+        this.repoBatchMediciones.agregar(batchMediciones);
     }
 
     public void undoSetup() {
