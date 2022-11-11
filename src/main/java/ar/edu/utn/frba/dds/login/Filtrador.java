@@ -57,6 +57,14 @@ public class Filtrador {
         };
     }
 
+    public static void filtrarLogueo(Request req, Response res) throws UnauthorizedException{
+        UserUtils userUtils = new UserUtils();
+        if(!userUtils.estaLogueado(req)){
+            res.status(401);
+            throw new UnauthorizedException();
+        }
+    }
+
 
     private static boolean filtrarPorId(int idDeAceptacion, int idProvista) throws ForbiddenException{
         return idDeAceptacion == idProvista;

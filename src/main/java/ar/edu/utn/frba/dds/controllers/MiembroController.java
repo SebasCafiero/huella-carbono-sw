@@ -1,14 +1,19 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.login.Filtrador;
+import ar.edu.utn.frba.dds.login.ForbiddenException;
+import ar.edu.utn.frba.dds.login.UnauthorizedException;
 import ar.edu.utn.frba.dds.mapping.MiembrosMapper;
 import ar.edu.utn.frba.dds.mihuella.dto.*;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MiembroController {
@@ -19,9 +24,18 @@ public class MiembroController {
     }
 
     public Object obtener(Request request, Response response) {
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }TODO todo esto agregar una vez que tengamos la vista*/
+        try{
+            Filtrador.filtrarLogueo(request, response);
+            Filtrador.filtrarPorRol(request, response, "miembro");
+        }catch (ForbiddenException | UnauthorizedException e){
+            //response.redirect("error.hbs");
+            HashMap<String, Object> model = new HashMap<>();
+            model.put("codigo", e.getCodigo());
+            model.put("descripcion", e.getMessage());
+
+            return new ModelAndView(model, "error.hbs");
+        }
+
 
         Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id")));
 
