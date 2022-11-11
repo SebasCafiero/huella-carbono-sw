@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.controllers;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.login.Filtrador;
 import ar.edu.utn.frba.dds.login.ForbiddenException;
+import ar.edu.utn.frba.dds.login.NotFoundException;
 import ar.edu.utn.frba.dds.login.UnauthorizedException;
 import ar.edu.utn.frba.dds.mapping.MiembrosMapper;
 import ar.edu.utn.frba.dds.mihuella.dto.*;
@@ -28,20 +29,15 @@ public class MiembroController {
         try{
             Filtrador.filtrarLogueo(request, response);
             Filtrador.filtrarPorRol(request, response, "miembro");
-        }catch (ForbiddenException | UnauthorizedException e){
+            Filtrador.filtrarExistenciaRecurso(request, response, Miembro.class, Integer.parseInt(request.params("id")));
+            Filtrador.filtrarPorId(request, response, Integer.parseInt(request.params("id")), "miembro");
+        }catch (ForbiddenException | UnauthorizedException | NotFoundException e){
             model.put("descripcion", e.getMessage());
             model.put("codigo", response.status());
 
-            return new ErrorResponse(e.getMessage()).generarVista(model);
+            return new ErrorResponse().generarVista(model);
         }
-
-
         Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id")));
-
-        if(miembro == null) {
-            response.status(400);
-            return new ErrorResponse().generarVista("El miembro de id " + request.params("id") + " no existe");
-        }
 
         model.put("descripcion", miembro.nombreCompleto());
 

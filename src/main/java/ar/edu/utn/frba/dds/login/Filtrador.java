@@ -1,48 +1,15 @@
 package ar.edu.utn.frba.dds.login;
 
+import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
 public class Filtrador {
 
-    public static void filtrarMiembro(){
-
-    }
-
-    /*
-    public static void filtrar(Request request, Response response) throws RuntimeException {
-        String path = request.pathInfo();
-        UserUtils userUtils = new UserUtils();
-
-        if (path.equals("/home")){
-            return;
-        }
-
-        if(!userUtils.estaLogueado(request)){
-            response.status(401);
-            throw new RuntimeException();
-        }
-
-        String rol = userRepository.getRol(request.session().id());
-
-        if(path.equals("/miembro") ||
-                path.equals("/organizacion") ||
-                path.equals("/medicion") ||
-                path.equals("/batchMedicion") ||
-                path.equals("/factorEmision") ||
-                path.equals("/agenteSectorial") ||
-                path.equals("/trayectos") ||
-                path.equals("/reportes") ||
-                path.equals("/reinicia")){
-            if (!filtrarPorRol("admin",rol){
-                response.status(403);
-                throw new RuntimeException();
-            }
-            return;
-        }
-        if()
-    }*/
+    public static void filtrarMiembro(){}
 
     private static boolean filtrarPorRol(String rolDeAceptacion, String rolProvisto){
         return rolDeAceptacion.equals(rolProvisto);
@@ -65,15 +32,37 @@ public class Filtrador {
         }
     }
 
+    public static void filtrarPorId(Request req, Response res, Integer idDeAceptacion, String rol) throws ForbiddenException{
 
-    private static boolean filtrarPorId(int idDeAceptacion, int idProvista) throws ForbiddenException{
-        return idDeAceptacion == idProvista;
-    }
-    private static void filtrarPorId(Request req, Response res, int idDeAceptacion) throws UnauthorizedException{
+        UserUtils userUtils = new UserUtils();
+        Integer id = null;
 
-        if (!String.valueOf(idDeAceptacion).equals(req.session().id())){
+        switch(rol) {
+            case "miembro":
+                id = userUtils.getUsuarioLogueado(req).getMiembro().getId();
+                break;
+            case "organizacion":
+                id = userUtils.getUsuarioLogueado(req).getOrganizacion().getId();
+                break;
+            case "agente":
+                id = userUtils.getUsuarioLogueado(req).getAgenteSectorial().getId();
+                break;
+            default:
+                break;
+        }
+
+        if (!idDeAceptacion.equals(id)){
             res.status(403);
-            throw new UnauthorizedException();
+            throw new ForbiddenException();
+        }
+    }
+
+    public static <T> void filtrarExistenciaRecurso(Request req, Response res, Class<T> type, int idRecurso) throws NotFoundException{
+        Repositorio<T> repositorio = FactoryRepositorio.get(type);
+
+        if(repositorio.buscar(idRecurso) == null){
+            res.status(404);
+            throw new NotFoundException();
         }
     }
 }
