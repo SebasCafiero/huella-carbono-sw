@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.login;
 
 public class UnauthorizedException extends Throwable{
 
-    private Integer codigo;
+    private int codigo;
 
     public UnauthorizedException() {
         this.codigo = 401;
@@ -11,7 +11,4 @@ public class UnauthorizedException extends Throwable{
     public String getMessage() {
         return codigo + " Unauthorized";
     }
-
-    public Integer getCodigo(){ return 401; }
-
 }

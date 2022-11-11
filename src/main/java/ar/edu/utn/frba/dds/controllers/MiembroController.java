@@ -23,17 +23,16 @@ public class MiembroController {
         this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
     }
 
-    public Object obtener(Request request, Response response) {
+    public ModelAndView obtener(Request request, Response response) {
+        HashMap<String, Object> model = new HashMap<>();
         try{
             Filtrador.filtrarLogueo(request, response);
             Filtrador.filtrarPorRol(request, response, "miembro");
         }catch (ForbiddenException | UnauthorizedException e){
-            //response.redirect("error.hbs");
-            HashMap<String, Object> model = new HashMap<>();
-            model.put("codigo", e.getCodigo());
             model.put("descripcion", e.getMessage());
+            model.put("codigo", response.status());
 
-            return new ModelAndView(model, "error.hbs");
+            return new ErrorResponse(e.getMessage()).generarVista(model);
         }
 
 
@@ -41,10 +40,12 @@ public class MiembroController {
 
         if(miembro == null) {
             response.status(400);
-            return new ErrorResponse("El miembro de id " + request.params("id") + " no existe");
+            return new ErrorResponse().generarVista("El miembro de id " + request.params("id") + " no existe");
         }
 
-        return miembro.nombreCompleto();
+        model.put("descripcion", miembro.nombreCompleto());
+
+        return new ModelAndView(model, "mensaje.hbs");
     }
 
     public Object eliminar(Request request, Response response) {

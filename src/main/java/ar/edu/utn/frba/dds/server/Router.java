@@ -36,7 +36,7 @@ public class Router {
         Spark.post("/organizacion", organizacionController::agregar);
 
         MiembroController miembroController = new MiembroController();
-        Spark.get("/miembro/:id", miembroController::obtener);
+        Spark.get("/miembro/:id", miembroController::obtener, engine);
         Spark.delete("/miembro/:id", miembroController::eliminar);
         Spark.get("/miembro", miembroController::mostrarTodos);
         Spark.put("/miembro/:id", miembroController::modificar);

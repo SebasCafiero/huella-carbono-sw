@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.login;
 
 public class ForbiddenException extends Throwable{
 
-    private Integer codigo;
+    private int codigo;
 
     public ForbiddenException() {
         this.codigo = 403;
@@ -11,6 +11,4 @@ public class ForbiddenException extends Throwable{
     public String getMessage() {
         return codigo + " Forbidden";
     }
-
-    public Integer getCodigo(){ return 401; }
 }
