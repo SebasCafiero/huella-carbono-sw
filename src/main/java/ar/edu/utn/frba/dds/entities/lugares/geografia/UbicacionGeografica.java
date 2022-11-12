@@ -34,16 +34,16 @@ public class UbicacionGeografica {
         this.direccion = new Direccion(municipio, localidad, calle, numero);
     }
 
-    public UbicacionGeografica(Coordenada coordenada) { //TODO direccion por defecto
+    public UbicacionGeografica(Coordenada coordenada) {
         this.coordenada = coordenada;
-//        this.direccion = mapearCoordenada(coordenada);
-        this.direccion = new Direccion();
+        this.direccion = mapearCoordenada(coordenada); //TODO
+//        this.direccion = new Direccion();
     }
 
-    /*public UbicacionGeografica(Direccion direccion) {
-        this.coordenada = mapearDireccion(direccion);
+    public UbicacionGeografica(Direccion direccion) {
+        this.coordenada = mapearDireccion(direccion); //TODO
         this.direccion = direccion;
-    }*/
+    }
 
     public Integer getId() {
         return id;
