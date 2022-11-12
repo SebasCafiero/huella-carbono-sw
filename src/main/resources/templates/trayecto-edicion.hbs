@@ -117,36 +117,50 @@
                       <legend>Ubicación Inicial</legend>
                       <label for="provincia-inicial-{{@index}}">Provincia:</label>
                       <input id="provincia-inicial-{{@index}}" type="text" name="f-provincia-inicial-{{@index}}" value="{{ubicacionInicial.provincia}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
                       <label for="municipio-inicial-{{@index}}">Municipio:</label>
                       <input id="municipio-inicial-{{@index}}" type="text" name="f-municipio-inicial-{{@index}}" value="{{ubicacionInicial.municipio}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
                       <label for="localidad-inicial-{{@index}}">Localidad:</label>
                       <input id="localidad-inicial-{{@index}}" type="text" name="f-localidad-inicial-{{@index}}" value="{{ubicacionInicial.localidad}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
                       <label for="calle-inicial-{{@index}}">Calle:</label>
                       <input id="calle-inicial-{{@index}}" type="text" name="f-calle-inicial-{{@index}}" value="{{ubicacionInicial.calle}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
                       <label for="numero-inicial-{{@index}}">Numero:</label>
                       <input id="numero-inicial-{{@index}}" type="text" name="f-numero-inicial-{{@index}}" value="{{ubicacionInicial.numero}}" required/>
+                      <span><i>(Número entero)</i></span><br/><br/>
                       <label for="lat-inicial-{{@index}}">Latitud:</label>
                       <input id="lat-inicial-{{@index}}" type="text" name="f-lat-inicial-{{@index}}" value="{{ubicacionInicial.latitud}}" required/>
+                      <span><i>(Número decimal)</i></span><br/><br/>
                       <label for="lon-inicial-{{@index}}">Longitud:</label>
                       <input id="lon-inicial-{{@index}}" type="text" name="f-lon-inicial-{{@index}}" value="{{ubicacionInicial.longitud}}" required/>
+                      <span><i>(Número decimal)</i></span>
                     </fieldset>
                     <br />
                     <fieldset>
                       <legend>Ubicación Final</legend>
                       <label for="provincia-final-{{@index}}">Provincia:</label>
                       <input id="provincia-final-{{@index}}" type="text" name="f-provincia-final-{{@index}}" value="{{ubicacionFinal.provincia}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
                       <label for="municipio-final-{{@index}}">Municipio:</label>
                       <input id="municipio-final-{{@index}}" type="text" name="f-municipio-final-{{@index}}" value="{{ubicacionFinal.municipio}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
                       <label for="localidad-final-{{@index}}">Localidad:</label>
                       <input id="localidad-final-{{@index}}" type="text" name="f-localidad-final-{{@index}}" value="{{ubicacionFinal.localidad}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
                       <label for="calle-final-{{@index}}">Calle:</label>
                       <input id="calle-final-{{@index}}" type="text" name="f-calle-final-{{@index}}" value="{{ubicacionFinal.calle}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
                       <label for="numero-final-{{@index}}">Numero:</label>
                       <input id="numero-final-{{@index}}" type="text" name="f-numero-final-{{@index}}" value="{{ubicacionFinal.numero}}" required/>
+                      <span><i>(Número entero)</i></span><br/><br/>
                       <label for="lat-final-{{@index}}">Latitud:</label>
                       <input id="lat-final-{{@index}}" type="text" name="f-lat-final-{{@index}}" value="{{ubicacionFinal.latitud}}" required/>
+                      <span><i>(Número decimal)</i></span><br/><br/>
                       <label for="lon-final-{{@index}}">Longitud:</label>
                       <input id="lon-final-{{@index}}" type="text" name="f-lon-final-{{@index}}" value="{{ubicacionFinal.longitud}}" required/>
+                      <span><i>(Número decimal)</i></span>
                     </fieldset>
                   </div>
                   {{/if}}
@@ -155,7 +169,7 @@
               </div>
               {{/each}}
             </div>
-            <div id="tramo-nuevo">
+            <div id="tramo-nuevo" class="tramo">
               {{#if trayecto}}
               <br />
               <input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack" onclick="tramoNuevoHabilitacion()" {{#if tramoNuevo}}checked{{/if}}/>

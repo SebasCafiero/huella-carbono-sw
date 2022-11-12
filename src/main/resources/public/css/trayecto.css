@@ -12,9 +12,13 @@ table.particular {
 }
 
 .particular .tramos {
-    padding: 5px;
+    padding: 10px;
     margin: auto;
     border-spacing: 3px 15px;
+}
+
+.particular .tramos > tbody > tr > td {
+    padding: 10px;
 }
 
 .particular .coordenadas {
@@ -24,6 +28,8 @@ table.particular {
 
 .particular .ubicaciones {
     margin: auto;
+    /*border-style: inset;*/
+    border-collapse: collapse;
 }
 
 .particular .miembros {

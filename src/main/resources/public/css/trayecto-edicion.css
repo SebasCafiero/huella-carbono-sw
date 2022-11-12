@@ -12,3 +12,17 @@
 
 #trayecto-compartido-ack {
 }
+
+.ubicaciones fieldset {
+    padding: 10px;
+}
+
+.ubicaciones input {
+    padding: 5px;
+    margin: 0px 5px;
+    width: 20em;
+}
+
+div.tramo > fieldset {
+    padding: 20px;
+}
