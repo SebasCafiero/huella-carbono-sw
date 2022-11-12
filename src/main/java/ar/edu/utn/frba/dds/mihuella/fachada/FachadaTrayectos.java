@@ -38,8 +38,8 @@ public class FachadaTrayectos {
         this.fachadaMedios = new FachadaMedios();
     }
 
-    public void cargarTrayecto(Trayecto unTrayecto) {
-        this.repoTrayectos.agregar(unTrayecto); //TODO ver si validar que los demas repos tengan los datos del trayecto (miembros por ej)
+    public Trayecto cargarTrayecto(Trayecto unTrayecto) {
+        return this.repoTrayectos.agregar(unTrayecto); //TODO ver si validar que los demas repos tengan los datos del trayecto (miembros por ej)
     }
 
     public List<Trayecto> obtenerTrayectos() {

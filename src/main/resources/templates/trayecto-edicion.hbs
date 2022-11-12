@@ -70,6 +70,7 @@
               <div id="tramo-{{@index}}" class="tramo">
                 <fieldset>
                   <legend>Tramo {{id}}</legend>
+                  <input id="tramo-id-{{@index}}" type="hidden" name="f-tramo-id-{{@index}}" value="{{id}}"/>
                   <label for="transporte-{{@index}}">Transporte</label>
                   <select id="transporte-{{@index}}" name="f-transporte-{{@index}}" onchange="transporteCambiado()" required>
                     <option class="campo-seleccionar" value="{{transporte.id}}" selected>{{transporte.info}}</option>

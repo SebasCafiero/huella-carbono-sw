@@ -15,9 +15,7 @@ import java.util.List;
 
 public class RepoTrayectosMemoria<T> extends RepositorioMemoria<Trayecto> {
 
-    //TODO Cree RepoTrayectos para sincronizar los repo,sino el Data de trayectos
-    // debería tenerlos vacío y al utilizarlos agregar cada dato en cada
-    // repositorio, pero sin agregar dos veces (con if o usando Set en vez de List)
+    private Repositorio<Tramo> repoTramos = FactoryRepositorio.get(Tramo.class);
 
     public RepoTrayectosMemoria(DAOMemoria<Trayecto> dao) {
         super(dao);
@@ -33,7 +31,8 @@ public class RepoTrayectosMemoria<T> extends RepositorioMemoria<Trayecto> {
 
         Repositorio<MedioDeTransporte> repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
         Repositorio<Parada> repoParadas = FactoryRepositorio.get(Parada.class);
-        trayecto.getTramos().stream().map(Tramo::getMedioDeTransporte).forEach(mt -> {
+        List<Tramo> tramos = trayecto.getTramos();
+        tramos.stream().map(Tramo::getMedioDeTransporte).forEach(mt -> {
             if(!repoMedios.buscarTodos().contains(mt))
                 repoMedios.agregar(mt);
             if(mt instanceof TransportePublico){
@@ -44,6 +43,42 @@ public class RepoTrayectosMemoria<T> extends RepositorioMemoria<Trayecto> {
                 });
             }
         });
+        tramos.forEach(repoTramos::agregar);
     }
 
+    @Override
+    public Trayecto agregar(Trayecto unObjeto) {
+        unObjeto.getTramos().forEach(repoTramos::agregar);
+        return super.agregar(unObjeto);
+    }
+
+    @Override
+    public void modificar(Trayecto unObjeto) {
+        //o son los mismos tramos, o hay uno nuevo, pero no se pueden eliminar tramos
+        unObjeto.getTramos().forEach(tr -> {
+            if(repoTramos.buscar(tr.getId()) != null)
+                repoTramos.modificar(tr);
+            else
+                repoTramos.agregar(tr);
+        });
+        super.modificar(unObjeto);
+    }
+
+    @Override
+    public void modificar(int id, Trayecto unObjeto) {
+        //o son los mismos tramos, o hay uno nuevo, pero no se pueden eliminar tramos
+        unObjeto.getTramos().forEach(tr -> {
+            if(tr.getId() != null && repoTramos.buscar(tr.getId()) != null)
+                repoTramos.modificar(tr.getId(),tr);
+            else
+                repoTramos.agregar(tr);
+        });
+        super.modificar(id, unObjeto);
+    }
+
+    @Override
+    public void eliminar(Trayecto unObjeto) {
+        unObjeto.getTramos().forEach(repoTramos::eliminar);
+        super.eliminar(unObjeto);
+    }
 }

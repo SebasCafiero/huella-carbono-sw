@@ -114,6 +114,7 @@ function transporteCambiado() {
     }
 
     //TRAMOS EDITABLES
+    var id_tramos = "";
     var div_tramos_editables = document.getElementById("tramos-editables");
     var divs_tramos = div_tramos_editables.getElementsByClassName("tramo");
 
@@ -156,13 +157,14 @@ function transporteCambiado() {
             }
         }
 
+        id_tramos += "&tramo-id" + k + "=" + document.getElementById("tramo-id-" + k).value;
     }
 
     //window.location.replace("http://stackoverflow.com");
     $.ajax({
         type: "GET",
         success: function(result) {
-          location.href = path_actual + accion + fecha + transportes + paradas + ubicaciones
+          location.href = path_actual + accion + fecha + transportes + paradas + ubicaciones + id_tramos
         }
     });
 }
