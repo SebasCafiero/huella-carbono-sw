@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,16 +20,13 @@ public class Trayecto {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trayecto", cascade = CascadeType.ALL)
     private List<Tramo> tramos;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "MIEMBRO_POR_TRAYECTO",
-            joinColumns = { @JoinColumn(name = "trayectp_id") },
+            joinColumns = { @JoinColumn(name = "trayecto_id") },
             inverseJoinColumns = { @JoinColumn(name = "miembro_id") }
     )
     private List<Miembro> miembros;
-
-    @Column
-    private Integer compartido;
 
     @Embedded
     private Periodo periodo;
@@ -44,10 +42,12 @@ public class Trayecto {
         this.tramos = new ArrayList<>();
     }
 
-    public Trayecto(Tramo... tramos){
+    public Trayecto(Periodo periodo, Tramo... tramos) {
+        this.periodo = periodo;
         this.miembros = new ArrayList<>();
         this.tramos = new ArrayList<>();
         Collections.addAll(this.tramos,tramos);
+        Arrays.asList(tramos).forEach(tramo -> tramo.setTrayecto(this));
     }
 
     public Integer getId() {
@@ -83,22 +83,14 @@ public class Trayecto {
         this.periodo = periodo;
     }
 
-    public void agregarTramos(List<Tramo> tramos){
+    public void agregarTramos(List<Tramo> tramos) {
         this.tramos.addAll(tramos);
-        tramos.forEach(tr -> tr.setTrayecto(this)); //todo
+        tramos.forEach(tr -> tr.setTrayecto(this));
     }
 
-    public void agregarTramo(Tramo unTramo){
+    public void agregarTramo(Tramo unTramo) {
         this.tramos.add(unTramo);
-        unTramo.setTrayecto(this); //todo
-    }
-
-    public Integer getCompartido() {
-        return compartido;
-    }
-
-    public void setCompartido(Integer compartido) {
-        this.compartido = compartido;
+        unTramo.setTrayecto(this);
     }
 
     public Coordenada obtenerPuntoInicial(){
@@ -140,7 +132,6 @@ public class Trayecto {
                 "id=" + id +
                 ", tramos=" + tramos +
                 ", miembros=" + miembros +
-                ", compartido=" + compartido +
                 ", periodo=" + periodo +
                 '}';
     }

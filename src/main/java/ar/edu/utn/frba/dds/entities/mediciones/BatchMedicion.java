@@ -17,13 +17,14 @@ public class BatchMedicion {
     @JoinColumn(name = "batch_id")
     private List<Medicion> mediciones;
 
-    @Column
+    @Column(name = "fecha_carga")
     private LocalDate fecha;
 
-    @Column
+    @Column(name = "cantidad")
     private Integer cantidadMediciones;
 
-    @Transient
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizacion_id")
     private Organizacion organizacion;
 
     public BatchMedicion() {
@@ -83,11 +84,6 @@ public class BatchMedicion {
     public void setOrganizacion(Organizacion organizacion) {
         this.organizacion = organizacion;
     }
-
-    //    @Override
-//    public String toString() {
-//        return "El batch de mediciones de id " + getId().toString() + " fue cargado en la fecha " + getFecha().toString() + " y tiene " + getCantidadMediciones().toString() + " mediciones." + '\n';
-//    }
 
     @Override
     public String toString() {

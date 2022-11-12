@@ -28,12 +28,12 @@ public class Organizacion {
     @Enumerated(EnumType.STRING)
     private TipoDeOrganizacionEnum tipo;
 
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ubicacion_id", referencedColumnName = "ubicacion_id")
     private UbicacionGeografica ubicacion;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
-    @Transient
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private ClasificacionOrganizacion clasificacionOrganizacion;
 
     @OneToMany(mappedBy = "organizacion", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
@@ -43,21 +43,9 @@ public class Organizacion {
     @JoinColumn(name = "organizacion_id")
     private List<Medicion> mediciones;
 
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "organizacion")
-//    @JoinColumn(name = "organizacion_id", referencedColumnName = "organizacion_id")
-//    @Transient
-//    @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL)
-//    @OneToMany(cascade = CascadeType.ALL)
     @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, targetEntity = Contacto.class)
-//    @JoinColumn(name = "organizacion_id", referencedColumnName = "organizacion_id")
     private List<ContactoMail> contactosMail;
 
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "organizacion")
-//    @JoinColumn(name = "organizacion_id", referencedColumnName = "organizacion_id")
-//    @Transient
-//    @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL)
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "organizacion_id", referencedColumnName = "organizacion_id")
     @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, targetEntity = Contacto.class)
     private List<ContactoTelefono> contactosTelefono;
 

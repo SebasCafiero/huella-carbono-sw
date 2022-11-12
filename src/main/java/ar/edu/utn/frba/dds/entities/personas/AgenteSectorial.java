@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -16,18 +15,12 @@ public class AgenteSectorial {
     @Column(name = "agente_id")
     private Integer id;
 
-    @Transient
+    @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
     private AreaSectorial area;
 
-//    @Transient
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "mail_id", referencedColumnName = "contacto_id")
     @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
     private ContactoMail mail;
 
-//    @Transient
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "telefono_id", referencedColumnName = "contacto_id")
     @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
     private ContactoTelefono telefono;
 

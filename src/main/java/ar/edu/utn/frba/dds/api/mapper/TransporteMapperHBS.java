@@ -2,14 +2,9 @@ package ar.edu.utn.frba.dds.api.mapper;
 
 import ar.edu.utn.frba.dds.api.dto.ParadaHBS;
 import ar.edu.utn.frba.dds.api.dto.TransporteHBS;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
 import ar.edu.utn.frba.dds.entities.transportes.*;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TransporteMapperHBS {
