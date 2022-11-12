@@ -22,12 +22,12 @@ public class Direccion {
         this.numero = numero;
     }
 
-    public Direccion(String barrio, String calle, Integer numero) { //TODO direccion por defecto
+    /*public Direccion(String barrio, String calle, Integer numero) { //TODO direccion por defecto
         this.municipio = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));
         this.localidad = barrio;
         this.calle = calle;
         this.numero = numero;
-    }
+    }*/
 
     public Direccion() { //TODO direccion por defecto
         this.municipio = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));

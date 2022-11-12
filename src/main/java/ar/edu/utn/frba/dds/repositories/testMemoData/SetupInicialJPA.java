@@ -68,17 +68,37 @@ public class SetupInicialJPA {
                 new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Av: Corrientes",992),
                 new Coordenada(-34.603825f,-58.380681f));
 
-        UbicacionGeografica mirallaAlberdi = new UbicacionGeografica(new Coordenada(-34.649292F, -58.499945F));
-        UbicacionGeografica sanPedrito = new UbicacionGeografica(new Coordenada(-34.630861F, -58.470063F));
-        UbicacionGeografica castroBarros = new UbicacionGeografica(new Coordenada(-34.611624F, -58.421263F));
-        UbicacionGeografica cordobaY9deJulio = new UbicacionGeografica(new Coordenada(-34.599001f,-58.380794f));
-        UbicacionGeografica cordobaYEcuador = new UbicacionGeografica(new Coordenada(-34.597991f,-58.405410f));
-        UbicacionGeografica cordobaYMedrano = new UbicacionGeografica(new Coordenada(-34.597810f,-58.420118f));
+        UbicacionGeografica mirallaAlberdi = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Miralla",2200),
+                new Coordenada(-34.649292F, -58.499945F));
+        UbicacionGeografica sanPedrito = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","San Pedrito",2500),
+                new Coordenada(-34.630861F, -58.470063F));
+        UbicacionGeografica castroBarros = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Castro Barros",256),
+                new Coordenada(-34.611624F, -58.421263F));
+        UbicacionGeografica cordobaY9deJulio = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Av. Cordoba",1100),
+                new Coordenada(-34.599001f,-58.380794f));
+        UbicacionGeografica cordobaYEcuador = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Av. Cordoba",2700),
+                new Coordenada(-34.597991f,-58.405410f));
+        UbicacionGeografica cordobaYMedrano = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Av. Cordoba",3800),
+                new Coordenada(-34.597810f,-58.420118f));
 
-        UbicacionGeografica casaDePapuGomez = new UbicacionGeografica(new Coordenada(-34.675744f,-58.455509f));//Av Escalada y Alberto Zorrilla
-        UbicacionGeografica casaDeManu = new UbicacionGeografica(new Coordenada(-34.618784f,-58.403749f));//Av Jujuy y Av Independencia
-        UbicacionGeografica estacionamientoDeWalter = new UbicacionGeografica(new Coordenada(-34.584197f,-58.420833f));//Virasoro 2367
-        UbicacionGeografica casaDeWalter = new UbicacionGeografica(new Coordenada(-34.587201f,-58.423048f));//Guatemala 1425
+        UbicacionGeografica casaDePapuGomez = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Av. Escalada",300),
+                new Coordenada(-34.675744f,-58.455509f));//Av Escalada y Alberto Zorrilla
+        UbicacionGeografica casaDeManu = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Av. Jujuy",800),
+                new Coordenada(-34.618784f,-58.403749f));//Av Jujuy y Av Independencia
+        UbicacionGeografica estacionamientoDeWalter = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Virasoro",2367),
+                new Coordenada(-34.584197f,-58.420833f));//Virasoro 2367
+        UbicacionGeografica casaDeWalter = new UbicacionGeografica(
+                new Direccion(cabaMunicipio,"Ciudad Autonoma de Buenos Aires","Guatemala",1425),
+                new Coordenada(-34.587201f,-58.423048f));//Guatemala 1425
 
 
 

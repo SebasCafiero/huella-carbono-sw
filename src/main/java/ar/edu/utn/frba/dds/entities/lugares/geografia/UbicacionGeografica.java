@@ -16,9 +16,6 @@ public class UbicacionGeografica {
     @Transient
     private Direccion direccion;
 
-    public UbicacionGeografica() {
-    }
-
     public UbicacionGeografica(Direccion direccion, Coordenada coordenada) {
         this.coordenada = coordenada;
         this.direccion = direccion;
@@ -29,15 +26,20 @@ public class UbicacionGeografica {
         this.direccion = new Direccion(pais, provincia, municipio, localidad, calle, numero);
     }
 
-    public UbicacionGeografica(String localidad, String calle, Integer numero, Coordenada coordenada) {
+    /*public UbicacionGeografica(String localidad, String calle, Integer numero, Coordenada coordenada) {
         this.coordenada = coordenada;
         this.direccion = new Direccion(localidad, calle, numero); //TODO direccion por defecto
+    }*/
+
+    public UbicacionGeografica(Municipio municipio, String localidad, String calle, Integer numero, Coordenada coordenada) {
+        this.coordenada = coordenada;
+        this.direccion = new Direccion(municipio, localidad, calle, numero);
     }
 
-    public UbicacionGeografica(Coordenada coordenada) { //TODO direccion por defecto
+    /*public UbicacionGeografica(Coordenada coordenada) { //TODO direccion por defecto
         this.coordenada = coordenada;
         this.direccion = new Direccion();
-    }
+    }*/
 
     public Integer getId() {
         return id;
