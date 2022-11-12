@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DataTrayecto {
 
-        private static List<Trayecto> trayectos = new ArrayList<>();
+        private static final List<Trayecto> trayectos = new ArrayList<>();
 
     public static List<Trayecto> getList(){
         if(trayectos.size() == 0) {
@@ -30,17 +30,17 @@ public class DataTrayecto {
 //            m3.setId(3);
 //            m4.setId(4);
 
-            MedioDeTransporte subteA = new TransportePublico(TipoTransportePublico.SUBTE, "A");
-            MedioDeTransporte bondi47 = new TransportePublico(TipoTransportePublico.COLECTIVO, "47");
-            MedioDeTransporte trenSarmiento = new TransportePublico(TipoTransportePublico.TREN, "Sarmiento");
-            MedioDeTransporte autoElectrico = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.ELECTRICO);
-            MedioDeTransporte motoNafta = new VehiculoParticular(TipoVehiculo.MOTOCICLETA, TipoCombustible.NAFTA);
-            MedioDeTransporte caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
+            TransportePublico subteA = new TransportePublico(TipoTransportePublico.SUBTE, "A");
+            TransportePublico bondi47 = new TransportePublico(TipoTransportePublico.COLECTIVO, "47");
+            TransportePublico trenSarmiento = new TransportePublico(TipoTransportePublico.TREN, "Sarmiento");
+            VehiculoParticular autoElectrico = new VehiculoParticular(TipoVehiculo.AUTOMOVIL, TipoCombustible.ELECTRICO);
+            VehiculoParticular motoNafta = new VehiculoParticular(TipoVehiculo.MOTOCICLETA, TipoCombustible.NAFTA);
+            TransporteEcologico caminata = new TransporteEcologico(TipoTransporteEcologico.PIE);
 
             Municipio caba = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));
 
             Coordenada coorSubte1 = new Coordenada(50F, 70F);
-            UbicacionGeografica ubicacionSubte1 = new UbicacionGeografica(new Direccion(), coorSubte1);
+            UbicacionGeografica ubicacionSubte1 = new UbicacionGeografica(new Direccion(caba, "La Boca", "Brandsen", 805), coorSubte1);
 
             Coordenada coorSubte2 = new Coordenada(100F, 130F);
             UbicacionGeografica ubicacionSubte2 = new UbicacionGeografica(caba, "Belgrano", "Juramento", 123, coorSubte2);
@@ -62,9 +62,9 @@ public class DataTrayecto {
             Parada paradaTren1= new Parada(ubicacionTren1, 0F, 18F);
             Parada paradaTren2= new Parada(ubicacionBondi2Tren2, 18F, 0F);
 
-            ((TransportePublico) subteA).agregarParadas(paradaSubte1, paradaSubte2, paradaSubte3);
-            ((TransportePublico) bondi47).agregarParadas(paradaBondi1, paradaBondi2);
-            ((TransportePublico) trenSarmiento).agregarParadas(paradaTren1, paradaTren2);
+            subteA.agregarParadas(paradaSubte1, paradaSubte2, paradaSubte3);
+            bondi47.agregarParadas(paradaBondi1, paradaBondi2);
+            trenSarmiento.agregarParadas(paradaTren1, paradaTren2);
 
 
             Trayecto t1 = new Trayecto();

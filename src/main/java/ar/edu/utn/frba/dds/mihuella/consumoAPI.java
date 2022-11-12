@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.mihuella;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.*;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.AdaptadorServicioDDSTPA;
 
 import java.io.IOException;
@@ -46,7 +46,8 @@ public class consumoAPI {
 
         try {
             System.out.println("\n\nOBTENER ID LOCALIDAD La Boca (es 5346)");
-            System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion())); //Por defecto CABA-La Boca
+            Municipio caba = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));
+            System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion(caba, "La Boca", "Brandsen", 805)));
         } catch (IOException e) {
             e.printStackTrace();
         }
