@@ -18,6 +18,9 @@ public class Direccion {
     @JoinColumn(name = "municipio_id", nullable = false)
     private Municipio municipio;
 
+    public Direccion() {
+    }
+
     public Direccion(Municipio municipio, String localidad, String calle, Integer numero) {
         this.municipio = municipio;
         this.localidad = localidad;

@@ -1,11 +1,15 @@
 package ar.edu.utn.frba.dds.repositories.daos;
 
 import javax.persistence.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class EntityManagerHelper {
 
@@ -97,6 +101,7 @@ public class EntityManagerHelper {
     private static Map<String, Object> seteoPropiedades() throws URISyntaxException {
         //https://stackoverflow.com/questions/8836834/read-environment-variables-in-persistence-xml-file
         Map<String, String> env = System.getenv();
+        Map<String, String> file = cargarArchivoConfigurable();
         Map<String, Object> configOverrides = new HashMap<String, Object>();
         final String motorDB = "jdbc:postgresql://";
 
@@ -111,11 +116,16 @@ public class EntityManagerHelper {
         };
 
         for (String key : keys) {
-            if (env.containsKey(key)) {
+            if (env.containsKey(key) || file.containsKey(key)) {
+                String value;
+                if(env.containsKey(key))
+                    value = env.get(key);
+                else
+                    value = file.get(key);
 
                 if (key.equals("DATABASE_URL")) {
                     // https://devcenter.heroku.com/articles/connecting-heroku-postgres#connecting-in-java
-                    String value = env.get(key);
+
                     //postgres://<username>:<password>@<host>:<port>/<dbname>
                     URI dbUri = new URI(value);
 
@@ -130,7 +140,6 @@ public class EntityManagerHelper {
 
                 }
                 if (key.equals("ddlauto")) {
-                    String value = env.get(key);
                     configOverrides.put("hibernate.hbm2ddl.auto", value);
                 }
 //                if (key.equals("jdbc.driver")) {
@@ -142,6 +151,35 @@ public class EntityManagerHelper {
             }
         }
         return configOverrides;
+    }
+
+    private static Map<String, String> cargarArchivoConfigurable() {
+        Map<String, String> propiedadesMap = new HashMap<>();
+        String path = "resources/persistence.properties";
+//        File archivo = null;
+        try {
+            Properties propiedades = new Properties();
+//            archivo = new File(path);
+            FileReader file = new FileReader(path);
+            propiedades.load(file);
+
+            List<?> propiedadesList = Collections.list(propiedades.propertyNames());
+            System.out.println("persistence.properties: "+propiedadesList);
+            propiedadesList.forEach(p -> {
+                String prop = p.toString();
+                propiedadesMap.put(prop, propiedades.getProperty(prop));
+            });
+
+            file.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("No existe el archivo " + path);
+//            System.out.println(archivo.getAbsolutePath());
+//            System.out.println(e.getMessage());
+//            throw new RuntimeException("El archivo properties no existe");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return propiedadesMap;
     }
 
 }

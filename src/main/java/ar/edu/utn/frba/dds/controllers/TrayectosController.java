@@ -43,7 +43,7 @@ public class TrayectosController {
 
         int id;
 //        id = user.getRolId(); // id del miembro
-        id = 2;
+        id = 5;
 
         String rol;
 //        rol = user.getRol(); //miembro

@@ -14,6 +14,8 @@ public class Coordenada {
     @Column(name = "longitud")
     private Float longitud;
 
+    public Coordenada() {
+    }
 
     public Coordenada(Float latitud, Float longitud) {
         this.latitud = latitud;

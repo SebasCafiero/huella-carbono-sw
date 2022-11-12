@@ -13,7 +13,8 @@ public class UbicacionGeografica {
     @Embedded
     private Coordenada coordenada;
 
-    @Embedded
+    //@Embedded
+    @Transient
     private Direccion direccion;
 
     public UbicacionGeografica() {
