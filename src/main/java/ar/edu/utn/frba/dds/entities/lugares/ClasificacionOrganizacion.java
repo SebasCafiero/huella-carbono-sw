@@ -12,6 +12,9 @@ public class ClasificacionOrganizacion {
     @Column(name = "nombre")
     private String nombre;
 
+    public ClasificacionOrganizacion() {
+    }
+
     public ClasificacionOrganizacion(String nombre) {
         this.nombre = nombre;
     }

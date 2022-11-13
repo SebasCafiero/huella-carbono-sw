@@ -30,6 +30,7 @@ public class OrganizacionController {
     }
 
     public Object obtener(Request request, Response response) {
+
         Organizacion organizacion = this.repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
 
         if(organizacion == null) {
@@ -42,6 +43,7 @@ public class OrganizacionController {
     }
 
     public Object eliminar(Request request, Response response) {
+
         Organizacion organizacion = this.repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
 
         if(organizacion == null) {
@@ -54,11 +56,13 @@ public class OrganizacionController {
     }
 
     public Object modificar(Request request, Response response) {
+
         response.status(400);
         return "Modificacion de organizaciones no está implementada";
     }
 
     public Object agregar(Request request, Response response) {
+
         OrganizacionJSONDTO organizacionJSONDTO = new ParserJSON<>(OrganizacionJSONDTO.class)
                 .parseElement(request.body());
 
@@ -88,6 +92,7 @@ public class OrganizacionController {
     }
 
     public String mostrarTodos(Request request, Response response){
+
         List<Organizacion> organizaciones = this.repoOrganizaciones.buscarTodos();
         return organizaciones.toString();
     }

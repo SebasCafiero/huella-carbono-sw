@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.mihuella.dto;
 
 import spark.ModelAndView;
 
+import java.util.HashMap;
+
 public class ErrorResponse {
     private String error;
     private String descripcion;
@@ -9,6 +11,9 @@ public class ErrorResponse {
     public ErrorResponse(String descripcion) {
         this.error = "Solicitud inválida";
         this.descripcion = descripcion;
+    }
+
+    public ErrorResponse() {
     }
 
     public String getError() {
@@ -28,6 +33,12 @@ public class ErrorResponse {
     }
 
     public ModelAndView generarVista(Object parametro) {
+        return new ModelAndView(parametro, "error.hbs");
+    }
+
+    public ModelAndView generarVista(String msg) {
+        HashMap<String, Object> parametro = new HashMap<>();
+        parametro.put("descripcion", msg);
         return new ModelAndView(parametro, "error.hbs");
     }
 

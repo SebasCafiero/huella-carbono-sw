@@ -4,21 +4,15 @@ import ar.edu.utn.frba.dds.api.dto.TramoHBS;
 import ar.edu.utn.frba.dds.api.dto.TransporteHBS;
 import ar.edu.utn.frba.dds.api.dto.TrayectoHBS;
 import ar.edu.utn.frba.dds.api.mapper.*;
-import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
-import ar.edu.utn.frba.dds.entities.mediciones.ReporteOrganizacion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.mihuella.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaTrayectos;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -28,37 +22,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TrayectosController {
-
     private FachadaTrayectos fachada;
+    private LoginController loginController;
 
     public TrayectosController() {
         this.fachada = new FachadaTrayectos();
+        this.loginController = new LoginController();
     }
-
-
-    private Map<String, Object> mapUser(Request request, Response response) {
-        String username = request.session().attribute("currentUser");
-//        User user = new UserUtils().buscar(username);
-        Map<String, Object> parametros = new HashMap<>();
-
-        int id;
-//        id = user.getRolId(); // id del miembro
-        id = 5;
-
-        String rol;
-//        rol = user.getRol(); //miembro
-        rol = "miembro";
-
-        String name;
-//        name = user.getName();
-        name = "LEO MESSI";
-
-        parametros.put("rol", rol.toUpperCase(Locale.ROOT));
-        parametros.put(rol, id);
-        parametros.put("user", name);
-        return parametros;
-    }
-
 
     public ModelAndView mostrarTodosYCrear(Request request, Response response) {
         String modo = request.queryParamOrDefault("action", "list");
@@ -68,7 +38,7 @@ public class TrayectosController {
     }
 
     public ModelAndView mostrarTodos(Request req, Response res) {
-        Map<String, Object> parametros = mapUser(req, res);
+        Map<String, Object> parametros = new HashMap<>();
         int idMiembro = Integer.parseInt(req.params("id"));
         Miembro miembro = fachada.obtenerMiembro(idMiembro);
         parametros.put("miembroID", idMiembro);
@@ -77,7 +47,7 @@ public class TrayectosController {
     }
 
     public ModelAndView darAlta(Request req, Response res) {
-        Map<String, Object> parametros = mapUser(req, res);
+        Map<String, Object> parametros = new HashMap<>();
         int idMiembro = Integer.parseInt(req.params("id"));
         Miembro miembro = fachada.obtenerMiembro(idMiembro);
         parametros.put("miembroID", idMiembro);
@@ -246,17 +216,15 @@ public class TrayectosController {
 //        tramos.add(tramoNuevo);
     }
 
-
-
-    public ModelAndView mostrarYEditar(Request req, Response res) {
-        String modo = req.queryParamOrDefault("action", "view");
+    public ModelAndView mostrarYEditar(Request request, Response response) {
+        String modo = request.queryParamOrDefault("action", "view");
         if(modo.equals("edit"))
-            return editar(req, res);
-        return obtener(req, res);
+            return editar(request, response);
+        return obtener(request, response);
     }
 
     public ModelAndView obtener(Request req, Response res) {
-        Map<String, Object> parametros = mapUser(req, res);
+        Map<String, Object> parametros = new HashMap<>();
         int idTrayecto = Integer.parseInt(req.params("trayecto"));
         int idMiembro = Integer.parseInt(req.params("miembro"));
         try { //todo no se valida que el trayecto sea del miembro (xq falta validar el user)
@@ -273,10 +241,14 @@ public class TrayectosController {
         }
     }
 
-    public ModelAndView editar(Request req, Response res) {
-        Map<String, Object> parametros = mapUser(req, res);
-        int idTrayecto = Integer.parseInt(req.params("trayecto"));
-        int idMiembro = Integer.parseInt(req.params("miembro"));
+    public ModelAndView editar(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
+        Map<String, Object> parametros = new HashMap<>();
+        int idTrayecto = Integer.parseInt(request.params("trayecto"));
+        int idMiembro = Integer.parseInt(request.params("miembro"));
         Miembro miembro = fachada.obtenerMiembro(idMiembro);
 
         Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
@@ -284,19 +256,19 @@ public class TrayectosController {
         parametros.put("miembros", trayecto.getMiembros().stream().map(MiembroMapperHBS::toDTO).collect(Collectors.toList()));
         parametros.put("transportesTotales", generarMapeoTransportesTipos());
 
-        if(req.queryParams("transporte-nuevo") != null) {
-            mapTramoNuevo(parametros, req); //todo asegurar que parametros mantiene la referencia
+        if(request.queryParams("transporte-nuevo") != null) {
+            mapTramoNuevo(parametros, request); //todo asegurar que parametros mantiene la referencia
         }
 
         List<TramoHBS> tramosDTO = new ArrayList<>();
         int cant = 0;
-        while(req.queryParams("transporte"+cant) != null) {
-            tramosDTO.add(mapTramoEditable(cant, req));
+        while(request.queryParams("transporte"+cant) != null) {
+            tramosDTO.add(mapTramoEditable(cant, request));
             cant++;
         }
 
         String fechaActual = trayecto.getPeriodo().getMes() + "/" + trayecto.getPeriodo().getAnio();
-        String[] fecha = req.queryParamOrDefault("fecha", fechaActual).split("/");
+        String[] fecha = request.queryParamOrDefault("fecha", fechaActual).split("/");
 
         TrayectoHBS trayectoDTO = new TrayectoHBS();
         trayectoDTO.setMes(Integer.parseInt(fecha[0]));

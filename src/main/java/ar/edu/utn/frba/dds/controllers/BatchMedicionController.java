@@ -19,6 +19,7 @@ import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 public class BatchMedicionController {
     private Repositorio<BatchMedicion> repoBatch;
     private final Repositorio<Organizacion> repoOrganizaciones;
+    private LoginController loginController = new LoginController();
 
     public BatchMedicionController(){
         this.repoBatch = FactoryRepositorio.get(BatchMedicion.class);
@@ -26,18 +27,26 @@ public class BatchMedicionController {
     }
 
     public String mostrarTodos(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
         List<BatchMedicion> batches = this.repoBatch.buscarTodos();
         return batches.toString();
     }
 
-    public String obtener(Request request, Response response) {
+    public String obtener(Request request, Response response){
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
         BatchMedicion batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("id")));
-        //return batchMedicion.toString();
         String json = new Gson().toJson(batchMedicion);
         return json;
     }
 
     public Object agregar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
         BatchMedicionJSONDTO requestDTO = new ParserJSON<>(BatchMedicionJSONDTO.class).parseElement(request.body());
 
         BatchMedicion batchMedicion = BatchMedicionMapper.toEntity(requestDTO);
@@ -60,8 +69,12 @@ public class BatchMedicionController {
     }
 
     public Object eliminar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
         BatchMedicion batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("id")));
         this.repoBatch.eliminar(batchMedicion);
+
         return "BatchMedicion de id : " + request.params("id") + " eliminado correctamente.";
     }
 

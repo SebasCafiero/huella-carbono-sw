@@ -46,8 +46,8 @@ public class Trayecto {
         this.periodo = periodo;
         this.miembros = new ArrayList<>();
         this.tramos = new ArrayList<>();
-        Collections.addAll(this.tramos,tramos);
-        Arrays.asList(tramos).forEach(tramo -> tramo.setTrayecto(this));
+        Collections.addAll(this.tramos, tramos);
+        Arrays.asList(tramos).forEach(tr -> tr.setTrayecto(this));
     }
 
     public Integer getId() {

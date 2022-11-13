@@ -14,7 +14,6 @@ import ar.edu.utn.frba.dds.mihuella.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.mihuella.fachada.FachadaReportes;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
-import ar.edu.utn.frba.dds.server.SystemProperties;
 import org.hibernate.SessionException;
 import spark.ModelAndView;
 import spark.Request;
@@ -31,14 +30,19 @@ public class ReportesController {
     private FachadaReportes fachadaReportes;
     private Repositorio<AreaSectorial> repoAreas;
     private Repositorio<Organizacion> repoOrganizaciones;
+    private LoginController loginController;
 
     public ReportesController() {
         this.fachadaReportes = new FachadaReportes();
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
         this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
+        this.loginController = new LoginController();
     }
 
     public Object generarReporteAgente(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        } TODO todo esto agregar una vez que tengamos la vista*/
         int idArea = Integer.parseInt(request.params(("id")));
         AreaSectorial areaSectorial = repoAreas.buscar(idArea);
         if(areaSectorial == null) {
@@ -53,6 +57,9 @@ public class ReportesController {
     }
 
     public Object generarReporteOrganizacion(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
         int idOrganizacion = Integer.parseInt(request.params(("id")));
         Organizacion organizacion = repoOrganizaciones.buscar(idOrganizacion);
         if(organizacion == null) {
@@ -65,11 +72,6 @@ public class ReportesController {
                 .generarReporteOrganizacion(organizacion, new Periodo(fecha.getYear(), fecha.getMonthValue()));
         return reporte;
     }
-
-
-
-
-
 
     private Map<String, Object> mapUser(Request request, Response response) {
         String username = request.session().attribute("currentUser");
@@ -94,6 +96,15 @@ public class ReportesController {
         return parametros;
     }
 
+    public ModelAndView darAlta(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("organizaciones", repoOrganizaciones.buscarTodos()); //podria omitirse y usar this
+        return new ModelAndView(parametros, "reporte-creacion.hbs");
+    }
 
     public ModelAndView darAltaYMostrar(Request request, Response response) {
         Map<String, Object> parametros;
@@ -134,7 +145,7 @@ public class ReportesController {
         return new ModelAndView(parametros, "reporte.hbs");
     }
 
-    public Response generar(Request request, Response response) {
+    public Response generar1(Request request, Response response) {
         int idOrg = Integer.parseInt(request.params("id"));
         Organizacion organizacion = repoOrganizaciones.buscar(idOrg); //todo check error
         String fechaActual = LocalDate.now().getMonthValue()+"/"+LocalDate.now().getYear();
@@ -142,6 +153,43 @@ public class ReportesController {
         Periodo periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
         try {
             fachadaReportes.generarReporteOrganizacion2(organizacion, periodo);
+            documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion); //todo no lo toma bien, agarra el viejo o ninguno
+            response.redirect("/organizacion/"+organizacion.getId()+"/reporte");
+        } catch (NullPointerException | FileNotFoundException | UnsupportedEncodingException e) {
+            response.status(400);
+            response.redirect("/error/"+400);
+            return response; //todo check, no puedo retornar vista
+            //return new ErrorResponse("Organización de id "+idOrg+" inexistente");
+        } catch (SessionException e) { //todo check
+            response.status(403);
+            response.redirect("/error/"+403);
+            return response;
+//            return new ErrorResponse("Acceso no permitido").generarVista(parametros);
+        }
+        return response;
+    }
+
+
+    //TODO FUSIONAR DAR ALTA REPORTE
+    public ModelAndView darAltaDeUnaOrganizacion(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null) {
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+        Map<String, Object> parametros = new HashMap<>();
+        Organizacion org = repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
+        parametros.put("organizaciones", Arrays.asList(org));
+        return new ModelAndView(parametros, "reporte-creacion.hbs");
+    }
+
+    public Response generar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        } TODO todo esto agregar una vez que tengamos la vista*/
+        int idOrg = Integer.parseInt(request.queryParams("f-organizacion"));
+        Organizacion organizacion = repoOrganizaciones.buscar(idOrg);
+        LocalDate fecha = LocalDate.now();
+        try {
+            fachadaReportes.generarReporteOrganizacion2(organizacion, new Periodo(fecha.getYear(), fecha.getMonthValue()));
             documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion); //todo no lo toma bien, agarra el viejo o ninguno
             response.redirect("/organizacion/"+organizacion.getId()+"/reporte");
         } catch (NullPointerException | FileNotFoundException | UnsupportedEncodingException e) {
@@ -184,5 +232,91 @@ public class ReportesController {
         writer.close();
 
         return arch;
+    }
+
+    public ModelAndView mostrarTodos(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
+        Map<String, Object> parametros = new HashMap<>();
+        List<Map<String, Object>> orgs = new ArrayList<>();
+        repoOrganizaciones.buscarTodos().forEach(org -> {
+           Map<String, Object> repoMap = new HashMap<>();
+           repoMap.put("id", org.getId());
+           repoMap.put("razon", org.getRazonSocial());
+           repoMap.put("reportes", org.getReportes());
+           orgs.add(repoMap);
+        });
+        parametros.put("organizaciones", orgs); //podria omitirse y usar this
+        return new ModelAndView(parametros, "reportes.hbs");
+    }
+    //TODO FUSIONAR MOSTRAR TODOS
+    public ModelAndView mostrarTodosDeUnaOrganizacion(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
+        Map<String, Object> parametros = new HashMap<>();
+        Organizacion organizacion = repoOrganizaciones.buscar(Integer.parseInt(request.params("id")));
+        List<Map<String, Object>> orgs = new ArrayList<>(); //para reutilizar #mostrarTodos
+        Map<String, Object> parametrosOrg = new HashMap<>();
+        parametrosOrg.put("id", organizacion.getId());
+        parametrosOrg.put("razon", organizacion.getRazonSocial());
+        parametrosOrg.put("reportes", organizacion.getReportes());
+        orgs.add(parametrosOrg);
+        parametros.put("organizaciones", orgs);
+        return new ModelAndView(parametros, "reportes.hbs");
+    }
+
+    public ModelAndView obtener(Request request, Response response) throws FileNotFoundException, UnsupportedEncodingException {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+
+        int idOrg = Integer.parseInt(request.params("org"));
+        Organizacion organizacion;
+        int idReporte = Integer.parseInt(request.params("rep"));
+        ReporteOrganizacion reporte;
+        Map<String, Object> parametros = new HashMap<>();
+
+        try {
+            organizacion = repoOrganizaciones.buscar(idOrg);
+            reporte = organizacion.getReportes().get(idReporte);
+        } catch (IndexOutOfBoundsException | NullPointerException e) {
+            response.status(400);
+            parametros.put("codigo", response.status());
+            String errorDesc = "Organización de id " + idOrg + " inexistente";
+            if (e instanceof IndexOutOfBoundsException)
+                errorDesc = "Reporte de id " + idReporte + " inexistente";
+            parametros.put("descripcion", errorDesc);
+            throw e;
+        }
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String arch = organizacion.getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
+
+        PrintWriter writer = new PrintWriter("resources/public/docs/"+arch, "UTF-8");
+
+        writer.println("Fecha de Creacion: " + reporte.getFechaCreacion());
+        writer.println("Periodo de Referencia: " + reporte.getPeriodoReferencia());
+        writer.println("Total : " + reporte.getConsumoTotal());
+        writer.println("Total mediciones : " + reporte.getConsumoMediciones());
+
+        for (Map.Entry<Miembro, Float> miembro : reporte.getConsumoPorMiembro().entrySet()) {
+            writer.println("Miembro : " + miembro.getKey().getNroDocumento() + " :-> " + miembro.getValue());
+        }
+
+        for (Map.Entry<Sector, Float> sector : reporte.getConsumoPorSector().entrySet()) {
+            writer.println("Sector : " + sector.getKey().getNombre() + " :-> " + sector.getValue());
+        }
+
+        for(Map.Entry<Categoria, Float> categoria : reporte.getConsumoPorCategoria().entrySet()) {
+            writer.println("Categoria : " + categoria.getKey().toString() + " :-> " + categoria.getValue());
+        }
+
+        writer.close();
+
+        return null;
+//        return arch;
     }
 }

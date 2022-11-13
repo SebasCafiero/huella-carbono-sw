@@ -241,6 +241,8 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
+src/main/resources/META-INF/*
+
 # Eclipse m2e generated files
 # Eclipse Core
 .project

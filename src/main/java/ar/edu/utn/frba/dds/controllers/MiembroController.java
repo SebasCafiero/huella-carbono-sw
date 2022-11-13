@@ -1,14 +1,20 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
+import ar.edu.utn.frba.dds.login.Filtrador;
+import ar.edu.utn.frba.dds.login.ForbiddenException;
+import ar.edu.utn.frba.dds.login.NotFoundException;
+import ar.edu.utn.frba.dds.login.UnauthorizedException;
 import ar.edu.utn.frba.dds.mapping.MiembrosMapper;
 import ar.edu.utn.frba.dds.mihuella.dto.*;
 import ar.edu.utn.frba.dds.mihuella.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MiembroController {
@@ -18,18 +24,31 @@ public class MiembroController {
         this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
     }
 
-    public Object obtener(Request request, Response response) {
+    public ModelAndView obtener(Request request, Response response) {
+        HashMap<String, Object> model = new HashMap<>();
+        try{
+            Filtrador.filtrarLogueo(request, response);
+            Filtrador.filtrarPorRol(request, response, "miembro");
+            Filtrador.filtrarExistenciaRecurso(request, response, Miembro.class, Integer.parseInt(request.params("id")));
+            Filtrador.filtrarPorId(request, response, Integer.parseInt(request.params("id")), "miembro");
+        }catch (ForbiddenException | UnauthorizedException | NotFoundException e){
+            model.put("descripcion", e.getMessage());
+            model.put("codigo", response.status());
+
+            return new ErrorResponse().generarVista(model);
+        }
         Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id")));
 
-        if(miembro == null) {
-            response.status(400);
-            return new ErrorResponse("El miembro de id " + request.params("id") + " no existe");
-        }
+        model.put("descripcion", miembro.nombreCompleto());
 
-        return miembro.nombreCompleto();
+        return new ModelAndView(model, "mensaje.hbs");
     }
 
     public Object eliminar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
+
         Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id")));
 
         if(miembro == null) {
@@ -42,10 +61,17 @@ public class MiembroController {
     }
 
     public Object modificar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
         return "Modificacion de miembros no implementada";
     }
 
     public Object agregar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
+
         MiembroCSVDTO miembroCSVDTO = new ParserJSON<>(MiembroCSVDTO.class).parseElement(request.body());
 
         Miembro miembro = MiembrosMapper.toEntity(miembroCSVDTO);
@@ -61,6 +87,10 @@ public class MiembroController {
     }
 
     public String mostrarTodos(Request request, Response response){
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }TODO todo esto agregar una vez que tengamos la vista*/
+
         List<Miembro> organizaciones = this.repoMiembros.buscarTodos();
         return organizaciones.toString();
     }

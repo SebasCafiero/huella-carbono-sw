@@ -1,11 +1,16 @@
 package ar.edu.utn.frba.dds.server;
 
 import ar.edu.utn.frba.dds.controllers.*;
-import ar.edu.utn.frba.dds.login.LoginController;
+import ar.edu.utn.frba.dds.login.*;
+import ar.edu.utn.frba.dds.mihuella.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.spark.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.spark.utils.HandlebarsTemplateEngineBuilder;
-import spark.Spark;
+import com.google.gson.Gson;
+import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
+
+import java.util.HashMap;
+import java.util.Optional;
 
 public class Router {
     private static HandlebarsTemplateEngine engine;
@@ -24,18 +29,83 @@ public class Router {
         Router.configure();
     }
 
-    private static void configure(){
+    private static void configure() {
+        UserUtils userUtils = new UserUtils();
+
         Spark.get("/", ((request, response) -> "Api HC DDS - 2022"));
 
+        LoginController loginController = new LoginController();
+        Spark.post("/login", (request, response) -> {
+//            User mayBeUser = new ParserJSON<>(User.class).parseElement(request.body());
+
+            HashMap<String, String> loginRequest = new HashMap<>();
+            loginRequest.put("username", "fito");
+            loginRequest.put("password", "miembro");
+            User mayBeUser = new ParserJSON<>(User.class).parseElement(new Gson().toJson(loginRequest));
+
+            User realUser = userUtils.buscarUsuarioEnRepo(mayBeUser.getUsername())
+                    .orElseThrow(AuthenticationException::new);
+
+            HashMap<String, Object> user = new HashMap<>();
+            user.put("user", realUser.getUsername());
+            user.put("rol", realUser.getRol());
+            user.put("miembro", realUser.getMiembro() != null ? realUser.getMiembro().getId() : null);
+            user.put("organizacion", realUser.getOrganizacion() != null ? realUser.getOrganizacion().getId() : null);
+            user.put("agente", realUser.getAgenteSectorial() != null ? realUser.getOrganizacion().getId() : null);
+            return new ModelAndView(user, "menu.hbs");
+        }, engine);
+        Spark.post("/logout", loginController::cerrarSesion);
+        Spark.post("/errorAcceso", loginController::errorAcceso);
+
+        UserController userController = new UserController();
+        Spark.post("/login/alta", userController::agregar);
+
+
+
         OrganizacionController organizacionController = new OrganizacionController();
-        Spark.get("/organizacion/:id", organizacionController::obtener);
-        Spark.delete("/organizacion/:id", organizacionController::eliminar);
-        Spark.get("/organizacion", organizacionController::mostrarTodos);
-        Spark.put("/organizacion/:id", organizacionController::modificar);
-        Spark.post("/organizacion", organizacionController::agregar);
+
+        Spark.path("/organizacion", () -> {
+//            List<Rol> rolesValidos;
+            Spark.before("/*", (Request request, Response response) -> {
+                if (!userUtils.estaLogueado(request))
+                    throw new NotLoggedException();
+            });
+            Spark.post("/organizacion", organizacionController::agregar);
+            Spark.get("/organizacion", organizacionController::mostrarTodos);
+            Spark.path("/:id", () -> {
+                Spark.before("/*", (Request request, Response response) -> {
+                    Optional<User> user = userUtils
+                            .getUsuarioLogueado(request.session().attribute("idUsuario"));
+
+                    if(!user.isPresent())
+                        throw new AuthenticationException();
+
+                    if(!user.get().isOrganizacion() || !user.get().getId().equals(Integer.parseInt(request.params("id")))) {
+                        throw new UnauthorizedException();
+                    }
+                });
+
+                Spark.get("", organizacionController::obtener);
+                Spark.put("", organizacionController::modificar);
+                Spark.delete("", organizacionController::eliminar);
+            });
+
+        });
+
+        Spark.exception(NotLoggedException.class, (exception, request, response) -> {
+            System.out.println("Request rechazado. " + exception.getMessage());
+            System.out.println("Ip origen: " + request.ip());
+            response.redirect("/home");
+        });
+
+//        Spark.get("/organizacion/:id", organizacionController::obtener);
+//        Spark.delete("/organizacion/:id", organizacionController::eliminar);
+//        Spark.get("/organizacion", organizacionController::mostrarTodos);
+//        Spark.put("/organizacion/:id", organizacionController::modificar);
+//        Spark.post("/organizacion", organizacionController::agregar);
 
         MiembroController miembroController = new MiembroController();
-        Spark.get("/miembro/:id", miembroController::obtener);
+        Spark.get("/miembro/:id", miembroController::obtener, engine);
         Spark.delete("/miembro/:id", miembroController::eliminar);
         Spark.get("/miembro", miembroController::mostrarTodos);
         Spark.put("/miembro/:id", miembroController::modificar);
@@ -55,7 +125,7 @@ public class Router {
 
         FactorEmisionController factorEmisionController = new FactorEmisionController();
         Spark.put("/factorEmision/:id", factorEmisionController :: modificar);
-        Spark.get("/factorEmision",factorEmisionController :: mostrarTodos); // solo para probar
+        Spark.get("/factorEmision", factorEmisionController :: mostrarTodos); // solo para probar
 
         AgenteSectorialController agenteSectorialController = new AgenteSectorialController();
         Spark.get("/agenteSectorial/:id", agenteSectorialController::obtener);
@@ -68,15 +138,13 @@ public class Router {
         Spark.get("/reportes/agente/:id", reportesController::generarReporteAgente);
         Spark.get("/reportes/organizacion/:id", reportesController::generarReporteOrganizacion);
 
-
-
         /* Endpoints para la GUI */
         HomeController homeController = new HomeController();
-        LoginController loginController = new LoginController();
+//        LoginController loginController = new LoginController();
         TrayectosController trayectosController = new TrayectosController();
 
         Spark.get("/home", homeController::inicio, engine);
-        Spark.get("/menu", homeController::menu, engine );
+//        Spark.get("/menu", homeController::menu, engine );
 
         Spark.post("/login", loginController::intentarLogear);
         Spark.post("/login/alta", loginController::agregar);

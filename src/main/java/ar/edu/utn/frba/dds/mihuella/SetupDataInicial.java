@@ -19,7 +19,7 @@ import java.util.Map;
 
 import static java.lang.System.exit;
 
-public class PruebasJPA {
+public class SetupDataInicial {
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
 
         SetupInicialJPA setup = new SetupInicialJPA();

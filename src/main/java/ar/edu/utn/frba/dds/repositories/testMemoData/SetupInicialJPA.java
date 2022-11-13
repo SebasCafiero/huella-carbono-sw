@@ -11,6 +11,7 @@ import ar.edu.utn.frba.dds.entities.personas.*;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.login.User;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
 import ar.edu.utn.frba.dds.repositories.daos.Cache;
@@ -37,7 +38,7 @@ public class SetupInicialJPA {
     private final Repositorio<AgenteSectorial> repoAgentes;
     private final Repositorio<Contacto> repoContactos;
     private final Repositorio<BatchMedicion> repoBatchMediciones;
-    private final Cache<String, CacheLocalidad> cacheLocalidades;
+    private final Repositorio<User> repoUsuarios;
 
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
@@ -46,9 +47,9 @@ public class SetupInicialJPA {
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
+        this.repoUsuarios = FactoryRepositorio.get(User.class);
         this.repoContactos = FactoryRepositorio.get(Contacto.class);
         this.repoBatchMediciones = FactoryRepositorio.get(BatchMedicion.class);
-        this.cacheLocalidades = FactoryCache.get(String.class, CacheLocalidad.class);
     }
 
     public void doSetup() {
@@ -81,11 +82,6 @@ public class SetupInicialJPA {
 
                 if(municipio.getNombre().equals(cabaMunicipio.getNombre()))
                     cabaMunicipio = municipio;
-
-                adapter.obtenerLocalidades(muni.getId()).forEach(loca -> {
-                    this.cacheLocalidades.put(loca.getNombre(),
-                            new CacheLocalidad(prov.getId(), muni.getId(), loca.getId()));
-                });
             };
 
             this.repoAreas.agregar(provincia);
@@ -363,6 +359,21 @@ public class SetupInicialJPA {
         orgUtnCampus.agregarMediciones(medicionesIniciales);
 
         this.repoBatchMediciones.agregar(batchMediciones);
+
+        User usuarioOrganizacionCampus = new User("campus", "org", orgUtnCampus);
+        User usuarioOrganizacionMedrano = new User("medrano", "org", orgUtnMedrano);
+        User usuarioOrganizacionMc = new User("mac", "org", orgMcObelisco);
+
+        User usuarioMiembroCharly = new User("fito", "miembro", fitoPaez);
+        User usuarioMiembroManu = new User("manu", "miembro", manuGinobili);
+        User usuarioMiembroDiego = new User("diego", "miembro", elDiego);
+
+        User usuarioAgenteProv = new User("prov.caba", "agente", carlos);
+        User usuarioAgenteMuni = new User("muni.caba", "agente", esteban);
+
+        this.repoUsuarios.agregar(usuarioOrganizacionCampus, usuarioOrganizacionMedrano, usuarioOrganizacionMc,
+                usuarioMiembroCharly, usuarioMiembroManu, usuarioMiembroDiego,
+                usuarioAgenteProv, usuarioAgenteMuni);
     }
 
     public void undoSetup() {

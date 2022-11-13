@@ -9,6 +9,7 @@ import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.login.User;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
 import ar.edu.utn.frba.dds.repositories.impl.jpa.*;
 import ar.edu.utn.frba.dds.repositories.impl.memory.*;
@@ -69,6 +70,8 @@ public class FactoryRepositorio {
                     repo = new RepoParticularesMemoria(new DAOMemoria<>(VehiculoParticular.class));
                 } else if(type.equals(TipoServicio.class)) {
                     repo = new RepoTiposServicioMemoria(new DAOMemoria<>(TipoServicio.class));
+                } else if(type.equals(User.class)) {
+                    repo = new RepoUsuariosMemoria(new DAOMemoria<>(User.class));
                 } else {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type));
                 }
@@ -90,6 +93,8 @@ public class FactoryRepositorio {
                         repo = new RepoParticularesJPA(new DAOHibernate<>(VehiculoParticular.class));
                     } else if(type.equals(TipoServicio.class)) {
                         repo = new RepoTiposServicioJPA(new DAOHibernate<>(TipoServicio.class));
+                    } else if(type.equals(User.class)) {
+                        repo = new RepoUsuariosJPA(new DAOHibernate<>(User.class));
                     } else {
                         repo = new RepositorioPersistente<>(new DAOHibernate<>(type));
                     }

@@ -106,6 +106,7 @@ public class FachadaOrganizacion implements FachadaOrg {
                 factorProporcionalCompartido(trayecto) *
                 factorProporcionalOrganizaciones(miembro);
     }
+
     public float factorEquivalenciaPeriodos(Periodo periodoDeseado, Periodo periodoMedible) {
         if(!periodoDeseado.getAnio().equals(periodoMedible.getAnio()))
             return 0;

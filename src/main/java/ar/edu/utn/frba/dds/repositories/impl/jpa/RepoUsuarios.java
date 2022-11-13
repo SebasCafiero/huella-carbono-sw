@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.impl.jpa;
 
-
 import ar.edu.utn.frba.dds.login.User;
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 
