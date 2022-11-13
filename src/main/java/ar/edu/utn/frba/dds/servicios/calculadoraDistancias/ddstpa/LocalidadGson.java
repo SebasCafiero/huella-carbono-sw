@@ -1,13 +1,53 @@
 package ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ddstpa;
 
 public class LocalidadGson {
-    public int id;
-    public String nombre;
+    private int id;
+    private String nombre;
     //public int codigoPostal;
-    public MunicipioInterno municipio;
+    private MunicipioInterno municipio;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public MunicipioInterno getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(MunicipioInterno municipio) {
+        this.municipio = municipio;
+    }
 
     public class MunicipioInterno {
-        public int id;
-        public String nombre;
+        private int id;
+        private String nombre;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
     }
 }

@@ -12,15 +12,20 @@ import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
+import ar.edu.utn.frba.dds.repositories.daos.Cache;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryCache;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.AdaptadorServicioDDSTPA;
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ddstpa.MunicipioGson;
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ddstpa.ProvinciaGson;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SetupInicialJPA {
     private final Repositorio<MedioDeTransporte> repoMedios;
@@ -31,6 +36,7 @@ public class SetupInicialJPA {
     private final Repositorio<AgenteSectorial> repoAgentes;
     private final Repositorio<Contacto> repoContactos;
     private final Repositorio<BatchMedicion> repoBatchMediciones;
+    private final Cache<String, Integer> cacheLocalidades;
 
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
@@ -41,6 +47,7 @@ public class SetupInicialJPA {
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
         this.repoContactos = FactoryRepositorio.get(Contacto.class);
         this.repoBatchMediciones = FactoryRepositorio.get(BatchMedicion.class);
+        this.cacheLocalidades = FactoryCache.get(String.class, Integer.class);
     }
 
     public void doSetup() {
@@ -50,8 +57,35 @@ public class SetupInicialJPA {
 
         //  Ubicaciones, Agenstes Sectoriales y medios de transporte
 
-        Provincia cabaProvincia = new Provincia("Ciudad de Buenos Aires", "Argentina");
-        Municipio cabaMunicipio = new Municipio("Ciudad de Buenos Aires", cabaProvincia);
+        AdaptadorServicioDDSTPA adapter = new AdaptadorServicioDDSTPA();
+
+        Provincia cabaProvincia = new Provincia("CIUDAD DE BUENOS AIRES", "Argentina");
+        Municipio cabaMunicipio = new Municipio("CIUDAD DE BUENOS AIRES", cabaProvincia);
+
+        List<ProvinciaGson> provinciasGson = adapter.obtenerPaises().stream().filter(pais -> pais.getNombre().equals("ARGENTINA"))
+                .flatMap(pais -> adapter.obtenerProvincias(pais.getId()).stream()).collect(Collectors.toList());
+
+        for(ProvinciaGson prov : provinciasGson) {
+            Provincia provincia = new Provincia(prov.getNombre(), prov.getPais().getNombre());
+            provincia.setIdApiDistancias(prov.getId());
+
+            if(provincia.getNombre().equals(cabaProvincia.getNombre()))
+                cabaProvincia = provincia;
+
+            for(MunicipioGson muni : adapter.obtenerMunicipios(prov.getId())) {
+                Municipio municipio = new Municipio(muni.getNombre(), provincia);
+                municipio.setIdApiDistancias(muni.getId());
+
+                if(municipio.getNombre().equals(cabaMunicipio.getNombre()))
+                    cabaMunicipio = municipio;
+
+                adapter.obtenerLocalidades(muni.getId()).forEach(loca -> {
+                    this.cacheLocalidades.put(loca.getNombre(), loca.getId());
+                });
+            };
+
+            this.repoAreas.agregar(provincia);
+        }
 
         ContactoMail con1 = new ContactoMail("uncontacto@gmail.com", "123");
         ContactoTelefono con2 = new ContactoTelefono("1155443322");

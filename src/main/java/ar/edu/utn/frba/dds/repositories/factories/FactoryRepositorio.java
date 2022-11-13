@@ -80,7 +80,7 @@ public class FactoryRepositorio {
                         repo = new RepoFactoresJPA(new DAOHibernate<>(type));
                     } else if (type.equals(Miembro.class)) {
                         repo = new RepoMiembrosJPA(new DAOHibernate<>(type));
-                    } if(type.equals(TransporteEcologico.class)) {
+                    } else if(type.equals(TransporteEcologico.class)) {
                         repo = new RepoEcologicosJPA(new DAOHibernate<>(TransporteEcologico.class));
                     } else if(type.equals(TransportePublico.class)) {
                         repo = new RepoPublicosJPA(new DAOHibernate<>(TransportePublico.class));

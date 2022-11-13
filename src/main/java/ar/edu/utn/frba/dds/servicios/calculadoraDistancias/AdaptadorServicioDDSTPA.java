@@ -33,8 +33,8 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias {
                     idLocalidadDestino,
                     calleDestino,
                     alturaDestino);
-            valorDistancia = distancia.valor;
-            unidadDistancia = distancia.unidad;
+            valorDistancia = distancia.getValor();
+            unidadDistancia = distancia.getUnidad();
         } catch (IOException e) {
             //System.out.println(e.getMessage());
             System.out.println("ERROR API");
@@ -50,89 +50,89 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias {
         return valorDistancia;
     }
 
-    public void imprimirPaises() throws IOException {
+    public void imprimirPaises() {
         List<PaisGson> paises = servicioExterno.paises();
         for(PaisGson unPais: paises){
-            System.out.println(unPais.id + "| " + unPais.nombre);
+            System.out.println(unPais.getId() + "| " + unPais.getNombre());
         }
     }
 
-    public void imprimirProvincias(int idPais) throws IOException {
+    public void imprimirProvincias(int idPais) {
         List<ProvinciaGson> provincias = servicioExterno.provincias(idPais);
         System.out.println("Id del pais para buscar provincias: " + idPais);
         for(ProvinciaGson unaProv: provincias){
-            System.out.println(unaProv.id + "| " + unaProv.nombre);
+            System.out.println(unaProv.getId() + "| " + unaProv.getNombre());
         }
     }
 
-    public void imprimirMunicipios(int idProvincia) throws IOException {
+    public void imprimirMunicipios(int idProvincia) {
         List<MunicipioGson> municipios = servicioExterno.municipios(idProvincia);
         System.out.println("Id de la provincia para buscar municipios: " + idProvincia);
         for(MunicipioGson unMunicipio: municipios){
-            System.out.println(unMunicipio.id + "| " + unMunicipio.nombre);
+            System.out.println(unMunicipio.getId() + "| " + unMunicipio.getNombre());
         }
     }
 
-    public void imprimirLocalidades(int idMunicipio) throws IOException {
+    public void imprimirLocalidades(int idMunicipio) {
         List<LocalidadGson> localidades = servicioExterno.localidades(idMunicipio);
         System.out.println(("Id del municipio para buscar localidades: " + idMunicipio));
         for(LocalidadGson unaLocalidad: localidades){
-            System.out.println(unaLocalidad.id + "| " + unaLocalidad.nombre);
+            System.out.println(unaLocalidad.getId() + "| " + unaLocalidad.getNombre());
         }
     }
 
 
-    public List<PaisGson> obtenerPaises() throws IOException {
+    public List<PaisGson> obtenerPaises() {
         return servicioExterno.paises();
     }
 
-    public List<ProvinciaGson> obtenerProvincias(int idPais) throws IOException {
+    public List<ProvinciaGson> obtenerProvincias(int idPais) {
         return servicioExterno.provincias(idPais);
     }
 
-    public List<MunicipioGson> obtenerMunicipios(int idProvincia) throws IOException {
+    public List<MunicipioGson> obtenerMunicipios(int idProvincia) {
         return servicioExterno.municipios(idProvincia);
     }
 
-    public List<LocalidadGson> obtenerLocalidades(int idMunicipio) throws IOException {
+    public List<LocalidadGson> obtenerLocalidades(int idMunicipio) {
         return servicioExterno.localidades(idMunicipio);
     }
 
-    public int obtenerIdPais(Direccion direccion) throws IOException {
+    public int obtenerIdPais(Direccion direccion) {
         String nombrePais = direccion.getMunicipio().getProvincia().getNombrePais();
-        PaisGson pais = obtenerPaises().stream().filter(p->p.nombre.equals(nombrePais.toUpperCase())).findFirst().get();
-        System.out.println("PAIS ENCONTRADO: " + pais.id + "| " + pais.nombre);
-        return pais.id;
+        PaisGson pais = obtenerPaises().stream().filter(p-> p.getNombre().equals(nombrePais.toUpperCase())).findFirst().get();
+        System.out.println("PAIS ENCONTRADO: " + pais.getId() + "| " + pais.getNombre());
+        return pais.getId();
         //return obtenerPaises().stream().filter(p->p.nombre.equals(nombrePais)).findFirst().map(p->p.id).orElse(9); //Defecto Argentina
     }
 
-    public int obtenerIdProvincia(Direccion direccion) throws IOException {
+    public int obtenerIdProvincia(Direccion direccion) {
         String nombreProvincia = direccion.getMunicipio().getProvincia().getNombre();
         ProvinciaGson provincia = obtenerProvincias(obtenerIdPais(direccion)).stream()
-                .filter(p -> p.nombre.equals(nombreProvincia.toUpperCase()))
+                .filter(p -> p.getNombre().equals(nombreProvincia.toUpperCase()))
                 .findFirst().orElseThrow(() -> new ApiDistanciasException("provincia", nombreProvincia));
-        System.out.println("PROVINCIA ENCONTRADA: " + provincia.id + "| " + provincia.nombre);
-        return provincia.id;
+        System.out.println("PROVINCIA ENCONTRADA: " + provincia.getId() + "| " + provincia.getNombre());
+        return provincia.getId();
         //return obtenerProvincias(obtenerIdPais("ARGENTINA")).stream().filter(p->p.nombre.equals(nombreProvincia)).findFirst().map(p->p.id).orElse(168); //Defecto BsAs
     }
 
-    public int obtenerIdMunicipio(Direccion direccion) throws IOException {
+    public int obtenerIdMunicipio(Direccion direccion) {
         String nombreMunicipio = direccion.getMunicipio().getNombre();
         MunicipioGson municipio = obtenerMunicipios(obtenerIdProvincia(direccion)).stream()
-                .filter(p -> p.nombre.equals(nombreMunicipio.toUpperCase()))
+                .filter(p -> p.getNombre().equals(nombreMunicipio.toUpperCase()))
                 .findFirst().orElseThrow(() -> new ApiDistanciasException("municipio", nombreMunicipio));
-        System.out.println("MUNICIPIO ENCONTRADO: " + municipio.id + "| " + municipio.nombre);
-        return municipio.id;
+        System.out.println("MUNICIPIO ENCONTRADO: " + municipio.getId() + "| " + municipio.getNombre());
+        return municipio.getId();
         //return obtenerMunicipios(obtenerIdProvincia("BUENOS AIRES")).stream().filter(m->m.nombre.equals(nombreMunicipio)).findFirst().map(m->m.id).orElse(335); //Defecto Avellaneda
     }
 
-    public int obtenerIdLocalidad(Direccion direccion) throws IOException {
+    public int obtenerIdLocalidad(Direccion direccion) {
         String nombreLocalidad = direccion.getLocalidad();
         LocalidadGson localidad = obtenerLocalidades(obtenerIdMunicipio(direccion)).stream()
-                .filter(l -> l.nombre.equals(nombreLocalidad.toUpperCase()))
+                .filter(l -> l.getNombre().equals(nombreLocalidad.toUpperCase()))
                 .findFirst().orElseThrow(() -> new ApiDistanciasException("localidad", nombreLocalidad));;
-        System.out.println("LOCALIDAD ENCONTRADA: " + localidad.id + "| " + localidad.nombre);
-        return localidad.id;
+        System.out.println("LOCALIDAD ENCONTRADA: " + localidad.getId() + "| " + localidad.getNombre());
+        return localidad.getId();
         //return obtenerLocalidades(obtenerIdMunicipio("AVELLANEDA")).stream().filter(l->l.nombre.equals(nombreLocalidad)).findFirst().map(l->l.id).orElse(3319); //Defecto Dock Sud
     }
 
@@ -143,31 +143,31 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias {
 
 
 
-    public int obtenerIdPais2(String nombrePais) throws IOException {
-        PaisGson pais = obtenerPaises().stream().filter(p->p.nombre.equals(nombrePais.toUpperCase())).findFirst().get();
-        System.out.println("PAIS ENCONTRADO: " + pais.id + "| " + pais.nombre);
-        return pais.id;
+    public int obtenerIdPais2(String nombrePais) {
+        PaisGson pais = obtenerPaises().stream().filter(p-> p.getNombre().equals(nombrePais.toUpperCase())).findFirst().get();
+        System.out.println("PAIS ENCONTRADO: " + pais.getId() + "| " + pais.getNombre());
+        return pais.getId();
         //return obtenerPaises().stream().filter(p->p.nombre.equals(nombrePais)).findFirst().map(p->p.id).orElse(9); //Defecto Argentina
     }
 
-    public int obtenerIdProvincia2(String nombreProvincia) throws IOException {
-        ProvinciaGson provincia = obtenerProvincias(obtenerIdPais2("ARGENTINA")).stream().filter(p->p.nombre.equals(nombreProvincia.toUpperCase())).findFirst().get();
-        System.out.println("PROVINCIA ENCONTRADA: " + provincia.id + "| " + provincia.nombre);
-        return provincia.id;
+    public int obtenerIdProvincia2(String nombreProvincia) {
+        ProvinciaGson provincia = obtenerProvincias(obtenerIdPais2("ARGENTINA")).stream().filter(p-> p.getNombre().equals(nombreProvincia.toUpperCase())).findFirst().get();
+        System.out.println("PROVINCIA ENCONTRADA: " + provincia.getId() + "| " + provincia.getNombre());
+        return provincia.getId();
         //return obtenerProvincias(obtenerIdPais("ARGENTINA")).stream().filter(p->p.nombre.equals(nombreProvincia)).findFirst().map(p->p.id).orElse(168); //Defecto BsAs
     }
 
-    public int obtenerIdMunicipio2(String nombreMunicipio) throws IOException {
-        MunicipioGson municipio = obtenerMunicipios(obtenerIdProvincia2("BUENOS AIRES")).stream().filter(p->p.nombre.equals(nombreMunicipio.toUpperCase())).findFirst().get();
-        System.out.println("MUNICIPIO ENCONTRADO: " + municipio.id + "| " + municipio.nombre);
-        return municipio.id;
+    public int obtenerIdMunicipio2(String nombreMunicipio) {
+        MunicipioGson municipio = obtenerMunicipios(obtenerIdProvincia2("BUENOS AIRES")).stream().filter(p-> p.getNombre().equals(nombreMunicipio.toUpperCase())).findFirst().get();
+        System.out.println("MUNICIPIO ENCONTRADO: " + municipio.getId() + "| " + municipio.getNombre());
+        return municipio.getId();
         //return obtenerMunicipios(obtenerIdProvincia("BUENOS AIRES")).stream().filter(m->m.nombre.equals(nombreMunicipio)).findFirst().map(m->m.id).orElse(335); //Defecto Avellaneda
     }
 
-    public int obtenerIdLocalidad2(String nombreLocalidad) throws IOException {
-        LocalidadGson localidad = obtenerLocalidades(obtenerIdMunicipio2("AVELLANEDA")).stream().filter(l->l.nombre.equals(nombreLocalidad.toUpperCase())).findFirst().get();
-        System.out.println("LOCALIDAD ENCONTRADA: " + localidad.id + "| " + localidad.nombre);
-        return localidad.id;
+    public int obtenerIdLocalidad2(String nombreLocalidad) {
+        LocalidadGson localidad = obtenerLocalidades(obtenerIdMunicipio2("AVELLANEDA")).stream().filter(l-> l.getNombre().equals(nombreLocalidad.toUpperCase())).findFirst().get();
+        System.out.println("LOCALIDAD ENCONTRADA: " + localidad.getId() + "| " + localidad.getNombre());
+        return localidad.getId();
         //return obtenerLocalidades(obtenerIdMunicipio("AVELLANEDA")).stream().filter(l->l.nombre.equals(nombreLocalidad)).findFirst().map(l->l.id).orElse(3319); //Defecto Dock Sud
     }
 }

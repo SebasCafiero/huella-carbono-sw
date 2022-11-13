@@ -8,49 +8,26 @@ import java.io.IOException;
 public class consumoAPI {
     public static void main(String[] args) {
         AdaptadorServicioDDSTPA servicioExterno = new AdaptadorServicioDDSTPA();
-        try {
-            System.out.println("OBTENER PAISES");
-            servicioExterno.imprimirPaises();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        try {
-            System.out.println("\nOBTENER PROVINCIAS de 9-Argentina");
-            servicioExterno.imprimirProvincias(9);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("OBTENER PAISES");
+        servicioExterno.imprimirPaises();
 
-        try {
-            System.out.println("\nOBTENER MUNICIPIOS de 168-BsAs");
-            servicioExterno.imprimirMunicipios(168);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("\nOBTENER PROVINCIAS de 9-Argentina");
+        servicioExterno.imprimirProvincias(9);
 
-        try {
-            System.out.println("\nOBTENER LOCALIDADES de 335-Avellaneda");
-            servicioExterno.imprimirLocalidades(335);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("\nOBTENER MUNICIPIOS de 168-BsAs");
+        servicioExterno.imprimirMunicipios(168);
 
-        try {
-            System.out.println("\n\nOBTENER ID LOCALIDAD DockSud (es 3319)");
+        System.out.println("\nOBTENER LOCALIDADES de 335-Avellaneda");
+        servicioExterno.imprimirLocalidades(335);
+
+        System.out.println("\n\nOBTENER ID LOCALIDAD DockSud (es 3319)");
 //            System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion("Dock Sud","callecita",5))); //TODO PROBAR AL MANDAR VALOR INCORRECTO
-            System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion("Argentina", "Buenos Aires", "Avellaneda", "Dock Sud","callecita",5)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion("Argentina", "Buenos Aires", "Avellaneda", "Dock Sud","callecita",5)));
 
-        try {
-            System.out.println("\n\nOBTENER ID LOCALIDAD La Boca (es 5346)");
-            Municipio caba = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));
-            System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion(caba, "La Boca", "Brandsen", 805)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("\n\nOBTENER ID LOCALIDAD La Boca (es 5346)");
+        Municipio caba = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));
+        System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion(caba, "La Boca", "Brandsen", 805)));
 
     }
 }

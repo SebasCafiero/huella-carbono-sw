@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ddstpa;
 
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ApiDistanciasException;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -46,31 +47,55 @@ public class ServicioDDSTPA {
 
     }
 
-    public List<ProvinciaGson> provincias(int idPais) throws IOException {
+    public List<ProvinciaGson> provincias(int idPais) {
         OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
         Call<List<ProvinciaGson>> requestProvincias = operacionesDDSTPA.provincias(TOKEN, idPais);
-        Response<List<ProvinciaGson>> responseProvincias = requestProvincias.execute();
+
+        Response<List<ProvinciaGson>> responseProvincias;
+        try {
+            responseProvincias = requestProvincias.execute();
+        } catch (IOException e) {
+            throw new ApiDistanciasException();
+        }
         return responseProvincias.body();
     }
 
-    public List<MunicipioGson> municipios(int idProvincia) throws IOException {
+    public List<MunicipioGson> municipios(int idProvincia) {
         OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
         Call<List<MunicipioGson>> requestMunicipios = operacionesDDSTPA.municipios(TOKEN, 1, idProvincia); //TODO RECORRER TODAS LAS PAGINAS
-        Response<List<MunicipioGson>> responseMunicipios = requestMunicipios.execute();
+
+        Response<List<MunicipioGson>> responseMunicipios;
+        try {
+            responseMunicipios = requestMunicipios.execute();
+        } catch (IOException e) {
+            throw new ApiDistanciasException();
+        }
         return responseMunicipios.body();
     }
 
-    public List<LocalidadGson> localidades(int idMunicipio) throws IOException {
+    public List<LocalidadGson> localidades(int idMunicipio) {
         OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
         Call<List<LocalidadGson>> requestLocalidades = operacionesDDSTPA.localidades(TOKEN,idMunicipio);
-        Response<List<LocalidadGson>> responseLocalidades = requestLocalidades.execute();
+
+        Response<List<LocalidadGson>> responseLocalidades;
+        try {
+            responseLocalidades = requestLocalidades.execute();
+        } catch (IOException e) {
+            throw new ApiDistanciasException();
+        }
         return responseLocalidades.body();
     }
 
-    public List<PaisGson> paises() throws IOException {
+    public List<PaisGson> paises() {
         OperacionesDDSTPA operacionesDDSTPA = this.retrofit.create(OperacionesDDSTPA.class);
         Call<List<PaisGson>> requestPaises = operacionesDDSTPA.paises(TOKEN);
-        Response<List<PaisGson>> responsePaises = requestPaises.execute();
+
+        Response<List<PaisGson>> responsePaises;
+        try {
+            responsePaises = requestPaises.execute();
+        } catch (IOException e) {
+            throw new ApiDistanciasException();
+        }
         return responsePaises.body();
     }
 

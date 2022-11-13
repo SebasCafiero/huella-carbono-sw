@@ -25,6 +25,9 @@ public abstract class AreaSectorial {
     @JoinColumn(name = "agente_id", referencedColumnName = "agente_id")
     protected AgenteSectorial agente;
 
+    @Column(name = "id_api_distancias")
+    private Integer idApiDistancias;
+
     public Integer getId() {
         return id;
     }
@@ -64,5 +67,13 @@ public abstract class AreaSectorial {
 
     public void setOrganizaciones(Set<Organizacion> organizaciones) {
         this.organizaciones = organizaciones;
+    }
+
+    public Integer getIdApiDistancias() {
+        return idApiDistancias;
+    }
+
+    public void setIdApiDistancias(Integer idApiDistancias) {
+        this.idApiDistancias = idApiDistancias;
     }
 }

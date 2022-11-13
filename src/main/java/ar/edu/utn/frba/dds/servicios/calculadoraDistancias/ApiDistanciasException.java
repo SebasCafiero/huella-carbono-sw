@@ -3,8 +3,13 @@ package ar.edu.utn.frba.dds.servicios.calculadoraDistancias;
 public class ApiDistanciasException extends RuntimeException {
     private String atributo;
     private String valorEsperado;
+    private String ioError;
 
     public ApiDistanciasException() {
+    }
+
+    public ApiDistanciasException(String ioError) {
+        this.ioError = ioError;
     }
 
     public ApiDistanciasException(String atributo, String valorEsperado) {
@@ -22,6 +27,8 @@ public class ApiDistanciasException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return "El servicio externo no conoce " + atributo + " con valor " + valorEsperado;
+        return ioError == null
+                ? "El servicio externo no conoce " + atributo + " con valor " + valorEsperado
+                : "Ha ocurrido un error de conexion con el servicio de api distancias";
     }
 }

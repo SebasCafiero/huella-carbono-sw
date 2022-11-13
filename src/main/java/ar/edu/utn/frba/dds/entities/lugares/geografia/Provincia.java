@@ -11,7 +11,7 @@ public class Provincia extends AreaSectorial {
     @Column(name = "pais")
     private String nombrePais;
 
-    @OneToMany(mappedBy = "provincia")
+    @OneToMany(mappedBy = "provincia", cascade = CascadeType.ALL)
     private Set<Municipio> municipios;
 
     public Provincia() {
