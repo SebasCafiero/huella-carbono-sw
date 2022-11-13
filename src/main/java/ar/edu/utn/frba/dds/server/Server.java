@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.server;
 
+import ar.edu.utn.frba.dds.cache.CacheLocalidad;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Municipio;
 import ar.edu.utn.frba.dds.repositories.daos.Cache;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryCache;
@@ -15,8 +16,9 @@ public class Server {
     public static void main(String[] args) {
         System.out.println("HEROKU-PORT: "+getHerokuAssignedPort());
         port(getHerokuAssignedPort());
-        Router.init();
         loadCache();
+
+        Router.init();
 //        DebugScreen.enableDebugScreen();
     }
 
@@ -30,13 +32,18 @@ public class Server {
     }
 
     static void loadCache() {
-        Cache<String, Integer> cacheLocalidades = FactoryCache.get(String.class, Integer.class);
+        if(!SystemProperties.isCalculadoraDistanciasCacheEnabled())
+            return;
+
+        Cache<String, CacheLocalidad> cacheLocalidades = FactoryCache.get(String.class, CacheLocalidad.class);
 
         AdaptadorServicioDDSTPA adapter = new AdaptadorServicioDDSTPA();
 
-        FactoryRepositorio.get(Municipio.class).buscarTodos()
-                .forEach(muni -> adapter.obtenerLocalidades(muni.getIdApiDistancias())
-                            .forEach(loca -> cacheLocalidades.put(loca.getNombre(), loca.getId())));
+        FactoryRepositorio.get(Municipio.class).buscarTodos().forEach(muni -> {
+            adapter.obtenerLocalidades(muni.getIdApiDistancias())
+                    .forEach(loca -> cacheLocalidades.put(loca.getNombre(),
+                            new CacheLocalidad(muni.getProvincia().getIdApiDistancias(), muni.getId(), loca.getId())));
+        });
 
     }
 

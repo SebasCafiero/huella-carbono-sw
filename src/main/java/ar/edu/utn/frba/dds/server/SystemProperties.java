@@ -12,6 +12,9 @@ public class SystemProperties {
     private static final Float delta;
     private static final Float coeficienteGradoKm;
     private static final Boolean calculadoraDistanciasMockEnabled;
+    private static final Boolean calculadoraDistanciasCacheEnabled;
+    private static final String calculadoraDistanciasUrl;
+    private static final String calculadoraDistanciasToken;
 
     static {
         File archivo = null;
@@ -28,7 +31,10 @@ public class SystemProperties {
                     propiedades.getProperty("coordenadas.precision.equivalencia", "111.10"));
             calculadoraDistanciasMockEnabled = Objects.equals(
                     propiedades.getProperty("client.calculadora.distancias.mock-enabled"), "true");
-
+            calculadoraDistanciasCacheEnabled = Objects.equals(
+                    propiedades.getProperty("client.calculadora.distancias.cache-enabled"), "true");
+            calculadoraDistanciasUrl = propiedades.getProperty("client.calculadora.distancias.api.url");
+            calculadoraDistanciasToken = propiedades.getProperty("client.calculadora.distancias.api.token");
 
             file.close();
         } catch (FileNotFoundException e) {
@@ -54,6 +60,18 @@ public class SystemProperties {
 
     public static Boolean isCalculadoraDistanciasMockEnabled() {
         return calculadoraDistanciasMockEnabled;
+    }
+
+    public static Boolean isCalculadoraDistanciasCacheEnabled() {
+        return calculadoraDistanciasCacheEnabled;
+    }
+
+    public static String getCalculadoraDistanciasUrl() {
+        return calculadoraDistanciasUrl;
+    }
+
+    public static String getCalculadoraDistanciasToken() {
+        return calculadoraDistanciasToken;
     }
 
 }

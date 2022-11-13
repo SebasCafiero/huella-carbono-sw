@@ -19,7 +19,7 @@ public class FactoryCache {
         else{
             mapa = new Cache<>(keyType, valueType);
 
-            caches.put(keyType.getName(), mapa);
+            caches.put(keyType.getName() + "-" + valueType.getName(), mapa);
         }
 
         return mapa;

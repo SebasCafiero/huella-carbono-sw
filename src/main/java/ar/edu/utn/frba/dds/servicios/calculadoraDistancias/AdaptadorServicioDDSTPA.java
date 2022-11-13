@@ -1,17 +1,25 @@
 package ar.edu.utn.frba.dds.servicios.calculadoraDistancias;
 
+import ar.edu.utn.frba.dds.cache.CacheLocalidad;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.repositories.daos.Cache;
+import ar.edu.utn.frba.dds.repositories.factories.FactoryCache;
+import ar.edu.utn.frba.dds.server.SystemProperties;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ddstpa.*;
 
-import java.io.IOException;
 import java.util.List;
 
 public class AdaptadorServicioDDSTPA implements CalculadoraDistancias {
     //SERIA EL ROL ADAPTADOR DEL PATRON ADAPTER PARA EL SERVICIO DDSTPA
 
-    private ServicioDDSTPA servicioExterno = ServicioDDSTPA.getInstancia();
+    private final ServicioDDSTPA servicioExterno;
+    private final Cache<String, CacheLocalidad> localidadesCache;
 
+    public AdaptadorServicioDDSTPA() {
+        servicioExterno = ServicioDDSTPA.getInstancia();
+        localidadesCache = FactoryCache.get(String.class, CacheLocalidad.class);
+    }
 
     @Override
     public Float calcularDistancia(UbicacionGeografica ubicacionInicial, UbicacionGeografica ubicacionFinal) {
@@ -19,27 +27,32 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias {
         Float valorDistancia = 0F;
         String unidadDistancia = "KM";
 
-        try {
-            int idLocalidadOrigen = obtenerIdLocalidad(ubicacionInicial.getDireccion());//1;
-            String calleOrigen = ubicacionInicial.getDireccion().getCalle();//"maipu";
-            int alturaOrigen = ubicacionInicial.getDireccion().getNumero();//100;
-            int idLocalidadDestino = obtenerIdLocalidad(ubicacionFinal.getDireccion());//457;
-            String calleDestino = ubicacionFinal.getDireccion().getCalle();//"O'Higgins";
-            int alturaDestino = ubicacionFinal.getDireccion().getNumero();//200;
+        int idLocalidadOrigen;
+        int idLocalidadDestino;
 
-            DistanciaGson distancia = servicioExterno.distancia(idLocalidadOrigen,
-                    calleOrigen,
-                    alturaOrigen,
-                    idLocalidadDestino,
-                    calleDestino,
-                    alturaDestino);
-            valorDistancia = distancia.getValor();
-            unidadDistancia = distancia.getUnidad();
-        } catch (IOException e) {
-            //System.out.println(e.getMessage());
-            System.out.println("ERROR API");
-            e.printStackTrace();
+        if(SystemProperties.isCalculadoraDistanciasCacheEnabled()) {
+            idLocalidadOrigen = localidadesCache.get(ubicacionInicial.getDireccion().getLocalidad()).getIdLocalidad();
+            idLocalidadDestino = localidadesCache.get(ubicacionFinal.getDireccion().getLocalidad()).getIdLocalidad();
+        } else {
+            idLocalidadOrigen = obtenerIdLocalidad(ubicacionInicial.getDireccion());//1;
+            idLocalidadDestino = obtenerIdLocalidad(ubicacionFinal.getDireccion());//457;
         }
+
+        String calleOrigen = ubicacionInicial.getDireccion().getCalle();//"maipu";
+        int alturaOrigen = ubicacionInicial.getDireccion().getNumero();//100;
+
+        String calleDestino = ubicacionFinal.getDireccion().getCalle();//"O'Higgins";
+        int alturaDestino = ubicacionFinal.getDireccion().getNumero();//200;
+
+        DistanciaGson distancia = servicioExterno.distancia(idLocalidadOrigen,
+                calleOrigen,
+                alturaOrigen,
+                idLocalidadDestino,
+                calleDestino,
+                alturaDestino);
+        valorDistancia = distancia.getValor();
+        unidadDistancia = distancia.getUnidad();
+
         System.out.println("DistanciaConAPI: " + valorDistancia + " " + unidadDistancia);
 
         if(unidadDistancia != "KM"){ //TODO

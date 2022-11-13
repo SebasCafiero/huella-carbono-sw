@@ -21,7 +21,7 @@ public abstract class AreaSectorial {
     @Transient
     protected Set<Organizacion> organizaciones;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "agente_id", referencedColumnName = "agente_id")
     protected AgenteSectorial agente;
 

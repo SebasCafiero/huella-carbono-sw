@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.repositories.testMemoData;
 
+import ar.edu.utn.frba.dds.cache.CacheLocalidad;
 import ar.edu.utn.frba.dds.entities.lugares.ClasificacionOrganizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
@@ -36,7 +37,7 @@ public class SetupInicialJPA {
     private final Repositorio<AgenteSectorial> repoAgentes;
     private final Repositorio<Contacto> repoContactos;
     private final Repositorio<BatchMedicion> repoBatchMediciones;
-    private final Cache<String, Integer> cacheLocalidades;
+    private final Cache<String, CacheLocalidad> cacheLocalidades;
 
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
@@ -47,7 +48,7 @@ public class SetupInicialJPA {
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
         this.repoContactos = FactoryRepositorio.get(Contacto.class);
         this.repoBatchMediciones = FactoryRepositorio.get(BatchMedicion.class);
-        this.cacheLocalidades = FactoryCache.get(String.class, Integer.class);
+        this.cacheLocalidades = FactoryCache.get(String.class, CacheLocalidad.class);
     }
 
     public void doSetup() {
@@ -62,8 +63,10 @@ public class SetupInicialJPA {
         Provincia cabaProvincia = new Provincia("CIUDAD DE BUENOS AIRES", "Argentina");
         Municipio cabaMunicipio = new Municipio("CIUDAD DE BUENOS AIRES", cabaProvincia);
 
-        List<ProvinciaGson> provinciasGson = adapter.obtenerPaises().stream().filter(pais -> pais.getNombre().equals("ARGENTINA"))
-                .flatMap(pais -> adapter.obtenerProvincias(pais.getId()).stream()).collect(Collectors.toList());
+        List<ProvinciaGson> provinciasGson = adapter.obtenerPaises().stream()
+                .filter(pais -> pais.getNombre().equals("ARGENTINA"))
+                .flatMap(pais -> adapter.obtenerProvincias(pais.getId()).stream())
+                .collect(Collectors.toList());
 
         for(ProvinciaGson prov : provinciasGson) {
             Provincia provincia = new Provincia(prov.getNombre(), prov.getPais().getNombre());
@@ -80,7 +83,8 @@ public class SetupInicialJPA {
                     cabaMunicipio = municipio;
 
                 adapter.obtenerLocalidades(muni.getId()).forEach(loca -> {
-                    this.cacheLocalidades.put(loca.getNombre(), loca.getId());
+                    this.cacheLocalidades.put(loca.getNombre(),
+                            new CacheLocalidad(prov.getId(), muni.getId(), loca.getId()));
                 });
             };
 
