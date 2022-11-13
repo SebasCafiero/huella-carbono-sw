@@ -37,6 +37,14 @@ public class ServicioContratado extends MedioDeTransporte {
         return "Contratado";
     }
 
+    public TipoServicio getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoServicio tipo) {
+        this.tipo = tipo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

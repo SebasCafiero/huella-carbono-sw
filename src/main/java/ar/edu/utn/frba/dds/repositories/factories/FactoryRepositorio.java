@@ -7,15 +7,17 @@ import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.transportes.ServicioContratado;
+import ar.edu.utn.frba.dds.entities.transportes.TransporteEcologico;
+import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
+import ar.edu.utn.frba.dds.entities.transportes.VehiculoParticular;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
 import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoMiembrosJPA;
 import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoFactoresJPA;
 import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoOrganizacionesJPA;
-import ar.edu.utn.frba.dds.repositories.impl.memory.RepoMiembrosMemoria;
-import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
-import ar.edu.utn.frba.dds.repositories.impl.memory.RepoOrganizacionesMemoria;
-import ar.edu.utn.frba.dds.repositories.impl.memory.RepoTrayectosMemoria;
+import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoParticularesJPA;
+import ar.edu.utn.frba.dds.repositories.impl.memory.*;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
@@ -63,6 +65,14 @@ public class FactoryRepositorio {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataAgenteSectorial()));
                 } else if(type.equals(Trayecto.class)) {
                     repo = new RepoTrayectosMemoria(new DAOMemoria<>(Trayecto.class, Data.getDataTrayecto()));
+                } else if(type.equals(TransporteEcologico.class)) {
+                    repo = new RepoEcologicosMemoria(new DAOMemoria<>(TransporteEcologico.class));
+                } else if(type.equals(TransportePublico.class)) {
+                    repo = new RepoPublicosMemoria(new DAOMemoria<>(TransportePublico.class));
+                } else if(type.equals(ServicioContratado.class)) {
+                    repo = new RepoContratadosMemoria(new DAOMemoria<>(ServicioContratado.class));
+                } else if(type.equals(VehiculoParticular.class)) {
+                    repo = new RepoParticularesMemoria(new DAOMemoria<>(VehiculoParticular.class));
                 } else {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type));
                 }
