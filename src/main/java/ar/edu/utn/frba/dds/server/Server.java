@@ -35,6 +35,7 @@ public class Server {
         if(!SystemProperties.isCalculadoraDistanciasCacheEnabled())
             return;
 
+        System.out.println("Inicializando datos de api distancias por cache");
         Cache<String, CacheLocalidad> cacheLocalidades = FactoryCache.get(String.class, CacheLocalidad.class);
 
         AdaptadorServicioDDSTPA adapter = new AdaptadorServicioDDSTPA();
