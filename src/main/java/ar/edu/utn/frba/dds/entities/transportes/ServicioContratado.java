@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.CalculadoraDistanciasFactory;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -14,12 +14,12 @@ public class ServicioContratado extends MedioDeTransporte {
     private TipoServicio tipo;
 
     public ServicioContratado() {
-        servicioDistancias = new ServicioSimulado();
+        servicioDistancias = CalculadoraDistanciasFactory.get();
     }
 
     public ServicioContratado(TipoServicio tipoServicio) {
         tipo = tipoServicio;
-        servicioDistancias = new ServicioSimulado();
+        servicioDistancias = CalculadoraDistanciasFactory.get();
     }
 
     @Override

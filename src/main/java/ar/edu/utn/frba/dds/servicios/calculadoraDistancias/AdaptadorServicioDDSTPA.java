@@ -7,7 +7,7 @@ import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ddstpa.*;
 import java.io.IOException;
 import java.util.List;
 
-public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
+public class AdaptadorServicioDDSTPA implements CalculadoraDistancias {
     //SERIA EL ROL ADAPTADOR DEL PATRON ADAPTER PARA EL SERVICIO DDSTPA
 
     private ServicioDDSTPA servicioExterno = ServicioDDSTPA.getInstancia();
@@ -108,7 +108,9 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
 
     public int obtenerIdProvincia(Direccion direccion) throws IOException {
         String nombreProvincia = direccion.getMunicipio().getProvincia().getNombre();
-        ProvinciaGson provincia = obtenerProvincias(obtenerIdPais(direccion)).stream().filter(p->p.nombre.equals(nombreProvincia.toUpperCase())).findFirst().get();
+        ProvinciaGson provincia = obtenerProvincias(obtenerIdPais(direccion)).stream()
+                .filter(p -> p.nombre.equals(nombreProvincia.toUpperCase()))
+                .findFirst().orElseThrow(() -> new ApiDistanciasException("provincia", nombreProvincia));
         System.out.println("PROVINCIA ENCONTRADA: " + provincia.id + "| " + provincia.nombre);
         return provincia.id;
         //return obtenerProvincias(obtenerIdPais("ARGENTINA")).stream().filter(p->p.nombre.equals(nombreProvincia)).findFirst().map(p->p.id).orElse(168); //Defecto BsAs
@@ -116,7 +118,9 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
 
     public int obtenerIdMunicipio(Direccion direccion) throws IOException {
         String nombreMunicipio = direccion.getMunicipio().getNombre();
-        MunicipioGson municipio = obtenerMunicipios(obtenerIdProvincia(direccion)).stream().filter(p->p.nombre.equals(nombreMunicipio.toUpperCase())).findFirst().get();
+        MunicipioGson municipio = obtenerMunicipios(obtenerIdProvincia(direccion)).stream()
+                .filter(p -> p.nombre.equals(nombreMunicipio.toUpperCase()))
+                .findFirst().orElseThrow(() -> new ApiDistanciasException("municipio", nombreMunicipio));
         System.out.println("MUNICIPIO ENCONTRADO: " + municipio.id + "| " + municipio.nombre);
         return municipio.id;
         //return obtenerMunicipios(obtenerIdProvincia("BUENOS AIRES")).stream().filter(m->m.nombre.equals(nombreMunicipio)).findFirst().map(m->m.id).orElse(335); //Defecto Avellaneda
@@ -124,7 +128,9 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias{
 
     public int obtenerIdLocalidad(Direccion direccion) throws IOException {
         String nombreLocalidad = direccion.getLocalidad();
-        LocalidadGson localidad = obtenerLocalidades(obtenerIdMunicipio(direccion)).stream().filter(l->l.nombre.equals(nombreLocalidad.toUpperCase())).findFirst().get();
+        LocalidadGson localidad = obtenerLocalidades(obtenerIdMunicipio(direccion)).stream()
+                .filter(l -> l.nombre.equals(nombreLocalidad.toUpperCase()))
+                .findFirst().orElseThrow(() -> new ApiDistanciasException("localidad", nombreLocalidad));;
         System.out.println("LOCALIDAD ENCONTRADA: " + localidad.id + "| " + localidad.nombre);
         return localidad.id;
         //return obtenerLocalidades(obtenerIdMunicipio("AVELLANEDA")).stream().filter(l->l.nombre.equals(nombreLocalidad)).findFirst().map(l->l.id).orElse(3319); //Defecto Dock Sud

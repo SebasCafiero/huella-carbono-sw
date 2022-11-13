@@ -7,16 +7,10 @@ import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
-import ar.edu.utn.frba.dds.entities.transportes.ServicioContratado;
-import ar.edu.utn.frba.dds.entities.transportes.TransporteEcologico;
-import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
-import ar.edu.utn.frba.dds.entities.transportes.VehiculoParticular;
+import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
-import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoMiembrosJPA;
-import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoFactoresJPA;
-import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoOrganizacionesJPA;
-import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoParticularesJPA;
+import ar.edu.utn.frba.dds.repositories.impl.jpa.*;
 import ar.edu.utn.frba.dds.repositories.impl.memory.*;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
@@ -73,6 +67,8 @@ public class FactoryRepositorio {
                     repo = new RepoContratadosMemoria(new DAOMemoria<>(ServicioContratado.class));
                 } else if(type.equals(VehiculoParticular.class)) {
                     repo = new RepoParticularesMemoria(new DAOMemoria<>(VehiculoParticular.class));
+                } else if(type.equals(TipoServicio.class)) {
+                    repo = new RepoTiposServicioMemoria(new DAOMemoria<>(TipoServicio.class));
                 } else {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type));
                 }
@@ -84,6 +80,16 @@ public class FactoryRepositorio {
                         repo = new RepoFactoresJPA(new DAOHibernate<>(type));
                     } else if (type.equals(Miembro.class)) {
                         repo = new RepoMiembrosJPA(new DAOHibernate<>(type));
+                    } if(type.equals(TransporteEcologico.class)) {
+                        repo = new RepoEcologicosJPA(new DAOHibernate<>(TransporteEcologico.class));
+                    } else if(type.equals(TransportePublico.class)) {
+                        repo = new RepoPublicosJPA(new DAOHibernate<>(TransportePublico.class));
+                    } else if(type.equals(ServicioContratado.class)) {
+                        repo = new RepoContratadosJPA(new DAOHibernate<>(ServicioContratado.class));
+                    } else if(type.equals(VehiculoParticular.class)) {
+                        repo = new RepoParticularesJPA(new DAOHibernate<>(VehiculoParticular.class));
+                    } else if(type.equals(TipoServicio.class)) {
+                        repo = new RepoTiposServicioJPA(new DAOHibernate<>(TipoServicio.class));
                     } else {
                         repo = new RepositorioPersistente<>(new DAOHibernate<>(type));
                     }

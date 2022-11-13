@@ -11,6 +11,7 @@ public class SystemProperties {
     private static final Boolean jpa;
     private static final Float delta;
     private static final Float coeficienteGradoKm;
+    private static final Boolean calculadoraDistanciasMockEnabled;
 
     static {
         File archivo = null;
@@ -25,6 +26,9 @@ public class SystemProperties {
                     propiedades.getProperty("coordenadas.precision.delta", "0.00001"));
             coeficienteGradoKm = Float.parseFloat(
                     propiedades.getProperty("coordenadas.precision.equivalencia", "111.10"));
+            calculadoraDistanciasMockEnabled = Objects.equals(
+                    propiedades.getProperty("client.calculadora.distancias.mock-enabled"), "true");
+
 
             file.close();
         } catch (FileNotFoundException e) {
@@ -48,5 +52,8 @@ public class SystemProperties {
         return coeficienteGradoKm;
     }
 
+    public static Boolean isCalculadoraDistanciasMockEnabled() {
+        return calculadoraDistanciasMockEnabled;
+    }
 
 }

@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.CalculadoraDistanciasFactory;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -13,12 +13,12 @@ public class TransporteEcologico extends MedioDeTransporte {
     private TipoTransporteEcologico tipo;
 
     public TransporteEcologico() {
-        servicioDistancias = new ServicioSimulado();
+        servicioDistancias = CalculadoraDistanciasFactory.get();
     }
 
     public TransporteEcologico(TipoTransporteEcologico tipo){
         this.tipo = tipo;
-        servicioDistancias = new ServicioSimulado();
+        servicioDistancias = CalculadoraDistanciasFactory.get();
     }
 
     @Override

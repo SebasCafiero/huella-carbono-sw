@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.entities.lugares.trayectos;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.*;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
@@ -99,10 +98,14 @@ public class DistanciasTest {
     @Test
     public void testServicioSimulado() {
         CalculadoraDistancias servicioContratado = new ServicioSimulado();
-        UbicacionGeografica ubicacionInicial = new UbicacionGeografica(new Coordenada(5F,20F));
-        UbicacionGeografica ubicacionFinal = new UbicacionGeografica(new Coordenada(55F,58F));
+        UbicacionGeografica ubicacionInicial = new UbicacionGeografica(
+                new Direccion(new Municipio("Almagro", new Provincia("CABA", "Argentina")), "CABA", "Medrano", 951),
+                new Coordenada(5F, 20F));
+        UbicacionGeografica ubicacionFinal = new UbicacionGeografica(
+                new Direccion(new Municipio("Almagro", new Provincia("CABA", "Argentina")), "CABA", "Campus", 2300),
+                new Coordenada(55F, 58F));
 
-        Assertions.assertEquals(88F,servicioContratado.calcularDistancia(ubicacionInicial, ubicacionFinal));
+        Assertions.assertEquals(88F, servicioContratado.calcularDistancia(ubicacionInicial, ubicacionFinal));
     }
 
     @Test
@@ -156,8 +159,8 @@ public class DistanciasTest {
         }
         CalculadoraDistancias mockCalc = mock(CalculadoraDistancias.class, new CalcMock());
 
-        UbicacionGeografica ubicacionInicial = new UbicacionGeografica(new Coordenada(5F,20F));
-        UbicacionGeografica ubicacionFinal = new UbicacionGeografica(new Coordenada(55F,58F));
+        UbicacionGeografica ubicacionInicial = new UbicacionGeografica(new Coordenada(5F, 20F));
+        UbicacionGeografica ubicacionFinal = new UbicacionGeografica(new Coordenada(55F, 58F));
         Tramo unTramo = new Tramo(unVehiculoParticular, ubicacionInicial, ubicacionFinal);
         unVehiculoParticular.setServicioDistancias(mockCalc);
 
@@ -171,8 +174,8 @@ public class DistanciasTest {
     @Test
     public void testConexion() { //TODO no valdría la pena testear la conexion, o al menos no acá.
         CalculadoraDistancias servicioExterno = new AdaptadorServicioDDSTPA();
-        UbicacionGeografica ubicacionInicial = new UbicacionGeografica(new Coordenada(5F,20F));
-        UbicacionGeografica ubicacionFinal = new UbicacionGeografica(new Coordenada(55F,58F));
-        Assertions.assertDoesNotThrow(()->servicioExterno.calcularDistancia(ubicacionInicial, ubicacionFinal));
+        UbicacionGeografica ubicacionInicial = new UbicacionGeografica(new Direccion(new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina")), "Almagro", "Medrano", 951), new Coordenada(5F, 20F));
+        UbicacionGeografica ubicacionFinal = new UbicacionGeografica(new Direccion(new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina")), "Almagro", "Campus", 2300), new Coordenada(55F, 58F));
+        Assertions.assertDoesNotThrow(() -> servicioExterno.calcularDistancia(ubicacionInicial, ubicacionFinal));
     }
 }
