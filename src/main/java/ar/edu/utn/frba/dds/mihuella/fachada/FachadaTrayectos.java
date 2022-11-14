@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.mihuella.fachada;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
 import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.mediciones.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
@@ -106,8 +107,8 @@ public class FachadaTrayectos {
 
         Coordenada coordenadaInicial = new Coordenada(trayectoDTO.getLatitudInicial(), trayectoDTO.getLongitudInicial());
         Coordenada coordenadaFinal = new Coordenada(trayectoDTO.getLatitudFinal(), trayectoDTO.getLongitudFinal());
-        UbicacionGeografica ubicacionInicial = new UbicacionGeografica(coordenadaInicial);
-        UbicacionGeografica ubicacionFinal = new UbicacionGeografica(coordenadaFinal);
+        UbicacionGeografica ubicacionInicial = new UbicacionGeografica(new Direccion(), coordenadaInicial);
+        UbicacionGeografica ubicacionFinal = new UbicacionGeografica(new Direccion(), coordenadaFinal);
 
         Tramo tramo = new Tramo(medio, ubicacionInicial, ubicacionFinal);
         tramo.setValor();

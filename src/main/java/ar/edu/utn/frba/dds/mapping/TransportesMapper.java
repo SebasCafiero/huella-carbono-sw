@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.mapping;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
 import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.mihuella.dto.TransporteJSONDTO;
 
@@ -15,7 +16,7 @@ public class TransportesMapper {
                     transporteDTO.linea
             );
             for(TransporteJSONDTO.ParadaDTO paradaDTO : transporteDTO.paradas) {
-                transportePublico.agregarParada(new Parada(
+                transportePublico.agregarParada(new Parada(new Direccion(),
                         new Coordenada(paradaDTO.latitud, paradaDTO.longitud),
                         paradaDTO.distanciaAnterior,
                         paradaDTO.distanciaProxima

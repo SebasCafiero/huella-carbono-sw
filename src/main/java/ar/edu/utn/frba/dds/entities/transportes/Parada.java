@@ -40,12 +40,6 @@ public class Parada {
         this.distanciaProxima = distanciaProxima;
     }
 
-    public Parada(Coordenada coordenada, Float distanciaAnterior, Float distanciaProxima) {
-        this.ubicacion = new UbicacionGeografica(coordenada);
-        this.distanciaAnterior = distanciaAnterior;
-        this.distanciaProxima = distanciaProxima;
-    }
-
     public Integer getId() {
         return id;
     }

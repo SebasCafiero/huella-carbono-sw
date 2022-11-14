@@ -36,14 +36,7 @@ public class Router {
 
         LoginController loginController = new LoginController();
         Spark.post("/login", (request, response) -> {
-//            User mayBeUser = new ParserJSON<>(User.class).parseElement(request.body());
-
-            HashMap<String, String> loginRequest = new HashMap<>();
-            loginRequest.put("username", "fito");
-            loginRequest.put("password", "miembro");
-            User mayBeUser = new ParserJSON<>(User.class).parseElement(new Gson().toJson(loginRequest));
-
-            User realUser = userUtils.buscarUsuarioEnRepo(mayBeUser.getUsername())
+            User realUser = userUtils.buscarUsuarioEnRepo(request.queryParams("username"), request.queryParams("password"))
                     .orElseThrow(AuthenticationException::new);
 
             HashMap<String, Object> user = new HashMap<>();
@@ -70,17 +63,16 @@ public class Router {
                 if (!userUtils.estaLogueado(request))
                     throw new NotLoggedException();
             });
-            Spark.post("/organizacion", organizacionController::agregar);
-            Spark.get("/organizacion", organizacionController::mostrarTodos);
+            Spark.post("", organizacionController::agregar);
+            Spark.get("", organizacionController::mostrarTodos);
+
+
             Spark.path("/:id", () -> {
                 Spark.before("/*", (Request request, Response response) -> {
-                    Optional<User> user = userUtils
-                            .getUsuarioLogueado(request.session().attribute("idUsuario"));
+                    User user = userUtils.getUsuarioLogueado(request.session().attribute("idUsuario"))
+                            .orElseThrow(AuthenticationException::new);
 
-                    if(!user.isPresent())
-                        throw new AuthenticationException();
-
-                    if(!user.get().isOrganizacion() || !user.get().getId().equals(Integer.parseInt(request.params("id")))) {
+                    if(!user.isOrganizacion() || !user.getId().equals(Integer.parseInt(request.params("id")))) {
                         throw new UnauthorizedException();
                     }
                 });
@@ -144,7 +136,7 @@ public class Router {
         TrayectosController trayectosController = new TrayectosController();
 
         Spark.get("/home", homeController::inicio, engine);
-//        Spark.get("/menu", homeController::menu, engine );
+        Spark.get("/menu", homeController::menu, engine);
 
         Spark.post("/login", loginController::intentarLogear);
         Spark.post("/login/alta", loginController::agregar);

@@ -74,7 +74,6 @@ public class TrayectosController {
         return transportes;
     }
 
-
     public Response agregar(Request req, Response res) {
         Trayecto trayecto = new Trayecto();
 

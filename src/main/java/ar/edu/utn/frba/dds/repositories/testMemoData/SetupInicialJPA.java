@@ -19,6 +19,7 @@ import ar.edu.utn.frba.dds.repositories.factories.FactoryCache;
 import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.AdaptadorServicioDDSTPA;
+import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ddstpa.LocalidadGson;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ddstpa.MunicipioGson;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ddstpa.ProvinciaGson;
 
@@ -27,7 +28,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SetupInicialJPA {
     private final Repositorio<MedioDeTransporte> repoMedios;
@@ -39,6 +42,7 @@ public class SetupInicialJPA {
     private final Repositorio<Contacto> repoContactos;
     private final Repositorio<BatchMedicion> repoBatchMediciones;
     private final Repositorio<User> repoUsuarios;
+    private final Cache<String, CacheLocalidad> cacheLocalidades;
 
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
@@ -50,6 +54,7 @@ public class SetupInicialJPA {
         this.repoUsuarios = FactoryRepositorio.get(User.class);
         this.repoContactos = FactoryRepositorio.get(Contacto.class);
         this.repoBatchMediciones = FactoryRepositorio.get(BatchMedicion.class);
+        this.cacheLocalidades = FactoryCache.get(String.class, CacheLocalidad.class);
     }
 
     public void doSetup() {
@@ -80,8 +85,16 @@ public class SetupInicialJPA {
                 Municipio municipio = new Municipio(muni.getNombre(), provincia);
                 municipio.setIdApiDistancias(muni.getId());
 
-                if(municipio.getNombre().equals(cabaMunicipio.getNombre()))
+                if(municipio.getNombre().equals(cabaMunicipio.getNombre())) {
                     cabaMunicipio = municipio;
+
+                    List<LocalidadGson> lista = adapter.obtenerLocalidades(muni.getId());
+                    lista.forEach(loca -> {
+                        System.out.println(loca.getNombre());
+                        cacheLocalidades.put(loca.getNombre(),
+                                new CacheLocalidad(muni.getProvincia().getId(), muni.getId(), loca.getId()));
+                    });
+                }
             };
 
             this.repoAreas.agregar(provincia);
@@ -95,46 +108,65 @@ public class SetupInicialJPA {
         AgenteSectorial carlos = new AgenteSectorial(cabaProvincia, con1, con2);
         AgenteSectorial esteban = new AgenteSectorial(cabaMunicipio, con3, con4);
 
+        String almagro = "ALMAGRO";
+        String mataderos = "MATADEROS";
+        String lugano = "LUGANO";
+        String caballito = "CABALLITO";
+        String sanCristobal = "SAN CRISTOBAL";
+        String palermo = "PALERMO";
+        String flores = "FLORES";
+        String villaCrespo = "VILLA CRESPO";
+        String constitucion = "CONSTITUCION";
+
+        Optional<String> estado = Stream.of(almagro, mataderos, lugano, constitucion,
+                caballito, sanCristobal, palermo, flores, villaCrespo)
+                .filter(loca -> !cacheLocalidades.containsKey(almagro))
+                .findFirst();
+
+        if(estado.isPresent()) {
+            throw new RuntimeException(estado.get());
+        }
+
         UbicacionGeografica ubicacionUtnCampus = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Mozart", 2300),
+                new Direccion(cabaMunicipio, lugano, "Mozart", 2300),
                 new Coordenada(-34.659932F, -58.468397F));
         UbicacionGeografica ubicacionUtnMedrano = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Medrano", 951),
+                new Direccion(cabaMunicipio, almagro, "Av. Medrano", 951),
                 new Coordenada(-34.598412F, -58.420196F));
         UbicacionGeografica ubicacionMcObelisco = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Corrientes", 992),
+                new Direccion(cabaMunicipio, sanCristobal, "Av. Corrientes", 992),
                 new Coordenada(-34.603825f, -58.380681f));
 
         UbicacionGeografica mirallaAlberdi = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Miralla", 2200),
+                new Direccion(cabaMunicipio, mataderos, "Miralla", 2200),
                 new Coordenada(-34.649292F, -58.499945F));
         UbicacionGeografica sanPedrito = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "San Pedrito", 2500),
+                new Direccion(cabaMunicipio, caballito, "San Pedrito", 2500),
                 new Coordenada(-34.630861F, -58.470063F));
         UbicacionGeografica castroBarros = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Castro Barros", 256),
+                new Direccion(cabaMunicipio, almagro, "Castro Barros", 256),
                 new Coordenada(-34.611624F, -58.421263F));
         UbicacionGeografica cordobaY9deJulio = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Cordoba", 1100),
+                new Direccion(cabaMunicipio, palermo, "Av. Cordoba", 1100),
                 new Coordenada(-34.599001f, -58.380794f));
         UbicacionGeografica cordobaYEcuador = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Cordoba", 2700),
+                new Direccion(cabaMunicipio, villaCrespo, "Av. Cordoba", 2700),
                 new Coordenada(-34.597991f, -58.405410f));
         UbicacionGeografica cordobaYMedrano = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires","Av. Cordoba", 3800),
+                new Direccion(cabaMunicipio, villaCrespo, "Av. Cordoba", 3800),
                 new Coordenada(-34.597810f, -58.420118f));
 
         UbicacionGeografica casaDePapuGomez = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Escalada", 300),
+                new Direccion(cabaMunicipio, lugano, "Av. Escalada", 300),
                 new Coordenada(-34.675744f,-58.455509f));//Av Escalada y Alberto Zorrilla
         UbicacionGeografica casaDeManu = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Av. Jujuy", 800),
+                new Direccion(cabaMunicipio, sanCristobal, "Av. Jujuy", 800),
                 new Coordenada(-34.618784f,-58.403749f));//Av Jujuy y Av Independencia
         UbicacionGeografica estacionamientoDeWalter = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires","Virasoro",2367),
-                new Coordenada(-34.584197f,-58.420833f));//Virasoro 2367
+                new Direccion(cabaMunicipio, mataderos, "Virasoro", 2367),
+                new Coordenada(-34.584197f,-58.420833f)); //Virasoro 2367
         UbicacionGeografica casaDeWalter = new UbicacionGeografica(
-                new Direccion(cabaMunicipio, "Ciudad Autonoma de Buenos Aires", "Guatemala",1425),
+                new Direccion(cabaMunicipio, flores, "Guatemala",1425),
                 new Coordenada(-34.587201f,-58.423048f));//Guatemala 1425
 
         this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano,cordobaY9deJulio,cordobaYEcuador,cordobaYMedrano,casaDePapuGomez,casaDeManu,casaDeWalter,estacionamientoDeWalter);
@@ -151,38 +183,54 @@ public class SetupInicialJPA {
         TransportePublico colectivo109 = new TransportePublico(TipoTransportePublico.COLECTIVO, "109");
         colectivo109.agregarParadas(
                 new Parada(cordobaY9deJulio, 0f, 0.45f),
-                new Parada(new Coordenada(-34.599298f, -58.387400f), 0.45f, 0.4f),//av cordoba y uruguay
-                new Parada(new Coordenada(-34.599554f, -58.394166f), 0.4f, 1.2f),//av cordoba y riobamba
-                new Parada(cordobaYEcuador, 1.2f, 0.5f),//av cordoba y ecuador
-                new Parada(new Coordenada(-34.597935f, -58.413103f), 0.5f, 0.6f),//av cordoba y bustamante
+                new Parada(new Direccion(cabaMunicipio, palermo, "Av. Córdoba", 1231),
+                        new Coordenada(-34.599298f, -58.387400f), 0.45f, 0.4f), //av cordoba y uruguay
+                new Parada(new Direccion(cabaMunicipio, palermo, "Av. Córdoba", 1531),
+                        new Coordenada(-34.599554f, -58.394166f), 0.4f, 1.2f), //av cordoba y riobamba
+                new Parada(cordobaYEcuador, 1.2f, 0.5f), //av cordoba y ecuador
+                new Parada(new Direccion(cabaMunicipio, palermo, "Av. Córdoba", 2100),
+                        new Coordenada(-34.597935f, -58.413103f), 0.5f, 0.6f), //av cordoba y bustamante
                 new Parada(cordobaYMedrano, 0.6f, 0f)//av cordoba y av medrano
         );
 
         TransportePublico colectivo63 = new TransportePublico(TipoTransportePublico.COLECTIVO, "63");
         colectivo63.agregarParadas(
-                new Parada(new Coordenada(-34.655186F, -58.506615F), 0F, 0.6F), // pilar
-                new Parada(new Coordenada(-34.651554F, -58.502202F), 0.6F, 0.350F), // larrazabal
+                new Parada(new Direccion(cabaMunicipio, mataderos, "Av. Alberdi", 6200),
+                        new Coordenada(-34.655186F, -58.506615F), 0F, 0.6F), // pilar
+                new Parada(new Direccion(cabaMunicipio, mataderos, "Av. Alberdi", 5900),
+                        new Coordenada(-34.651554F, -58.502202F), 0.6F, 0.350F), // larrazabal
                 new Parada(mirallaAlberdi, 0.350F, 0.6F), // miralla
-                new Parada(new Coordenada(-34.645056F, -58.495307F), 0.6F, 1.3F), // escalada
-                new Parada(new Coordenada(-34.636489F, -58.492135F), 1.5F, 0.950F), // mozart
-                new Parada(new Coordenada(-34.634149F, -58.482348F), 0.950F, 1.1F), // mariano acosta
+                new Parada(new Direccion(cabaMunicipio, mataderos, "Av. Alberdi", 5000),
+                        new Coordenada(-34.645056F, -58.495307F), 0.6F, 1.3F), // escalada
+                new Parada(new Direccion(cabaMunicipio, mataderos, "Av. Alberdi", 4500),
+                        new Coordenada(-34.636489F, -58.492135F), 1.5F, 0.950F), // mozart
+                new Parada(new Direccion(cabaMunicipio, flores, "Av. Alberdi", 3500),
+                        new Coordenada(-34.634149F, -58.482348F), 0.950F, 1.1F), // mariano acosta
                 new Parada(sanPedrito, 1.1F, 0.8F), // san pedrito
-                new Parada(new Coordenada(-34.626601F, -58.471626F), 0.6F, 0.7F), // avellaneda
-                new Parada(new Coordenada(-34.620776F, -58.474034F), 0.7F, 0F) // gaona
+                new Parada(new Direccion(cabaMunicipio, caballito, "Av. Nazca", 4321),
+                        new Coordenada(-34.626601F, -58.471626F), 0.6F, 0.7F), // avellaneda
+                new Parada(new Direccion(cabaMunicipio, caballito, "Av. Nazca", 1234),
+                        new Coordenada(-34.620776F, -58.474034F), 0.7F, 0F) // gaona
         );
 
         TransportePublico subteA = new TransportePublico(TipoTransportePublico.SUBTE, "A");
         subteA.agregarParadas(
                 new Parada(sanPedrito, 0F, 1.3F), // san pedrito
-                new Parada(new Coordenada(-34.626615F, -58.456582F), 1.3F, 1.5F), // carabobo
-                new Parada(new Coordenada(-34.620974F, -58.442162F), 1.5F, 0.6F), // primera junta
-                new Parada(new Coordenada(-34.617957F, -58.435755F), 0.6F, 0.5F), // acoyte
+                new Parada(new Direccion(cabaMunicipio, caballito, "Av. Rivadavia", 7000),
+                        new Coordenada(-34.626615F, -58.456582F), 1.3F, 1.5F), // carabobo
+                new Parada(new Direccion(cabaMunicipio, caballito, "Av. Rivadavia", 6500),
+                        new Coordenada(-34.620974F, -58.442162F), 1.5F, 0.6F), // primera junta
+                new Parada(new Direccion(cabaMunicipio, caballito, "Av. Rivadavia", 5800),
+                        new Coordenada(-34.617957F, -58.435755F), 0.6F, 0.5F), // acoyte
                 new Parada(castroBarros, 0.5F, 0.7F), // castro barros
-                new Parada(new Coordenada(-34.610828F, -58.415497F), 0.7F, 0.7F), // loria
-                new Parada(new Coordenada(-34.610144F, -58.406930F), 0.7F, 0F) // plaza miserere
+                new Parada(new Direccion(cabaMunicipio, almagro, "Av. Rivadavia", 6500),
+                        new Coordenada(-34.610828F, -58.415497F), 0.7F, 0.7F), // loria
+                new Parada(new Direccion(cabaMunicipio, constitucion, "Av. Rivadavia", 4500),
+                        new Coordenada(-34.610144F, -58.406930F), 0.7F, 0F) // plaza miserere
         );
 
-        this.repoMedios.agregar(fitito, colectivo63,colectivo109, subteA, caminata,bicicleta,autoDeManu,autoDeWalter);
+        this.repoMedios.agregar(fitito, colectivo63, colectivo109, subteA, caminata,
+                bicicleta, autoDeManu, autoDeWalter);
 
         // Organizaciones, sectores y miembros
 

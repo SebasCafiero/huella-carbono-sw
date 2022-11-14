@@ -49,13 +49,6 @@ public class Tramo implements Medible {
         this.ubicacionFinal = new UbicacionGeografica(direccionFinal, coordFinal);
     }
 
-    public Tramo(MedioDeTransporte medioDeTransporte, Coordenada coordInicial, Coordenada coordFinal) {
-        this.medioDeTransporte = medioDeTransporte;
-        this.categoria = new Categoria("Traslado de Miembros", medioDeTransporte.getCategoria());
-        this.ubicacionInicial = new UbicacionGeografica(coordInicial);
-        this.ubicacionFinal = new UbicacionGeografica(coordFinal);
-    }
-
     public Tramo(MedioDeTransporte medioDeTransporte, UbicacionGeografica ubicacionInicial, UbicacionGeografica ubicacionFinal) {
         this.medioDeTransporte = medioDeTransporte;
         this.categoria = new Categoria("Traslado de Miembros", medioDeTransporte.getCategoria());

@@ -62,32 +62,32 @@ public class FachadaOrganizacionesTest {
         });
     }
 
-    @Test
-    void calculaCorrectamenteUnTramo() {
-        List<Medible> mediciones = new ArrayList<>();
-        MedioDeTransporte medio = new TransportePublico(TipoTransportePublico.COLECTIVO, "47");
-        Tramo tramo = new Tramo(medio,
-                new UbicacionGeografica(new Coordenada(1F,1F)),
-                new UbicacionGeografica(new Coordenada(2F,2F)));
-        tramo.setValor(4F);
-
-        mediciones.add(tramo);
-        Assertions.assertEquals(40, calculadora.obtenerHU(mediciones), 1);
-    }
-
-    @Test
-    void fallaPorCategoriaInexistenteEnTramo() {
-        List<Medible> mediciones = new ArrayList<>();
-        MedioDeTransporte medio = new TransportePublico(TipoTransportePublico.SUBTE, "A");
-        Tramo tramo = new Tramo(medio,
-                new UbicacionGeografica(new Coordenada(1F,1F)),
-                new UbicacionGeografica(new Coordenada(2F,2F)));
-        tramo.setValor(4F);
-
-        mediciones.add(tramo);
-
-        Assertions.assertThrows(MedicionSinFactorEmisionException.class, () -> {
-            calculadora.obtenerHU(mediciones);
-        });
-    }
+//    @Test
+//    void calculaCorrectamenteUnTramo() {
+//        List<Medible> mediciones = new ArrayList<>();
+//        MedioDeTransporte medio = new TransportePublico(TipoTransportePublico.COLECTIVO, "47");
+//        Tramo tramo = new Tramo(medio,
+//                new UbicacionGeografica(new Coordenada(1F,1F)),
+//                new UbicacionGeografica(new Coordenada(2F,2F)));
+//        tramo.setValor(4F);
+//
+//        mediciones.add(tramo);
+//        Assertions.assertEquals(40, calculadora.obtenerHU(mediciones), 1);
+//    }
+//
+//    @Test
+//    void fallaPorCategoriaInexistenteEnTramo() {
+//        List<Medible> mediciones = new ArrayList<>();
+//        MedioDeTransporte medio = new TransportePublico(TipoTransportePublico.SUBTE, "A");
+//        Tramo tramo = new Tramo(medio,
+//                new UbicacionGeografica(new Coordenada(1F,1F)),
+//                new UbicacionGeografica(new Coordenada(2F,2F)));
+//        tramo.setValor(4F);
+//
+//        mediciones.add(tramo);
+//
+//        Assertions.assertThrows(MedicionSinFactorEmisionException.class, () -> {
+//            calculadora.obtenerHU(mediciones);
+//        });
+//    }
 }

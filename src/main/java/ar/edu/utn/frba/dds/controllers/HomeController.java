@@ -13,13 +13,13 @@ public class HomeController {
         return new ModelAndView(null, "home.hbs");
     }
 
-//    public ModelAndView menu(Request request, Response response) {
-//        if (loginController.chequearValidezAcceso(request, response, true) != null){
-//            return loginController.chequearValidezAcceso(request, response, true);
-//        }
-//        HashMap<String, String> data = new HashMap<>();
-////        data.put("rol", re)
-//        return new ModelAndView(null, "menu.hbs");
-//    }
+    public ModelAndView menu(Request request, Response response) {
+        if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }
+        HashMap<String, String> data = new HashMap<>();
+//        data.put("rol", re)
+        return new ModelAndView(null, "menu.hbs");
+    }
 
 }

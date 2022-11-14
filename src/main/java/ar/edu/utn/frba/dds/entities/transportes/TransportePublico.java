@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
 import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
 import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
 
 import javax.persistence.*;
@@ -81,12 +82,12 @@ public class TransportePublico extends MedioDeTransporte {
     }
 
     public Parada buscarParada(Coordenada coordenada) {
-        Parada paradaRandom = new Parada(new Coordenada(0F, 0F), 0F, 0F);
+        Parada paradaRandom = new Parada(new Direccion(), new Coordenada(0F, 0F), 0F, 0F);
         return this.paradas.stream()
                 .filter(parada -> parada.getCoordenada().esIgualAOtraCoordenada(coordenada))
                 .findFirst()
                 .orElse(paradaRandom);
-        //TODO lo puse para pruebas web, si afecta a otra cosa sacarlo -> Esto está feo, lo dejo cambiando algo mio para que no rompa
+        // TODO lo puse para pruebas web, si afecta a otra cosa sacarlo -> Esto está feo, lo dejo cambiando algo mio para que no rompa
     }
 
     @Override

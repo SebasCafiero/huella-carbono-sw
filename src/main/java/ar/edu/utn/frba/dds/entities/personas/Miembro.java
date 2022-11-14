@@ -29,7 +29,7 @@ public class Miembro {
     @Column(name = "numero_documento", nullable = false, unique = true)
     private int nroDocumento;
 
-    @ManyToMany(mappedBy = "miembros", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "miembros", fetch = FetchType.LAZY)
     private Set<Sector> sectoresDondeTrabaja;
 
     @ManyToMany(mappedBy = "miembros")

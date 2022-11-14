@@ -4,7 +4,6 @@ import ar.edu.utn.frba.dds.entities.lugares.SectorException;
 
 import ar.edu.utn.frba.dds.login.User;
 import ar.edu.utn.frba.dds.login.UserUtils;
-import ar.edu.utn.frba.dds.repositories.impl.jpa.RepoUsuarios;
 import spark.*;
 
 import java.util.*;
@@ -22,13 +21,13 @@ public class LoginController {
             response.redirect("/errorAcceso");
         }
         Map<String, Object> model = new HashMap<>();
-        if (!userUtils.authenticate(request.queryParams("username"), request.queryParams("password"))) {
+        if (!userUtils.isAuthenticated(request.queryParams("username"), request.queryParams("password"))) {
             model.put("authenticationFailed", true);
             response.redirect("/home");
             return null;
         }
         model.put("authenticationSucceeded", true);
-        request.session().attribute("idUsuario", (userUtils.buscarUsuarioEnRepo(request.queryParams("username"))).get().getId());
+        request.session().attribute("idUsuario", userUtils.buscarUsuarioEnRepo(request.queryParams("username"), request.queryParams("password")).get().getId());
         response.redirect("/menu");
         return null;
     }
