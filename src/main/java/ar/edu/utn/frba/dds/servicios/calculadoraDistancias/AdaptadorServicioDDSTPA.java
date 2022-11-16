@@ -9,16 +9,17 @@ import ar.edu.utn.frba.dds.server.SystemProperties;
 import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ddstpa.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AdaptadorServicioDDSTPA implements CalculadoraDistancias {
     //SERIA EL ROL ADAPTADOR DEL PATRON ADAPTER PARA EL SERVICIO DDSTPA
 
     private final ServicioDDSTPA servicioExterno;
-    private final Cache<String, CacheLocalidad> localidadesCache;
+    private final Cache<CacheLocalidad> localidadesCache;
 
     public AdaptadorServicioDDSTPA() {
         servicioExterno = ServicioDDSTPA.getInstancia();
-        localidadesCache = FactoryCache.get(String.class, CacheLocalidad.class);
+        localidadesCache = FactoryCache.get(CacheLocalidad.class);
     }
 
     @Override
@@ -31,8 +32,13 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias {
         int idLocalidadDestino;
 
         if(SystemProperties.isCalculadoraDistanciasCacheEnabled()) {
-            idLocalidadOrigen = localidadesCache.get(ubicacionInicial.getDireccion().getLocalidad()).getIdLocalidad();
-            idLocalidadDestino = localidadesCache.get(ubicacionFinal.getDireccion().getLocalidad()).getIdLocalidad();
+            Optional<CacheLocalidad> idOrigen = localidadesCache.get(ubicacionInicial.getDireccion().getLocalidad());
+            idLocalidadOrigen = idOrigen.isPresent() ? idOrigen.get().getIdLocalidad()
+                    : obtenerIdLocalidad(ubicacionInicial.getDireccion());
+
+            Optional<CacheLocalidad> idDestino = localidadesCache.get(ubicacionFinal.getDireccion().getLocalidad());
+            idLocalidadDestino = idDestino.isPresent() ? idDestino.get().getIdLocalidad()
+                    : obtenerIdLocalidad(ubicacionFinal.getDireccion());
         } else {
             idLocalidadOrigen = obtenerIdLocalidad(ubicacionInicial.getDireccion());//1;
             idLocalidadDestino = obtenerIdLocalidad(ubicacionFinal.getDireccion());//457;

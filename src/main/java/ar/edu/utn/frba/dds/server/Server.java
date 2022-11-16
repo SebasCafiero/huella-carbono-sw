@@ -36,7 +36,7 @@ public class Server {
             return;
 
         System.out.println("Inicializando datos de api distancias por cache");
-        Cache<String, CacheLocalidad> cacheLocalidades = FactoryCache.get(String.class, CacheLocalidad.class);
+        Cache<CacheLocalidad> cacheLocalidades = FactoryCache.get(CacheLocalidad.class);
 
         AdaptadorServicioDDSTPA adapter = new AdaptadorServicioDDSTPA();
 

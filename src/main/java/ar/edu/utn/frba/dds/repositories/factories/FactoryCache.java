@@ -11,15 +11,14 @@ public class FactoryCache {
         caches = new HashMap<>();
     }
 
-    public static <K, V> Cache<K, V> get(Class<K> keyType, Class<V> valueType) {
-        Cache<K, V> mapa;
-        if(caches.containsKey(keyType.getName())) {
-            mapa = caches.get(keyType.getName());
+    public static <V> Cache<V> get(Class<V> valueType) {
+        Cache<V> mapa;
+        if(caches.containsKey(valueType.getName())) {
+            mapa = caches.get(valueType.getName());
         }
         else{
-            mapa = new Cache<>(keyType, valueType);
-
-            caches.put(keyType.getName() + "-" + valueType.getName(), mapa);
+            mapa = new Cache<>(valueType);
+            caches.put(valueType.getName(), mapa);
         }
 
         return mapa;

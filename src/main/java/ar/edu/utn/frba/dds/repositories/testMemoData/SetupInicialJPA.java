@@ -42,7 +42,7 @@ public class SetupInicialJPA {
     private final Repositorio<Contacto> repoContactos;
     private final Repositorio<BatchMedicion> repoBatchMediciones;
     private final Repositorio<User> repoUsuarios;
-    private final Cache<String, CacheLocalidad> cacheLocalidades;
+    private final Cache<CacheLocalidad> cacheLocalidades;
 
     public SetupInicialJPA() {
         this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
@@ -54,7 +54,7 @@ public class SetupInicialJPA {
         this.repoUsuarios = FactoryRepositorio.get(User.class);
         this.repoContactos = FactoryRepositorio.get(Contacto.class);
         this.repoBatchMediciones = FactoryRepositorio.get(BatchMedicion.class);
-        this.cacheLocalidades = FactoryCache.get(String.class, CacheLocalidad.class);
+        this.cacheLocalidades = FactoryCache.get(CacheLocalidad.class);
     }
 
     public void doSetup() {
@@ -66,7 +66,7 @@ public class SetupInicialJPA {
 
         AdaptadorServicioDDSTPA adapter = new AdaptadorServicioDDSTPA();
 
-        Provincia cabaProvincia = new Provincia("CIUDAD DE BUENOS AIRES", "Argentina");
+        Provincia cabaProvincia = new Provincia("CIUDAD DE BUENOS AIRES", "ARGENTINA");
         Municipio cabaMunicipio = new Municipio("CIUDAD DE BUENOS AIRES", cabaProvincia);
 
         List<ProvinciaGson> provinciasGson = adapter.obtenerPaises().stream()
@@ -84,6 +84,7 @@ public class SetupInicialJPA {
             for(MunicipioGson muni : adapter.obtenerMunicipios(prov.getId())) {
                 Municipio municipio = new Municipio(muni.getNombre(), provincia);
                 municipio.setIdApiDistancias(muni.getId());
+                System.out.println("Cargo municipio en cache: " + municipio.getNombre());
 
                 if(municipio.getNombre().equals(cabaMunicipio.getNombre())) {
                     cabaMunicipio = municipio;
@@ -110,7 +111,7 @@ public class SetupInicialJPA {
 
         String almagro = "ALMAGRO";
         String mataderos = "MATADEROS";
-        String lugano = "LUGANO";
+        String lugano = "VILLA LUGANO";
         String caballito = "CABALLITO";
         String sanCristobal = "SAN CRISTOBAL";
         String palermo = "PALERMO";

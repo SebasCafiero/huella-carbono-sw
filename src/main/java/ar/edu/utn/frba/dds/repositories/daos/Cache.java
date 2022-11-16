@@ -1,32 +1,31 @@
 package ar.edu.utn.frba.dds.repositories.daos;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
-public class Cache<T, ID> {
-    private final Map<T, ID> entidades;
+public class Cache<T> {
+    private final Map<String, T> entidades;
 
-    public Cache(Class<T> keyType, Class<ID> valueType) {
+    public Cache(Class<T> valueType) {
         this.entidades = new HashMap<>();
     }
 
-    public Cache(Class<T> clazz, HashMap<T, ID> entidades) {
+    public Cache(HashMap<String, T> entidades) {
         this.entidades = entidades;
     }
 
-    public ID get(T key) {
-        return this.entidades.getOrDefault(key, null);
+    public Optional<T> get(String key) {
+        return Optional.ofNullable(this.entidades.getOrDefault(key, null));
     }
 
-    public Boolean containsKey(T key) {
+    public Boolean containsKey(String key) {
         return entidades.containsKey(key);
     }
 
-    public void put(T key, ID value) {
+    public void put(String key, T value) {
         this.entidades.put(key, value);
     }
 
-    public void delete(T unObjeto) {
+    public void delete(String unObjeto) {
         this.entidades.remove(unObjeto);
     }
 
