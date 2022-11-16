@@ -21,15 +21,20 @@ table.particular {
     padding: 10px;
 }
 
-.particular .coordenadas {
+/*.particular .coordenadas {
     border-spacing: 2px 5px;
     margin: auto;
-}
+}*/
 
 .particular .ubicaciones {
     margin: auto;
     /*border-style: inset;*/
-    border-collapse: collapse;
+    /*border-collapse: collapse;*/
+    border-collapse: separate;
+}
+
+.particular .ubicaciones td:last-child {
+    border: 0px solid;
 }
 
 .particular .miembros {

@@ -58,44 +58,20 @@
                   <td><i>{{transporte.info}}</i></td>
                   <td>
                     <table class="ubicaciones">
-                      <tr>
-                        <th>DIRECCION</th>
-                        <th>COORDENADAS</th>
-                      </tr>
-                      <tr>
-                        <td>
-                          {{#if idParadaInicial}}<p><i>Parada {{idParadaInicial}}</i></p>{{/if}}
-                          <p><i>{{ubicacionInicial.calle}} {{ubicacionInicial.numero}} - {{ubicacionInicial.localidad}}</i></p>
-                          <p><i>({{ubicacionInicial.municipio}} - {{ubicacionInicial.provincia}})</i></p>
-                        </td>
-                        <td>
-                          <table class="coordenadas">
-                            <tr><td>LATITUD</td><td><i>{{ubicacionInicial.latitud}}</i></td></tr>
-                            <tr><td>LONGITUD</td><td><i>{{ubicacionInicial.longitud}}</i></td></tr>
-                          </table>
-                        </td>
-                      </tr>
+                      {{#if idParadaInicial}}<tr><td>PARADA</td><td><i>{{idParadaInicial}}</i></td></tr>{{/if}}
+                      <tr><td>CALLE</td><td><i>{{ubicacionInicial.calle}} {{ubicacionInicial.numero}}</i></td></tr>
+                      <tr><td>LOCALIDAD</td><td><i>{{ubicacionInicial.localidad}}</i></td></tr>
+                      <tr><td>MUNICIPIO</td><td><i>{{ubicacionInicial.municipio}}</i></td></tr>
+                      <tr><td>PROVINCIA</td><td><i>{{ubicacionInicial.provincia}}</i></td></tr>
                     </table>
                   </td>
                   <td>
                     <table class="ubicaciones">
-                      <tr>
-                        <th>DIRECCION</th>
-                        <th>COORDENADAS</th>
-                      </tr>
-                      <tr>
-                        <td>
-                          {{#if idParadaFinal}}<p><i>Parada {{idParadaFinal}}</i></p>{{/if}}
-                          <p><i>{{ubicacionFinal.calle}} {{ubicacionFinal.numero}} - {{ubicacionFinal.localidad}}</i></p>
-                          <p><i>({{ubicacionFinal.municipio}} - {{ubicacionFinal.provincia}})</i></p>
-                        </td>
-                        <td>
-                          <table class="coordenadas">
-                            <tr><td>LATITUD</td><td><i>{{ubicacionFinal.latitud}}</i></td></tr>
-                            <tr><td>LONGITUD</td><td><i>{{ubicacionFinal.longitud}}</i></td></tr>
-                          </table>
-                        </td>
-                      </tr>
+                      {{#if idParadaFinal}}<tr><td>PARADA</td><td><i>{{idParadaFinal}}</i></td></tr>{{/if}}
+                      <tr><td>CALLE</td><td><i>{{ubicacionFinal.calle}} {{ubicacionFinal.numero}}</i></td></tr>
+                      <tr><td>LOCALIDAD</td><td><i>{{ubicacionFinal.localidad}}</i></td></tr>
+                      <tr><td>MUNICIPIO</td><td><i>{{ubicacionFinal.municipio}}</i></td></tr>
+                      <tr><td>PROVINCIA</td><td><i>{{ubicacionFinal.provincia}}</i></td></tr>
                     </table>
                   </td>
                 </tr>
