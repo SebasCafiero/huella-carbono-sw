@@ -97,66 +97,65 @@ public class EntityManagerHelper {
         }
     }
 
-    //TODO podríamos tener un archivo solamente con las prioridades y dsp las variables de entorno (1º persistenceXML, 2º arch, 3º env vars)
     private static Map<String, Object> seteoPropiedades() throws URISyntaxException {
-        //https://stackoverflow.com/questions/8836834/read-environment-variables-in-persistence-xml-file
-        Map<String, String> env = System.getenv();
-        Map<String, String> file = cargarArchivoConfigurable();
-        Map<String, Object> configOverrides = new HashMap<String, Object>();
+        Map<String, String> varEntorno = System.getenv();
+        Map<String, String> varArchivo = cargarArchivoConfigurable();
+        Map<String, Object> configuraciones = new HashMap<String, Object>();
         final String motorDB = "jdbc:postgresql://";
 
         String[] keys = new String[]{
-                //, "javax.persistence.jdbc.url",
-                //"javax.persistence.jdbc.user", "javax.persistence.jdbc.password",
                 "DATABASE_URL",
-                "hibernate.show_sql",
+                "show_sql",
                 "ddlauto",
-                "jdbc.driver"
+                "driver"
                 //"javax.persistence.schema-generation.database.action"
         };
 
         for (String key : keys) {
-            if (env.containsKey(key) || file.containsKey(key)) {
+            if (varEntorno.containsKey(key) || varArchivo.containsKey(key)) {
                 String value;
-                if(env.containsKey(key))
-                    value = env.get(key);
+                if(varEntorno.containsKey(key))
+                    value = varEntorno.get(key);
                 else
-                    value = file.get(key);
+                    value = varArchivo.get(key);
 
                 if (key.equals("DATABASE_URL")) {
-                    // https://devcenter.heroku.com/articles/connecting-heroku-postgres#connecting-in-java
-
                     //postgres://<username>:<password>@<host>:<port>/<dbname>
                     URI dbUri = new URI(value);
 
                     String username = dbUri.getUserInfo().split(":")[0];
                     String password = dbUri.getUserInfo().split(":")[1];
-                    //javax.persistence.jdbc.url=jdbc:postgresql://localhost/dblibros
+                    //url=jdbc:postgresql://host:port/dbname
                     value = motorDB + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();// + "?sslmode=require";
-                    configOverrides.put("hibernate.connection.url", value);
-                    configOverrides.put("hibernate.connection.username", username);
-                    configOverrides.put("hibernate.connection.password", password);
-                    //  configOverrides.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+                    configuraciones.put("hibernate.connection.url", value);
+//                    configuraciones.put("javax.persistence.jdbc.url", value);
+                    configuraciones.put("hibernate.connection.username", username);
+//                    configuraciones.put("javax.persistence.jdbc.user", value);
+                    configuraciones.put("hibernate.connection.password", password);
+//                    configuraciones.put("javax.persistence.jdbc.password", value);
+//                    configOverrides.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
 
                 }
                 if (key.equals("ddlauto")) {
-                    configOverrides.put("hibernate.hbm2ddl.auto", value);
+                    configuraciones.put("hibernate.hbm2ddl.auto", value);
+//                    configuraciones.put("javax.persistence.schema-generation.database.action", value);
                 }
-//                if (key.equals("jdbc.driver")) {
-//                    String value = env.get(key);
-////                    configOverrides.put("javax.persistence.jdbc.driver", value);
-//                    configOverrides.put("hibernate.connection.driver_class", value);
-//                }
+                if (key.equals("show_sql")) {
+                    configuraciones.put("hibernate.show_sql", true);
+                }
+                if (key.equals("driver")) {
+//                    configOverrides.put("javax.persistence.jdbc.driver", value);
+                    configuraciones.put("hibernate.connection.driver_class", value);
+                }
 
             }
         }
-        return configOverrides;
+        return configuraciones;
     }
 
     private static Map<String, String> cargarArchivoConfigurable() {
         Map<String, String> propiedadesMap = new HashMap<>();
         String path = "resources/persistence.properties";
-//        File archivo = null;
         try {
             Properties propiedades = new Properties();
 //            archivo = new File(path);
@@ -174,8 +173,6 @@ public class EntityManagerHelper {
         } catch (FileNotFoundException e) {
             System.out.println("No existe el archivo " + path);
 //            System.out.println(archivo.getAbsolutePath());
-//            System.out.println(e.getMessage());
-//            throw new RuntimeException("El archivo properties no existe");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

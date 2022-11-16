@@ -276,4 +276,8 @@ nbdist/
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,java,intellij,netbeans,web,maven
 
+# Ignoro los documentos de los reportes
 **/docs
+
+# Ignoro la configuración de la DB
+persistence.properties
