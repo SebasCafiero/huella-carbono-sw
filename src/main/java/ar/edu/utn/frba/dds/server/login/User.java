@@ -29,11 +29,13 @@ public class User {
     @JoinColumn(name = "agente_id")
     AgenteSectorial agenteSectorial;
 
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public User() {
     }
+
+//    public User(String username, String password) {
+//        this.username = username;
+//        this.password = password;
+//    }
 
     public User(String username, String password, Organizacion organizacion) {
         this.username = username;
@@ -51,8 +53,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.agenteSectorial = agenteSectorial;
-    }
-    public User() {
     }
 
     public void setUsername(String username) {
@@ -114,6 +114,19 @@ public class User {
             return "organizacion";
 
         return "admin";
+    }
+
+    public Integer getIdRol() {
+        if (isMiembro())
+            return this.miembro.getId();
+
+        if (isAgenteSectorial())
+            return this.agenteSectorial.getId();
+
+        if (isOrganizacion())
+            return this.organizacion.getId();
+
+        return null; //todo
     }
 
     public Boolean isMiembro() {

@@ -17,6 +17,7 @@ public class Trayecto {
     private Integer id;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trayecto", cascade = CascadeType.ALL)
+    @OrderColumn(name = "posicion")
     private List<Tramo> tramos;
 
     @ManyToMany(cascade = CascadeType.ALL)

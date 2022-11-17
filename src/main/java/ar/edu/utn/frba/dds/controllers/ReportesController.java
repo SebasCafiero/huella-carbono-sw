@@ -75,7 +75,7 @@ public class ReportesController {
 
     private Map<String, Object> mapUser(Request request, Response response) {
         String username = request.session().attribute("currentUser");
-//        User user = new UserUtils().buscar(username);
+//        User user = new FachadaUsuarios().buscar(username);
         Map<String, Object> parametros = new HashMap<>();
 
         int id;

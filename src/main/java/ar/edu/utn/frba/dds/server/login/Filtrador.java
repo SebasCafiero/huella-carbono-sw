@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.server.login;
 
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.servicios.fachadas.FachadaUsuarios;
 import spark.Request;
 import spark.Response;
 
@@ -14,8 +15,8 @@ public class Filtrador {
     }
 
     public static void filtrarPorRol(Request req, Response res, String rolDeAceptacion) throws ForbiddenException{
-        UserUtils userUtils = new UserUtils();
-        String rol = userUtils.getUsuarioLogueado(req.session().attribute("idUsuario")).get().getRol();
+        FachadaUsuarios fachadaUsuarios = new FachadaUsuarios();
+        String rol = fachadaUsuarios.findById(req.session().attribute("idUsuario")).get().getRol();
         if(!rolDeAceptacion.equals(rol)) {
             res.status(403);
             throw new ForbiddenException();
@@ -23,8 +24,8 @@ public class Filtrador {
     }
 
     public static void filtrarLogueo(Request req, Response res) throws UnauthorizedException{
-        UserUtils userUtils = new UserUtils();
-        if(!userUtils.estaLogueado(req)){
+        FachadaUsuarios fachadaUsuarios = new FachadaUsuarios();
+        if(!fachadaUsuarios.estaLogueado(req)){
             res.status(401);
             throw new UnauthorizedException();
         }
@@ -32,18 +33,18 @@ public class Filtrador {
 
     public static void filtrarPorId(Request req, Response res, Integer idDeAceptacion, String rol) throws ForbiddenException{
 
-        UserUtils userUtils = new UserUtils();
+        FachadaUsuarios fachadaUsuarios = new FachadaUsuarios();
         Integer id = null;
 
         switch(rol) {
             case "miembro":
-                id = userUtils.getUsuarioLogueado(req.session().attribute("idUsuario")).get().getMiembro().getId();
+                id = fachadaUsuarios.findById(req.session().attribute("idUsuario")).get().getMiembro().getId();
                 break;
             case "organizacion":
-                id = userUtils.getUsuarioLogueado(req.session().attribute("idUsuario")).get().getOrganizacion().getId();
+                id = fachadaUsuarios.findById(req.session().attribute("idUsuario")).get().getOrganizacion().getId();
                 break;
             case "agente":
-                id = userUtils.getUsuarioLogueado(req.session().attribute("idUsuario")).get().getAgenteSectorial().getId();
+                id = fachadaUsuarios.findById(req.session().attribute("idUsuario")).get().getAgenteSectorial().getId();
                 break;
             default:
                 break;

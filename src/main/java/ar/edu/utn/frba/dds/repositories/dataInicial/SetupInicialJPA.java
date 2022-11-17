@@ -413,8 +413,8 @@ public class SetupInicialJPA {
         User usuarioMiembroManu = new User("manu", "miembro", manuGinobili);
         User usuarioMiembroDiego = new User("diego", "miembro", elDiego);
 
-        User usuarioAgenteProv = new User("prov.caba", "agente", carlos);
-        User usuarioAgenteMuni = new User("muni.caba", "agente", esteban);
+        User usuarioAgenteProv = new User("provcaba", "agente", carlos);
+        User usuarioAgenteMuni = new User("municaba", "agente", esteban);
 
         this.repoUsuarios.agregar(usuarioOrganizacionCampus, usuarioOrganizacionMedrano, usuarioOrganizacionMc,
                 usuarioMiembroCharly, usuarioMiembroManu, usuarioMiembroDiego,

@@ -41,6 +41,8 @@ public class TrayectosController {
         Map<String, Object> parametros = new HashMap<>();
         int idMiembro = Integer.parseInt(req.params("id"));
         Miembro miembro = fachada.obtenerMiembro(idMiembro);
+        parametros.put("rol", "MIEMBRO");
+        parametros.put("user", miembro.getNombre() + " " + miembro.getApellido());
         parametros.put("miembroID", idMiembro);
         parametros.put("trayectos", miembro.getTrayectos().stream().map(TrayectoMapperHBS::toDTOLazy).collect(Collectors.toList()));
         return new ModelAndView(parametros, "trayectos.hbs");
@@ -225,7 +227,7 @@ public class TrayectosController {
     public ModelAndView obtener(Request req, Response res) {
         Map<String, Object> parametros = new HashMap<>();
         int idTrayecto = Integer.parseInt(req.params("trayecto"));
-        int idMiembro = Integer.parseInt(req.params("miembro"));
+        int idMiembro = Integer.parseInt(req.params("id"));
         try { //todo no se valida que el trayecto sea del miembro (xq falta validar el user)
             Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
             parametros.put("trayecto", TrayectoMapperHBS.toDTO(trayecto));
@@ -439,7 +441,7 @@ public class TrayectosController {
 
     public Response modificar(Request req, Response res) { //todo CHECK
         Integer idTrayecto = Integer.parseInt(req.params("trayecto"));
-        Integer idMiembro = Integer.parseInt(req.params("miembro"));
+        Integer idMiembro = Integer.parseInt(req.params("id"));
         Miembro miembro = fachada.obtenerMiembro(idMiembro);
         try {
             Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
@@ -461,7 +463,7 @@ public class TrayectosController {
 
     public Response eliminar(Request req, Response res) {
         Integer idTrayecto = Integer.parseInt(req.params("trayecto"));
-        Integer idMiembro = Integer.parseInt(req.params("miembro"));
+        Integer idMiembro = Integer.parseInt(req.params("id"));
         Miembro miembro = fachada.obtenerMiembro(idMiembro);
         try {
             Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);

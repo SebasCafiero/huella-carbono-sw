@@ -1,50 +1,48 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.entities.exceptions.SectorException;
-
-import ar.edu.utn.frba.dds.server.login.User;
-import ar.edu.utn.frba.dds.server.login.UserUtils;
+import ar.edu.utn.frba.dds.servicios.fachadas.FachadaUsuarios;
 import spark.*;
 
 import java.util.*;
 
 public class LoginController {
 
-    UserUtils userUtils;
+    FachadaUsuarios fachadaUsuarios;
 
     public LoginController() {
-        this.userUtils = new UserUtils();
+        this.fachadaUsuarios = new FachadaUsuarios();
     }
 
     public Void intentarLogear(Request request, Response response) {
-        if (userUtils.estaLogueado(request)) {
+        if (fachadaUsuarios.estaLogueado(request)) {
             response.redirect("/errorAcceso");
         }
         Map<String, Object> model = new HashMap<>();
-        if (!userUtils.isAuthenticated(request.queryParams("username"), request.queryParams("password"))) {
+        if (!fachadaUsuarios.isAuthenticated(request.queryParams("username"), request.queryParams("password"))) {
             model.put("authenticationFailed", true);
             response.redirect("/home");
             return null;
         }
         model.put("authenticationSucceeded", true);
-        request.session().attribute("idUsuario", userUtils.buscarUsuarioEnRepo(request.queryParams("username"), request.queryParams("password")).get().getId());
+        request.session().attribute("idUsuario", fachadaUsuarios.buscarUsuarioEnRepo(request.queryParams("username"), request.queryParams("password")).get().getId());
         response.redirect("/menu");
         return null;
     }
 
-    public Object agregar(Request request, Response response) throws SectorException {
-        User user = new User(request.queryParams("username"), request.queryParams("password"));
-        userUtils.agregar(user);
-        return "Agregaste correctamente el usuario";
-    }
+//    public Object agregar(Request request, Response response) throws SectorException {
+//        User user = new User(request.queryParams("username"), request.queryParams("password"));
+//        fachadaUsuarios.agregar(user);
+//        return "Agregaste correctamente el usuario";
+//    }
 
-    public Void cerrarSesion(Request request, Response response) {
-        if (!userUtils.estaLogueado(request)) {
+    public Response cerrarSesion(Request request, Response response) {
+        if (!fachadaUsuarios.estaLogueado(request))
             response.redirect("/errorAcceso");
-            return null;
+        else {
+            request.session().removeAttribute("idUsuario");
+            response.redirect("/home");
         }
-        request.session().removeAttribute("idUsuario");
-        return null;
+        return response;
     }
 
     public ModelAndView errorAcceso(Request request, Response response){
@@ -52,7 +50,7 @@ public class LoginController {
     }
 
     public ModelAndView chequearValidezAcceso(Request request, Response response, Boolean valorAceptado) {
-        if (valorAceptado != userUtils.estaLogueado(request)) {
+        if (valorAceptado != fachadaUsuarios.estaLogueado(request)) {
             response.status(403);
             return new ModelAndView(null, "/errorAcceso.html");
         }
