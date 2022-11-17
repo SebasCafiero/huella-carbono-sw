@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds.repositories.impl.jpa;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

@@ -1,15 +1,16 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.login.Filtrador;
-import ar.edu.utn.frba.dds.login.ForbiddenException;
-import ar.edu.utn.frba.dds.login.NotFoundException;
-import ar.edu.utn.frba.dds.login.UnauthorizedException;
-import ar.edu.utn.frba.dds.mapping.MiembrosMapper;
-import ar.edu.utn.frba.dds.mihuella.dto.*;
-import ar.edu.utn.frba.dds.mihuella.parsers.ParserJSON;
+import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
+import ar.edu.utn.frba.dds.server.login.Filtrador;
+import ar.edu.utn.frba.dds.server.login.ForbiddenException;
+import ar.edu.utn.frba.dds.server.login.NotFoundException;
+import ar.edu.utn.frba.dds.server.login.UnauthorizedException;
+import ar.edu.utn.frba.dds.interfaces.mappers.MiembrosMapper;
+import ar.edu.utn.frba.dds.interfaces.input.csv.MiembroCSVDTO;
+import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;

@@ -4,7 +4,6 @@ import ar.edu.utn.frba.dds.entities.transportes.TipoTransporteEcologico;
 import ar.edu.utn.frba.dds.entities.transportes.TransporteEcologico;
 import ar.edu.utn.frba.dds.repositories.RepoEcologicos;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 
 import java.util.function.Predicate;
 

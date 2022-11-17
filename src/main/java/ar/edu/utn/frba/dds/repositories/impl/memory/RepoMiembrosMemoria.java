@@ -4,7 +4,6 @@ import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 
 import java.util.Objects;
 import java.util.Optional;

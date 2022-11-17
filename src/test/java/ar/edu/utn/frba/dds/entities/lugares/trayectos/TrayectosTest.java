@@ -1,24 +1,6 @@
 package ar.edu.utn.frba.dds.entities.lugares.trayectos;
 
-import ar.edu.utn.frba.dds.entities.lugares.*;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
-import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
-import ar.edu.utn.frba.dds.entities.transportes.*;
-import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
-import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
-import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
-import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
-import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
-import ar.edu.utn.frba.dds.repositories.impl.memory.RepoFactoresMemoria;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class TrayectosTest {
 

@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import spark.Request;
 import spark.Response;
 

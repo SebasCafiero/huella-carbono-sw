@@ -1,16 +1,13 @@
 package ar.edu.utn.frba.dds.server;
 
 import ar.edu.utn.frba.dds.controllers.*;
-import ar.edu.utn.frba.dds.login.*;
-import ar.edu.utn.frba.dds.mihuella.parsers.ParserJSON;
-import ar.edu.utn.frba.dds.spark.utils.BooleanHelper;
-import ar.edu.utn.frba.dds.spark.utils.HandlebarsTemplateEngineBuilder;
-import com.google.gson.Gson;
+import ar.edu.utn.frba.dds.server.login.*;
+import ar.edu.utn.frba.dds.server.utils.BooleanHelper;
+import ar.edu.utn.frba.dds.server.utils.HandlebarsTemplateEngineBuilder;
 import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 public class Router {
     private static HandlebarsTemplateEngine engine;

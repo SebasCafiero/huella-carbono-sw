@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds.repositories.impl.memory;
 import ar.edu.utn.frba.dds.entities.transportes.TipoServicio;
 import ar.edu.utn.frba.dds.repositories.RepoTiposServicio;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 
 import java.util.function.Predicate;
 

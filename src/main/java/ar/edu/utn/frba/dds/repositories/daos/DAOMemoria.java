@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositories.daos;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -79,7 +78,7 @@ public class DAOMemoria<T> implements DAO<T> {
         Optional<Method> getterId = Arrays.stream(persistentClass.getMethods())
                 .filter(me -> me.getName().equals(nombre)).findFirst();
         if (!getterId.isPresent()) {
-            throw new EntidadSinPrimaryKey();
+            throw new EntidadSinPrimaryKeyException();
         }
         return getterId.get();
     }

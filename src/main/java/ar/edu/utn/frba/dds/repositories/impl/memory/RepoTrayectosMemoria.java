@@ -4,12 +4,11 @@ import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.transportes.Parada;
 import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
-import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.medibles.Tramo;
+import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
+import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
 
 import java.util.List;
 

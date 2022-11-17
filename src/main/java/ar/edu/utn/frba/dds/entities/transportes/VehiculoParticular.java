@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.CalculadoraDistanciasFactory;
+import ar.edu.utn.frba.dds.servicios.clients.calculadoraDistancias.CalculadoraDistanciasFactory;
 
 import javax.persistence.*;
 import java.util.Objects;

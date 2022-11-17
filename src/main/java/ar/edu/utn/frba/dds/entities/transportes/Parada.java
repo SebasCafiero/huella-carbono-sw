@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.lugares.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.Direccion;
+import ar.edu.utn.frba.dds.entities.lugares.UbicacionGeografica;
 
 import javax.persistence.*;
 

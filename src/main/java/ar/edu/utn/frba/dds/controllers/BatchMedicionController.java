@@ -1,20 +1,20 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
-import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
-import ar.edu.utn.frba.dds.mapping.BatchMedicionMapper;
-import ar.edu.utn.frba.dds.mihuella.dto.BatchMedicionJSONDTO;
-import ar.edu.utn.frba.dds.mihuella.dto.ErrorResponse;
-import ar.edu.utn.frba.dds.mihuella.parsers.ParserJSON;
+import ar.edu.utn.frba.dds.entities.medibles.BatchMedicion;
+import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.interfaces.mappers.BatchMedicionMapper;
+import ar.edu.utn.frba.dds.interfaces.input.json.BatchMedicionJSONDTO;
+import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
+import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
 import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
 
 import java.time.LocalDate;
 import java.util.List;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 
 public class BatchMedicionController {
     private Repositorio<BatchMedicion> repoBatch;

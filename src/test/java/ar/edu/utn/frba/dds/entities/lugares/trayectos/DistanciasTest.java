@@ -1,25 +1,14 @@
 package ar.edu.utn.frba.dds.entities.lugares.trayectos;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.*;
+import ar.edu.utn.frba.dds.entities.lugares.*;
 import ar.edu.utn.frba.dds.entities.transportes.*;
-import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.AdaptadorServicioDDSTPA;
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.CalculadoraDistancias;
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
+import ar.edu.utn.frba.dds.servicios.clients.calculadoraDistancias.ddstpa.AdaptadorServicioDDSTPA;
+import ar.edu.utn.frba.dds.servicios.clients.calculadoraDistancias.CalculadoraDistancias;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import java.io.Closeable;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
 
 public class DistanciasTest {
 

@@ -1,8 +1,9 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Direccion;
-import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
+import ar.edu.utn.frba.dds.entities.exceptions.TransportePublicoSinParadaException;
+import ar.edu.utn.frba.dds.entities.lugares.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.Direccion;
+import ar.edu.utn.frba.dds.entities.medibles.Tramo;
 
 import javax.persistence.*;
 import java.util.*;

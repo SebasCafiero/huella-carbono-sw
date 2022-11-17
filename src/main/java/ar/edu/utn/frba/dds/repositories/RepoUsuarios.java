@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.repositories;
 
-import ar.edu.utn.frba.dds.login.User;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
+import ar.edu.utn.frba.dds.server.login.User;
 
 import java.util.Optional;
 

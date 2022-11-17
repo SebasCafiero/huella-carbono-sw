@@ -1,9 +1,8 @@
 package ar.edu.utn.frba.dds.repositories.impl.jpa;
 
-import ar.edu.utn.frba.dds.login.User;
+import ar.edu.utn.frba.dds.server.login.User;
 import ar.edu.utn.frba.dds.repositories.RepoUsuarios;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

@@ -1,13 +1,13 @@
 package ar.edu.utn.frba.dds.entities.lugares;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
-import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
-import ar.edu.utn.frba.dds.entities.mediciones.ReporteOrganizacion;
+import ar.edu.utn.frba.dds.entities.exceptions.SectorException;
+import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.entities.medibles.ReporteOrganizacion;
 import ar.edu.utn.frba.dds.entities.personas.Contacto;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
 import ar.edu.utn.frba.dds.entities.personas.ContactoTelefono;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 
 import javax.persistence.*;
 import java.time.LocalDate;

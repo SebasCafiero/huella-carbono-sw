@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.repositories.daos;
 
+import ar.edu.utn.frba.dds.repositories.utils.EntityManagerHelper;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;

@@ -1,12 +1,8 @@
 package ar.edu.utn.frba.dds.repositories.impl.jpa;
 
 import ar.edu.utn.frba.dds.entities.transportes.TipoServicio;
-import ar.edu.utn.frba.dds.entities.transportes.TipoTransporteEcologico;
-import ar.edu.utn.frba.dds.entities.transportes.TransporteEcologico;
-import ar.edu.utn.frba.dds.repositories.RepoEcologicos;
 import ar.edu.utn.frba.dds.repositories.RepoTiposServicio;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

@@ -4,7 +4,6 @@ import ar.edu.utn.frba.dds.entities.transportes.TipoTransportePublico;
 import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
 import ar.edu.utn.frba.dds.repositories.RepoPublicos;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

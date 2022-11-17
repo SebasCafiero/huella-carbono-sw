@@ -4,7 +4,6 @@ import ar.edu.utn.frba.dds.entities.transportes.TipoTransportePublico;
 import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
 import ar.edu.utn.frba.dds.repositories.RepoPublicos;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 
 import java.util.function.Predicate;
 

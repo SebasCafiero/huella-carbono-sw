@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.entities.lugares;
 
-import ar.edu.utn.frba.dds.entities.lugares.*;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.*;
+import ar.edu.utn.frba.dds.entities.exceptions.SectorException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

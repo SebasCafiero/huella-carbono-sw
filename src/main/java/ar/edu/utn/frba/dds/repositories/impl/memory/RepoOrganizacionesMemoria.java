@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.repositories.impl.memory;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
+
 import java.util.Objects;
 import java.util.function.Predicate;
 

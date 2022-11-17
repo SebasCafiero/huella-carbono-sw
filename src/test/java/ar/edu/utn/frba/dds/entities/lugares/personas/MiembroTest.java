@@ -1,14 +1,5 @@
 package ar.edu.utn.frba.dds.entities.lugares.personas;
 
-import ar.edu.utn.frba.dds.entities.lugares.*;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
-import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.personas.MiembroException;
-import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 public class MiembroTest {
 
 //TODO VER DE USAR @BEFORE O AGRUPAR DECLARACIONES REPETIDAS

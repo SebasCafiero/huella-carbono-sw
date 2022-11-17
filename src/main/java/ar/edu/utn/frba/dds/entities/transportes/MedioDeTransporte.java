@@ -1,9 +1,7 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
-import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.AdaptadorServicioDDSTPA;
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.CalculadoraDistancias;
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.ServicioSimulado;
+import ar.edu.utn.frba.dds.entities.medibles.Tramo;
+import ar.edu.utn.frba.dds.servicios.clients.calculadoraDistancias.CalculadoraDistancias;
 
 import javax.persistence.*;
 

@@ -1,14 +1,11 @@
 package ar.edu.utn.frba.dds.server;
 
-import ar.edu.utn.frba.dds.cache.CacheLocalidad;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Municipio;
+import ar.edu.utn.frba.dds.repositories.cache.CacheLocalidad;
+import ar.edu.utn.frba.dds.entities.lugares.Municipio;
 import ar.edu.utn.frba.dds.repositories.daos.Cache;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryCache;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
-import ar.edu.utn.frba.dds.servicios.calculadoraDistancias.AdaptadorServicioDDSTPA;
-import spark.Spark;
-import spark.debug.DebugScreen;
+import ar.edu.utn.frba.dds.repositories.utils.FactoryCache;
+import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
+import ar.edu.utn.frba.dds.servicios.clients.calculadoraDistancias.ddstpa.AdaptadorServicioDDSTPA;
 
 import static spark.Spark.port;
 

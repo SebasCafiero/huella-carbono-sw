@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.entities.transportes.TipoVehiculo;
 import ar.edu.utn.frba.dds.entities.transportes.VehiculoParticular;
 import ar.edu.utn.frba.dds.repositories.RepoParticulares;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 
 import java.util.function.Predicate;
 

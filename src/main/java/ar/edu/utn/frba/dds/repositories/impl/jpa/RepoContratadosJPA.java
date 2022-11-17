@@ -4,7 +4,6 @@ import ar.edu.utn.frba.dds.entities.transportes.ServicioContratado;
 import ar.edu.utn.frba.dds.entities.transportes.TipoServicio;
 import ar.edu.utn.frba.dds.repositories.RepoContratados;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

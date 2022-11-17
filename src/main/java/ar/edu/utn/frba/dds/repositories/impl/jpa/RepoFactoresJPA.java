@@ -1,10 +1,9 @@
 package ar.edu.utn.frba.dds.repositories.impl.jpa;
 
-import ar.edu.utn.frba.dds.entities.mediciones.Categoria;
-import ar.edu.utn.frba.dds.entities.mediciones.FactorEmision;
+import ar.edu.utn.frba.dds.entities.medibles.Categoria;
+import ar.edu.utn.frba.dds.entities.medibles.FactorEmision;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

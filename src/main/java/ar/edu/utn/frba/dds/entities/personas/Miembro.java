@@ -1,8 +1,9 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
+import ar.edu.utn.frba.dds.entities.exceptions.MiembroException;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 
 import javax.persistence.*;
 import java.util.*;

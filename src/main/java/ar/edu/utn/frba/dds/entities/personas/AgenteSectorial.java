@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
-import ar.edu.utn.frba.dds.entities.mediciones.ReporteAgente;
+import ar.edu.utn.frba.dds.entities.lugares.AreaSectorial;
+import ar.edu.utn.frba.dds.entities.medibles.ReporteAgente;
 
 import javax.persistence.*;
 import java.util.ArrayList;

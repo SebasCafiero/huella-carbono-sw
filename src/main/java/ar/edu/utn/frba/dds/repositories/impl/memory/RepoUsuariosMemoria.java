@@ -1,9 +1,8 @@
 package ar.edu.utn.frba.dds.repositories.impl.memory;
 
-import ar.edu.utn.frba.dds.login.User;
+import ar.edu.utn.frba.dds.server.login.User;
 import ar.edu.utn.frba.dds.repositories.RepoUsuarios;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioMemoria;
 
 import java.util.Optional;
 import java.util.function.Predicate;

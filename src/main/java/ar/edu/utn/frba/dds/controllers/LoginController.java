@@ -1,9 +1,9 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.entities.lugares.SectorException;
+import ar.edu.utn.frba.dds.entities.exceptions.SectorException;
 
-import ar.edu.utn.frba.dds.login.User;
-import ar.edu.utn.frba.dds.login.UserUtils;
+import ar.edu.utn.frba.dds.server.login.User;
+import ar.edu.utn.frba.dds.server.login.UserUtils;
 import spark.*;
 
 import java.util.*;

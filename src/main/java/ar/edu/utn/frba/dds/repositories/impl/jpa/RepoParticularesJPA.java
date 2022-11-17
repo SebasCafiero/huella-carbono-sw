@@ -2,12 +2,9 @@ package ar.edu.utn.frba.dds.repositories.impl.jpa;
 
 import ar.edu.utn.frba.dds.entities.transportes.TipoCombustible;
 import ar.edu.utn.frba.dds.entities.transportes.TipoVehiculo;
-import ar.edu.utn.frba.dds.entities.transportes.TransporteEcologico;
 import ar.edu.utn.frba.dds.entities.transportes.VehiculoParticular;
-import ar.edu.utn.frba.dds.repositories.RepoEcologicos;
 import ar.edu.utn.frba.dds.repositories.RepoParticulares;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
-import ar.edu.utn.frba.dds.repositories.utils.RepositorioPersistente;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
