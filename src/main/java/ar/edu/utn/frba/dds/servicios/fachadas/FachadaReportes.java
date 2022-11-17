@@ -139,6 +139,7 @@ public class FachadaReportes {
         reporte.setConsumoMediciones(totalMediciones);
         reporte.setFechaCreacion(LocalDate.now());
         reporte.setPeriodoReferencia(periodo);
+        reporte.setOrganizacion(organizacion);
 //        organizacion.agregarReporte(reporte);
 
         this.reporteOrganizacion = reporte;

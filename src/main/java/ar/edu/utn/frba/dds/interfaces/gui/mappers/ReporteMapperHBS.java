@@ -18,6 +18,8 @@ public class ReporteMapperHBS {
         reporteDTO.setConsumoPorCategoria(reporte.getConsumoPorCategoria().entrySet().stream().map(ConsumoMapperHBS::toDTO).collect(Collectors.toList()));
         reporteDTO.setConsumoPorSector(reporte.getConsumoPorSector().entrySet().stream().map(ConsumoMapperHBS::toDTO).collect(Collectors.toList()));
         reporteDTO.setConsumoPorMiembro(reporte.getConsumoPorMiembro().entrySet().stream().map(ConsumoMapperHBS::toDTO).collect(Collectors.toList()));
+
+        reporteDTO.setOrganizacion(OrganizacionMapperHBS.toDTO(reporte.getOrganizacion()));
         return reporteDTO;
     }
 }

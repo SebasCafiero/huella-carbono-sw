@@ -8,6 +8,7 @@ import ar.edu.utn.frba.dds.interfaces.input.json.AgenteSectorialJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
+import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
@@ -77,4 +78,8 @@ public class AgenteSectorialController {
         this.repoAgentes.eliminar(agenteSectorial);
         return "Agente Sectorial eliminado correctamente";
     }
+
+    public ModelAndView mostrarOrganizaciones(Request request, Response response) {
+        return new ModelAndView(null, "");
     }
+}

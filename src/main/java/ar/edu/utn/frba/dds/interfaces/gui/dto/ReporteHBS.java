@@ -11,6 +11,7 @@ public class ReporteHBS {
     private List<ConsumoHBS> consumoPorCategoria;
     private List<ConsumoHBS> consumoPorSector;
     private List<ConsumoHBS> consumoPorMiembro;
+    private OrganizacionHBS organizacion;
 
     public ReporteHBS() {
     }
@@ -78,4 +79,13 @@ public class ReporteHBS {
     public void setConsumoPorMiembro(List<ConsumoHBS> consumoPorMiembro) {
         this.consumoPorMiembro = consumoPorMiembro;
     }
+
+    public OrganizacionHBS getRazonSocialOrganizacion() {
+        return organizacion;
+    }
+
+    public void setOrganizacion(OrganizacionHBS organizacion) {
+        this.organizacion = organizacion;
+    }
+
 }

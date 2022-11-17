@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.entities.medibles;
 
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
@@ -14,6 +15,7 @@ public class ReporteOrganizacion {
     private Float consumoTotal;
     private LocalDate fechaCreacion;
     private Periodo periodoReferencia;
+    private Organizacion organizacion;
 
     public ReporteOrganizacion() {
     }
@@ -81,5 +83,13 @@ public class ReporteOrganizacion {
     public void setPeriodoReferencia(Periodo periodoReferencia) {
         this.periodoReferencia = periodoReferencia;
 
+    }
+
+    public Organizacion getOrganizacion() {
+        return organizacion;
+    }
+
+    public void setOrganizacion(Organizacion organizacion) {
+        this.organizacion = organizacion;
     }
 }

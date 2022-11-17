@@ -11,7 +11,7 @@
     <header>
       <div id="header">
         <div class="user">
-          <span>Organización: </span>
+          <span>Usuario: </span>
           <i>{{rol}} - {{user}}</i>
         </div>
         <div class="logout">
@@ -26,7 +26,11 @@
     </header>
     <div class="content">
       <div class="info">
+        {{#if agente}}
+        <span>Se creará el reporte para la organización seleccionada</span>
+        {{else}}
         <span>Se creará el reporte para <i>{{organizacion.razonSocial}}</i></span>
+        {{/if}}
         <ul>
           <li>Por Año</li>
           <li>Por Mes</li>
@@ -36,12 +40,23 @@
         </ul>
       </div>
       <div class="generar">
-        <form action="/organizacion/{{organizacion.id}}/reporte" method="post">
+        <form {{#if agente}} action="/agente/{{agente.id}}/reporte" {{else}} action="/organizacion/{{organizacion.id}}/reporte" {{/if}} method="post">
           <div class="form-fecha">
             <label for="fecha">Fecha de Referencia: </label><i>(CHECK)</i>
             <input id="fecha" type="text" name="f-fecha" value="MES/AÑO" required/>
           </div>
           <br />
+          {{#if agente}}
+          <div class="organizaciones">
+            <label for="organizacion">Seleccione la Organizacion:</label>
+            <select id="organizacion" name="f-organizacion" required>
+              <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+              {{#each agente.organizaciones}}
+              <option value="{{id}}">{{razonSocial}}</option>
+              {{/each}}
+            </select>
+          </div>
+          {{/if}}
           <div class="enviar">
             <input type="submit" value="Generar Reporte"/>
           </div>

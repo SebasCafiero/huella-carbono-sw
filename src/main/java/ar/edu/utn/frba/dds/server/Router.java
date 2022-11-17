@@ -38,7 +38,6 @@ public class Router {
         MiembroController miembroController = new MiembroController();
         OrganizacionController organizacionController = new OrganizacionController();
         GenericController genericController = new GenericController();
-        LoginController loginController = new LoginController();
         TrayectosController trayectosController = new TrayectosController();
 
         Function<Function<User, Boolean>, Filter> autorizarUsuario =
@@ -128,9 +127,12 @@ public class Router {
             Spark.delete("/trayecto/:trayecto", trayectosController::eliminar);
         });
 
-        Spark.get("/organizacion/:id/reporte", reportesController::darAltaYMostrar, engine);
-        Spark.post("/organizacion/:id/reporte", reportesController::generar);
+        Spark.get("/organizacion/:organizacion/reporte", reportesController::darAltaYMostrar, engine);
+        Spark.post("/organizacion/:organizacion/reporte", reportesController::generar);
 
+        Spark.get("/agente/:id/organizacion", agenteSectorialController::mostrarOrganizaciones, engine); //todo
+        Spark.get("/agente/:agente/reporte", reportesController::darAltaYMostrar, engine);
+        Spark.post("/agente/:agente/reporte", reportesController::generar);
 
         Spark.get("/*", ((request, response) -> {
             response.redirect("/home");
@@ -143,6 +145,10 @@ public class Router {
             System.out.println("Request rechazado. " + exception.getMessage());
             System.out.println("Ip origen: " + request.ip());
             response.redirect("/home");
+        });
+
+        Spark.exception(UnauthorizedException.class, (exception, request, response) -> {
+
         });
     }
 }
