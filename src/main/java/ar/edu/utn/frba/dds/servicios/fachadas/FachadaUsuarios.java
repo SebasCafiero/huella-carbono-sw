@@ -34,8 +34,7 @@ public class FachadaUsuarios {
     }
 
     public Optional<User> findById(Integer idUsuario) {
-        User user = repoUsuarios.buscar(idUsuario);
-        return Optional.ofNullable(user);
+        return Optional.ofNullable(repoUsuarios.buscar(idUsuario));
     }
 
     public boolean estaLogueado(Request request) {

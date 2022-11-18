@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.repositories.utils.EntityManagerHelper;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class RepositorioPersistente<T> implements Repositorio<T> {
     private final DAOHibernate<T> dao;
@@ -45,12 +46,12 @@ public class RepositorioPersistente<T> implements Repositorio<T> {
     }
 
     @Override
-    public T buscar(int id) {
-        return this.dao.buscar(id);
+    public T buscar(Integer id) {
+        return this.dao.buscar(id).orElse(null); //todo
     }
 
     @Override
-    public void modificar(int id, T unObjeto) {
+    public void modificar(Integer id, T unObjeto) {
         this.dao.modificar(unObjeto);
     }
 

@@ -64,7 +64,7 @@ public class RepoTrayectosMemoria<T> extends RepositorioMemoria<Trayecto> {
     }
 
     @Override
-    public void modificar(int id, Trayecto unObjeto) {
+    public void modificar(Integer id, Trayecto unObjeto) {
         //o son los mismos tramos, o hay uno nuevo, pero no se pueden eliminar tramos
         unObjeto.getTramos().forEach(tr -> {
             if(tr.getId() != null && repoTramos.buscar(tr.getId()) != null)

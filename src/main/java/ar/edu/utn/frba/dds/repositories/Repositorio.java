@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Repositorio<T> {
     T agregar(T unObjeto);
@@ -9,7 +10,7 @@ public interface Repositorio<T> {
     void modificar(T unObjeto);
     void eliminar(T unObjeto);
     List<T> buscarTodos();
-    T buscar(int id);
+    T buscar(Integer id);
 
-    void modificar(int id,T unObjeto);
+    void modificar(Integer id,T unObjeto);
 }

@@ -30,54 +30,41 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ReportesController {
-    private FachadaReportes fachadaReportes;
-    private Repositorio<AreaSectorial> repoAreas;
-    private Repositorio<Organizacion> repoOrganizaciones;
-    private LoginController loginController;
+    private final FachadaReportes fachadaReportes;
+    private final Repositorio<AreaSectorial> repoAreas;
+    private final Repositorio<Organizacion> repoOrganizaciones;
     private final Repositorio<AgenteSectorial> repoAgentes;
 
     public ReportesController() {
         this.fachadaReportes = new FachadaReportes();
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
         this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
-        this.loginController = new LoginController();
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
     }
 
     public Object generarReporteAgente(Request request, Response response) {
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        } TODO todo esto agregar una vez que tengamos la vista*/
         int idArea = Integer.parseInt(request.params(("id")));
         AreaSectorial areaSectorial = repoAreas.buscar(idArea);
         if(areaSectorial == null) {
             response.status(400);
             return new ErrorResponse("La organizacion de id " + idArea + " no existe");
         }
-
         LocalDate fecha = LocalDate.now();
-        ReporteAgente reporte = fachadaReportes
+        return fachadaReportes
                 .generarReporteAgente(areaSectorial, fecha.getYear(), fecha.getMonthValue());
-        return reporte;
     }
 
     public Object generarReporteOrganizacion(Request request, Response response) {
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }TODO todo esto agregar una vez que tengamos la vista*/
         int idOrganizacion = Integer.parseInt(request.params(("id")));
         Organizacion organizacion = repoOrganizaciones.buscar(idOrganizacion);
         if(organizacion == null) {
             response.status(400);
             return new ErrorResponse("La organizacion de id " + idOrganizacion + " no existe");
         }
-
         LocalDate fecha = LocalDate.now();
-        ReporteOrganizacion reporte = fachadaReportes
+        return fachadaReportes
                 .generarReporteOrganizacion(organizacion, new Periodo(fecha.getYear(), fecha.getMonthValue()));
-        return reporte;
     }
-
 
 
 

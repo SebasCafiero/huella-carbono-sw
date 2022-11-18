@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.repositories.utils.EntityManagerHelper;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
+import java.util.Optional;
 
 public class DAOHibernate<T> implements DAO<T> {
     private Class<T> type;
@@ -23,8 +24,8 @@ public class DAOHibernate<T> implements DAO<T> {
     }
 
     @Override
-    public T buscar(int id) {
-        return EntityManagerHelper.getEntityManager().find(type, id);
+    public Optional<T> buscar(Integer id) {
+        return Optional.ofNullable(EntityManagerHelper.getEntityManager().find(type, id));
     }
 
     public List<T> buscar(CriteriaQuery<T> condicion) {

@@ -34,12 +34,11 @@ public class DAOMemoria<T> implements DAO<T> {
     }
 
     @Override
-    public T buscar(int id) {
+    public Optional<T> buscar(Integer id) {
         Method getId = obtenerMetodo("getId");
         return this.entidades.stream()
                 .filter(e -> invocarGetter(getId, e).equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     public List<T> buscar(Predicate<T> condicion) {
@@ -63,8 +62,8 @@ public class DAOMemoria<T> implements DAO<T> {
         agregar(unObjeto);
     }
 
-    public void modificar(int id, T nuevoObjeto) {
-        eliminar(buscar(id));
+    public void modificar(Integer id, T nuevoObjeto) {
+        eliminar(buscar(id).orElseThrow(RuntimeException::new)); //todo
         invocarSetter(obtenerMetodo("setId"), nuevoObjeto, id);
         this.entidades.add(nuevoObjeto);
     }

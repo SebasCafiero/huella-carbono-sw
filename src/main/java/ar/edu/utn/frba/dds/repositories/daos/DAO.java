@@ -1,10 +1,11 @@
 package ar.edu.utn.frba.dds.repositories.daos;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DAO<T> {
     List<T> buscarTodos();
-    T buscar(int id);
+    Optional<T> buscar(Integer id);
     T agregar(T unObjeto);
     void modificar(T unObjeto);
     void eliminar(T unObjeto);
