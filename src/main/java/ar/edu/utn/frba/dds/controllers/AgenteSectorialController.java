@@ -1,9 +1,12 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.lugares.AreaSectorial;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
 import ar.edu.utn.frba.dds.entities.personas.ContactoTelefono;
+import ar.edu.utn.frba.dds.interfaces.gui.dto.AgenteHBS;
+import ar.edu.utn.frba.dds.interfaces.gui.dto.OrganizacionHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.AgenteMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.OrganizacionMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.input.json.AgenteSectorialJSONDTO;
@@ -22,12 +25,12 @@ import java.util.stream.Collectors;
 public class AgenteSectorialController {
     private Repositorio<AgenteSectorial> repoAgentes;
     private Repositorio<AreaSectorial> repoAreas;
-    private LoginController loginController;
+    private Repositorio<Organizacion> repoOrganizaciones;
 
     public AgenteSectorialController() {
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
-        loginController = new LoginController();
+        this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
     }
 
     public String mostrarTodos(Request request, Response response) {
@@ -92,7 +95,11 @@ public class AgenteSectorialController {
         parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
         parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
         parametros.put("agenteID", idAgente);
-        parametros.put("organizaciones", agente.getArea().getOrganizaciones().stream().map(OrganizacionMapperHBS::toDTOUbicacion).collect(Collectors.toList()));
+
+//        List<Organizacion> orgs = repoOrganizaciones.buscarTodos().stream().filter(o -> agente.getArea().getUbicaciones().contains(o.getUbicacion())).collect(Collectors.toList());
+        List<Organizacion> orgs = repoOrganizaciones.buscarTodos();
+        parametros.put("organizaciones", orgs.stream().map(OrganizacionMapperHBS::toDTOUbicacion).collect(Collectors.toList()));
+//        parametros.put("organizaciones", agente.getArea().getOrganizaciones().stream().map(OrganizacionMapperHBS::toDTOUbicacion).collect(Collectors.toList()));
         return new ModelAndView(parametros, "organizaciones.hbs");
     }
 }

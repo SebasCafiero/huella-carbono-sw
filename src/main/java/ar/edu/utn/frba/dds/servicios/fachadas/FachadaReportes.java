@@ -107,20 +107,21 @@ public class FachadaReportes {
             Float consumoSector = sector.getListaDeMiembros().stream().map(miembro -> {
                 Float consumoMiembro = miembro.getTrayectos().stream()
                         .flatMap(trayecto -> trayecto.getTramos().stream()).map(tramo -> {
-                            final float consumoTramo = fachadaOrganizacion.obtenerHU(Collections.singletonList(tramo)) /
+                            final float consumoTramo = fachadaOrganizacion.obtenerHU(Collections.singletonList(tramo)) *
                                     fachadaOrganizacion.factorProporcionalTrayecto(tramo.getTrayecto(), miembro, periodo);
 
                             consumoPorCategoria.putIfAbsent(tramo.getMiCategoria(), 0F);
-                            if(Float.isFinite(consumoTramo))
+//                            if(Float.isFinite(consumoTramo))
                                 consumoPorCategoria.compute(tramo.getMiCategoria(), (categoria, anterior) -> anterior+consumoTramo);
 
-                            return Float.isFinite(consumoTramo) ? consumoTramo : 0F;
+//                            return Float.isFinite(consumoTramo) ? consumoTramo : 0F;
+                            return consumoTramo;
                         }).reduce(Float::sum).orElse(0F);
                 consumoPorMiembro.put(miembro, consumoMiembro);
-                return Float.isFinite(consumoMiembro) ? consumoMiembro : 0F;
+                return consumoMiembro;
             }).reduce(Float::sum).orElse(0F);
             consumoPorSector.put(sector, consumoSector);
-            return Float.isFinite(consumoSector) ? consumoSector : 0F;
+            return consumoSector;
         }).reduce(Float::sum).orElse(0F);
 
         Float totalMediciones = organizacion.getMediciones().stream().map(me -> {
@@ -128,10 +129,9 @@ public class FachadaReportes {
                     fachadaOrganizacion.factorEquivalenciaPeriodos(periodo, me.getPeriodo());
 
             consumoPorCategoria.putIfAbsent(me.getMiCategoria(), 0F);
-            if(Float.isFinite(consumoMedicion))
                 consumoPorCategoria.compute(me.getMiCategoria(), (categoria, anterior) -> anterior+consumoMedicion);
 
-            return Float.isFinite(consumoMedicion) ? consumoMedicion : 0F;
+            return consumoMedicion;
         }).reduce(Float::sum).orElse(0F);
 
         reporte.setConsumoPorSector(consumoPorSector);

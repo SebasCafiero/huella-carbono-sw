@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
+import ar.edu.utn.frba.dds.interfaces.gui.dto.AgenteHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.AgenteMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.OrganizacionMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.ReporteMapperHBS;
@@ -26,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReportesController {
     private final FachadaReportes fachadaReportes;
@@ -100,8 +102,14 @@ public class ReportesController {
 
             parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
             parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
-            parametros.put("agente", AgenteMapperHBS.toDTO(agente));
+            AgenteHBS agenteDTO = AgenteMapperHBS.toDTO(agente);
+//            List<Organizacion> orgs = repoOrganizaciones.buscarTodos().stream().filter(o -> agente.getArea().getUbicaciones().contains(o.getUbicacion())).collect(Collectors.toList());
+            List<Organizacion> orgs = repoOrganizaciones.buscarTodos();
+            agenteDTO.setOrganizaciones(orgs.stream().map(OrganizacionMapperHBS::toDTO).collect(Collectors.toList()));
+            parametros.put("agente", agenteDTO);
             //todo quizas agregar reporte de agente (todas las organizaciones en uno)
+            if(request.queryParams("org") != null)
+                parametros.put("organizacion", OrganizacionMapperHBS.toDTO(repoOrganizaciones.buscar(Integer.parseInt(request.queryParams("org")))));
         }
 
         ReporteOrganizacion reporte = fachadaReportes.getReporteOrganizacion();
@@ -146,7 +154,7 @@ public class ReportesController {
             int idOrg = Integer.parseInt(request.queryParams("f-organizacion"));
 
             organizacion = repoOrganizaciones.buscar(idOrg);
-            ruta = "/agente/"+agente.getId()+"/reporte#reporte";
+            ruta = "/agente/"+agente.getId()+"/reporte?org="+idOrg+"#reporte";
         }
         fachadaReportes.generarReporteOrganizacion(organizacion, periodo);
         documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion); //todo no lo toma bien, agarra el viejo o ninguno
