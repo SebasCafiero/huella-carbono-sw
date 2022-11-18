@@ -1,13 +1,14 @@
-"Combustion Fija", "Gas Natural", "m3", "1"
-"Combustion Fija", "Diesel", "ls", "2"
-"Combustion Movil", "Gasoil", "ls", "3"
-"Electricidad", "Electricidad", "kw", "4"
-"Traslado de Miembros", "Particular - GNC", "lts", "100"
-"Traslado de Miembros", "Particular - GASOIL", "lts", "80"
-"Traslado de Miembros", "Particular - NAFTA", "lts", "150"
-"Traslado de Miembros", "Particular - ELECTRICO", "km", "15"
-"Traslado de Miembros", "Publico - TREN", "km", "250"
-"Traslado de Miembros", "Publico - SUBTE", "km", "125"
-"Traslado de Miembros", "Publico - COLECTIVO", "km", "200"
-"Traslado de Miembros", "Ecologico", "km", "0"
-"Traslado de Miembros", "Contratado", "km", "130"
+Actividad,TipoConsumo,Unidad,Valor
+"Combustion Fija",Gas Natural,m3,1
+"Combustion Fija",Diesel,ls,2
+"Combustion Movil",Gasoil,ls,3
+"Electricidad",Electricidad,kw,4
+"Traslado de Miembros",Particular - GNC,lts,100
+"Traslado de Miembros",Particular - GASOIL,lts,80
+"Traslado de Miembros",Particular - NAFTA,lts,150
+"Traslado de Miembros",Particular - ELECTRICO,km,15
+"Traslado de Miembros",Publico - TREN,km,250
+"Traslado de Miembros",Publico - SUBTE,km,125
+"Traslado de Miembros",Publico - COLECTIVO,km,200
+"Traslado de Miembros",Ecologico,km,0
+"Traslado de Miembros",Contratado,km,130

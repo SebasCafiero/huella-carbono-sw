@@ -1,0 +1,94 @@
+/* Archivo generico para todos los templates */
+
+header .user {
+    font-size: 20px;
+}
+
+header .logout {
+    margin: 5px 0px;
+    font-size: 10px;
+}
+
+header .titulo h2 {
+    background-color: lightblue;
+    font-size: 30px;
+}
+
+div.cancelar {
+    text-align: center;
+    padding: 10px;
+}
+
+div.cancelar span {
+    border: 2px dotted blue;
+    padding: 7px;
+}
+
+div.editar {
+    text-align: center;
+    padding: 10px;
+}
+
+div.editar span {
+    border: 2px dotted blue;
+    padding: 7px;
+}
+
+div.volver {
+    text-align: left;
+    padding: 10px;
+}
+
+div.volver span {
+    border: 2px dotted blue;
+    padding: 7px;
+}
+
+div.generar {
+    text-align: center;
+    padding: 10px;
+}
+
+div.enviar {
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid black;
+}
+
+div.enviar input {
+    color: black;
+    background-color: #22CC22;
+    border: 3px solid orange;
+    border-radius: 20px;
+    font-size: 20px;
+    padding: 5px 15px;
+}
+
+input[type=submit]:hover, input[type=reset]:hover {
+    opacity: 0.8;
+}
+
+input[type=submit]:active {
+    background-color: #22BB22;
+}
+
+.reiniciar {
+    text-align: right;
+}
+
+
+.reiniciar input {
+    color: black;
+    background-color: #DDAA22;
+    border-radius: 20px;
+    margin: 10px 10px;
+}
+
+div.borrar {
+    text-align: center;
+}
+
+option.campo-seleccionar {
+    font-style: italic;
+}

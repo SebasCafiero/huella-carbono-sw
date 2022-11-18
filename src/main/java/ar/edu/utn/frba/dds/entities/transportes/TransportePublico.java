@@ -1,16 +1,33 @@
 package ar.edu.utn.frba.dds.entities.transportes;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.Coordenada;
-import ar.edu.utn.frba.dds.entities.trayectos.Tramo;
+import ar.edu.utn.frba.dds.entities.exceptions.TransportePublicoSinParadaException;
+import ar.edu.utn.frba.dds.entities.lugares.Coordenada;
+import ar.edu.utn.frba.dds.entities.lugares.Direccion;
+import ar.edu.utn.frba.dds.entities.medibles.Tramo;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
+@Table(name = "TRANSPORTE_PUBLICO")
+@PrimaryKeyJoinColumn(name = "publico_id")
 public class TransportePublico extends MedioDeTransporte {
-    private final TipoTransportePublico tipo;
-    private final LinkedList<Parada> paradas;
-    private final String linea;
+    @Enumerated(EnumType.STRING)
+    private TipoTransportePublico tipo;
 
-    public TransportePublico(TipoTransportePublico tipo, String linea){
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderColumn(name = "posicion")
+    @JoinColumn(name = "medio_id")
+    private List<Parada> paradas;
+
+    @Column(name = "linea")
+    private String linea;
+
+    public TransportePublico() {
+        this.paradas = new LinkedList<>();
+    }
+
+    public TransportePublico(TipoTransportePublico tipo, String linea) {
         this.tipo = tipo;
         this.linea = linea;
         this.paradas = new LinkedList<>();
@@ -20,61 +37,58 @@ public class TransportePublico extends MedioDeTransporte {
         this.paradas.add(parada);
     }
 
-    public void agregarParadas(Parada... paradas){
-        Collections.addAll(this.paradas,paradas);
+    public void agregarParadas(Parada... paradas) {
+        Collections.addAll(this.paradas, paradas);
     }
 
-    public LinkedList<Parada> getParadas() {
+    public List<Parada> getParadas() {
         return paradas;
     }
 
     @Override
-    public Float calcularDistancia(Tramo tramo) { //Quizas una interface que haga el calculo, ver calculadoraDistancias_Objetivo del diagrama
+    public Float calcularDistancia(Tramo tramo) {
         Parada paradaInicial = buscarParada(tramo.getUbicacionInicial().getCoordenada());
-        if (paradaInicial == null)
-            System.out.println("ERROR DE COORDENADAS"); //TODO VER DE USAR EXCEPCIONES
-        //Parada paradaFinal = buscarParada(tramo.getCoordenadaFinal());
-        //Se podria validar que la distancia proxima de la parada inicial sea igual a la distancia anterior de la parada final.
+        Parada paradaFinal = buscarParada(tramo.getUbicacionFinal().getCoordenada());
+//        if (paradaInicial == null || paradaFinal == null) {
+//            throw new TransportePublicoSinParadaException();
+//        }
+        if (paradaInicial.getCoordenada().getLatitud().equals(0F) || paradaFinal.getCoordenada().getLatitud().equals(0F)) {
+            throw new TransportePublicoSinParadaException();
+        }
 
-        return paradaInicial.getDistanciaProxima();
+        int nroParadaInicial = paradas.indexOf(paradaInicial);
+        int nroParadaFinal = paradas.indexOf(paradaFinal);
+
+        if(nroParadaInicial < nroParadaFinal) {
+            return (float) paradas.subList(nroParadaInicial, nroParadaFinal).stream()
+                    .mapToDouble(Parada::getDistanciaProxima).reduce(0, Double::sum);
+        } else {
+            return (float) paradas.subList(nroParadaFinal + 1, nroParadaInicial + 1).stream()
+                    .mapToDouble(Parada::getDistanciaAnterior).reduce(0, Double::sum);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (!(o instanceof TransportePublico)) return false;
+        TransportePublico that = (TransportePublico) o;
+        return getTipo() == that.getTipo() && Objects.equals(getLinea(), that.getLinea());
     }
 
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(getTipo(), getLinea());
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        TransportePublico other = (TransportePublico) obj;
-        if (!Objects.equals(tipo, other.tipo)) return false;
-        return linea.equals(other.linea);
-    }
-
-//    @Override
-//    public boolean matchAtributo1(String atributo) {
-//        try {
-//            TipoTransportePublico tipo = TipoTransportePublico.valueOf(atributo.toUpperCase(Locale.ROOT));
-//        } catch (IllegalArgumentException ex) {
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean matchAtributo2(String atributo) {
-//        return atributo.equals(linea);
-//    }
-
-    private Parada buscarParada(Coordenada coordenada) {
-        //TODO Por el momento busca la parada que coincida, quizás debería buscar la mas cercana
+    public Parada buscarParada(Coordenada coordenada) {
+        Parada paradaRandom = new Parada(new Direccion(), new Coordenada(0F, 0F), 0F, 0F);
         return this.paradas.stream()
                 .filter(parada -> parada.getCoordenada().esIgualAOtraCoordenada(coordenada))
                 .findFirst()
-                .orElse(null);
+                .orElse(paradaRandom);
+        // TODO lo puse para pruebas web, si afecta a otra cosa sacarlo -> Esto está feo, lo dejo cambiando algo mio para que no rompa
     }
 
     @Override
@@ -83,7 +97,32 @@ public class TransportePublico extends MedioDeTransporte {
     }
 
     @Override
+    public String getClasificacion() {
+        return tipo.toString() + " - " + linea;
+    }
+
+    @Override
     public String getCategoria() {
         return "Publico - " + tipo.toString();
+    }
+
+    public TipoTransportePublico getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoTransportePublico tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getLinea() {
+        return linea;
+    }
+
+    public void setLinea(String linea) {
+        this.linea = linea;
+    }
+
+    public void setParadas(LinkedList<Parada> paradas) {
+        this.paradas = paradas;
     }
 }

@@ -1,9 +1,9 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
+import ar.edu.utn.frba.dds.entities.exceptions.MiembroException;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,24 +14,32 @@ import java.util.stream.Collectors;
 public class Miembro {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "miembro_id")
     private Integer id;
 
-    @Column
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column
+    @Column(name = "apellido", nullable = false)
     private String apellido;
 
-    @Transient
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_documento", nullable = false)
     private TipoDeDocumento tipoDeDocumento;
-    @Transient
+
+    @Column(name = "numero_documento", nullable = false, unique = true)
     private int nroDocumento;
 
-    @ManyToMany(mappedBy = "miembros", fetch = FetchType.EAGER)
-    private Set<Sector> sectoresDondeTrabaja; //Los sectores conocen las organizaciones
+    @ManyToMany(mappedBy = "miembros", fetch = FetchType.LAZY)
+    private Set<Sector> sectoresDondeTrabaja;
 
-    @Transient
+    @ManyToMany(mappedBy = "miembros")
     private List<Trayecto> trayectos;
+
+    public Miembro() {
+        this.sectoresDondeTrabaja = new HashSet<>();
+        this.trayectos = new ArrayList<>();
+    }
 
     public Miembro(String nombre, String apellido, TipoDeDocumento tipoDeDocumento, int nroDocumento) {
         this.nombre = nombre;
@@ -42,9 +50,6 @@ public class Miembro {
         this.trayectos = new ArrayList<>();
     }
 
-    public Miembro() {
-    }
-
     public Set<Sector> getSectoresDondeTrabaja() {
         return this.sectoresDondeTrabaja;
     }
@@ -52,7 +57,7 @@ public class Miembro {
     public Set<Organizacion> organizacionesDondeTrabaja(){
         return this.sectoresDondeTrabaja
                 .stream()
-                .map(sector -> sector.getOrganizacion())
+                .map(Sector::getOrganizacion)
                 .collect(Collectors.toSet());
     }
 
@@ -60,24 +65,24 @@ public class Miembro {
         return this.nombre + " " + this.apellido;
     }
 
-    public void agregarSector(Sector sector) throws MiembroException {
+    public void agregarSector(Sector sector) {
         if(this.trabajaEnSector(sector))
             throw new MiembroException("El miembro ya trabaja en ese sector");
         this.sectoresDondeTrabaja.add(sector);
     }
 
-    public void quitarSector(Sector sector) throws MiembroException {
+    public void quitarSector(Sector sector) {
         if(!this.trabajaEnSector(sector))
             throw new MiembroException("El miembro no trabaja en ese sector");
         this.sectoresDondeTrabaja.remove(sector);
     }
 
-    public void solicitarIngresoAlSector(Sector sector) throws MiembroException {
+    public void solicitarIngresoAlSector(Sector sector) {
         sector.agregarMiembro(this);
     }
 
     public Integer cantidadDeSectoresDondeTrabaja() {
-        return this.sectoresDondeTrabaja.size();
+        return this.getSectoresDondeTrabaja().size();
     }
 
     public Integer cantidadDeOrganizacionesDondeTrabaja() {
@@ -86,12 +91,6 @@ public class Miembro {
 
     public boolean trabajaEnSector(Sector unSector) {
         return this.sectoresDondeTrabaja.contains(unSector);
-    }
-
-    public void registrarTrayecto(Trayecto unTrayecto) {
-        this.trayectos.add(unTrayecto);
-        //registrar en cada organizacion en la que trabaja
-//        this.sectoresDondeTrabaja.iterator().next().getOrganizacion().cargarTrayecto(unTrayecto,this);
     }
 
     public Integer getId() {
@@ -139,8 +138,11 @@ public class Miembro {
     }
 
     public void agregarTrayecto(Trayecto trayecto) {
-        if(trayectos.contains(trayecto)) System.out.println("TRAYECTO REPETIDO EN MIEMBRO ("+nroDocumento+").");
         trayectos.add(trayecto);
+    }
+
+    public void quitarTrayecto(Trayecto trayecto) {
+        this.trayectos.remove(trayecto);
     }
 
     public Integer cantidadTrayectos() {
@@ -154,20 +156,10 @@ public class Miembro {
     @Override
     public String toString() {
         return "Miembro{" +
-                "nombre='" + nombre + '\'' +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
-                ", tipoDeDocumento=" + tipoDeDocumento +
-                ", nroDocumento=" + nroDocumento +
-                ", sectoresDondeTrabaja=" + sectoresDondeTrabaja +
-                ", trayectos=" + trayectos +
                 '}';
     }
-    /*TO string raro que no quisimos borrar por si era util
-    @Override
-    public String toString() {
-        return "Miembro{<br>" +
-                "&nbsp;&nbsp;&nbsp;&nbsp;nombre='" + nombre + '\'' +
-                "}<br>";
-    }*/
 }
 

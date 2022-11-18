@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.entities.lugares;
 
-import ar.edu.utn.frba.dds.entities.personas.MiembroException;
+import ar.edu.utn.frba.dds.entities.exceptions.SectorException;
+import ar.edu.utn.frba.dds.entities.exceptions.MiembroException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import javax.persistence.*;
@@ -15,13 +16,13 @@ public class Sector {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Organizacion organizacion;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "MIEMBRO_POR_SECTOR")
     private Set<Miembro> miembros;
 
@@ -50,18 +51,26 @@ public class Sector {
         return this.organizacion;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public boolean esMiembro(Miembro miembro) {
         return this.miembros.contains(miembro);
     }
 
-    public void agregarMiembro(Miembro miembro) throws MiembroException{
+    public void agregarMiembro(Miembro miembro) {
         if(esMiembro(miembro))
             throw new MiembroException("El miembro ya pertenece a este sector");
         miembros.add(miembro);
         miembro.agregarSector(this);
     }
 
-    public void quitarMiembro(Miembro miembro) throws MiembroException {
+    public void quitarMiembro(Miembro miembro) {
         if(!esMiembro(miembro))
             throw new MiembroException("El miembro no pertenece a este sector");
         miembros.remove(miembro);
@@ -70,14 +79,5 @@ public class Sector {
 
     public Integer cantidadMiembros() {
         return this.miembros.size();
-    }
-
-    @Override
-    public String toString() { // TODO cambio organizacion y miembros por recursividad!
-        return "<br>&nbsp;&nbsp;&nbsp;&nbsp;Sector{<br>" +
-                "&nbsp;&nbsp;&nbsp;&nbsp;nombre='" + nombre + '\'' +
-                ", organizacion=<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + organizacion.getRazonSocial() +
-                ",<br>&nbsp;&nbsp;&nbsp;&nbsp;miembros=" + miembros.stream().map(m->m.getNroDocumento()) +
-                "}<br>";
     }
 }

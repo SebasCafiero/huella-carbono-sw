@@ -1,0 +1,103 @@
+.particular td, .particular th {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+}
+
+table.particular {
+    border-collapse: separate;
+    border-spacing: 15px 30px;
+    text-align: center;
+    margin: auto;
+}
+
+.particular .tramos {
+    padding: 10px;
+    margin: auto;
+    border-spacing: 3px 15px;
+}
+
+.particular .tramos > tbody > tr > td {
+    padding: 10px;
+}
+
+/*.particular .coordenadas {
+    border-spacing: 2px 5px;
+    margin: auto;
+}*/
+
+.particular .ubicaciones {
+    margin: auto;
+    /*border-style: inset;*/
+    /*border-collapse: collapse;*/
+    border-collapse: separate;
+}
+
+.particular .ubicaciones td:last-child {
+    border: 0px solid;
+}
+
+.particular .miembros {
+    margin: auto;
+    border-spacing: 3px 10px;
+    border-collapse: collapse;
+    padding: 10px;
+}
+
+.particular > tbody > tr > th, .particular > tbody > tr > td {
+    /*border: 1px solid black;*/
+    border-radius:12px;
+}
+
+/*.particular > tbody > tr > th:first-child {
+    border: 0px;
+}*/
+
+
+.confirmar {
+  display: none;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.confirmar-botones {
+  padding-top: 20%;
+}
+
+.confirmar-botones span {
+    padding: 6px;
+}
+
+.confirmar button {
+    font-size: 20px;
+    border: 5px solid orange;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.confirmar button:hover {
+    opacity: 0.8;
+}
+
+.confirmar button:active {
+   /* background-color: #22BB22;*/
+    background-color: lightgrey;
+}
+
+.confirmar-texto {
+    padding-bottom: 15px;
+}
+
+.confirmar-texto label {
+    font-size: 17px;
+    background-color: lightblue;
+    padding: 50px 70px 90px 70px;
+    border-radius: 10px;
+}

@@ -241,6 +241,8 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
+src/main/resources/META-INF/*
+
 # Eclipse m2e generated files
 # Eclipse Core
 .project
@@ -261,10 +263,10 @@ nbdist/
 *.asp
 *.cer
 *.csr
-*.css
-*.htm
-*.html
-*.js
+#*.css
+#*.htm
+#*.html
+#*.js
 *.jsp
 *.php
 *.rss
@@ -273,3 +275,9 @@ nbdist/
 *.xhtml
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,java,intellij,netbeans,web,maven
+
+# Ignoro los documentos de los reportes
+**/docs
+
+# Ignoro la configuración de la DB
+persistence.properties

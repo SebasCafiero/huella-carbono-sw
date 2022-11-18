@@ -12,10 +12,16 @@ import java.util.stream.Collectors;
 
 public class DAOMemoria<T> implements DAO<T> {
     private final List<T> entidades;
-    public Class<T> persistentClass;
+    public final Class<T> persistentClass;
     private Integer id;
 
-    public DAOMemoria(Class<T> clazz, List<T> entidades){
+    public DAOMemoria(Class<T> clazz) {
+        this.persistentClass = clazz;
+        this.id = 1;
+        this.entidades = new ArrayList<>();
+    }
+
+    public DAOMemoria(Class<T> clazz, List<T> entidades) {
         this.persistentClass = clazz;
         this.id = 1;
         this.entidades = new ArrayList<>();
@@ -28,12 +34,11 @@ public class DAOMemoria<T> implements DAO<T> {
     }
 
     @Override
-    public T buscar(int id) {
+    public Optional<T> buscar(Integer id) {
         Method getId = obtenerMetodo("getId");
         return this.entidades.stream()
                 .filter(e -> invocarGetter(getId, e).equals(id))
-                .findFirst()
-                .get();
+                .findFirst();
     }
 
     public List<T> buscar(Predicate<T> condicion) {
@@ -44,10 +49,11 @@ public class DAOMemoria<T> implements DAO<T> {
     }
 
     @Override
-    public void agregar(T unObjeto) {
+    public T agregar(T unObjeto) {
         invocarSetter(obtenerMetodo("setId"), unObjeto, id);
         id++;
         this.entidades.add(unObjeto);
+        return unObjeto;
     }
 
     @Override
@@ -56,8 +62,8 @@ public class DAOMemoria<T> implements DAO<T> {
         agregar(unObjeto);
     }
 
-    public void modificar(int id, T nuevoObjeto) {
-        eliminar(buscar(id));
+    public void modificar(Integer id, T nuevoObjeto) {
+        eliminar(buscar(id).orElseThrow(RuntimeException::new)); //todo
         invocarSetter(obtenerMetodo("setId"), nuevoObjeto, id);
         this.entidades.add(nuevoObjeto);
     }
@@ -71,7 +77,7 @@ public class DAOMemoria<T> implements DAO<T> {
         Optional<Method> getterId = Arrays.stream(persistentClass.getMethods())
                 .filter(me -> me.getName().equals(nombre)).findFirst();
         if (!getterId.isPresent()) {
-            throw new EntidadSinPrimaryKey();
+            throw new EntidadSinPrimaryKeyException();
         }
         return getterId.get();
     }

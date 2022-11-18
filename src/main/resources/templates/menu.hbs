@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+    <link rel="icon" href="/img/logo.png">
+    <title>Menú</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/menu.css">
+  </head>
+  <body id="body">
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>{{rol}} - {{user}}</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h2>MENÚ DE INICIO</h2>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="menu">
+        <ul>
+          {{#if miembro}}
+          <li>TRAYECTOS</li>
+          <ul>
+            <li><a href="/miembro/{{miembro}}/trayecto?action=list">VER TRAYECTOS</a>
+            <li><a href="/miembro/{{miembro}}/trayecto?action=create">CARGAR TRAYECTO</a>
+          </ul>
+          {{/if}}
+          {{#if organizacion}}
+          <li>REPORTES</li>
+          <ul>
+            <li><a href="/organizacion/{{organizacion}}/reporte">GENERAR REPORTE</a>
+          </ul>
+          {{/if}}
+          {{#if agente}}
+          <li>REPORTES</li>
+          <ul>
+            <li><a href="/agente/{{agente}}/reporte">GENERAR REPORTE</a>
+          </ul>
+          <li>ORGANIZACIONES</li>
+          <ul>
+            <li><a href="/agente/{{agente}}/organizacion">VER ORGANIZACIONES</a></li>
+          </ul>
+          {{/if}}
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,50 +1,80 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.entities.mediciones.BatchMedicion;
-import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
-import ar.edu.utn.frba.dds.mihuella.parsers.ParserBatchesJSON;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
+import ar.edu.utn.frba.dds.entities.medibles.BatchMedicion;
+import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.interfaces.mappers.BatchMedicionMapper;
+import ar.edu.utn.frba.dds.interfaces.input.json.BatchMedicionJSONDTO;
+import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
+import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
+import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
+
+import java.time.LocalDate;
 import java.util.List;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 
 public class BatchMedicionController {
-    private Repositorio<BatchMedicion> repositorio;
+    private Repositorio<BatchMedicion> repoBatch;
+    private final Repositorio<Organizacion> repoOrganizaciones;
+    private LoginController loginController = new LoginController();
 
     public BatchMedicionController(){
-        this.repositorio = FactoryRepositorio.get(BatchMedicion.class);
+        this.repoBatch = FactoryRepositorio.get(BatchMedicion.class);
+        this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
     }
 
     public String mostrarTodos(Request request, Response response) {
-        List<BatchMedicion> batches = this.repositorio.buscarTodos();
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
+        List<BatchMedicion> batches = this.repoBatch.buscarTodos();
         return batches.toString();
     }
 
     public String obtener(Request request, Response response){
-        BatchMedicion batchMedicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        return batchMedicion.toString();
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
+        BatchMedicion batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("id")));
+        String json = new Gson().toJson(batchMedicion);
+        return json;
     }
 
+    public Object agregar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
+        BatchMedicionJSONDTO requestDTO = new ParserJSON<>(BatchMedicionJSONDTO.class).parseElement(request.body());
 
-    public Object agregar(Request request, Response response){
-        BatchMedicion batchMedicion = ParserBatchesJSON.generarBatch(request.body());
-        this.repositorio.agregar(batchMedicion);
+        BatchMedicion batchMedicion = BatchMedicionMapper.toEntity(requestDTO);
+        batchMedicion.setFecha(LocalDate.now());
+
+        Organizacion organizacion = this.repoOrganizaciones.buscar(requestDTO.getOrganizacion());
+
+        if(organizacion == null) {
+            response.status(400);
+            return new ErrorResponse("La organizacion de id " + request.params("id") + " no existe");
+        }
+        batchMedicion.setOrganizacion(organizacion);
+
+        this.repoBatch.agregar(batchMedicion);
         for(Medicion medicion : batchMedicion.getMediciones()) {
             FactoryRepositorio.get(Medicion.class).agregar(medicion);
+            batchMedicion.getOrganizacion().agregarMediciones(medicion); //Como ahora el batch es de una org, le agrego sus mediciones
         }
         return "BatchMedicion agregado correctamente.";
     }
 
-    public Object modificar(Request request, Response response){
-        BatchMedicion batchMedicion = ParserBatchesJSON.generarBatch(request.body());
-        this.repositorio.modificar(Integer.valueOf(request.params("id")), batchMedicion);
-        return response;
-    }
+    public Object eliminar(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
+        BatchMedicion batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("id")));
+        this.repoBatch.eliminar(batchMedicion);
 
-    public Object eliminar(Request request, Response response){
-        BatchMedicion batchMedicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        this.repositorio.eliminar(batchMedicion);
         return "BatchMedicion de id : " + request.params("id") + " eliminado correctamente.";
     }
 

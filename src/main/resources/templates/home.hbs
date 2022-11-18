@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+
+  <link rel="icon" href="/img/logo.png">
+  <title>Inicio</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/home.css">
+
+</head>
+<body id="body">
+<form action="/login" method="POST">
+  <div class="container">
+    <div class="group">
+      <input type="text" placeholder=" " pattern="[A-Za-z0-9.]+" title="Este campo es alfanumérico"
+             name="username" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label class="label-input">Usuario</label>
+    </div>
+    <div class="group">
+      <input type="password" placeholder=" " name="password" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label class="label-input">Contraseña</label>
+    </div>
+
+    <input type="submit" value="Loguearse">
+  </div>
+</form>
+</body>
+</html>

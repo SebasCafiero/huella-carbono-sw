@@ -1,0 +1,12 @@
+
+.menu ul > li {
+    padding: 5px;
+}
+
+.menu > ul > li {
+    padding: 10px;
+}
+
+.menu {
+    font-size: 25px;
+}

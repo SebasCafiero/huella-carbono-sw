@@ -1,9 +1,9 @@
-TrayectoId, MiembroDNI, IdCompartido,   LatitudInicial, LongitudInicial,    LatitudFinal,   LongitudFinal,  Tipo,       Atributo1,  Atributo2,  Periodicidad,   Fecha
-1,          1,          0,              123.4,          123.4,              135.4,          135.4,          publico,    colectivo,  47,         "M",            "10/2020"
-1,          1,          0,              135.4,          135.4,              146.4,          146.4,          publico,    tren,       sarmiento,  "M",            "10/2020"
-2,          1,          2,              146.4,          146.4,              123.4,          123.4,          contratado, Taxi,       ,           "M",            "10/2020"
-3,          2,          0,              200.4,          200.4,              205.4,          205.4,          ecologico,  bicicleta,  ,           "M",            "10/2020"
-3,          2,          0,              205.4,          205.4,              300.9,          300.9,          particular, automovil,  GNC,        "M",            "10/2020"
-4,          3,          0,              123.4,          123.4,              135.4,          135.4,          publico,    colectivo,  47,         "M",            "10/2020"
-4,          3,          0,              135.4,          135.4,              146.4,          146.4,          publico,    tren,       sarmiento,  "M",            "10/2020"
-0,          2,          2,              ,               ,                   ,               ,               ,           ,           ,           ,
+TrayectoId,MiembroDNI,IdCompartido,LatitudInicial,LongitudInicial,LatitudFinal,LongitudFinal,Tipo,Atributo1,Atributo2,Periodicidad,Fecha,TipoDocumento
+1,1,0,123.4,123.4,135.4,135.4,publico,colectivo,47,M,10/2020,DNI
+1,1,0,135.4,135.4,146.4,146.4,publico,tren,sarmiento,M,10/2020,DNI
+2,1,2,146.4,146.4,123.4,123.4,contratado,Taxi,"",M,10/2020,DNI
+3,2,0,200.4,200.4,205.4,205.4,ecologico,bicicleta,"",M,10/2020,PASAPORTE
+3,2,0,205.4,205.4,300.9,300.9,particular,automovil,GNC,M,10/2020,PASAPORTE
+4,3,0,123.4,123.4,135.4,135.4,publico,colectivo,47,M,10/2020,DNI
+4,3,0,135.4,135.4,146.4,146.4,publico,tren,sarmiento,M,10/2020,DNI
+0,2,2,"","","","","","","","",,PASAPORTE

@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/img/logo.png">
+    <title>{{#unless reporte}}Crear {{/unless}}Reporte</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/reporte.css" > <!--FALTAN VER LOS ESTILOS-->
+  </head>
+  <body>
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>{{rol}} - {{user}}</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h2>REPORTES</h2>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="info">
+        {{#if agente}}
+        <span>Se creará el reporte para la organización seleccionada</span>
+        {{else}}
+        <span>Se creará el reporte para <i>{{organizacion.razonSocial}}</i></span>
+        {{/if}}
+        <ul>
+          <li>Por Año</li>
+          <li>Por Mes</li>
+          <li>Desglosando por cada Categoría</li>
+          <li>Desglosando por cada Sector</li>
+          <li>Desglosando por cada Miembro</li>
+        </ul>
+      </div>
+      <div class="generar">
+        <form {{#if agente}} action="/agente/{{agente.id}}/reporte" {{else}} action="/organizacion/{{organizacion.id}}/reporte" {{/if}} method="post">
+          <div class="form-fecha">
+            <label for="fecha">Fecha de Referencia: </label><i>(CHECK)</i>
+            <input id="fecha" type="text" name="f-fecha" value="MES/AÑO" required/>
+          </div>
+          <br />
+          {{#if agente}}
+          <div class="organizaciones">
+            <label for="organizacion">Seleccione la Organizacion:</label>
+            <select id="organizacion" name="f-organizacion" required>
+              <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+              {{#each agente.organizaciones}}
+              <option value="{{id}}">{{razonSocial}}</option>
+              {{/each}}
+            </select>
+          </div>
+          {{/if}}
+          <div class="enviar">
+            <input type="submit" value="Generar Reporte"/>
+          </div>
+        </form>
+      </div>
+      {{#if reporte}}
+      <!-- VER DE REDIRIGIR A LA SECCION #reporte -->
+      <!-- VER SI DESCARGA ADENTRO DE REPORTE -->
+      <div class="reporte">
+        <ul>
+          <li>Organizacion: <i>{{organizacion.razonSocial}}</i></li>
+          <li>Fecha: <i>{{reporte.fechaCreacion}}</i></li>
+          <li>Fecha Referencia: <i>{{reporte.fechaReferencia}}</i></li>
+          <br/>
+          <li>Consumo Mediciones: <i>{{reporte.consumoMediciones}}</i></li>
+          <li>Consumo Trayectos: <i>{{reporte.consumoTrayectos}}</i></li>
+          <li>Consumo Total: <i>{{reporte.consumoTotal}}</i></li>
+        </ul>
+        <!--<table class="meses">
+          <tr>
+            <th>MES</th>
+            <th>MEDICIONES</th>
+            <th>TRAYECTOS</th>
+            <th>TOTAL</th>
+          </tr>
+          {{#each meses}}
+          <tr>
+            <td>{{mes}}</td>
+            <td>{{consumoMediciones}}</td>
+            <td>{{consumoTrayectos}}</td>
+            <td>{{consumoTotal}}</td>
+          </tr>
+          {{/each}}
+          <tr>
+            <td>Anual</td>
+            <td>{{reporte.consumoMediciones}}</td>
+            <td>{{reporte.consumoTrayectos}}</td>
+            <td>{{reporte.consumoTotal}}</td>
+          </tr>
+        </table>-->
+        <table class="categorias">
+          <tr>
+            <th>CATEGORIA</th>
+            <th>CONSUMO</th>
+          </tr>
+          {{#each reporte.consumoPorCategoria}}
+          <tr>
+            <td>{{concepto}}</td>
+            <td>{{consumo}}</td>
+          </tr>
+          {{else}}
+          <tr>
+            <td colspan="2"><i>SIN CATEGORIAS</i></td>
+          </tr>
+          {{/each}}
+        </table>
+        <br />
+        <table class="sectores">
+          <tr>
+            <th>SECTOR</th>
+            <th>CONSUMO</th>
+          </tr>
+          {{#each reporte.consumoPorSector}}
+          <tr>
+            <td>{{concepto}}</td>
+            <td>{{consumo}}</td>
+          </tr>
+          {{else}}
+          <tr>
+            <td colspan="2"><i>SIN SECTORES</i></td>
+          </tr>
+          {{/each}}
+        </table>
+        <br />
+        <table class="miembros">
+          <tr>
+            <th>MIEMBRO</th>
+            <th>CONSUMO</th>
+          </tr>
+          {{#each reporte.consumoPorMiembro}}
+          <tr>
+            <td>{{concepto}}</td>
+            <td>{{consumo}}</td>
+          </tr>
+          {{else}}
+          <tr>
+            <td colspan="2"><i>SIN MIEMBROS</i></td>
+          </tr>
+          {{/each}}
+        </table>
+        <br />
+      </div>
+      <div class="descargar"> <!-- VER SI AL GENERARLO Y GUARDARLO EN /public/docs SE ENVIA AL CLIENTE -->
+<!--        <span><a href="/docs/#RAZONSOCIAL-#ANIOMESDIA" download>DESCARGAR</a></span>-->
+        <span><a href="/docs/{{file}}" download>DESCARGAR</a></span><i>(CHECK)</i>
+      </div>
+      {{/if}}
+      <div class="volver">
+        <br />
+        <span><a href="/menu">VOLVER</a></span>
+      </div>
+    </div>
+  </body>
+</html>

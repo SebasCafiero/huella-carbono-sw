@@ -1,9 +1,13 @@
 package ar.edu.utn.frba.dds.entities.lugares;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.UbicacionGeografica;
-import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
+import ar.edu.utn.frba.dds.entities.exceptions.SectorException;
+import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.entities.medibles.ReporteOrganizacion;
+import ar.edu.utn.frba.dds.entities.personas.Contacto;
+import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
+import ar.edu.utn.frba.dds.entities.personas.ContactoTelefono;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,6 +19,7 @@ import java.util.stream.Collectors;
 public class Organizacion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "organizacion_id")
     private Integer id;
 
     @Column (name = "razon_social")
@@ -23,27 +28,36 @@ public class Organizacion {
     @Enumerated(EnumType.STRING)
     private TipoDeOrganizacionEnum tipo;
 
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ubicacion_id", referencedColumnName = "ubicacion_id")
     private UbicacionGeografica ubicacion;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
-    @Transient
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private ClasificacionOrganizacion clasificacionOrganizacion;
 
-    @OneToMany(mappedBy = "organizacion", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "organizacion", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<Sector> sectores;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizacion_id")
     private List<Medicion> mediciones;
 
+    @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, targetEntity = Contacto.class)
+    private List<ContactoMail> contactosMail;
+
+    @OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, targetEntity = Contacto.class)
+    private List<ContactoTelefono> contactosTelefono;
+
     @Transient
-    private List<String> contactosMail;
-    @Transient
-    private List<Integer> contactosTelefono;
+    private List<ReporteOrganizacion> reportes;
 
     public Organizacion() {
+        this.sectores = new HashSet<>();
+        this.mediciones = new ArrayList<>();
+        this.reportes = new ArrayList<>();
+        this.contactosTelefono = new ArrayList<>();
+        this.contactosMail = new ArrayList<>();
     }
 
     public Organizacion(String razonSocial,
@@ -58,6 +72,7 @@ public class Organizacion {
         this.mediciones = new ArrayList<>();
         this.contactosMail = new ArrayList<>();
         this.contactosTelefono = new ArrayList<>();
+        this.reportes = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -76,7 +91,7 @@ public class Organizacion {
                 .collect(Collectors.toSet());
     }
 
-    public void agregarSector(Sector sector) throws SectorException {
+    public void agregarSector(Sector sector) {
         if (this.sectores.contains(sector)) {
             throw new SectorException("El sector ya pertenece a la organización.");
         }
@@ -131,29 +146,38 @@ public class Organizacion {
 
     public void setSectores(Set<Sector> sectores) {this.sectores = sectores;}
 
-    public static boolean existeTipoOrganizacion(String tipo) {
-        try {
-            TipoDeOrganizacionEnum tipoDeOrganizacion = TipoDeOrganizacionEnum.valueOf(tipo);
-        } catch(IllegalArgumentException ex) {
-            return false;
-        }
-        return true;
-    }
-
-    public List<String> getContactosMail() {
+    public List<ContactoMail> getContactosMail() {
         return contactosMail;
     }
 
-    public List<Integer> getContactosTelefono() {
+    public List<ContactoTelefono> getContactosTelefono() {
         return contactosTelefono;
     }
 
-    public void agregarContactoMail(String contacto) {
-        this.contactosMail.add(contacto);
+    public void setMediciones(List<Medicion> mediciones) {
+        this.mediciones = mediciones;
     }
 
-    public void agregarContactoTelefono(Integer contacto) {
+    public void setContactosMail(List<ContactoMail> contactosMail) {
+        this.contactosMail = contactosMail;
+    }
+
+    public void setContactosTelefono(List<ContactoTelefono> contactosTelefono) {
+        this.contactosTelefono = contactosTelefono;
+    }
+
+    public void setReportes(List<ReporteOrganizacion> reportes) {
+        this.reportes = reportes;
+    }
+
+    public void agregarContactoMail(ContactoMail contacto) {
+        this.contactosMail.add(contacto);
+        contacto.setOrganizacion(this);
+    }
+
+    public void agregarContactoTelefono(ContactoTelefono contacto) {
         this.contactosTelefono.add(contacto);
+        contacto.setOrganizacion(this);
     }
 
     public List<Trayecto> trayectosDeMiembros() {
@@ -163,6 +187,15 @@ public class Organizacion {
     public void setRazonSocial(String razonSocial) {
         this.razonSocial = razonSocial;
     }
+
+    public List<ReporteOrganizacion> getReportes() {
+        return reportes;
+    }
+
+    /*public void agregarReporte(ReporteOrganizacion reporte) {
+        reporte.setId(this.reportes.size()); //reporte1: id 0 - reporte2: id 1 - reporte3: id 2
+        this.reportes.add(reporte);
+    }*/
 
     @Override
     public String toString() {

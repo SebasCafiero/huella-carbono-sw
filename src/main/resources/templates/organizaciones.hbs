@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/img/logo.png">
+    <title>Organizaciones</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/organizaciones.css">
+  </head>
+  <body>
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>{{rol}} - {{user}}</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h1>ORGANIZACIONES</h1>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="volver">
+        <span><a href="/menu">VOLVER AL MENU PRINCIPAL</a></span>
+      </div>
+      <div class="organizaciones">
+        <table class="general">
+          <thead>
+          <tr>
+              <th>ID</th>
+              <th>RAZON SOCIAL</th>
+              <th>AREA</th>
+              <th>DIRECCION</th>
+          </tr>
+          </thead>
+          <tbody>
+          {{#each organizaciones}}
+          <tr>
+            <td><i>{{id}}</i></td>
+            <td><i>{{razonSocial}}</i></td>
+            <td><i>{{ubicacion.localidad}} - {{ubicacion.municipio}} ({{ubicacion.provincia}})</i></td>
+            <td><i>{{ubicacion.calle}} {{ubicacion.numero}}</i></td>
+          </tr>
+          {{else}}
+          <tr>
+            <td class="ausente" colspan="4">SIN ORGANIZACIONES</td>
+          </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      </div>
+      <div class="generar">
+        <span><a href="/agente/{{agenteID}}/reporte">Generar Reporte</a></span>
+      </div>
+    </div>
+  </body>
+</html>

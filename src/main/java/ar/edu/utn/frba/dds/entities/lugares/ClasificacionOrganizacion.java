@@ -12,6 +12,8 @@ public class ClasificacionOrganizacion {
     @Column(name = "nombre")
     private String nombre;
 
+    public ClasificacionOrganizacion() {
+    }
 
     public ClasificacionOrganizacion(String nombre) {
         this.nombre = nombre;
@@ -22,12 +24,3 @@ public class ClasificacionOrganizacion {
     }
 
 }
-
-
-/* Ejemplos de uso:
-* ministerio = new ClasificacionOrganizacion("Ministerio")
-* universidad = new ClasificacionOrganizacion("Universidad")
-* escuela = new ClasificacionOrganizacion("Escuela")
-* empresaSectorPrimario = new ClasificacionOrganizacion("Empresa del Sector Primario")
-* empresaSectorSecundario = new ClasificacionOrganizacion("Empresa del Sector Secundario")
-* */

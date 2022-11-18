@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+    <link rel="icon" href="/img/logo.png">
+    <title>Menú</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/menu.css">
+  </head>
+  <body id="body">
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Organización: </span>
+          <i>Razón Social</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h2>MENÚ DE INICIO</h2>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="menu">
+        <ul>
+          <li>REPORTES</li>
+          <ul>
+            <li><a href="/organizacion/#id/reporte">GENERAR REPORTE</a>
+            <!-- VER DE USAR EL MISMO TEMPLATE CON UN PARAMETRO QUE SE COMPLETE TRAS EL POST -->
+          </ul>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

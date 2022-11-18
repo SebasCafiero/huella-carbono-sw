@@ -1,44 +1,98 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import ar.edu.utn.frba.dds.entities.lugares.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
-import ar.edu.utn.frba.dds.mihuella.parsers.ParserAgentesJSON;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
+import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
+import ar.edu.utn.frba.dds.entities.personas.ContactoTelefono;
+import ar.edu.utn.frba.dds.interfaces.gui.mappers.AgenteMapperHBS;
+import ar.edu.utn.frba.dds.interfaces.gui.mappers.OrganizacionMapperHBS;
+import ar.edu.utn.frba.dds.interfaces.input.json.AgenteSectorialJSONDTO;
+import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
+import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AgenteSectorialController {
-    private Repositorio<AgenteSectorial> repositorio;
+    private Repositorio<AgenteSectorial> repoAgentes;
+    private Repositorio<AreaSectorial> repoAreas;
+    private LoginController loginController;
 
-    public AgenteSectorialController() {this.repositorio = FactoryRepositorio.get(AgenteSectorial.class);}
+    public AgenteSectorialController() {
+        this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
+        this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
+        loginController = new LoginController();
+    }
 
     public String mostrarTodos(Request request, Response response) {
-        List<AgenteSectorial> agentes =this.repositorio.buscarTodos();
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
+        List<AgenteSectorial> agentes = this.repoAgentes.buscarTodos();
         return agentes.toString();
     }
 
     public String obtener(Request request, Response response){
-        AgenteSectorial agenteSectorial = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
+        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")));
         return agenteSectorial.toString();
     }
 
     public Object agregar(Request request, Response response){
-        AgenteSectorial agenteSectorial = ParserAgentesJSON.generarAgente(request.body());
-        this.repositorio.agregar(agenteSectorial);
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
+        AgenteSectorialJSONDTO agenteDTO = new ParserJSON<>(AgenteSectorialJSONDTO.class).parseElement(request.body());
+        AreaSectorial area = this.repoAreas.buscar(agenteDTO.getArea());
+
+        AgenteSectorial agenteSectorial = new AgenteSectorial(
+                area, new ContactoMail(agenteDTO.getContactoMail().direccionesEMail, agenteDTO.getContactoMail().password),
+                new ContactoTelefono(agenteDTO.getTelefono()));
+
+        this.repoAgentes.agregar(agenteSectorial);
         return "Agente Sectorial agregado correctamente";
     }
 
     public Object modificar(Request request, Response response){
-        AgenteSectorial agenteSectorial = ParserAgentesJSON.generarAgente(request.body());
-        this.repositorio.modificar(Integer.valueOf(request.params("id")),agenteSectorial);
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
+        AgenteSectorialJSONDTO agenteDTO = new ParserJSON<>(AgenteSectorialJSONDTO.class).parseElement(request.body());
+
+        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")));
+        agenteSectorial.setMail(new ContactoMail(agenteDTO.getContactoMail().direccionesEMail, agenteDTO.getContactoMail().password));
+        agenteSectorial.setTelefono(new ContactoTelefono(agenteDTO.getTelefono()));
+
+        this.repoAgentes.modificar(Integer.parseInt(request.params("id")),agenteSectorial);
         return "Agente Sectorial modificado correctamente";
     }
 
     public Object eliminar(Request request, Response response){
-        AgenteSectorial agenteSectorial = this.repositorio.buscar(Integer.valueOf(request.params("id")));
-        this.repositorio.eliminar(agenteSectorial);
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
+        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")));
+        this.repoAgentes.eliminar(agenteSectorial);
         return "Agente Sectorial eliminado correctamente";
     }
+
+    public ModelAndView mostrarOrganizaciones(Request request, Response response) {
+        Map<String, Object> parametros = new HashMap<>();
+        Integer idAgente = Integer.parseInt(request.params("id"));
+        AgenteSectorial agente = this.repoAgentes.buscar(idAgente);
+
+        parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
+        parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
+        parametros.put("agenteID", idAgente);
+        parametros.put("organizaciones", agente.getArea().getOrganizaciones().stream().map(OrganizacionMapperHBS::toDTOUbicacion).collect(Collectors.toList()));
+        return new ModelAndView(parametros, "organizaciones.hbs");
     }
+}

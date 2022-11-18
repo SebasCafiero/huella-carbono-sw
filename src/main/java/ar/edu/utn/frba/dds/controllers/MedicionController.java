@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
-import ar.edu.utn.frba.dds.repositories.utils.Repositorio;
-import ar.edu.utn.frba.dds.repositories.factories.FactoryRepositorio;
+import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import spark.Request;
 import spark.Response;
 
@@ -12,22 +12,33 @@ import java.util.stream.Collectors;
 
 public class MedicionController {
     private Repositorio<Medicion> repositorio;
+    private LoginController loginController;
 
     public MedicionController(){
         this.repositorio = FactoryRepositorio.get(Medicion.class);
+        loginController = new LoginController();
     }
 
-    public String obtener(Request request, Response response){
-        Medicion medicion = this.repositorio.buscar(Integer.valueOf(request.params("id")));
+    public String obtener(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
+        Medicion medicion = this.repositorio.buscar(Integer.parseInt(request.params("id")));
         return medicion.toString();
     }
 
-    public String mostrarTodos(Request request, Response response){
+    public String mostrarTodos(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
         List<Medicion> mediciones = this.repositorio.buscarTodos();
         return mediciones.toString();
     }
 
     public String filtrarUnidad(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
         List<Medicion> mediciones = this.repositorio.buscarTodos();
         return  mediciones
                 .stream()
@@ -37,6 +48,9 @@ public class MedicionController {
     }
 
     public String filtrarValor(Request request, Response response) {
+        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
+            return loginController.chequearValidezAcceso(request, response, true);
+        }    Todo esto agregar una vez que tengamos la vista*/
         List<Medicion> mediciones = this.repositorio.buscarTodos();
         return  mediciones
                 .stream()

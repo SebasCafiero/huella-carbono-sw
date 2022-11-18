@@ -1,14 +1,16 @@
 package ar.edu.utn.frba.dds.repositories.daos;
 
+import ar.edu.utn.frba.dds.repositories.utils.EntityManagerHelper;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
+import java.util.Optional;
 
 public class DAOHibernate<T> implements DAO<T> {
     private Class<T> type;
 
-    public DAOHibernate(Class<T> type){
+    public DAOHibernate(Class<T> type) {
         this.type = type;
     }
 
@@ -22,33 +24,36 @@ public class DAOHibernate<T> implements DAO<T> {
     }
 
     @Override
-    public T buscar(int id) {
-        return EntityManagerHelper.getEntityManager().find(type, id);
+    public Optional<T> buscar(Integer id) {
+        if(id != null) //Porque Entity#find rompe al recibir null en la PK
+            return Optional.ofNullable(EntityManagerHelper.getEntityManager().find(type, id));
+        else
+            return Optional.empty();
     }
 
-//    @Override
-//    public T buscar(BusquedaCondicional condicional) {
-//        return (T) EntityManagerHelper.getEntityManager()
-//                .createQuery(condicional.getCondicionCritero())
-//                .getSingleResult();
-//    }
+    public List<T> buscar(CriteriaQuery<T> condicion) {
+        return EntityManagerHelper.getEntityManager()
+                .createQuery(condicion)
+                .getResultList();
+    }
 
     @Override
-    public void agregar(Object unObjeto) {
+    public T agregar(T unObjeto) {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
         EntityManagerHelper.getEntityManager().persist(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();
+        return unObjeto;
     }
 
     @Override
-    public void modificar(Object unObjeto) {
+    public void modificar(T unObjeto) {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
         EntityManagerHelper.getEntityManager().merge(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();
     }
 
     @Override
-    public void eliminar(Object unObjeto) {
+    public void eliminar(T unObjeto) {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
         EntityManagerHelper.getEntityManager().remove(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();

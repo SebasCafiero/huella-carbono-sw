@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/img/logo.png">
+    {{#if trayecto}}
+    <title>Modificar Trayecto {{trayecto.id}}</title>
+    {{else}}
+    <title>Crear Trayecto</title>
+    {{/if}}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="/js/trayecto.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/trayecto-edicion.css" >
+  </head>
+  <body>
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>{{rol}} - {{user}}</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h1>TRAYECTOS</h1>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="info">
+        {{#if trayecto}}
+        <span>ID-Trayecto: {{trayecto.id}}</span><br />
+        <span>Miembros: </span>
+        <ul>
+          {{#each miembros}}
+          <li>{{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</li>
+          {{/each}}
+        </ul>
+        {{/if}}
+        {{#with miembroLogueado}}
+        <span>Miembro: {{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</span>
+        {{/with}}
+        <br/><br/>
+      </div>
+      <div class="edicion">
+        <!-- Al editar trayecto se usa method post xq html no admite form.put -->
+        <form {{#if trayecto}} action="/miembro/{{miembroID}}/trayecto/{{trayecto.id}}" {{else}} action="/miembro/{{miembroID}}/trayecto" {{/if}} method="post">
+          {{#unless trayecto}}
+          <label for="trayecto-compartido-ack">¿Es Trayecto Compartido?</label>
+          <input id="trayecto-compartido-ack" type="checkbox" value="true" name="f-trayecto-compartido-ack" onclick="trayectoCompartido()" />
+          <br/><br/>
+          <div class="form-compartido">
+            <label for="trayecto-id">Ingrese el ID del trayecto compartido: </label>
+            <input id="trayecto-id" type="text" name="f-trayecto-id" value="" disabled/><br/><br/>
+          </div>
+          {{/unless}}
+
+          <div class="form-fecha">
+            <label for="fecha">Fecha</label>
+            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.mes}}/{{trayecto.año}}" {{else}} value="{{fecha}}" {{/if}} required/>
+          </div>
+          <br />
+          <div class="form-tramos">
+            <div id="tramos-editables">
+              {{#each trayecto.tramos}}
+              <div id="tramo-{{@index}}" class="tramo">
+                <fieldset>
+                  <legend>Tramo {{id}}</legend>
+                  <input id="tramo-id-{{@index}}" type="hidden" name="f-tramo-id-{{@index}}" value="{{id}}"/>
+                  <label for="transporte-{{@index}}">Transporte</label>
+                  <select id="transporte-{{@index}}" name="f-transporte-{{@index}}" onchange="transporteCambiado()" required>
+                    <option class="campo-seleccionar" value="{{transporte.id}}" selected>{{transporte.info}}</option>
+                    {{#each ../transportesTotales}}
+                    <optgroup label="{{tipo}}">
+                      {{#each transportes}}
+                      <option value="{{id}}">{{info}}</option>
+                      {{/each}}
+                    </optgroup>
+                    {{/each}}
+                  </select>
+                  <br /><br />
+                  {{#if transporte.esPublico}}
+                  <div class="paradas">
+                    <fieldset>
+                      <legend>Paradas</legend>
+                      <label for="transporte-parada-inicial-{{@index}}">Partida:</label>
+                      <select id="transporte-parada-inicial-{{@index}}" name="f-transporte-parada-inicial-{{@index}}" required>
+                        {{#if idParadaInicial}}
+                        <option class="campo-seleccionar" value="{{idParadaInicial}}" selected>{{ubicacionInicial.calle}} {{ubicacionInicial.numero}} ({{ubicacionInicial.localidad}})</option>
+                        {{else}}
+                        <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+                        {{/if}}
+                        {{#each transporte.paradas}}
+                        <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
+                        {{/each}}
+                      </select>
+                      <label for="transporte-parada-final-{{@index}}">Llegada:</label>
+                      <select id="transporte-parada-final-{{@index}}" name="f-transporte-parada-final-{{@index}}" required>
+                        {{#if idParadaFinal}}
+                        <option class="campo-seleccionar" value="{{idParadaFinal}}" selected>{{ubicacionFinal.calle}} {{ubicacionFinal.numero}} ({{ubicacionFinal.localidad}})</option>
+                        {{else}}
+                        <option class="campo-seleccionar" value="" selected>Seleccionar</option>
+                        {{/if}}
+                        {{#each transporte.paradas}}
+                        <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
+                        {{/each}}
+                      </select>
+                    </fieldset>
+                  </div>
+                  {{else}}
+                  <div class="ubicaciones">
+                    <fieldset>
+                      <legend>Ubicación Inicial</legend>
+                      <label for="provincia-inicial-{{@index}}">Provincia:</label>
+                      <input id="provincia-inicial-{{@index}}" type="text" name="f-provincia-inicial-{{@index}}" value="{{ubicacionInicial.provincia}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
+                      <label for="municipio-inicial-{{@index}}">Municipio:</label>
+                      <input id="municipio-inicial-{{@index}}" type="text" name="f-municipio-inicial-{{@index}}" value="{{ubicacionInicial.municipio}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
+                      <label for="localidad-inicial-{{@index}}">Localidad:</label>
+                      <input id="localidad-inicial-{{@index}}" type="text" name="f-localidad-inicial-{{@index}}" value="{{ubicacionInicial.localidad}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
+                      <label for="calle-inicial-{{@index}}">Calle:</label>
+                      <input id="calle-inicial-{{@index}}" type="text" name="f-calle-inicial-{{@index}}" value="{{ubicacionInicial.calle}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
+                      <label for="numero-inicial-{{@index}}">Numero:</label>
+                      <input id="numero-inicial-{{@index}}" type="text" name="f-numero-inicial-{{@index}}" value="{{ubicacionInicial.numero}}" required/>
+                      <span><i>(Número entero)</i></span><br/><br/>
+                      <label for="lat-inicial-{{@index}}">Latitud:</label>
+                      <input id="lat-inicial-{{@index}}" type="text" name="f-lat-inicial-{{@index}}" value="{{ubicacionInicial.latitud}}" required/>
+                      <span><i>(Número decimal)</i></span><br/><br/>
+                      <label for="lon-inicial-{{@index}}">Longitud:</label>
+                      <input id="lon-inicial-{{@index}}" type="text" name="f-lon-inicial-{{@index}}" value="{{ubicacionInicial.longitud}}" required/>
+                      <span><i>(Número decimal)</i></span>
+                    </fieldset>
+                    <br />
+                    <fieldset>
+                      <legend>Ubicación Final</legend>
+                      <label for="provincia-final-{{@index}}">Provincia:</label>
+                      <input id="provincia-final-{{@index}}" type="text" name="f-provincia-final-{{@index}}" value="{{ubicacionFinal.provincia}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
+                      <label for="municipio-final-{{@index}}">Municipio:</label>
+                      <input id="municipio-final-{{@index}}" type="text" name="f-municipio-final-{{@index}}" value="{{ubicacionFinal.municipio}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
+                      <label for="localidad-final-{{@index}}">Localidad:</label>
+                      <input id="localidad-final-{{@index}}" type="text" name="f-localidad-final-{{@index}}" value="{{ubicacionFinal.localidad}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
+                      <label for="calle-final-{{@index}}">Calle:</label>
+                      <input id="calle-final-{{@index}}" type="text" name="f-calle-final-{{@index}}" value="{{ubicacionFinal.calle}}" required/>
+                      <span><i>(Texto)</i></span><br/><br/>
+                      <label for="numero-final-{{@index}}">Numero:</label>
+                      <input id="numero-final-{{@index}}" type="text" name="f-numero-final-{{@index}}" value="{{ubicacionFinal.numero}}" required/>
+                      <span><i>(Número entero)</i></span><br/><br/>
+                      <label for="lat-final-{{@index}}">Latitud:</label>
+                      <input id="lat-final-{{@index}}" type="text" name="f-lat-final-{{@index}}" value="{{ubicacionFinal.latitud}}" required/>
+                      <span><i>(Número decimal)</i></span><br/><br/>
+                      <label for="lon-final-{{@index}}">Longitud:</label>
+                      <input id="lon-final-{{@index}}" type="text" name="f-lon-final-{{@index}}" value="{{ubicacionFinal.longitud}}" required/>
+                      <span><i>(Número decimal)</i></span>
+                    </fieldset>
+                  </div>
+                  {{/if}}
+                </fieldset>
+                <br />
+              </div>
+              {{/each}}
+            </div>
+            <div id="tramo-nuevo" class="tramo">
+              {{#if trayecto}}
+              <br />
+              <input id="tramo-nuevo-ack" type="checkbox" value="true" name="f-tramo-nuevo-ack" onclick="tramoNuevoHabilitacion()" {{#if tramoNuevo}}checked{{/if}}/>
+              <label for="tramo-nuevo-ack">Agregar Tramo Nuevo</label><br /><br />
+              {{/if}}
+              <fieldset {{#if trayecto}}{{#unless tramoNuevo}}disabled{{/unless}}{{/if}}>
+                <legend>Nuevo Tramo</legend>
+                <label for="transporte-nuevo">Transporte</label>
+                <select id="transporte-nuevo" name="f-transporte-nuevo" onchange="transporteCambiado()" required>
+                  {{#if tramoNuevo}}
+                  <option class="campo-seleccionar" value="{{tramoNuevo.transporte.id}}" selected>{{tramoNuevo.transporte.info}}</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
+                  {{else}}
+                  <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
+                  {{/if}}
+                  {{#each transportesTotales}}
+                  <optgroup label="{{tipo}}">
+                    {{#each transportes}}
+                    <option value="{{id}}">{{info}}</option>
+                    {{/each}}
+                  </optgroup>
+                  {{/each}}
+                </select>
+                <br /><br />
+                {{#if tramoNuevo}}
+                {{#if tramoNuevo.transporte.esPublico}}
+                <div class="paradas">
+                  <fieldset>
+                    <legend>Paradas</legend>
+                    <label for="transporte-parada-inicial-nueva">Partida:</label>
+                    <select id="transporte-parada-inicial-nueva" name="f-transporte-parada-inicial-nueva" required>
+                      <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
+                      {{#each tramoNuevo.transporte.paradas}}
+                      <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
+                      {{/each}}
+                    </select>
+                    <label for="transporte-parada-final-nueva">Llegada:</label>
+                    <select id="transporte-parada-final-nueva" name="f-transporte-parada-final-nueva" required>
+                      <option class="campo-seleccionar" value="" selected>Seleccionar</option> <!-- VER DE SACAR DISABLED POR SI ANULAR -->
+                      {{#each tramoNuevo.transporte.paradas}}
+                      <option value="{{id}}">{{ubicacion.calle}} {{ubicacion.numero}} ({{ubicacion.localidad}})</option>
+                      {{/each}}
+                    </select>
+                  </fieldset>
+                </div>
+                {{else}}
+                <div class="ubicaciones">
+                  <fieldset>
+                    <legend>Ubicación Inicial</legend>
+                    <label for="provincia-inicial-nueva">Provincia:</label>
+                    <input id="provincia-inicial-nueva" type="text" name="f-provincia-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.provincia}}" required/>
+                    <span><i>(Texto)</i></span><br/><br/>
+                    <label for="municipio-inicial-nueva">Municipio:</label>
+                    <input id="municipio-inicial-nueva" type="text" name="f-municipio-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.municipio}}" required/>
+                    <span><i>(Texto)</i></span><br/><br/>
+                    <label for="localidad-inicial-nueva">Localidad:</label>
+                    <input id="localidad-inicial-nueva" type="text" name="f-localidad-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.localidad}}" required/>
+                    <span><i>(Texto)</i></span><br/><br/>
+                    <label for="calle-inicial-nueva">Calle:</label>
+                    <input id="calle-inicial-nueva" type="text" name="f-calle-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.calle}}" required/>
+                    <span><i>(Texto)</i></span><br/><br/>
+                    <label for="numero-inicial-nueva">Numero:</label>
+                    <input id="numero-inicial-nueva" type="text" name="f-numero-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.numero}}" required/>
+                    <span><i>(Número entero)</i></span><br/><br/>
+                    <label for="lat-inicial-nueva">Latitud:</label>
+                    <input id="lat-inicial-nueva" type="text" name="f-lat-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.latitud}}" required/>
+                    <span><i>(Número decimal)</i></span><br/><br/>
+                    <label for="lon-inicial-nueva">Longitud:</label>
+                    <input id="lon-inicial-nueva" type="text" name="f-lon-inicial-nueva" value="{{tramoNuevo.ubicacionInicial.longitud}}" required/>
+                    <span><i>(Número decimal)</i></span>
+                  </fieldset>
+                  <br />
+                  <fieldset>
+                    <legend>Ubicación Final</legend>
+                    <label for="provincia-final-nueva">Provincia:</label>
+                    <input id="provincia-final-nueva" type="text" name="f-provincia-final-nueva" value="{{tramoNuevo.ubicacionFinal.provincia}}" required/>
+                    <span><i>(Texto)</i></span><br/><br/>
+                    <label for="municipio-final-nueva">Municipio:</label>
+                    <input id="municipio-final-nueva" type="text" name="f-municipio-final-nueva" value="{{tramoNuevo.ubicacionFinal.municipio}}" required/>
+                    <span><i>(Texto)</i></span><br/><br/>
+                    <label for="localidad-final-nueva">Localidad:</label>
+                    <input id="localidad-final-nueva" type="text" name="f-localidad-final-nueva" value="{{tramoNuevo.ubicacionFinal.localidad}}" required/>
+                    <span><i>(Texto)</i></span><br/><br/>
+                    <label for="calle-final-nueva">Calle:</label>
+                    <input id="calle-final-nueva" type="text" name="f-calle-final-nueva" value="{{tramoNuevo.ubicacionFinal.calle}}" required/>
+                    <span><i>(Texto)</i></span><br/><br/>
+                    <label for="numero-final-nueva">Numero:</label>
+                    <input id="numero-final-nueva" type="text" name="f-numero-final-nueva" value="{{tramoNuevo.ubicacionFinal.numero}}" required/>
+                    <span><i>(Número entero)</i></span><br/><br/>
+                    <label for="lat-final-nueva">Latitud:</label>
+                    <input id="lat-final-nueva" type="text" name="f-lat-final-nueva" value="{{tramoNuevo.ubicacionFinal.latitud}}" required/>
+                    <span><i>(Número decimal)</i></span><br/><br/>
+                    <label for="lon-final-nueva">Longitud:</label>
+                    <input id="lon-final-nueva" type="text" name="f-lon-final-nueva" value="{{tramoNuevo.ubicacionFinal.longitud}}" required/>
+                    <span><i>(Número decimal)</i></span>
+                  </fieldset>
+                </div>
+                {{/if}}
+                {{/if}}
+              </fieldset>
+              <br />
+            </div>
+          </div>
+          <div class="reiniciar">
+            <input type="reset" value="Reiniciar"/> <!-- Quizas sacarlo -->
+          </div>
+          <div class="enviar">
+            {{#if trayecto}}
+            <input type="submit" value="Guardar Cambios" />
+            {{else}}
+            <input type="submit" value="Crear" />
+            {{/if}}
+          </div>
+        </form>
+      </div>
+      <br />
+      <div class="cancelar">
+        {{#if trayecto}}
+        <span><a href="/miembro/{{miembroID}}/trayecto/{{trayecto.id}}">CANCELAR</a></span>
+        {{else}}
+        <span><a href="/miembro/{{miembroID}}/trayecto?action=list">CANCELAR</a></span>
+        {{/if}}
+      </div>
+    </div>
+  </body>
+</html>

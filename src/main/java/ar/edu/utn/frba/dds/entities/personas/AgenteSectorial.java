@@ -1,54 +1,50 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
-import ar.edu.utn.frba.dds.entities.lugares.geografia.AreaSectorial;
-import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.entities.mediciones.Medicion;
-import ar.edu.utn.frba.dds.entities.mediciones.Reporte;
-import ar.edu.utn.frba.dds.mihuella.MedicionSinFactorEmisionException;
-import ar.edu.utn.frba.dds.mihuella.fachada.FachadaOrganizacion;
-import ar.edu.utn.frba.dds.mihuella.fachada.Medible;
-import ar.edu.utn.frba.dds.servicios.reportes.NotificadorReportes;
-import ar.edu.utn.frba.dds.entities.trayectos.Trayecto;
+import ar.edu.utn.frba.dds.entities.lugares.AreaSectorial;
+import ar.edu.utn.frba.dds.entities.medibles.ReporteAgente;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "AGENTE_SECTORIAL")
 public class AgenteSectorial {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "agente_id")
     private Integer id;
 
-    @Transient
+    @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
     private AreaSectorial area;
 
-    @Transient
-    private ContactoMail contactoMail;
+    @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
+    private ContactoMail mail;
+
+    @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
+    private ContactoTelefono telefono;
 
     @Transient
-    private String telefono;
+    private List<ReporteAgente> reportes;
 
-    @Transient
-    private List<Reporte> reportes;
+    public AgenteSectorial() {
+        this.reportes = new ArrayList<>();
+    }
 
     public AgenteSectorial(AreaSectorial areaSectorial) {
         this.reportes = new ArrayList<>();
         this.area = areaSectorial;
+        this.area.setAgente(this);
     }
 
-    public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, String telefono, List<Reporte> reportes) {
+    public AgenteSectorial(AreaSectorial areaSectorial, ContactoMail contactoMail, ContactoTelefono telefono) {
         this.area = areaSectorial;
-        this.contactoMail = contactoMail;
+        this.area.setAgente(this);
+        this.mail = contactoMail;
+        contactoMail.setAgente(this);
         this.telefono = telefono;
-        this.reportes = reportes;
+        telefono.setAgente(this);
     }
-
-
-    public AgenteSectorial() {}
 
     public Integer getId() {
         return id;
@@ -58,76 +54,48 @@ public class AgenteSectorial {
         this.id = id;
     }
 
-    public Float obtenerHC(Integer anio, Integer mes) throws MedicionSinFactorEmisionException {
-        return obtenerHcxOrg(anio, mes).values().stream().reduce(0F, Float::sum);
+    public ContactoMail getMail() {
+        return mail;
     }
 
-    public HashMap<Organizacion,Float> obtenerHcxOrg(Integer anio, Integer mes) throws MedicionSinFactorEmisionException {
-        FachadaOrganizacion fachada = new FachadaOrganizacion();
-        HashMap<Organizacion,Float> resultados = new HashMap<>();
-
-        for(Organizacion organizacion : area.getOrganizaciones()) {
-            List<Medible> mediciones = organizacion.getMediciones().stream()
-                    .filter(me -> perteneceAPeriodo(me, anio, mes))
-                    .collect(Collectors.toList());
-            List<Medible> tramos = organizacion.getMiembros().stream()
-                    .flatMap(mi -> mi.getTrayectos().stream())
-                    .filter(tr -> perteneceAPeriodo(tr, anio, mes))
-                    .flatMap(tr -> tr.getTramos().stream())
-                    .collect(Collectors.toList());
-
-            mediciones.addAll(tramos);
-            Float valor = fachada.obtenerHU(mediciones);
-            resultados.put(organizacion, valor);
-        }
-        return resultados;
+    public void setMail(ContactoMail mail) {
+        this.mail = mail;
     }
 
-    public Reporte crearReporte(Integer anio, Integer mes) throws MedicionSinFactorEmisionException {
-//        LocalDate fecha = LocalDate.now();
-        return new Reporte(area.getOrganizaciones(), this.obtenerHcxOrg(anio, mes), area, this.obtenerHC(anio,mes));
-    }
-
-    public void hacerReporte(NotificadorReportes notificador, Integer anio, Integer mes) throws MedicionSinFactorEmisionException {
-        notificador.setAgente(this)
-                .setInformacionReporte(this.crearReporte(anio, mes))
-                .notificarReporte();
-    }
-
-    private boolean perteneceAPeriodo(Medicion medicion, Integer anio, Integer mes) {
-        return medicion.perteneceAPeriodo(anio, mes);
-    }
-
-    private boolean perteneceAPeriodo(Trayecto trayecto, Integer anio, Integer mes) {
-        return trayecto.perteneceAPeriodo(anio, mes);
-    }
-
-    public String getTelefono() {
+    public ContactoTelefono getTelefono() {
         return telefono;
     }
 
-    public List<Reporte> getReportes() {
-        return reportes;
-    }
-
-    public ContactoMail getContactoMail() {
-        return contactoMail;
-    }
-
-    public void setContactoMail(ContactoMail contactoMail) {
-        this.contactoMail = contactoMail;
-    }
-
-    public void setTelefono(String telefono) {
+    public void setTelefono(ContactoTelefono telefono) {
         this.telefono = telefono;
     }
 
-    public void setArea(AreaSectorial area) {this.area = area;}
+    public List<ReporteAgente> getReportes() {
+        return reportes;
+    }
 
-    public void setReportes(List<Reporte> reportes) {this.reportes = reportes;}
+    public void setArea(AreaSectorial area) {
+        this.area = area;
+    }
+
+    public void agregarReporte(ReporteAgente reporte) {
+        this.reportes.add(reporte);
+    }
+
+    public void quitarReporte(ReporteAgente reporte) {
+        this.reportes.remove(reporte);
+    }
+
+    public void setReportes(List<ReporteAgente> reportes) {
+        this.reportes = reportes;
+    }
+
+    public AreaSectorial getArea() {
+        return area;
+    }
 
     @Override
     public String toString() {
-        return '\n' + "Mail : " + this.contactoMail.getDireccionEMail() + '\n' + "Telefono : " + this.telefono + '\n';
+        return '\n' + "ID : " + this.id + '\n';
     }
 }
