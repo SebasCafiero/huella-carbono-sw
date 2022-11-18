@@ -18,9 +18,13 @@ div.descargar {
 table, th, td {
     border: 1px solid black;
     margin: auto;
-    text-align: center;
+    text-align: left;
     border-collapse: collapse;
-    padding: 5px;
+    padding: 8px;
+}
+
+td:last-child{
+    text-align: center;
 }
 
 .reporte {

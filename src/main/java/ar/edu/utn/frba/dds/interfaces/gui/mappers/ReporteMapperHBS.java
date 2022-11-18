@@ -15,9 +15,9 @@ public class ReporteMapperHBS {
         reporteDTO.setConsumoMediciones(reporte.getConsumoMediciones());
         reporteDTO.setConsumoTrayectos(reporte.getConsumoTotal()- reporteDTO.getConsumoMediciones());
 
-        reporteDTO.setConsumoPorCategoria(reporte.getConsumoPorCategoria().entrySet().stream().map(ConsumoMapperHBS::toDTO).collect(Collectors.toList()));
-        reporteDTO.setConsumoPorSector(reporte.getConsumoPorSector().entrySet().stream().map(ConsumoMapperHBS::toDTO).collect(Collectors.toList()));
-        reporteDTO.setConsumoPorMiembro(reporte.getConsumoPorMiembro().entrySet().stream().map(ConsumoMapperHBS::toDTO).collect(Collectors.toList()));
+        reporteDTO.setConsumoPorCategoria(reporte.getConsumoPorCategoria().entrySet().stream().map(ConsumoMapperHBS::toDTOCategoria).collect(Collectors.toList()));
+        reporteDTO.setConsumoPorSector(reporte.getConsumoPorSector().entrySet().stream().map(ConsumoMapperHBS::toDTOSector).collect(Collectors.toList()));
+        reporteDTO.setConsumoPorMiembro(reporte.getConsumoPorMiembro().entrySet().stream().map(ConsumoMapperHBS::toDTOMiembro).collect(Collectors.toList()));
 
         reporteDTO.setOrganizacion(OrganizacionMapperHBS.toDTO(reporte.getOrganizacion()));
         return reporteDTO;
