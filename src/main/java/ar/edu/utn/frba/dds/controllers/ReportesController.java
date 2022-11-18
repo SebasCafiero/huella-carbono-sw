@@ -75,20 +75,7 @@ public class ReportesController {
         Integer idOrg;
         if(request.params("organizacion") != null) {
             idOrg = Integer.parseInt(request.params("organizacion"));
-            try {
-                org = repoOrganizaciones.buscar(idOrg); //deberia coincidir con los permisos del usuario
-            } catch (NullPointerException | SessionException e) {
-                response.status(400);
-                String errorDesc = "Organización de id " + idOrg + " inexistente";
-                if (e instanceof SessionException) {
-                    response.status(403);
-                    errorDesc = "Acceso no permitido";
-                }
-                parametros.put("codigo", response.status());
-                parametros.put("descripcion", errorDesc);
-                return new ErrorResponse(errorDesc).generarVista(parametros);
-            }
-
+            org = repoOrganizaciones.buscar(idOrg); //deberia coincidir con los permisos del usuario
             parametros.put("rol", "ORGANIZACION");
             parametros.put("user", org.getRazonSocial());
             parametros.put("organizacion", OrganizacionMapperHBS.toDTO(org));

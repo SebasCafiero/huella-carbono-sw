@@ -228,28 +228,19 @@ public class TrayectosController {
         Map<String, Object> parametros = new HashMap<>();
         int idTrayecto = Integer.parseInt(req.params("trayecto"));
         int idMiembro = Integer.parseInt(req.params("id"));
-        try { //todo no se valida que el trayecto sea del miembro (xq falta validar el user)
-            Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
-            parametros.put("trayecto", TrayectoMapperHBS.toDTO(trayecto));
-            parametros.put("miembroID", idMiembro);
-            return new ModelAndView(parametros, "trayecto.hbs");
-        } catch (NullPointerException e) {
-            res.status(400);
-            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
-            parametros.put("descripcion", errorDesc);
-            parametros.put("codigo", res.status());
-            return new ErrorResponse(errorDesc).generarVista(parametros);
-        }
+        Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+        parametros.put("trayecto", TrayectoMapperHBS.toDTO(trayecto));
+        parametros.put("miembroID", idMiembro);
+        return new ModelAndView(parametros, "trayecto.hbs");
     }
 
     public ModelAndView editar(Request request, Response response) {
-        if (loginController.chequearValidezAcceso(request, response, true) != null){
+        if (loginController.chequearValidezAcceso(request, response, true) != null){ //todo
             return loginController.chequearValidezAcceso(request, response, true);
         }
-
         Map<String, Object> parametros = new HashMap<>();
         int idTrayecto = Integer.parseInt(request.params("trayecto"));
-        int idMiembro = Integer.parseInt(request.params("miembro"));
+        int idMiembro = Integer.parseInt(request.params("id"));
         Miembro miembro = fachada.obtenerMiembro(idMiembro);
 
         Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
@@ -439,68 +430,35 @@ public class TrayectosController {
 
     }
 
-    public Response modificar(Request req, Response res) { //todo CHECK
+    public Response modificar(Request req, Response res) {
         Integer idTrayecto = Integer.parseInt(req.params("trayecto"));
         Integer idMiembro = Integer.parseInt(req.params("id"));
         Miembro miembro = fachada.obtenerMiembro(idMiembro);
-        try {
-            Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
-            asignarTramos(trayecto, req);
-            fachada.modificarTrayecto(trayecto);
-        } catch (NullPointerException e) {
-            res.status(400);
-            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
-            //parametros.put("descripcion", errorDesc);
-            //parametros.put("codigo", response.status());
-            //return new ErrorResponse(errorDesc).generarVista(parametros);
-            res.redirect("/error/"+400);
-            return res; //todo check, no puedo retornar vista
-        }
-
+        Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+        asignarTramos(trayecto, req);
+        fachada.modificarTrayecto(trayecto);
         res.redirect("/miembro/" + idMiembro + "/trayecto/" + idTrayecto);
         return res;
     }
 
-    public Response eliminar(Request req, Response res) {
+    public Response eliminar(Request req, Response res) { //Elimino del trayecto, no del sistema
         Integer idTrayecto = Integer.parseInt(req.params("trayecto"));
         Integer idMiembro = Integer.parseInt(req.params("id"));
         Miembro miembro = fachada.obtenerMiembro(idMiembro);
-        try {
             Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
             miembro.quitarTrayecto(trayecto);
             trayecto.quitarMiembro(miembro);
-            //no lo elimino del Repo xq el trayecto como entidad sigue existiendo (hasta #borrar)
-        } catch (NullPointerException e) {
-            res.status(400);
-            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
-            //parametros.put("descripcion", errorDesc);
-            //parametros.put("codigo", response.status());
-            //return new ErrorResponse(errorDesc).generarVista(parametros);
-            res.redirect("/error/"+400);
-//            return res; //todo check, no puedo retornar vista
-        }
-
 //        res.redirect("/miembro/" + idMiembro + "/trayecto?action=list"); //redirijo desde JS
         return res;
     }
 
 
-    public Response borrar(Request req, Response res) {
+    public Response borrar(Request req, Response res) { //Elimino del sistema
         Integer idTrayecto = Integer.parseInt(req.params("id"));
-        try {
             Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
             trayecto.getMiembros().forEach(m -> m.quitarTrayecto(trayecto));
-            trayecto.setMiembros(new ArrayList<>()); //todo no puedo usar foreach de miembros por problemas de concurrencia
+            trayecto.setMiembros(new ArrayList<>()); //No puedo usar foreach de miembros por problemas de concurrencia
             this.fachada.eliminarTrayecto(trayecto);
-        } catch (NullPointerException e) {
-            res.status(400);
-            String errorDesc = "Trayecto de id "+idTrayecto+" inexistente";
-            //parametros.put("descripcion", errorDesc);
-            //parametros.put("codigo", response.status());
-            //return new ErrorResponse(errorDesc).generarVista(parametros);
-            res.redirect("/error/"+400);
-//            return res; //todo check, no puedo retornar vista
-        }
         return res;
     }
 }
