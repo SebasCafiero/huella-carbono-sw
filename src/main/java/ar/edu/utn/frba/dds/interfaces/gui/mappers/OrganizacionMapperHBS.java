@@ -10,4 +10,12 @@ public class OrganizacionMapperHBS {
         organizacionDTO.setRazonSocial(organizacion.getRazonSocial());
         return organizacionDTO;
     }
+
+    public static OrganizacionHBS toDTOUbicacion(Organizacion organizacion) {
+        OrganizacionHBS organizacionDTO = new OrganizacionHBS();
+        organizacionDTO.setId(organizacion.getId());
+        organizacionDTO.setRazonSocial(organizacion.getRazonSocial());
+        organizacionDTO.setUbicacion(UbicacionMapperHBS.toDTO(organizacion.getUbicacion()));
+        return organizacionDTO;
+    }
 }

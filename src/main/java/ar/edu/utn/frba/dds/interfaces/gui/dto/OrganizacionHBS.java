@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.interfaces.gui.dto;
 public class OrganizacionHBS {
     private String razonSocial;
     private Integer id;
+    private UbicacionHBS ubicacion;
 
     public OrganizacionHBS() {
     }
@@ -21,5 +22,13 @@ public class OrganizacionHBS {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public UbicacionHBS getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(UbicacionHBS ubicacion) {
+        this.ubicacion = ubicacion;
     }
 }

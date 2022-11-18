@@ -4,6 +4,8 @@ import ar.edu.utn.frba.dds.entities.lugares.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
 import ar.edu.utn.frba.dds.entities.personas.ContactoTelefono;
+import ar.edu.utn.frba.dds.interfaces.gui.mappers.AgenteMapperHBS;
+import ar.edu.utn.frba.dds.interfaces.gui.mappers.OrganizacionMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.input.json.AgenteSectorialJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
@@ -12,7 +14,10 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AgenteSectorialController {
     private Repositorio<AgenteSectorial> repoAgentes;
@@ -80,6 +85,14 @@ public class AgenteSectorialController {
     }
 
     public ModelAndView mostrarOrganizaciones(Request request, Response response) {
-        return new ModelAndView(null, "");
+        Map<String, Object> parametros = new HashMap<>();
+        Integer idAgente = Integer.parseInt(request.params("id"));
+        AgenteSectorial agente = this.repoAgentes.buscar(idAgente);
+
+        parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
+        parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
+        parametros.put("agenteID", idAgente);
+        parametros.put("organizaciones", agente.getArea().getOrganizaciones().stream().map(OrganizacionMapperHBS::toDTOUbicacion).collect(Collectors.toList()));
+        return new ModelAndView(parametros, "organizaciones.hbs");
     }
 }

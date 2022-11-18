@@ -122,7 +122,7 @@ public class Router {
             Spark.before("/*", autorizarUsuario.apply(User::isMiembro));
             Spark.get("/trayecto", trayectosController::mostrarTodosYCrear, engine);
             Spark.post("/trayecto", trayectosController::agregar);
-            Spark.get("/trayecto/:trayecto", trayectosController::mostrarYEditar, engine); //TODO NO VALIDA EL MIEMBRO
+            Spark.get("/trayecto/:trayecto", trayectosController::mostrarYEditar, engine);
             Spark.post("/trayecto/:trayecto", trayectosController::modificar);
             Spark.delete("/trayecto/:trayecto", trayectosController::eliminar);
         });
@@ -130,7 +130,7 @@ public class Router {
         Spark.get("/organizacion/:organizacion/reporte", reportesController::darAltaYMostrar, engine);
         Spark.post("/organizacion/:organizacion/reporte", reportesController::generar);
 
-        Spark.get("/agente/:id/organizacion", agenteSectorialController::mostrarOrganizaciones, engine); //todo
+        Spark.get("/agente/:id/organizacion", agenteSectorialController::mostrarOrganizaciones, engine);
         Spark.get("/agente/:agente/reporte", reportesController::darAltaYMostrar, engine);
         Spark.post("/agente/:agente/reporte", reportesController::generar);
 

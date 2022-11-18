@@ -1,0 +1,18 @@
+table.general, .general table, .general td, .general th {
+    text-align: center;
+    border-collapse: collapse;
+    margin: auto;
+    padding: 12px;
+}
+
+.general td, .general th  {
+    border: 1px solid black;
+}
+
+.organizaciones td:last-child {
+    border-width: 0px 0px 0px 1px;
+}
+
+td.ausente {
+    border-width: 1px !important;
+}
