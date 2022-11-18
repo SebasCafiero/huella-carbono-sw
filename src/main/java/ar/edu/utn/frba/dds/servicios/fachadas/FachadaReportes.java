@@ -48,7 +48,7 @@ public class FachadaReportes {
         return reporte;
     }
 
-    public ReporteOrganizacion generarReporteOrganizacion(Organizacion organizacion, Periodo periodo) {
+/*    public ReporteOrganizacion generarReporteOrganizacion(Organizacion organizacion, Periodo periodo) {
         ReporteOrganizacion reporte = new ReporteOrganizacion();
 
         Map<Categoria, Float> consumoPorCategoria = new HashMap<>();
@@ -94,9 +94,9 @@ public class FachadaReportes {
 
         return reporte;
 //        this.notificadorReportes.notificarReporteOrganizacion(area.getAgente(), reporte);
-    }
+    }*/
 
-    public void generarReporteOrganizacion2(Organizacion organizacion, Periodo periodo) {
+    public ReporteOrganizacion generarReporteOrganizacion(Organizacion organizacion, Periodo periodo) {
         ReporteOrganizacion reporte = new ReporteOrganizacion();
 
         Map<Categoria, Float> consumoPorCategoria = new HashMap<>();
@@ -111,15 +111,16 @@ public class FachadaReportes {
                                     fachadaOrganizacion.factorProporcionalTrayecto(tramo.getTrayecto(), miembro, periodo);
 
                             consumoPorCategoria.putIfAbsent(tramo.getMiCategoria(), 0F);
-                            consumoPorCategoria.compute(tramo.getMiCategoria(), (anterior, nuevo) -> +consumoTramo);
+                            if(Float.isFinite(consumoTramo))
+                                consumoPorCategoria.compute(tramo.getMiCategoria(), (categoria, anterior) -> anterior+consumoTramo);
 
-                            return consumoTramo;
+                            return Float.isFinite(consumoTramo) ? consumoTramo : 0F;
                         }).reduce(Float::sum).orElse(0F);
                 consumoPorMiembro.put(miembro, consumoMiembro);
-                return consumoMiembro;
+                return Float.isFinite(consumoMiembro) ? consumoMiembro : 0F;
             }).reduce(Float::sum).orElse(0F);
             consumoPorSector.put(sector, consumoSector);
-            return consumoSector;
+            return Float.isFinite(consumoSector) ? consumoSector : 0F;
         }).reduce(Float::sum).orElse(0F);
 
         Float totalMediciones = organizacion.getMediciones().stream().map(me -> {
@@ -127,9 +128,10 @@ public class FachadaReportes {
                     fachadaOrganizacion.factorEquivalenciaPeriodos(periodo, me.getPeriodo());
 
             consumoPorCategoria.putIfAbsent(me.getMiCategoria(), 0F);
-            consumoPorCategoria.compute(me.getMiCategoria(), (anterior, nuevo) -> +consumoMedicion);
+            if(Float.isFinite(consumoMedicion))
+                consumoPorCategoria.compute(me.getMiCategoria(), (categoria, anterior) -> anterior+consumoMedicion);
 
-            return consumoMedicion;
+            return Float.isFinite(consumoMedicion) ? consumoMedicion : 0F;
         }).reduce(Float::sum).orElse(0F);
 
         reporte.setConsumoPorSector(consumoPorSector);
@@ -144,6 +146,7 @@ public class FachadaReportes {
 
         this.reporteOrganizacion = reporte;
 //        this.notificadorReportes.notificarReporteOrganizacion(area.getAgente(), reporte);
+        return reporte;
     }
 
     public ReporteOrganizacion getReporteOrganizacion() {

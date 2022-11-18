@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
-import ar.edu.utn.frba.dds.interfaces.gui.dto.ReporteHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.AgenteMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.OrganizacionMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.ReporteMapperHBS;
@@ -10,7 +9,6 @@ import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.lugares.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.medibles.Categoria;
 import ar.edu.utn.frba.dds.entities.medibles.Periodo;
-import ar.edu.utn.frba.dds.entities.medibles.ReporteAgente;
 import ar.edu.utn.frba.dds.entities.medibles.ReporteOrganizacion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
@@ -127,14 +125,19 @@ public class ReportesController {
     public Response generar(Request request, Response response) {
         String fechaActual = LocalDate.now().getMonthValue()+"/"+LocalDate.now().getYear();
         String[] fecha = request.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar fecha
-        Periodo periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
+        Periodo periodo;
+        if(fecha.length > 1)
+            periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
+        else
+            periodo = new Periodo(Integer.parseInt(fecha[0]));
+
         Organizacion organizacion = null;
         String ruta = "";
         if(request.params("organizacion") != null) {
             int idOrg = Integer.parseInt(request.params("organizacion"));
 
             organizacion = repoOrganizaciones.buscar(idOrg);
-            ruta = "/organizacion/"+organizacion.getId()+"/reporte";
+            ruta = "/organizacion/"+organizacion.getId()+"/reporte#reporte";
         }
 
         if(request.params("agente") != null) {
@@ -143,9 +146,9 @@ public class ReportesController {
             int idOrg = Integer.parseInt(request.queryParams("f-organizacion"));
 
             organizacion = repoOrganizaciones.buscar(idOrg);
-            ruta = "/agente/"+agente.getId()+"/reporte";
+            ruta = "/agente/"+agente.getId()+"/reporte#reporte";
         }
-        fachadaReportes.generarReporteOrganizacion2(organizacion, periodo);
+        fachadaReportes.generarReporteOrganizacion(organizacion, periodo);
         documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion); //todo no lo toma bien, agarra el viejo o ninguno
         response.redirect(ruta);
 
