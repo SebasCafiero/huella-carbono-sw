@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.server.login.*;
 import ar.edu.utn.frba.dds.server.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.server.utils.HandlebarsTemplateEngineBuilder;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaUsuarios;
+import com.google.gson.Gson;
 import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
@@ -40,6 +41,8 @@ public class Router {
         GenericController genericController = new GenericController();
         TrayectosController trayectosController = new TrayectosController();
 
+        Gson gson = new Gson();
+
         Function<Function<User, Boolean>, Filter> autorizarUsuario =
                 tipoUsuario -> (Request request, Response response) -> {
             User user = fachadaUsuarios.findById(request.session().attribute("idUsuario"))
@@ -67,6 +70,20 @@ public class Router {
                     Spark.put("", organizacionController::modificar);
                     Spark.delete("", organizacionController::eliminar);
 
+                    Spark.path("/batch", () -> {
+                        Spark.get("", batchMedicionController::mostrarTodos);
+                        Spark.get("/:id", batchMedicionController::obtener, gson::toJson);
+                        Spark.post("", batchMedicionController::agregar);
+                        Spark.delete("/:id", batchMedicionController::eliminar);
+                    });
+
+                    Spark.path("/medicion", () -> {
+                        Spark.get("", medicionController::mostrarTodos);
+                        Spark.get("/:id", medicionController::obtener);
+                        Spark.get("/unidad/:unidad", medicionController::filtrarUnidad);
+                        Spark.get("/valor/:valor", medicionController::filtrarValor);
+                    });
+
                 });
             });
 
@@ -84,20 +101,6 @@ public class Router {
                 Spark.put("/:id", agenteSectorialController::modificar);
                 Spark.get("", agenteSectorialController::mostrarTodos);
                 Spark.post("", agenteSectorialController::agregar);
-            });
-
-            Spark.path("/batchMedicion", () -> {
-                Spark.get("", batchMedicionController::mostrarTodos);
-                Spark.get("/:id", batchMedicionController::obtener);
-                Spark.post("", batchMedicionController::agregar);
-                Spark.delete("/:id", batchMedicionController::eliminar);
-            });
-
-            Spark.path("/medicion", () -> {
-                Spark.get("", medicionController::mostrarTodos);
-                Spark.get("/:id", medicionController::obtener);
-                Spark.get("/unidad/:unidad", medicionController::filtrarUnidad);
-                Spark.get("/valor/:valor", medicionController::filtrarValor);
             });
 
             Spark.put("/factorEmision/:id", factorEmisionController :: modificar);

@@ -12,11 +12,9 @@ import java.util.stream.Collectors;
 
 public class MedicionController {
     private Repositorio<Medicion> repositorio;
-    private LoginController loginController;
 
     public MedicionController(){
         this.repositorio = FactoryRepositorio.get(Medicion.class);
-        loginController = new LoginController();
     }
 
     public String obtener(Request request, Response response) {

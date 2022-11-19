@@ -16,10 +16,11 @@ import java.util.List;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 
+import javax.persistence.EntityNotFoundException;
+
 public class BatchMedicionController {
     private Repositorio<BatchMedicion> repoBatch;
     private final Repositorio<Organizacion> repoOrganizaciones;
-    private LoginController loginController = new LoginController();
 
     public BatchMedicionController(){
         this.repoBatch = FactoryRepositorio.get(BatchMedicion.class);
@@ -27,26 +28,20 @@ public class BatchMedicionController {
     }
 
     public String mostrarTodos(Request request, Response response) {
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }    Todo esto agregar una vez que tengamos la vista*/
         List<BatchMedicion> batches = this.repoBatch.buscarTodos();
         return batches.toString();
     }
 
-    public String obtener(Request request, Response response){
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }    Todo esto agregar una vez que tengamos la vista*/
+    public Object obtener(Request request, Response response){
         BatchMedicion batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("id")));
-        String json = new Gson().toJson(batchMedicion);
-        return json;
+        if(batchMedicion == null) {
+            throw new EntityNotFoundException();
+        }
+        
+        return batchMedicion;
     }
 
     public Object agregar(Request request, Response response) {
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }    Todo esto agregar una vez que tengamos la vista*/
         BatchMedicionJSONDTO requestDTO = new ParserJSON<>(BatchMedicionJSONDTO.class).parseElement(request.body());
 
         BatchMedicion batchMedicion = BatchMedicionMapper.toEntity(requestDTO);
