@@ -3,12 +3,14 @@ package ar.edu.utn.frba.dds.controllers;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.medibles.BatchMedicion;
 import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.interfaces.input.json.MedicionJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.mappers.BatchMedicionMapper;
 import ar.edu.utn.frba.dds.interfaces.input.json.BatchMedicionJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.interfaces.mappers.MedicionMapper;
 import com.google.gson.Gson;
+import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
 import spark.Response;
 
@@ -31,12 +33,13 @@ public class BatchMedicionController {
         this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
     }
 
-    public String mostrarTodos(Request request, Response response) {
-        List<BatchMedicion> batches = this.repoBatch.buscarTodos();
-        return batches.toString();
+    public List<MedicionJSONDTO> mostrarTodos(Request request, Response response) {
+        Organizacion organizacion = request.attribute("organizacion");
+        return organizacion.getMediciones().stream()
+                .map(MedicionMapper::toDTO).collect(Collectors.toList());
     }
 
-    public BatchMedicion obtener(Request request, Response response){
+    public BatchMedicion obtener(Request request, Response response) {
         Optional<BatchMedicion> batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("batch")));
         if (!batchMedicion.isPresent() || !batchMedicion.get().getOrganizacion().getId()
                 .equals(Integer.parseInt(request.params("id")))) {
@@ -48,7 +51,8 @@ public class BatchMedicionController {
 
     public Object agregar(Request request, Response response) {
         BatchMedicionJSONDTO requestDTO = new ParserJSON<>(BatchMedicionJSONDTO.class).parseElement(request.body());
-        List<Medicion> mediciones = requestDTO.getMediciones().stream().map(MedicionMapper::toEntity).collect(Collectors.toList());
+        List<Medicion> mediciones = requestDTO.getMediciones().stream()
+                .map(MedicionMapper::toEntity).collect(Collectors.toList());
 
         // El get no puede romper porque se sabe de la existencia de la organización por los controles de seguridad
         Organizacion organizacion = this.repoOrganizaciones.buscar(requestDTO.getOrganizacion()).get();
@@ -60,7 +64,7 @@ public class BatchMedicionController {
 
         this.repoBatch.agregar(batchMedicion);
 
-        response.status(201);
+        response.status(HttpStatus.CREATED_201);
         return "BatchMedicion agregado correctamente.";
     }
 

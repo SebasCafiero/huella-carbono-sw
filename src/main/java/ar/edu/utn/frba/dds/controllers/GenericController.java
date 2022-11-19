@@ -31,7 +31,6 @@ public class GenericController {
         user.put("organizacion", realUser.getOrganizacion() != null ? realUser.getOrganizacion().getId() : null);
         user.put("agente", realUser.getAgenteSectorial() != null ? realUser.getAgenteSectorial().getId() : null);
 
-
         return new ModelAndView(user, "menu.hbs");
     }
 

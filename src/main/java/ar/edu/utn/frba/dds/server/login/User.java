@@ -17,15 +17,15 @@ public class User {
     @Column(name = "password")
     String password;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organizacion_id")
     Organizacion organizacion;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "miembro_id")
     Miembro miembro;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "agente_id")
     AgenteSectorial agenteSectorial;
 

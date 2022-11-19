@@ -4,7 +4,7 @@ public class MiHuellaApiException extends RuntimeException {
     private final ErrorDTO error;
 
     public MiHuellaApiException(String descripcion) {
-        super();
+        super(descripcion);
         this.error = new ErrorDTO(descripcion);
     }
 

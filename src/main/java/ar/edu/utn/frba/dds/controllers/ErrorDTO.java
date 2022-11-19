@@ -12,6 +12,11 @@ public class ErrorDTO {
         this.descripcion = descripcion;
     }
 
+    public ErrorDTO(String error, String descripcion) {
+        this.error = error;
+        this.descripcion = descripcion;
+    }
+
     public String getError() {
         return error;
     }
