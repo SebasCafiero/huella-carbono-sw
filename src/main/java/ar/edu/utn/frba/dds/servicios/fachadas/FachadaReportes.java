@@ -104,7 +104,7 @@ public class FachadaReportes {
         Map<Miembro, Float> consumoPorMiembro = new HashMap<>();
 
         Float totalTrayectos = organizacion.getSectores().stream().map(sector -> {
-            Float consumoSector = sector.getListaDeMiembros().stream().map(miembro -> {
+            Float consumoSector = sector.getMiembros().stream().map(miembro -> {
                 Float consumoMiembro = miembro.getTrayectos().stream()
                         .flatMap(trayecto -> trayecto.getTramos().stream()).map(tramo -> {
                             final float consumoTramo = fachadaOrganizacion.obtenerHU(Collections.singletonList(tramo)) *

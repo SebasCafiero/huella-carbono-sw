@@ -10,7 +10,7 @@ public interface Repositorio<T> {
     void modificar(T unObjeto);
     void eliminar(T unObjeto);
     List<T> buscarTodos();
-    T buscar(Integer id);
+    Optional<T> buscar(Integer id);
 
     void modificar(Integer id,T unObjeto);
 }

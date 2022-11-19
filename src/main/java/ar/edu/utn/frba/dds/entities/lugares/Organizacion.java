@@ -87,7 +87,7 @@ public class Organizacion {
         //Hay que traer cada miembro de cada sector y que no hayan repetidos.
         return sectores
                 .stream()
-                .flatMap(sector -> sector.getListaDeMiembros().stream())
+                .flatMap(sector -> sector.getMiembros().stream())
                 .collect(Collectors.toSet());
     }
 
@@ -104,6 +104,10 @@ public class Organizacion {
 
     public void agregarMediciones(Medicion... variasMediciones) {
         Collections.addAll(this.mediciones, variasMediciones);
+    }
+
+    public void agregarMediciones(List<Medicion> mediciones) {
+        this.mediciones.addAll(mediciones);
     }
 
     public List<Medicion> getMediciones() {
@@ -190,15 +194,5 @@ public class Organizacion {
 
     public List<ReporteOrganizacion> getReportes() {
         return reportes;
-    }
-
-    /*public void agregarReporte(ReporteOrganizacion reporte) {
-        reporte.setId(this.reportes.size()); //reporte1: id 0 - reporte2: id 1 - reporte3: id 2
-        this.reportes.add(reporte);
-    }*/
-
-    @Override
-    public String toString() {
-        return '\n' + "Organizacion: " + "Nombre = " + razonSocial;
     }
 }

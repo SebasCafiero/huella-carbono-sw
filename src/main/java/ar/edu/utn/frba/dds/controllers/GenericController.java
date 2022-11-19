@@ -44,6 +44,16 @@ public class GenericController {
         return response;
     }
 
+    public Object iniciarSesionApi(Request request, Response response) {
+        User realUser = fachadaUsuarios.buscarUsuarioEnRepo(request.queryParams("username"), request.queryParams("password"))
+                .orElseThrow(AuthenticationException::new);
+
+        HashMap<String, Integer> respuesta = new HashMap<>();
+        respuesta.put("idUsuario", realUser.getIdRol());
+        request.session().attribute("idUsuario", realUser.getId());
+        return respuesta;
+    }
+
     public Response cerrarSesion(Request request, Response response) {
         request.session().removeAttribute("idUsuario");
         response.redirect("/home");

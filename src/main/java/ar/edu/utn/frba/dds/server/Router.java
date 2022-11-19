@@ -9,10 +9,12 @@ import com.google.gson.Gson;
 import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class Router {
     private static HandlebarsTemplateEngine engine;
+    private static final Gson gson = new Gson();
 
     private static void initEngine() {
         Router.engine = HandlebarsTemplateEngineBuilder
@@ -41,40 +43,54 @@ public class Router {
         GenericController genericController = new GenericController();
         TrayectosController trayectosController = new TrayectosController();
 
-        Gson gson = new Gson();
-
         Function<Function<User, Boolean>, Filter> autorizarUsuario =
                 tipoUsuario -> (Request request, Response response) -> {
+            System.out.println(request.session().attribute("idUsuario").toString());
+
             User user = fachadaUsuarios.findById(request.session().attribute("idUsuario"))
                     .orElseThrow(AuthenticationException::new);
 
             if(!tipoUsuario.apply(user) || !user.getIdRol().equals(Integer.parseInt(request.params("id")))) {
                 throw new UnauthorizedException();
             }
+
+//            request.attribute("user", user);
+            request.attribute(user.getRolName(), user.getRol());
+
+            System.out.println("** HAY " + request.attributes().size() + " ATRIBUTOS");
+            request.attributes().forEach(atributo -> System.out.println("El atributo " + atributo
+                    + " tiene un valor de la clase " + request.attribute(atributo).getClass().getName()));
         };
 
         Spark.path("/api", () -> {
+            Spark.post("/login", genericController::iniciarSesionApi, gson::toJson);
 
             Spark.path("/organizacion", () -> {
                 Spark.before("/*", (Request request, Response response) -> {
-                    if (!fachadaUsuarios.estaLogueado(request))
+                    Optional<String> sesion = Optional.ofNullable(request.headers("Authorization"));
+
+                    if (!sesion.isPresent())
                         throw new NotLoggedException();
+                    else
+                        request.session().attribute("idUsuario", Integer.parseInt(sesion.get()));
+
+                    System.out.println(request.session().attribute("idUsuario").toString());
                 });
 
                 Spark.post("", organizacionController::agregar);
                 Spark.get("", organizacionController::mostrarTodos);
 
                 Spark.path("/:id", () -> {
-                    Spark.before("/*", autorizarUsuario.apply(User::isOrganizacion));
-                    Spark.get("", organizacionController::obtener);
+                    Spark.before("", autorizarUsuario.apply(User::isOrganizacion));
+                    Spark.get("", organizacionController::obtener, gson::toJson);
                     Spark.put("", organizacionController::modificar);
                     Spark.delete("", organizacionController::eliminar);
 
                     Spark.path("/batch", () -> {
                         Spark.get("", batchMedicionController::mostrarTodos);
-                        Spark.get("/:id", batchMedicionController::obtener, gson::toJson);
+                        Spark.get("/:batch", batchMedicionController::obtener, gson::toJson);
                         Spark.post("", batchMedicionController::agregar);
-                        Spark.delete("/:id", batchMedicionController::eliminar);
+                        Spark.delete("/:batch", batchMedicionController::eliminar);
                     });
 
                     Spark.path("/medicion", () -> {
@@ -147,11 +163,17 @@ public class Router {
         Spark.exception(NotLoggedException.class, (exception, request, response) -> {
             System.out.println("Request rechazado. " + exception.getMessage());
             System.out.println("Ip origen: " + request.ip());
+            response.status(401);
             response.redirect("/home");
         });
 
         Spark.exception(UnauthorizedException.class, (exception, request, response) -> {
+            response.status(403);
+        });
 
+        Spark.exception(MiHuellaApiException.class, (exception, request, response) -> {
+            response.status(400);
+            response.body(gson.toJson(exception.getError()));
         });
     }
 }

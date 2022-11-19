@@ -25,10 +25,7 @@ public class DAOHibernate<T> implements DAO<T> {
 
     @Override
     public Optional<T> buscar(Integer id) {
-        if(id != null) //Porque Entity#find rompe al recibir null en la PK
-            return Optional.ofNullable(EntityManagerHelper.getEntityManager().find(type, id));
-        else
-            return Optional.empty();
+        return id == null ? Optional.empty() : Optional.ofNullable(EntityManagerHelper.getEntityManager().find(type, id));
     }
 
     public List<T> buscar(CriteriaQuery<T> condicion) {

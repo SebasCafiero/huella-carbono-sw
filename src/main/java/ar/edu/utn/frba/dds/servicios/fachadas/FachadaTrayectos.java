@@ -50,7 +50,7 @@ public class FachadaTrayectos {
     }
 
     public Trayecto obtenerTrayecto(Integer id) {
-        return this.repoTrayectos.buscar(id);
+        return this.repoTrayectos.buscar(id).get();
     }
 
     public void eliminarTrayecto(Trayecto trayecto) {
@@ -62,7 +62,7 @@ public class FachadaTrayectos {
     }
 
     public Miembro obtenerMiembro(Integer id) {
-        return this.repoMiembros.buscar(id);
+        return this.repoMiembros.buscar(id).get();
     }
 
     public List<MedioDeTransporte> obtenerTransportes() {
@@ -70,7 +70,7 @@ public class FachadaTrayectos {
     }
 
     public MedioDeTransporte obtenerTransporte(Integer id) {
-        return this.repoMedios.buscar(id);
+        return this.repoMedios.buscar(id).get();
     }
 
     public void modificarTrayecto(Trayecto trayecto) {
@@ -128,10 +128,9 @@ public class FachadaTrayectos {
                 );
 
         // Si da error el get es porque se intentó referenciar con un trayecto que no existe
-        Trayecto trayecto = repoTrayectos.buscar(trayectoCompartidoDTO.getTrayectoReferencia());
-        if(trayecto == null) {
-            throw new NoExisteTrayectoCompartidoException(trayectoCompartidoDTO.getTrayectoReferencia());
-        }
+        Trayecto trayecto = repoTrayectos.buscar(trayectoCompartidoDTO.getTrayectoReferencia())
+                .orElseThrow(() -> new NoExisteTrayectoCompartidoException(
+                        trayectoCompartidoDTO.getTrayectoReferencia()));
 
         trayecto.agregarMiembro(miembro);
         miembro.agregarTrayecto(trayecto);

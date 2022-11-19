@@ -7,12 +7,16 @@ import ar.edu.utn.frba.dds.interfaces.mappers.BatchMedicionMapper;
 import ar.edu.utn.frba.dds.interfaces.input.json.BatchMedicionJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
+import ar.edu.utn.frba.dds.interfaces.mappers.MedicionMapper;
 import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 
@@ -32,43 +36,42 @@ public class BatchMedicionController {
         return batches.toString();
     }
 
-    public Object obtener(Request request, Response response){
-        BatchMedicion batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("id")));
-        if(batchMedicion == null) {
-            throw new EntityNotFoundException();
+    public BatchMedicion obtener(Request request, Response response){
+        Optional<BatchMedicion> batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("batch")));
+        if (!batchMedicion.isPresent() || !batchMedicion.get().getOrganizacion().getId()
+                .equals(Integer.parseInt(request.params("id")))) {
+            throw new MiHuellaApiException("El batch " + request.params("batch") + " de la organizacion "
+                    + request.params("id") + " no existe");
         }
-        
-        return batchMedicion;
+        return batchMedicion.get();
     }
 
     public Object agregar(Request request, Response response) {
         BatchMedicionJSONDTO requestDTO = new ParserJSON<>(BatchMedicionJSONDTO.class).parseElement(request.body());
+        List<Medicion> mediciones = requestDTO.getMediciones().stream().map(MedicionMapper::toEntity).collect(Collectors.toList());
 
-        BatchMedicion batchMedicion = BatchMedicionMapper.toEntity(requestDTO);
+        // El get no puede romper porque se sabe de la existencia de la organización por los controles de seguridad
+        Organizacion organizacion = this.repoOrganizaciones.buscar(requestDTO.getOrganizacion()).get();
+        organizacion.agregarMediciones(mediciones);
+
+        BatchMedicion batchMedicion = new BatchMedicion(mediciones);
         batchMedicion.setFecha(LocalDate.now());
-
-        Organizacion organizacion = this.repoOrganizaciones.buscar(requestDTO.getOrganizacion());
-
-        if(organizacion == null) {
-            response.status(400);
-            return new ErrorResponse("La organizacion de id " + request.params("id") + " no existe");
-        }
         batchMedicion.setOrganizacion(organizacion);
 
         this.repoBatch.agregar(batchMedicion);
-        for(Medicion medicion : batchMedicion.getMediciones()) {
-            FactoryRepositorio.get(Medicion.class).agregar(medicion);
-            batchMedicion.getOrganizacion().agregarMediciones(medicion); //Como ahora el batch es de una org, le agrego sus mediciones
-        }
+
+        response.status(201);
         return "BatchMedicion agregado correctamente.";
     }
 
     public Object eliminar(Request request, Response response) {
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }    Todo esto agregar una vez que tengamos la vista*/
-        BatchMedicion batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("id")));
-        this.repoBatch.eliminar(batchMedicion);
+        Optional<BatchMedicion> batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("id")));
+        if (!batchMedicion.isPresent() || !batchMedicion.get().getOrganizacion().getId()
+                .equals(Integer.parseInt(request.params("id")))) {
+            throw new MiHuellaApiException("El batch " + request.params("batch") + " de la organizacion "
+                    + request.params("id") + " no existe");
+        }
+        this.repoBatch.eliminar(batchMedicion.get());
 
         return "BatchMedicion de id : " + request.params("id") + " eliminado correctamente.";
     }

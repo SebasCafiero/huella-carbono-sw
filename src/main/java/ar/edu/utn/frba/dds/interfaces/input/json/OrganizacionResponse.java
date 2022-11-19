@@ -5,12 +5,12 @@ import ar.edu.utn.frba.dds.interfaces.input.SectorResponse;
 
 import java.util.List;
 
-public class OrganizacionJSONDTO {
+public class OrganizacionResponse {
     private String organizacion;
     private UbicacionJSONDTO ubicacion;
     private String clasificacion;
     private String tipo;
-    private List<SectorRequest> sectores;
+    private List<SectorResponse> sectores;
 
     public String getOrganizacion() {
         return organizacion;
@@ -44,11 +44,11 @@ public class OrganizacionJSONDTO {
         this.tipo = tipo;
     }
 
-    public List<SectorRequest> getSectores() {
+    public List<SectorResponse> getSectores() {
         return sectores;
     }
 
-    public void setSectores(List<SectorRequest> sectores) {
+    public void setSectores(List<SectorResponse> sectores) {
         this.sectores = sectores;
     }
 }

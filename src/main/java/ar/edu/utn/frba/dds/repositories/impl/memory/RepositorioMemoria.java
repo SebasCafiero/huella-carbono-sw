@@ -44,8 +44,8 @@ public class RepositorioMemoria<T> implements Repositorio<T> {
     }
 
     @Override
-    public T buscar(Integer id) {
-        return this.dao.buscar(id).orElse(null); //todo
+    public Optional<T> buscar(Integer id) {
+        return this.dao.buscar(id);
     }
 
     @Override

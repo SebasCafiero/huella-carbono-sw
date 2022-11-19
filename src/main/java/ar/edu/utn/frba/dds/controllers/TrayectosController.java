@@ -11,7 +11,6 @@ import ar.edu.utn.frba.dds.entities.transportes.*;
 import ar.edu.utn.frba.dds.entities.medibles.Tramo;
 import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.*;
-import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaTrayectos;
 import spark.ModelAndView;
 import spark.Request;
@@ -23,11 +22,9 @@ import java.util.stream.Collectors;
 
 public class TrayectosController {
     private FachadaTrayectos fachada;
-    private LoginController loginController;
 
     public TrayectosController() {
         this.fachada = new FachadaTrayectos();
-        this.loginController = new LoginController();
     }
 
     public ModelAndView mostrarTodosYCrear(Request request, Response response) {
@@ -235,9 +232,6 @@ public class TrayectosController {
     }
 
     public ModelAndView editar(Request request, Response response) {
-        if (loginController.chequearValidezAcceso(request, response, true) != null){ //todo
-            return loginController.chequearValidezAcceso(request, response, true);
-        }
         Map<String, Object> parametros = new HashMap<>();
         int idTrayecto = Integer.parseInt(request.params("trayecto"));
         int idMiembro = Integer.parseInt(request.params("id"));

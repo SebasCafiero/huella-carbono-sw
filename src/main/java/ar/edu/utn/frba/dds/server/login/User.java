@@ -32,11 +32,6 @@ public class User {
     public User() {
     }
 
-//    public User(String username, String password) {
-//        this.username = username;
-//        this.password = password;
-//    }
-
     public User(String username, String password, Organizacion organizacion) {
         this.username = username;
         this.password = password;
@@ -103,7 +98,7 @@ public class User {
         this.agenteSectorial = agenteSectorial;
     }
 
-    public String getRol() {
+    public String getRolName() {
         if (isMiembro())
             return "miembro";
 
@@ -114,6 +109,19 @@ public class User {
             return "organizacion";
 
         return "admin";
+    }
+
+    public Object getRol() {
+        if (isMiembro())
+            return this.miembro;
+
+        if (isAgenteSectorial())
+            return this.agenteSectorial;
+
+        if (isOrganizacion())
+            return this.organizacion;
+
+        return null;
     }
 
     public Integer getIdRol() {

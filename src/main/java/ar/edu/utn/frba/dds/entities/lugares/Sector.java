@@ -43,7 +43,7 @@ public class Sector {
 
     public String getNombre() { return this.nombre; }
 
-    public Set<Miembro> getListaDeMiembros() {
+    public Set<Miembro> getMiembros() {
         return this.miembros;
     }
 

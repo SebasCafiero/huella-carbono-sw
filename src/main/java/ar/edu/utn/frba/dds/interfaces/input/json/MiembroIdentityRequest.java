@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.interfaces.input.json;
 
-public class MiembroJSONDTO {
+public class MiembroIdentityRequest {
     private String tipoDocumento;
     private Integer documento;
 

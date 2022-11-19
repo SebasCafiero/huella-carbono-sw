@@ -17,6 +17,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,20 +42,15 @@ public class AgenteSectorialController {
         return agentes.toString();
     }
 
-    public String obtener(Request request, Response response){
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }    Todo esto agregar una vez que tengamos la vista*/
-        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")));
-        return agenteSectorial.toString();
+    public AgenteSectorial obtener(Request request, Response response) {
+        return this.repoAgentes.buscar(Integer.parseInt(request.params("id")))
+                .orElseThrow(EntityNotFoundException::new);
     }
 
-    public Object agregar(Request request, Response response){
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }    Todo esto agregar una vez que tengamos la vista*/
+    public Object agregar(Request request, Response response) {
         AgenteSectorialJSONDTO agenteDTO = new ParserJSON<>(AgenteSectorialJSONDTO.class).parseElement(request.body());
-        AreaSectorial area = this.repoAreas.buscar(agenteDTO.getArea());
+        AreaSectorial area = this.repoAreas.buscar(agenteDTO.getArea())
+                .orElseThrow(EntityNotFoundException::new);
 
         AgenteSectorial agenteSectorial = new AgenteSectorial(
                 area, new ContactoMail(agenteDTO.getContactoMail().direccionesEMail, agenteDTO.getContactoMail().password),
@@ -70,7 +66,8 @@ public class AgenteSectorialController {
         }    Todo esto agregar una vez que tengamos la vista*/
         AgenteSectorialJSONDTO agenteDTO = new ParserJSON<>(AgenteSectorialJSONDTO.class).parseElement(request.body());
 
-        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")));
+        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")))
+                .orElseThrow(EntityNotFoundException::new);
         agenteSectorial.setMail(new ContactoMail(agenteDTO.getContactoMail().direccionesEMail, agenteDTO.getContactoMail().password));
         agenteSectorial.setTelefono(new ContactoTelefono(agenteDTO.getTelefono()));
 
@@ -82,7 +79,8 @@ public class AgenteSectorialController {
         /*if (loginController.chequearValidezAcceso(request, response, true) != null){
             return loginController.chequearValidezAcceso(request, response, true);
         }    Todo esto agregar una vez que tengamos la vista*/
-        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")));
+        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")))
+                .orElseThrow(EntityNotFoundException::new);
         this.repoAgentes.eliminar(agenteSectorial);
         return "Agente Sectorial eliminado correctamente";
     }
@@ -90,7 +88,8 @@ public class AgenteSectorialController {
     public ModelAndView mostrarOrganizaciones(Request request, Response response) {
         Map<String, Object> parametros = new HashMap<>();
         Integer idAgente = Integer.parseInt(request.params("id"));
-        AgenteSectorial agente = this.repoAgentes.buscar(idAgente);
+        AgenteSectorial agente = this.repoAgentes.buscar(idAgente)
+                .orElseThrow(EntityNotFoundException::new);
 
         parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
         parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
