@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Optional;
 
 public class RepoParticularesJPA<T> extends RepositorioPersistente<VehiculoParticular> implements RepoParticulares {
 
@@ -18,9 +19,9 @@ public class RepoParticularesJPA<T> extends RepositorioPersistente<VehiculoParti
     }
 
     @Override
-    public VehiculoParticular findByEquality(TipoVehiculo tipoVehiculo, TipoCombustible tipoCombustible) {
+    public Optional<VehiculoParticular> findByEquality(TipoVehiculo tipoVehiculo, TipoCombustible tipoCombustible) {
         return this.getDao().buscar(condicionCategoria(tipoVehiculo, tipoCombustible)).stream()
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
     private CriteriaQuery<VehiculoParticular> condicionCategoria(TipoVehiculo tipoVehiculo, TipoCombustible tipoCombustible) {

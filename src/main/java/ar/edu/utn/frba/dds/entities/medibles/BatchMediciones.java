@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "BATCH_MEDICIONES")
-public class BatchMedicion {
+public class BatchMediciones {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -27,16 +27,16 @@ public class BatchMedicion {
     @JoinColumn(name = "organizacion_id")
     private Organizacion organizacion;
 
-    public BatchMedicion() {
+    public BatchMediciones() {
     }
 
-    public BatchMedicion(List<Medicion> mediciones, LocalDate fecha) {
+    public BatchMediciones(List<Medicion> mediciones, LocalDate fecha) {
         this.mediciones = mediciones;
         this.cantidadMediciones = mediciones.size();
         this.fecha = fecha;
     }
 
-    public BatchMedicion(List<Medicion> mediciones) {
+    public BatchMediciones(List<Medicion> mediciones) {
         this.mediciones = mediciones;
         this.cantidadMediciones = mediciones.size();
     }

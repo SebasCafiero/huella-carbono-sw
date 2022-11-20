@@ -26,7 +26,7 @@ public class GenericController {
 
         HashMap<String, Object> user = new HashMap<>();
         user.put("user", realUser.getUsername());
-        user.put("rol", realUser.getRol());
+        user.put("rol", realUser.getRolName());
         user.put("miembro", realUser.getMiembro() != null ? realUser.getMiembro().getId() : null);
         user.put("organizacion", realUser.getOrganizacion() != null ? realUser.getOrganizacion().getId() : null);
         user.put("agente", realUser.getAgenteSectorial() != null ? realUser.getAgenteSectorial().getId() : null);

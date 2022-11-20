@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.server.scripts;
 
-import ar.edu.utn.frba.dds.entities.medibles.BatchMedicion;
+import ar.edu.utn.frba.dds.entities.medibles.BatchMediciones;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.FechaException;
 import ar.edu.utn.frba.dds.entities.medibles.Medicion;
 import ar.edu.utn.frba.dds.interfaces.mappers.FactorEmisionMapper;
@@ -63,8 +63,8 @@ public class CalculadorHU {
         FachadaOrganizacion calculadora = new FachadaOrganizacion();
         calculadora.cargarParametros(factoresDeEmision);
 
-        Repositorio<BatchMedicion> repoBatch = FactoryRepositorio.get(BatchMedicion.class);
-        repoBatch.agregar(new BatchMedicion(mediciones, LocalDate.now()));
+        Repositorio<BatchMediciones> repoBatch = FactoryRepositorio.get(BatchMediciones.class);
+        repoBatch.agregar(new BatchMediciones(mediciones, LocalDate.now()));
 
         Float hcOrg;
         List<Medible> medibles = new ArrayList<>(mediciones);

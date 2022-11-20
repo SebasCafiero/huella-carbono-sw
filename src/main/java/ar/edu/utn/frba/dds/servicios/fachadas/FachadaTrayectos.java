@@ -20,24 +20,25 @@ import ar.edu.utn.frba.dds.repositories.Repositorio;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class FachadaTrayectos {
     private final RepoMiembros repoMiembros;
     private final Repositorio<Trayecto> repoTrayectos;
-    private final Repositorio<MedioDeTransporte> repoMedios;
+//    private final Repositorio<MedioDeTransporte> repoMedios;
     private final FachadaMedios fachadaMedios;
 
     public FachadaTrayectos() {
         this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
-        this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
+//        this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
         this.fachadaMedios = new FachadaMedios();
     }
 
     public FachadaTrayectos(RepoMiembros repoMiembros, Repositorio<Trayecto> repoTrayectos, Repositorio<MedioDeTransporte> repoMedios) {
         this.repoMiembros = repoMiembros;
         this.repoTrayectos = repoTrayectos;
-        this.repoMedios = repoMedios;
+//        this.repoMedios = repoMedios;
         this.fachadaMedios = new FachadaMedios();
     }
 
@@ -66,11 +67,11 @@ public class FachadaTrayectos {
     }
 
     public List<MedioDeTransporte> obtenerTransportes() {
-        return this.repoMedios.buscarTodos();
+        return this.fachadaMedios.findAll();
     }
 
-    public MedioDeTransporte obtenerTransporte(Integer id) {
-        return this.repoMedios.buscar(id).get();
+    public Optional<MedioDeTransporte> obtenerTransporte(Integer id) {
+        return this.fachadaMedios.findById(id);
     }
 
     public void modificarTrayecto(Trayecto trayecto) {
@@ -101,11 +102,10 @@ public class FachadaTrayectos {
                 });
         trayecto.agregarMiembro(unMiembro);
 
-        MedioDeTransporte medio = fachadaMedios.obtenerMedio(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
-
-        if(medio == null) {
-            throw new NoExisteMedioException(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
-        }
+        MedioDeTransporte medio = fachadaMedios.find(trayectoDTO.getTipoMedio(),
+                        trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2())
+                .orElseThrow(() -> new NoExisteMedioException(trayectoDTO.getTipoMedio(),
+                        trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2()));
 
         Coordenada coordenadaInicial = new Coordenada(trayectoDTO.getLatitudInicial(), trayectoDTO.getLongitudInicial());
         Coordenada coordenadaFinal = new Coordenada(trayectoDTO.getLatitudFinal(), trayectoDTO.getLongitudFinal());

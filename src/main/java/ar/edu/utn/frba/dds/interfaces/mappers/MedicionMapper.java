@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.interfaces.mappers;
 
 import ar.edu.utn.frba.dds.entities.medibles.Categoria;
 import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.entities.medibles.Periodo;
 import ar.edu.utn.frba.dds.interfaces.input.csv.MedicionCSVDTO;
 import ar.edu.utn.frba.dds.interfaces.input.json.CategoriaJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.input.json.MedicionJSONDTO;
@@ -29,13 +30,18 @@ public class MedicionMapper {
         );
     }
 
-    public static Medicion toEntity(MedicionJSONDTO medicionDTO) {
-        Medicion medicion = new Medicion(
-                new Categoria(medicionDTO.getCategoria().getActividad(), medicionDTO.getCategoria().getTipoConsumo()),
-                medicionDTO.getUnidad(),
-                medicionDTO.getValor()
-        );
-        return medicion;
+    public static Medicion toEntity(MedicionJSONDTO dto) {
+        Periodo periodo;
+        if(dto.getPeriodo().getPeriodicidad() == 'M') {
+            periodo = new Periodo(dto.getPeriodo().getAnio(), dto.getPeriodo().getMes());
+        } else {
+            periodo = new Periodo(dto.getPeriodo().getAnio());
+        }
+
+        return new Medicion(
+                new Categoria(dto.getCategoria().getActividad(),
+                        dto.getCategoria().getTipoConsumo()),
+                dto.getUnidad(), dto.getValor(), periodo);
     }
 
     public static MedicionJSONDTO toDTO(Medicion entity) {

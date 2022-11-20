@@ -1,14 +1,11 @@
 package ar.edu.utn.frba.dds.repositories.utils;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.entities.medibles.BatchMedicion;
-import ar.edu.utn.frba.dds.entities.medibles.Categoria;
-import ar.edu.utn.frba.dds.entities.medibles.FactorEmision;
+import ar.edu.utn.frba.dds.entities.medibles.*;
+import ar.edu.utn.frba.dds.entities.medibles.BatchMediciones;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
-import ar.edu.utn.frba.dds.entities.medibles.Medicion;
 import ar.edu.utn.frba.dds.entities.transportes.*;
-import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 import ar.edu.utn.frba.dds.server.login.User;
 import ar.edu.utn.frba.dds.repositories.daos.DAOHibernate;
 import ar.edu.utn.frba.dds.repositories.impl.jpa.*;
@@ -48,7 +45,7 @@ public class FactoryRepositorio {
                     repo = new RepoOrganizacionesMemoria(new DAOMemoria<>(Organizacion.class, Data.getDataOrganizacion()));
                 } else if(type.equals(Medicion.class)) {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataMedicion()));
-                } else if(type.equals(BatchMedicion.class)) {
+                } else if(type.equals(BatchMediciones.class)) {
                     repo = new RepositorioMemoria<>(new DAOMemoria<>(type, Data.getDataBatchMedicion()));
                 } else if(type.equals(Miembro.class)) {
                     repo = new RepoMiembrosMemoria(new DAOMemoria<>(Miembro.class, Data.getDataMiembro()));
