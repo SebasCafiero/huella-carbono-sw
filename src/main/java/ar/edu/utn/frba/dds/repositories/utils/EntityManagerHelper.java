@@ -109,7 +109,7 @@ public class EntityManagerHelper {
                 //"javax.persistence.schema-generation.database.action"
         };
 
-        for (String key : keys) {
+        for (String key : keys) { //Ver de poner como puse el default en SystemProperties
             if (varEntorno.containsKey(key) || varArchivo.containsKey(key)) {
                 String value;
                 if(varEntorno.containsKey(key))

@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 
 public class SystemProperties {
     private static final Boolean jpa;
@@ -17,33 +16,23 @@ public class SystemProperties {
     private static final String calculadoraDistanciasToken;
 
     static {
-        File archivo = null;
-        try {
-            Properties propiedades = new Properties();
-            archivo = new File("resources/aplication.properties");
-            FileReader file = new FileReader("resources/aplication.properties");
-            propiedades.load(file);
-
-            jpa = Objects.equals(propiedades.getProperty("jpa"), "true");
-            delta = Float.parseFloat(
-                    propiedades.getProperty("coordenadas.precision.delta", "0.00001"));
-            coeficienteGradoKm = Float.parseFloat(
-                    propiedades.getProperty("coordenadas.precision.equivalencia", "111.10"));
-            calculadoraDistanciasMockEnabled = Objects.equals(
-                    propiedades.getProperty("client.calculadora.distancias.mock-enabled"), "true");
-            calculadoraDistanciasCacheEnabled = Objects.equals(
-                    propiedades.getProperty("client.calculadora.distancias.cache-enabled"), "true");
-            calculadoraDistanciasUrl = propiedades.getProperty("client.calculadora.distancias.api.url");
-            calculadoraDistanciasToken = propiedades.getProperty("client.calculadora.distancias.api.token");
-
-            file.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(archivo.getAbsolutePath());
-            System.out.println(e.getMessage());
-            throw new RuntimeException("El archivo properties no existe");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Map<String, String> varEntorno = System.getenv();
+        Properties propArchivo = cargarArchivoConfigurable();
+        jpa = varEntorno.getOrDefault("jpa", propArchivo.getProperty("jpa")).equals("true");
+        delta = Float.parseFloat(
+                varEntorno.getOrDefault("coordenadas.precision.delta",
+                        propArchivo.getProperty("coordenadas.precision.delta", "0.00001")));
+        coeficienteGradoKm = Float.parseFloat(
+                varEntorno.getOrDefault("coordenadas.precision.equivalencia",
+                        propArchivo.getProperty("coordenadas.precision.equivalencia", "111.10")));
+        calculadoraDistanciasMockEnabled = varEntorno.getOrDefault("client.calculadora.distancias.mock-enabled",
+                propArchivo.getProperty("client.calculadora.distancias.mock-enabled")).equals("true");
+        calculadoraDistanciasCacheEnabled = varEntorno.getOrDefault("client.calculadora.distancias.cache-enabled",
+                propArchivo.getProperty("client.calculadora.distancias.cache-enabled")).equals("true");
+        calculadoraDistanciasUrl = varEntorno.getOrDefault("client.calculadora.distancias.api.url",
+                propArchivo.getProperty("client.calculadora.distancias.api.url", "https://ddstpa.com.ar/api/"));
+        calculadoraDistanciasToken = varEntorno.getOrDefault("client.calculadora.distancias.api.token",
+                propArchivo.getProperty("client.calculadora.distancias.api.token", ""));
     }
 
     public static Boolean isJpa() {
@@ -74,4 +63,38 @@ public class SystemProperties {
         return calculadoraDistanciasToken;
     }
 
+    private static Properties cargarArchivoConfigurable() {
+        Properties propiedades = new Properties();
+        String path = "resources/aplication.properties";
+//        File archivo = null;
+        try {
+//            archivo = new File(path);
+            FileReader file = new FileReader(path);
+            propiedades.load(file);
+
+            System.out.println("aplication.properties: "+propiedades.stringPropertyNames());
+            System.out.println("aplication.properties: "+propiedades);
+
+            file.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("No existe el archivo " + path);
+//            System.out.println(archivo.getAbsolutePath());
+//            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return propiedades;
+    }
 }
+/*
+  jpa = Objects.equals(propiedades.getProperty("jpa"), "true");
+          delta = Float.parseFloat(
+          propiedades.getProperty("coordenadas.precision.delta", "0.00001"));
+          coeficienteGradoKm = Float.parseFloat(
+          propiedades.getProperty("coordenadas.precision.equivalencia", "111.10"));
+          calculadoraDistanciasMockEnabled = Objects.equals(
+          propiedades.getProperty("client.calculadora.distancias.mock-enabled"), "true");
+          calculadoraDistanciasCacheEnabled = Objects.equals(
+          propiedades.getProperty("client.calculadora.distancias.cache-enabled"), "true");
+          calculadoraDistanciasUrl = propiedades.getProperty("client.calculadora.distancias.api.url");
+          calculadoraDistanciasToken = propiedades.getProperty("client.calculadora.distancias.api.token");*/
