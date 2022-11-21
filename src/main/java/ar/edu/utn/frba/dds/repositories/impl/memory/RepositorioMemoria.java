@@ -29,8 +29,8 @@ public class RepositorioMemoria<T> implements Repositorio<T> {
     }
 
     @Override
-    public void modificar(T unObjeto) {
-        this.dao.modificar(unObjeto);
+    public T modificar(T unObjeto) {
+        return this.dao.modificar(unObjeto);
     }
 
     @Override

@@ -7,6 +7,6 @@ public interface DAO<T> {
     List<T> buscarTodos();
     Optional<T> buscar(Integer id);
     T agregar(T unObjeto);
-    void modificar(T unObjeto);
+    T modificar(T unObjeto);
     void eliminar(T unObjeto);
 }

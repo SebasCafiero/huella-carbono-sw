@@ -25,25 +25,26 @@ import java.util.Optional;
 public class FachadaTrayectos {
     private final RepoMiembros repoMiembros;
     private final Repositorio<Trayecto> repoTrayectos;
-//    private final Repositorio<MedioDeTransporte> repoMedios;
     private final FachadaMedios fachadaMedios;
 
     public FachadaTrayectos() {
         this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
-//        this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
         this.fachadaMedios = new FachadaMedios();
     }
 
     public FachadaTrayectos(RepoMiembros repoMiembros, Repositorio<Trayecto> repoTrayectos, Repositorio<MedioDeTransporte> repoMedios) {
         this.repoMiembros = repoMiembros;
         this.repoTrayectos = repoTrayectos;
-//        this.repoMedios = repoMedios;
         this.fachadaMedios = new FachadaMedios();
     }
 
     public Trayecto cargarTrayecto(Trayecto unTrayecto) {
         return this.repoTrayectos.agregar(unTrayecto); //TODO ver si validar que los demas repos tengan los datos del trayecto (miembros por ej)
+    }
+
+    public Trayecto updateTrayecto(Trayecto unTrayecto) {
+        return this.repoTrayectos.modificar(unTrayecto); //TODO ver si validar que los demas repos tengan los datos del trayecto (miembros por ej)
     }
 
     public List<Trayecto> obtenerTrayectos() {

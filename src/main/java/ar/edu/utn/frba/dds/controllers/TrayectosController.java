@@ -18,13 +18,16 @@ import spark.Response;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TrayectosController {
-    private final FachadaTrayectos fachada;
+    private final FachadaTrayectos fachadaTrayectos;
 
     public TrayectosController() {
-        this.fachada = new FachadaTrayectos();
+        this.fachadaTrayectos = new FachadaTrayectos();
     }
 
     public ModelAndView mostrarTodosYCrear(Request request, Response response) {
@@ -57,7 +60,7 @@ public class TrayectosController {
         parametros.put("fecha", "MES/AÑO");
 
         if(req.queryParams("transporte-nuevo") != null) {
-            MedioDeTransporte transporte = fachada.obtenerTransporte(Integer.parseInt(req.queryParams("transporte-nuevo"))).get();
+            MedioDeTransporte transporte = fachadaTrayectos.obtenerTransporte(Integer.parseInt(req.queryParams("transporte-nuevo"))).get();
             TramoHBS tramoDTO = new TramoHBS();
             tramoDTO.setTransporte(TransporteMapperHBS.toDTO(transporte));
             parametros.put("tramoNuevo", tramoDTO);
@@ -68,7 +71,7 @@ public class TrayectosController {
 
     private List<Object> generarMapeoTransportesTipos() {
         List<Object> transportes = new ArrayList<>();
-        List<MedioDeTransporte> transporteTotales = fachada.obtenerTransportes();
+        List<MedioDeTransporte> transporteTotales = fachadaTrayectos.obtenerTransportes();
         transportes.add(MediosMapperHBS.toDTOLazy(TransportePublico.class, transporteTotales));
         transportes.add(MediosMapperHBS.toDTOLazy(VehiculoParticular.class, transporteTotales));
         transportes.add(MediosMapperHBS.toDTOLazy(TransporteEcologico.class, transporteTotales));
@@ -81,38 +84,28 @@ public class TrayectosController {
 
         if(req.queryParams("f-trayecto-compartido-ack") != null) {
             int idTrayecto = Integer.parseInt(req.queryParams("f-trayecto-id")); //todo validar
-            trayecto = this.fachada.obtenerTrayecto(idTrayecto);
+            trayecto = this.fachadaTrayectos.obtenerTrayecto(idTrayecto);
         } else {
             Periodo periodo = parsearPeriodo(req.queryParams("f-fecha"));
             trayecto.setPeriodo(periodo);
-            asignarTramos(trayecto, req); //todo la fecha y tramos vacios son solo en este caso, asi que ver de ignorarlos al modificar trayecto
-            this.fachada.cargarTrayecto(trayecto);
+            trayecto.setTramos(asignarTramos2(req)); //todo la fecha y tramos vacios son solo en este caso, asi que ver de ignorarlos al modificar trayecto
+
+            if(req.queryParams("f-transporte-nuevo") != null) {
+                trayecto.agregarTramo(asignarTramoNuevo(req));
+            }
+
         }
 
         Miembro miembro = req.attribute("miembro");
         miembro.agregarTrayecto(trayecto);
         trayecto.agregarMiembro(miembro);
-        this.fachada.cargarTrayecto(trayecto);
+        Trayecto trayectoResponse = this.fachadaTrayectos.updateTrayecto(trayecto);
 
-        res.redirect("/miembro/" + req.params("id") + "/trayecto/" + trayecto.getId());
+        res.redirect("/miembro/" + req.params("id") + "/trayecto/" + trayectoResponse.getId());
         return res;
     }
 
     private void asignarTramos(Trayecto trayecto, Request req) {
-//        Periodo periodo = parsearPeriodo(req.queryParams("f-fecha"));
-//        trayecto.setPeriodo(periodo);
-//        if(req.queryParams("f-fecha").matches("\\d+")) {
-//            periodo = new Periodo(Integer.parseInt(req.queryParams("f-fecha")));
-//        } else if(req.queryParams("f-fecha").matches("\\d+/\\d+")) {
-//            String[] fecha = req.queryParams("f-fecha").split("/"); //todo validar
-//            periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
-//        } else {
-//            LocalDate fecha = LocalDate.now();
-//            periodo = new Periodo(fecha.getYear(), fecha.getMonthValue());
-//        }
-////        String fechaActual = LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear();
-////        String[] fecha = req.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar
-
         List<Tramo> tramos = new ArrayList<>();
         int cant = 0; //index de cantidad tramos
 
@@ -120,7 +113,7 @@ public class TrayectosController {
         while(req.queryParams("f-transporte-"+cant) != null) { //uso transporte, pero podria ser cualquier campo
             Tramo tramo;
             if((req.queryParams("f-transporte-parada-inicial-"+cant) != null) || (req.queryParams("f-lat-inicial-"+cant) != null)) {
-                MedioDeTransporte transporte = fachada.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-"+cant))).get();
+                MedioDeTransporte transporte = fachadaTrayectos.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-"+cant))).get();
                 UbicacionGeografica ubiInicial;
                 UbicacionGeografica ubiFinal;
                 if(transporte instanceof TransportePublico) {
@@ -175,12 +168,97 @@ public class TrayectosController {
         trayecto.setTramos(tramos);
 
         if(req.queryParams("f-transporte-nuevo") != null) {
-            asignarTramoNuevo(trayecto, req);
+            trayecto.agregarTramo(asignarTramoNuevo(req));
         }
     }
 
-    private void asignarTramoNuevo(Trayecto trayecto, Request req) {
-        MedioDeTransporte transporte = fachada.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-nuevo"))).get();
+    private UbicacionGeografica obtenerUbicacion(Request req, MedioDeTransporte transporte, Boolean esInicial, Integer posicion) {
+        Function<String, Integer> paramToInt = param -> Integer.parseInt(req.queryParams(param));
+        Function<String, Float> paramToFloat = param -> Float.parseFloat(req.queryParams(param));
+
+        String pos = posicion == null ? "nueva" : posicion.toString();
+        String lugar = esInicial ? "inicial" : "final";
+
+        if(transporte instanceof TransportePublico) {
+            return ((TransportePublico) transporte).getParadas().stream()
+                        .filter(p -> p.getId().equals(paramToInt.apply("f-transporte-parada-" + lugar + "-" + pos)))
+                        .map(Parada::getUbicacion)
+                        .findFirst().get();
+        } else {
+            Coordenada coordenada = new Coordenada(
+                    paramToFloat.apply("f-lat-" + lugar + "-" + pos), paramToFloat.apply("f-lon-" + lugar + "-" + pos));
+            return new UbicacionGeografica(
+                    "Argentina",
+                    req.queryParams("f-provincia-" + lugar + "-" + pos),
+                    req.queryParams("f-municipio-" + lugar + "-" + pos),
+                    req.queryParams("f-localidad-" + lugar + "-" + pos),
+                    req.queryParams("f-calle-" + "-" + lugar + pos),
+                    paramToInt.apply("f-numero-" + lugar + "-" + pos),
+                    coordenada
+            );
+        }
+    }
+
+    private List<Tramo> asignarTramos2(Request req) {
+        Integer limit = Stream.iterate(0, i -> i + 1)
+                .filter(i -> req.queryParams("f-transporte-"+i) == null)
+                .findFirst().orElse(0);
+
+        Function<String, Integer> paramToInt = param -> Integer.parseInt(req.queryParams(param));
+        Function<String, Float> paramToFloat = param -> Float.parseFloat(req.queryParams(param));
+
+        List<Tramo> tramos = Stream.iterate(0, i -> i + 1)
+                .limit(limit)
+                .map(i -> {
+//                    if((req.queryParams("f-transporte-parada-inicial-" + i) == null) && (req.queryParams("f-lat-inicial-"+i) == null)) {
+//                     //Cuando se deja sin modificar el tramo //TODO VER SI ENTRA ALGUNA VEZ, CREO QUE QUEDO VIEJO CUANDO ESTABA EL DISABLED
+//                        return trayecto.getTramos().get(i); //TODO orden de la lista (indice es cant?), o buscar id?
+//                    }
+
+                    MedioDeTransporte transporte = fachadaTrayectos.obtenerTransporte(paramToInt.apply("f-transporte-" + i)).get();
+
+                    Function<Boolean, UbicacionGeografica> parsearUbicacion;
+                    if(transporte instanceof TransportePublico) {
+                        parsearUbicacion = esInicial -> {
+                            String tipo = esInicial ? "inicial" : "final";
+                            return ((TransportePublico) transporte).getParadas().stream()
+                                    .filter(p -> p.getId().equals(paramToInt.apply("f-transporte-parada-" + tipo + "-" + i)))
+                                    .map(Parada::getUbicacion)
+                                    .findFirst().get();
+                        };
+                    } else {
+                        parsearUbicacion = esInicial -> {
+                            String tipo = esInicial ? "inicial" : "final";
+                            Coordenada coordenada = new Coordenada(
+                                    paramToFloat.apply("f-lat-" + tipo + "-" + i), paramToFloat.apply("f-lon-" + tipo + "-" + i));
+                            return new UbicacionGeografica(
+                                    "Argentina",
+                                    req.queryParams("f-provincia-" + tipo + "-" + i),
+                                    req.queryParams("f-municipio-" + tipo + "-" + i),
+                                    req.queryParams("f-localidad-" + tipo + "-" + i),
+                                    req.queryParams("f-calle-" + "-" + tipo + i),
+                                    paramToInt.apply("f-numero-" + tipo + "-"+i),
+                                    coordenada
+                            );
+                        };
+                    }
+
+                    Tramo tramo = new Tramo(transporte, parsearUbicacion.apply(true), parsearUbicacion.apply(false));
+                    tramo.setId(paramToInt.apply("f-tramo-id-"+i));
+                    return tramo;
+                })
+                .collect(Collectors.toList());
+
+        return tramos;
+//        trayecto.setTramos(tramos);
+
+//        if(req.queryParams("f-transporte-nuevo") != null) {
+//            trayecto.agregarTramo(asignarTramoNuevo(req));
+//        }
+    }
+
+    private Tramo asignarTramoNuevo(Request req) {
+        MedioDeTransporte transporte = fachadaTrayectos.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-nuevo"))).get();
         Coordenada coorInicial;
         Coordenada coorFinal;
         Tramo tramoNuevo;
@@ -227,7 +305,8 @@ public class TrayectosController {
         }
         tramoNuevo = new Tramo(transporte, ubicacionInicial, ubicacionFinal);
 //        tramoNuevo.setId(cant); //el id se setea al cargar el trayecto en el repositorio
-        trayecto.agregarTramo(tramoNuevo);
+//        trayecto.agregarTramo(tramoNuevo);
+        return tramoNuevo;
 //        tramos.add(tramoNuevo);
     }
 
@@ -244,7 +323,7 @@ public class TrayectosController {
         Map<String, Object> parametros = new HashMap<>();
         int idTrayecto = Integer.parseInt(req.params("trayecto"));
 
-        Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+        Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(idTrayecto);
         parametros.put("rol", "miembro");
         parametros.put("user", miembro.getNombre() + " " + miembro.getApellido());
         parametros.put("trayecto", TrayectoMapperHBS.toDTO(trayecto));
@@ -255,7 +334,7 @@ public class TrayectosController {
 
     public ModelAndView editar(Request request, Response response) {
         Miembro miembro = request.attribute("miembro");
-        Trayecto trayecto = fachada.obtenerTrayecto(Integer.parseInt(request.params("trayecto")));
+        Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(Integer.parseInt(request.params("trayecto")));
 
         TramoHBS tramoHBS = null;
 
@@ -300,7 +379,7 @@ public class TrayectosController {
     }
 
     private TramoHBS mapTramoEditable(Integer cant, Request req) {
-        MedioDeTransporte transporte = fachada.obtenerTransporte(Integer.parseInt(req.queryParams("transporte"+cant))).get();
+        MedioDeTransporte transporte = fachadaTrayectos.obtenerTransporte(Integer.parseInt(req.queryParams("transporte"+cant))).get();
         TransporteHBS transporteDTO = TransporteMapperHBS.toDTOLazy(transporte); //deberia sacarlo xq no lo uso casi
         TramoHBS tramoDTO = new TramoHBS();
         UbicacionGeografica ubicacionInicial = null;
@@ -376,7 +455,7 @@ public class TrayectosController {
 
     private TramoHBS mapTramoNuevo(Request req) {
 
-        MedioDeTransporte transporteNuevo = fachada.obtenerTransporte(Integer.parseInt(req.queryParams("transporte-nuevo"))).get();
+        MedioDeTransporte transporteNuevo = fachadaTrayectos.obtenerTransporte(Integer.parseInt(req.queryParams("transporte-nuevo"))).get();
         TramoHBS tramoDTO = new TramoHBS();
         UbicacionGeografica ubicacionInicial = null;
         UbicacionGeografica ubicacionFinal = null;
@@ -453,10 +532,10 @@ public class TrayectosController {
     public Response modificar(Request req, Response res) {
         Integer idTrayecto = Integer.parseInt(req.params("trayecto"));
         Integer idMiembro = Integer.parseInt(req.params("id"));
-        Miembro miembro = fachada.obtenerMiembro(idMiembro);
-        Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+        Miembro miembro = fachadaTrayectos.obtenerMiembro(idMiembro);
+        Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(idTrayecto);
         asignarTramos(trayecto, req);
-        fachada.modificarTrayecto(trayecto);
+        fachadaTrayectos.modificarTrayecto(trayecto);
         res.redirect("/miembro/" + idMiembro + "/trayecto/" + idTrayecto);
         return res;
     }
@@ -464,8 +543,8 @@ public class TrayectosController {
     public Response eliminar(Request req, Response res) { //Elimino del trayecto, no del sistema
         Integer idTrayecto = Integer.parseInt(req.params("trayecto"));
         Integer idMiembro = Integer.parseInt(req.params("id"));
-        Miembro miembro = fachada.obtenerMiembro(idMiembro);
-        Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+        Miembro miembro = fachadaTrayectos.obtenerMiembro(idMiembro);
+        Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(idTrayecto);
         miembro.quitarTrayecto(trayecto);
         trayecto.quitarMiembro(miembro);
 //        res.redirect("/miembro/" + idMiembro + "/trayecto?action=list"); //redirijo desde JS
@@ -475,10 +554,10 @@ public class TrayectosController {
 
     public Response borrar(Request req, Response res) { //Elimino del sistema
         Integer idTrayecto = Integer.parseInt(req.params("id"));
-        Trayecto trayecto = fachada.obtenerTrayecto(idTrayecto);
+        Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(idTrayecto);
         trayecto.getMiembros().forEach(m -> m.quitarTrayecto(trayecto));
         trayecto.setMiembros(new ArrayList<>()); //No puedo usar foreach de miembros por problemas de concurrencia
-        this.fachada.eliminarTrayecto(trayecto);
+        this.fachadaTrayectos.eliminarTrayecto(trayecto);
         return res;
     }
 
