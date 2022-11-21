@@ -27,12 +27,12 @@ public class Medicion implements Medible {
     public Medicion() {
     }
 
-    public Medicion(Categoria categoria, String unidad, Float valor) {
-        this.categoria = categoria;
-        this.unidad = unidad;
-        this.valor = valor;
-        this.periodo = new Periodo(LocalDate.now().getYear(), LocalDate.now().getMonthValue()); //todo para que no sea null
-    }
+//    public Medicion(Categoria categoria, String unidad, Float valor) {
+//        this.categoria = categoria;
+//        this.unidad = unidad;
+//        this.valor = valor;
+//        this.periodo = new Periodo(LocalDate.now().getYear(), LocalDate.now().getMonthValue()); //todo para que no sea null
+//    }
 
     public Medicion(Categoria categoria, String unidad, float valor, Periodo periodo) {
         this.categoria = categoria;

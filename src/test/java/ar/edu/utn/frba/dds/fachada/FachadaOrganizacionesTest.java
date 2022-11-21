@@ -1,9 +1,6 @@
 package ar.edu.utn.frba.dds.fachada;
 
-import ar.edu.utn.frba.dds.entities.medibles.Categoria;
-import ar.edu.utn.frba.dds.entities.medibles.FactorEmision;
-import ar.edu.utn.frba.dds.entities.medibles.Medible;
-import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.entities.medibles.*;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaOrganizacion;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
@@ -34,7 +31,7 @@ public class FachadaOrganizacionesTest {
     void seObtieneCorrectamenteHC() {
         List<Medible> mediciones = new ArrayList<>();
         Categoria cat = new Categoria("Combustion Fija","Gas Natural");
-        mediciones.add(new Medicion(cat, "m3", 100F));
+        mediciones.add(new Medicion(cat, "m3", 100F, new Periodo(1, 1)));
 
         Assertions.assertEquals(100, calculadora.obtenerHU(mediciones), 1);
     }
@@ -43,7 +40,7 @@ public class FachadaOrganizacionesTest {
     void ignoraLaUnidad() {
         List<Medible> mediciones = new ArrayList<>();
         Categoria cat = new Categoria("Combustion Fija","Gas Natural");
-        mediciones.add(new Medicion(cat, "lt", 100F));
+        mediciones.add(new Medicion(cat, "lt", 100F, new Periodo(1, 1)));
 
         Assertions.assertEquals(100, calculadora.obtenerHU(mediciones), 1);
     }
@@ -52,7 +49,7 @@ public class FachadaOrganizacionesTest {
     void fallaPorCategoriaInexistenteEnMedicion() {
         List<Medible> mediciones = new ArrayList<>();
         Categoria cat = new Categoria("Combustion","Gas");
-        mediciones.add(new Medicion(cat, "m3", 100F));
+        mediciones.add(new Medicion(cat, "m3", 100F, new Periodo(1, 1)));
 
         Assertions.assertThrows(MedicionSinFactorEmisionException.class, () -> {
             calculadora.obtenerHU(mediciones);

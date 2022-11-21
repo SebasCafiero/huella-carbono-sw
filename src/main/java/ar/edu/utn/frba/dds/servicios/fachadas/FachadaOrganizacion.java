@@ -88,7 +88,7 @@ public class FachadaOrganizacion implements FachadaOrg {
     }
 
     public Float calcularImpactoTrayectos(Sector sector, Periodo periodo) {
-        return sector.getListaDeMiembros().stream()
+        return sector.getMiembros().stream()
                 .map(miembro -> {
                     Float trayectos = calcularImpactoTrayectos(miembro, periodo);
                     return trayectos;

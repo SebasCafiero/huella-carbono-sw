@@ -1,12 +1,12 @@
 package ar.edu.utn.frba.dds.interfaces.input;
 
-import ar.edu.utn.frba.dds.interfaces.input.json.MiembroJSONDTO;
+import ar.edu.utn.frba.dds.interfaces.input.json.MiembroResponse;
 
 import java.util.List;
 
-public class SectorDTO {
+public class SectorResponse {
     private String nombre;
-    private List<MiembroJSONDTO> miembros;
+    private List<MiembroResponse> miembros;
 
     public String getNombre() {
         return nombre;
@@ -16,11 +16,11 @@ public class SectorDTO {
         this.nombre = nombre;
     }
 
-    public List<MiembroJSONDTO> getMiembros() {
+    public List<MiembroResponse> getMiembros() {
         return miembros;
     }
 
-    public void setMiembros(List<MiembroJSONDTO> miembros) {
+    public void setMiembros(List<MiembroResponse> miembros) {
         this.miembros = miembros;
     }
 }

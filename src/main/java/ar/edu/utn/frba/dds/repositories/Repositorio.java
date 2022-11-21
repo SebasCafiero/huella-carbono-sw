@@ -7,10 +7,12 @@ public interface Repositorio<T> {
     T agregar(T unObjeto);
 
     void agregar(T... objetos);
-    void modificar(T unObjeto);
+    T modificar(T unObjeto);
     void eliminar(T unObjeto);
     List<T> buscarTodos();
-    T buscar(Integer id);
+    Optional<T> buscar(Integer id);
 
     void modificar(Integer id,T unObjeto);
+
+    Optional<T> getReferenceById(Integer id);
 }

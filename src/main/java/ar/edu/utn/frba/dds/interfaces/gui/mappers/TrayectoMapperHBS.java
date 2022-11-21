@@ -33,7 +33,5 @@ public class TrayectoMapperHBS {
         return trayectoDTO;
     }
 
-
-
 }
 

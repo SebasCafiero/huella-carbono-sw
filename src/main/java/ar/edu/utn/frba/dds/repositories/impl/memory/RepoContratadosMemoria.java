@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.entities.transportes.TipoServicio;
 import ar.edu.utn.frba.dds.repositories.RepoContratados;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class RepoContratadosMemoria<T> extends RepositorioMemoria<ServicioContratado> implements RepoContratados {
@@ -14,9 +15,9 @@ public class RepoContratadosMemoria<T> extends RepositorioMemoria<ServicioContra
     }
 
     @Override
-    public ServicioContratado findByEquality(TipoServicio tipo) {
+    public Optional<ServicioContratado> findByEquality(TipoServicio tipo) {
         return this.getDao().buscar(condicionCategoria(tipo)).stream()
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
     private Predicate<ServicioContratado> condicionCategoria(TipoServicio tipo) {

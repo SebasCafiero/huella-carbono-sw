@@ -16,7 +16,7 @@ public class Filtrador {
 
     public static void filtrarPorRol(Request req, Response res, String rolDeAceptacion) throws ForbiddenException{
         FachadaUsuarios fachadaUsuarios = new FachadaUsuarios();
-        String rol = fachadaUsuarios.findById(req.session().attribute("idUsuario")).get().getRol();
+        String rol = fachadaUsuarios.findById(req.session().attribute("idUsuario")).get().getRolName();
         if(!rolDeAceptacion.equals(rol)) {
             res.status(403);
             throw new ForbiddenException();

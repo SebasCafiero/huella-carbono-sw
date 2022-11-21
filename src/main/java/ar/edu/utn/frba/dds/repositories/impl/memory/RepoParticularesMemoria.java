@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.entities.transportes.VehiculoParticular;
 import ar.edu.utn.frba.dds.repositories.RepoParticulares;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class RepoParticularesMemoria<T> extends RepositorioMemoria<VehiculoParticular> implements RepoParticulares {
@@ -15,9 +16,9 @@ public class RepoParticularesMemoria<T> extends RepositorioMemoria<VehiculoParti
     }
 
     @Override
-    public VehiculoParticular findByEquality(TipoVehiculo tipoVehiculo, TipoCombustible tipoCombustible) {
+    public Optional<VehiculoParticular> findByEquality(TipoVehiculo tipoVehiculo, TipoCombustible tipoCombustible) {
         return this.getDao().buscar(condicionCategoria(tipoVehiculo, tipoCombustible)).stream()
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
     private Predicate<VehiculoParticular> condicionCategoria(TipoVehiculo tipoVehiculo, TipoCombustible tipoCombustible) {

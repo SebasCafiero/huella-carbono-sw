@@ -1,6 +1,6 @@
-package ar.edu.utn.frba.dds.interfaces.input.csv;
+package ar.edu.utn.frba.dds.interfaces.input.json;
 
-public class MiembroCSVDTO {
+public class MiembroResponse {
     private String nombre;
     private String apellido;
     private String tipoDocumento;

@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Optional;
 
 public class RepoEcologicosJPA<T> extends RepositorioPersistente<TransporteEcologico> implements RepoEcologicos {
 
@@ -16,9 +17,9 @@ public class RepoEcologicosJPA<T> extends RepositorioPersistente<TransporteEcolo
     }
 
     @Override
-    public TransporteEcologico findByEquality(TipoTransporteEcologico tipo) {
+    public Optional<TransporteEcologico> findByEquality(TipoTransporteEcologico tipo) {
         return this.getDao().buscar(condicionCategoria(tipo)).stream()
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
     private CriteriaQuery<TransporteEcologico> condicionCategoria(TipoTransporteEcologico tipo) {

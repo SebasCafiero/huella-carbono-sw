@@ -20,24 +20,22 @@ import ar.edu.utn.frba.dds.repositories.Repositorio;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class FachadaTrayectos {
     private final RepoMiembros repoMiembros;
     private final Repositorio<Trayecto> repoTrayectos;
-    private final Repositorio<MedioDeTransporte> repoMedios;
     private final FachadaMedios fachadaMedios;
 
     public FachadaTrayectos() {
         this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
-        this.repoMedios = FactoryRepositorio.get(MedioDeTransporte.class);
         this.fachadaMedios = new FachadaMedios();
     }
 
     public FachadaTrayectos(RepoMiembros repoMiembros, Repositorio<Trayecto> repoTrayectos, Repositorio<MedioDeTransporte> repoMedios) {
         this.repoMiembros = repoMiembros;
         this.repoTrayectos = repoTrayectos;
-        this.repoMedios = repoMedios;
         this.fachadaMedios = new FachadaMedios();
     }
 
@@ -45,12 +43,16 @@ public class FachadaTrayectos {
         return this.repoTrayectos.agregar(unTrayecto); //TODO ver si validar que los demas repos tengan los datos del trayecto (miembros por ej)
     }
 
+    public Trayecto updateTrayecto(Trayecto unTrayecto) {
+        return this.repoTrayectos.modificar(unTrayecto); //TODO ver si validar que los demas repos tengan los datos del trayecto (miembros por ej)
+    }
+
     public List<Trayecto> obtenerTrayectos() {
         return this.repoTrayectos.buscarTodos();
     }
 
     public Trayecto obtenerTrayecto(Integer id) {
-        return this.repoTrayectos.buscar(id);
+        return this.repoTrayectos.buscar(id).get();
     }
 
     public void eliminarTrayecto(Trayecto trayecto) {
@@ -62,15 +64,15 @@ public class FachadaTrayectos {
     }
 
     public Miembro obtenerMiembro(Integer id) {
-        return this.repoMiembros.buscar(id);
+        return this.repoMiembros.buscar(id).get();
     }
 
     public List<MedioDeTransporte> obtenerTransportes() {
-        return this.repoMedios.buscarTodos();
+        return this.fachadaMedios.findAll();
     }
 
-    public MedioDeTransporte obtenerTransporte(Integer id) {
-        return this.repoMedios.buscar(id);
+    public Optional<MedioDeTransporte> obtenerTransporte(Integer id) {
+        return this.fachadaMedios.findById(id);
     }
 
     public void modificarTrayecto(Trayecto trayecto) {
@@ -101,11 +103,10 @@ public class FachadaTrayectos {
                 });
         trayecto.agregarMiembro(unMiembro);
 
-        MedioDeTransporte medio = fachadaMedios.obtenerMedio(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
-
-        if(medio == null) {
-            throw new NoExisteMedioException(trayectoDTO.getTipoMedio(), trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2());
-        }
+        MedioDeTransporte medio = fachadaMedios.find(trayectoDTO.getTipoMedio(),
+                        trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2())
+                .orElseThrow(() -> new NoExisteMedioException(trayectoDTO.getTipoMedio(),
+                        trayectoDTO.getAtributo1(), trayectoDTO.getAtributo2()));
 
         Coordenada coordenadaInicial = new Coordenada(trayectoDTO.getLatitudInicial(), trayectoDTO.getLongitudInicial());
         Coordenada coordenadaFinal = new Coordenada(trayectoDTO.getLatitudFinal(), trayectoDTO.getLongitudFinal());
@@ -128,10 +129,9 @@ public class FachadaTrayectos {
                 );
 
         // Si da error el get es porque se intentó referenciar con un trayecto que no existe
-        Trayecto trayecto = repoTrayectos.buscar(trayectoCompartidoDTO.getTrayectoReferencia());
-        if(trayecto == null) {
-            throw new NoExisteTrayectoCompartidoException(trayectoCompartidoDTO.getTrayectoReferencia());
-        }
+        Trayecto trayecto = repoTrayectos.buscar(trayectoCompartidoDTO.getTrayectoReferencia())
+                .orElseThrow(() -> new NoExisteTrayectoCompartidoException(
+                        trayectoCompartidoDTO.getTrayectoReferencia()));
 
         trayecto.agregarMiembro(miembro);
         miembro.agregarTrayecto(trayecto);

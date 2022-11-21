@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Optional;
 
 public class RepoPublicosJPA<T> extends RepositorioPersistente<TransportePublico> implements RepoPublicos {
 
@@ -17,8 +18,8 @@ public class RepoPublicosJPA<T> extends RepositorioPersistente<TransportePublico
     }
 
     @Override
-    public TransportePublico findByEquality(TipoTransportePublico tipo, String linea) {
-        return this.getDao().buscar(condicionTransporte(tipo, linea)).stream().findFirst().orElse(null);
+    public Optional<TransportePublico> findByEquality(TipoTransportePublico tipo, String linea) {
+        return this.getDao().buscar(condicionTransporte(tipo, linea)).stream().findFirst();
     }
 
     private CriteriaQuery<TransportePublico> condicionTransporte(TipoTransportePublico tipo, String linea) {

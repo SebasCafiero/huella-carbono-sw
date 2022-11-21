@@ -1,17 +1,23 @@
 package ar.edu.utn.frba.dds.server;
 
-import ar.edu.utn.frba.dds.controllers.*;
+import ar.edu.utn.frba.dds.interfaces.controllers.*;
 import ar.edu.utn.frba.dds.server.login.*;
 import ar.edu.utn.frba.dds.server.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.server.utils.HandlebarsTemplateEngineBuilder;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaUsuarios;
+import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiHuellaApiException;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import org.eclipse.jetty.http.HttpStatus;
 import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class Router {
     private static HandlebarsTemplateEngine engine;
+    private static final Gson gson = new Gson();
 
     private static void initEngine() {
         Router.engine = HandlebarsTemplateEngineBuilder
@@ -40,71 +46,99 @@ public class Router {
         GenericController genericController = new GenericController();
         TrayectosController trayectosController = new TrayectosController();
 
-        Function<Function<User, Boolean>, Filter> autorizarUsuario =
-                tipoUsuario -> (Request request, Response response) -> {
-            User user = fachadaUsuarios.findById(request.session().attribute("idUsuario"))
-                    .orElseThrow(AuthenticationException::new);
+        Filter asegurarSesion = (Request request, Response response) -> {
+            Integer token = Optional.ofNullable((Integer) request.session().attribute("idUsuario"))
+                    .orElse(Optional.ofNullable(request.headers("Authorization"))
+                            .filter(value -> value.matches("\\d+"))
+                            .map(Integer::parseInt)
+                            .orElseThrow(NotLoggedException::new));
 
-            if(!tipoUsuario.apply(user) || !user.getIdRol().equals(Integer.parseInt(request.params("id")))) {
-                throw new UnauthorizedException();
-            }
+            request.session().attribute("idUsuario", token);
+        };
+
+        Function<String, Filter> autorizarUsuario =
+                tipoUsuario -> (Request request, Response response) -> {
+            fachadaUsuarios.findByRolId(tipoUsuario, Integer.parseInt(request.params("id")))
+                    .filter(u -> u.getId().equals(request.session().attribute("idUsuario")))
+                    .orElseThrow(UnauthorizedException::new);
         };
 
         Spark.path("/api", () -> {
+            Spark.before("/*", (Request request, Response response) -> response.header("Content-Type", "application/json"));
+            Spark.post("/login", genericController::iniciarSesionApi, gson::toJson);
 
             Spark.path("/organizacion", () -> {
-                Spark.before("/*", (Request request, Response response) -> {
-                    if (!fachadaUsuarios.estaLogueado(request))
-                        throw new NotLoggedException();
-                });
+                Spark.before("/*", asegurarSesion);
 
                 Spark.post("", organizacionController::agregar);
                 Spark.get("", organizacionController::mostrarTodos);
 
                 Spark.path("/:id", () -> {
-                    Spark.before("/*", autorizarUsuario.apply(User::isOrganizacion));
-                    Spark.get("", organizacionController::obtener);
+                    Spark.before("", autorizarUsuario.apply("organizacion"));
+                    Spark.before("/*", autorizarUsuario.apply("organizacion"));
+
+                    Spark.get("", organizacionController::obtener, gson::toJson);
                     Spark.put("", organizacionController::modificar);
                     Spark.delete("", organizacionController::eliminar);
 
+                    Spark.path("/batch", () -> {
+                        Spark.get("", batchMedicionController::mostrarTodos, gson::toJson);
+                        Spark.get("/:batch", batchMedicionController::obtener, gson::toJson);
+                        Spark.post("", batchMedicionController::agregar);
+                        Spark.delete("/:batch", batchMedicionController::eliminar);
+                    });
+
+                    Spark.path("/medicion", () -> {
+                        Spark.get("", medicionController::mostrarTodos);
+                        Spark.get("/:id", medicionController::obtener);
+                        Spark.get("/unidad/:unidad", medicionController::filtrarUnidad);
+                        Spark.get("/valor/:valor", medicionController::filtrarValor);
+                    });
+
+                    Spark.get("/reporte", reportesController::generarReporteOrganizacion);
                 });
             });
 
             Spark.path("/miembro", () -> {
-                Spark.get("/:id", miembroController::obtener, engine);
-                Spark.delete("/:id", miembroController::eliminar);
+                Spark.before("/*", asegurarSesion);
+
                 Spark.get("", miembroController::mostrarTodos);
-                Spark.put("/:id", miembroController::modificar);
                 Spark.post("", miembroController::agregar);
+
+                Spark.path("/:id", () -> {
+                    Spark.before("", autorizarUsuario.apply("miembro"));
+                    Spark.before("/*", autorizarUsuario.apply("miembro"));
+
+                    Spark.get("", miembroController::obtener, engine);
+                    Spark.delete("", miembroController::eliminar);
+                    Spark.put("", miembroController::modificar);
+                });
+
             });
 
-            Spark.path("/agenteSectorial", () -> {
-                Spark.get("/:id", agenteSectorialController::obtener);
-                Spark.delete("/:id", agenteSectorialController::eliminar);
-                Spark.put("/:id", agenteSectorialController::modificar);
+            Spark.path("/agente", () -> {
+                Spark.before("/*", asegurarSesion);
+
                 Spark.get("", agenteSectorialController::mostrarTodos);
                 Spark.post("", agenteSectorialController::agregar);
+
+                Spark.path("/:id", () -> {
+                    Spark.before("", autorizarUsuario.apply("agente"));
+                    Spark.before("/*", autorizarUsuario.apply("agente"));
+
+                    Spark.get("", agenteSectorialController::obtener);
+                    Spark.delete("", agenteSectorialController::eliminar);
+                    Spark.put("", agenteSectorialController::modificar);
+
+                    Spark.get("/reporte", reportesController::generarReporteAgente);
+                });
             });
 
-            Spark.path("/batchMedicion", () -> {
-                Spark.get("", batchMedicionController::mostrarTodos);
-                Spark.get("/:id", batchMedicionController::obtener);
-                Spark.post("", batchMedicionController::agregar);
-                Spark.delete("/:id", batchMedicionController::eliminar);
+            Spark.path("/factorEmision", () -> {
+                Spark.get("", factorEmisionController::mostrarTodos);
+                Spark.put("/:id", factorEmisionController::modificar);
+
             });
-
-            Spark.path("/medicion", () -> {
-                Spark.get("", medicionController::mostrarTodos);
-                Spark.get("/:id", medicionController::obtener);
-                Spark.get("/unidad/:unidad", medicionController::filtrarUnidad);
-                Spark.get("/valor/:valor", medicionController::filtrarValor);
-            });
-
-            Spark.put("/factorEmision/:id", factorEmisionController :: modificar);
-            Spark.get("/factorEmision", factorEmisionController :: mostrarTodos); // solo para probar
-
-            Spark.get("/reportes/agente/:id", reportesController::generarReporteAgente);
-            Spark.get("/reportes/organizacion/:id", reportesController::generarReporteOrganizacion);
 
             Spark.delete("trayecto/:id", trayectosController::borrar); //Para eliminar definitivamente el trayecto (admin)
         });
@@ -119,23 +153,41 @@ public class Router {
         Spark.get("/menu", genericController::menu, engine);
 
         Spark.path("/miembro/:id", () -> {
-            Spark.before("/*", autorizarUsuario.apply(User::isMiembro));
-            Spark.get("/trayecto", trayectosController::mostrarTodosYCrear, engine);
-            Spark.post("/trayecto", trayectosController::agregar);
-            Spark.get("/trayecto/:trayecto", trayectosController::mostrarYEditar, engine);
-            Spark.post("/trayecto/:trayecto", trayectosController::modificar);
-            Spark.delete("/trayecto/:trayecto", trayectosController::eliminar);
+            Spark.before("", autorizarUsuario.apply("miembro"));
+            Spark.before("/*", autorizarUsuario.apply("miembro"));
+
+            Spark.path("/trayecto", () -> {
+                Spark.get("", trayectosController::mostrarTodosYCrear, engine);
+                Spark.post("", trayectosController::agregar);
+
+                Spark.path("/:trayecto", () -> {
+                    Spark.get("", trayectosController::mostrarYEditar, engine);
+                    Spark.post("", trayectosController::modificar);
+                    Spark.delete("", trayectosController::eliminar);
+                });
+            });
         });
 
-        Spark.get("/organizacion/:organizacion/reporte", reportesController::darAltaYMostrar, engine);
-        Spark.post("/organizacion/:organizacion/reporte", reportesController::generar);
+        Spark.path("/organizacion/:id", () -> {
+            Spark.before("", autorizarUsuario.apply("organizacion"));
+            Spark.before("/*", autorizarUsuario.apply("organzacion"));
 
-        Spark.get("/agente/:id/organizacion", agenteSectorialController::mostrarOrganizaciones, engine);
-        Spark.get("/agente/:agente/reporte", reportesController::darAltaYMostrar, engine);
-        Spark.post("/agente/:agente/reporte", reportesController::generar);
+            Spark.get("/reporte", reportesController::darAltaYMostrar, engine);
+            Spark.post("/reporte", reportesController::generar);
+        });
+
+        Spark.path("/agente/:id", () -> {
+            Spark.before("", autorizarUsuario.apply("agente"));
+            Spark.before("/*", autorizarUsuario.apply("agente"));
+
+            Spark.get("/organizacion", agenteSectorialController::mostrarOrganizaciones, engine);
+            Spark.get("/reporte", reportesController::darAltaYMostrar, engine);
+            Spark.post("/reporte", reportesController::generar);
+        });
 
         Spark.get("/*", ((request, response) -> {
             response.redirect("/home");
+            response.status(HttpStatus.NOT_FOUND_404);
             return response;
         }));
     }
@@ -144,11 +196,47 @@ public class Router {
         Spark.exception(NotLoggedException.class, (exception, request, response) -> {
             System.out.println("Request rechazado. " + exception.getMessage());
             System.out.println("Ip origen: " + request.ip());
+            response.status(HttpStatus.UNAUTHORIZED_401);
+            if(request.pathInfo().startsWith("/api")) {
+                response.body(gson.toJson(exception.getMessage()));
+            } else {
+                response.body(exception.getMessage());
+            }
             response.redirect("/home");
         });
 
         Spark.exception(UnauthorizedException.class, (exception, request, response) -> {
-
+            System.out.println("Request rechazado. " + exception.getMessage());
+            response.status(HttpStatus.FORBIDDEN_403);
+            if(request.pathInfo().startsWith("/api")) {
+                response.body(gson.toJson(exception.getMessage()));
+            } else {
+                response.body(exception.getMessage());
+            }
+            response.redirect("/home");
         });
+
+        Spark.exception(AuthenticationException.class, (exception, request, response) -> {
+            System.out.println("Request rechazado. " + exception.getMessage());
+            response.status(HttpStatus.UNAUTHORIZED_401);
+            if(request.pathInfo().startsWith("/api")) {
+                response.body(gson.toJson(exception.getMessage()));
+            } else {
+                response.body(exception.getMessage());
+            }
+            response.redirect("/home"); // TODO: Mostrar alerta de error
+        });
+
+        Spark.exception(MiHuellaApiException.class, (exception, request, response) -> {
+            System.out.println("Request rechazado. " + exception.getMessage());
+            response.status(HttpStatus.BAD_REQUEST_400);
+            response.body(gson.toJson(exception.getError()));
+        });
+
+        Spark.exception(JsonSyntaxException.class, (exception, request, response) -> {
+            response.status(HttpStatus.BAD_REQUEST_400);
+            response.body(gson.toJson("Request inválido: " + exception.getMessage()));
+        });
+
     }
 }

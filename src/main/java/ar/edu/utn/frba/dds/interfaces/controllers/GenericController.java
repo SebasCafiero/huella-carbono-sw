@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.controllers;
+package ar.edu.utn.frba.dds.interfaces.controllers;
 
 import ar.edu.utn.frba.dds.server.login.AuthenticationException;
 import ar.edu.utn.frba.dds.server.login.User;
@@ -26,11 +26,10 @@ public class GenericController {
 
         HashMap<String, Object> user = new HashMap<>();
         user.put("user", realUser.getUsername());
-        user.put("rol", realUser.getRol());
+        user.put("rol", realUser.getRolName());
         user.put("miembro", realUser.getMiembro() != null ? realUser.getMiembro().getId() : null);
         user.put("organizacion", realUser.getOrganizacion() != null ? realUser.getOrganizacion().getId() : null);
         user.put("agente", realUser.getAgenteSectorial() != null ? realUser.getAgenteSectorial().getId() : null);
-
 
         return new ModelAndView(user, "menu.hbs");
     }
@@ -42,6 +41,16 @@ public class GenericController {
         request.session().attribute("idUsuario", realUser.getId());
         response.redirect("/menu");
         return response;
+    }
+
+    public Object iniciarSesionApi(Request request, Response response) {
+        User realUser = fachadaUsuarios.buscarUsuarioEnRepo(request.queryParams("username"), request.queryParams("password"))
+                .orElseThrow(AuthenticationException::new);
+
+        HashMap<String, Integer> respuesta = new HashMap<>();
+        respuesta.put("idUsuario", realUser.getIdRol());
+        request.session().attribute("idUsuario", realUser.getId());
+        return respuesta;
     }
 
     public Response cerrarSesion(Request request, Response response) {

@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.entities.transportes.TransporteEcologico;
 import ar.edu.utn.frba.dds.repositories.RepoEcologicos;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class RepoEcologicosMemoria<T> extends RepositorioMemoria<TransporteEcologico> implements RepoEcologicos {
@@ -14,9 +15,9 @@ public class RepoEcologicosMemoria<T> extends RepositorioMemoria<TransporteEcolo
     }
 
     @Override
-    public TransporteEcologico findByEquality(TipoTransporteEcologico tipo) {
+    public Optional<TransporteEcologico> findByEquality(TipoTransporteEcologico tipo) {
         return this.getDao().buscar(condicionCategoria(tipo)).stream()
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
     private Predicate<TransporteEcologico> condicionCategoria(TipoTransporteEcologico tipo) {

@@ -29,8 +29,8 @@ public class RepositorioMemoria<T> implements Repositorio<T> {
     }
 
     @Override
-    public void modificar(T unObjeto) {
-        this.dao.modificar(unObjeto);
+    public T modificar(T unObjeto) {
+        return this.dao.modificar(unObjeto);
     }
 
     @Override
@@ -44,12 +44,17 @@ public class RepositorioMemoria<T> implements Repositorio<T> {
     }
 
     @Override
-    public T buscar(Integer id) {
-        return this.dao.buscar(id).orElse(null); //todo
+    public Optional<T> buscar(Integer id) {
+        return this.dao.buscar(id);
     }
 
     @Override
     public void modificar(Integer id, T unObjeto) {
         this.dao.modificar(id,unObjeto);
+    }
+
+    @Override
+    public Optional<T> getReferenceById(Integer id) {
+        return this.dao.getReferenceById(id);
     }
 }

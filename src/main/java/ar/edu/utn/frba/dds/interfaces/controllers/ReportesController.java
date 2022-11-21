@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.controllers;
+package ar.edu.utn.frba.dds.interfaces.controllers;
 
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.AgenteHBS;
@@ -44,23 +44,17 @@ public class ReportesController {
 
     public Object generarReporteAgente(Request request, Response response) {
         int idArea = Integer.parseInt(request.params(("id")));
-        AreaSectorial areaSectorial = repoAreas.buscar(idArea);
-        if(areaSectorial == null) {
-            response.status(400);
-            return new ErrorResponse("La organizacion de id " + idArea + " no existe");
-        }
+        AgenteSectorial areaSectorial = repoAgentes.buscar(idArea).get();
+
         LocalDate fecha = LocalDate.now();
         return fachadaReportes
-                .generarReporteAgente(areaSectorial, fecha.getYear(), fecha.getMonthValue());
+                .generarReporteAgente(areaSectorial.getArea(), fecha.getYear(), fecha.getMonthValue());
     }
 
     public Object generarReporteOrganizacion(Request request, Response response) {
         int idOrganizacion = Integer.parseInt(request.params(("id")));
-        Organizacion organizacion = repoOrganizaciones.buscar(idOrganizacion);
-        if(organizacion == null) {
-            response.status(400);
-            return new ErrorResponse("La organizacion de id " + idOrganizacion + " no existe");
-        }
+        Organizacion organizacion = repoOrganizaciones.buscar(idOrganizacion).get();
+
         LocalDate fecha = LocalDate.now();
         return fachadaReportes
                 .generarReporteOrganizacion(organizacion, new Periodo(fecha.getYear(), fecha.getMonthValue()));
@@ -75,7 +69,7 @@ public class ReportesController {
         Integer idOrg;
         if(request.params("organizacion") != null) {
             idOrg = Integer.parseInt(request.params("organizacion"));
-            org = repoOrganizaciones.buscar(idOrg); //deberia coincidir con los permisos del usuario
+            org = repoOrganizaciones.buscar(idOrg).get(); //deberia coincidir con los permisos del usuario
             parametros.put("rol", "ORGANIZACION");
             parametros.put("user", org.getRazonSocial());
             parametros.put("organizacion", OrganizacionMapperHBS.toDTO(org));
@@ -85,7 +79,7 @@ public class ReportesController {
         AgenteSectorial agente;
         if(request.params("agente") != null) {
             idAgente = Integer.parseInt(request.params("agente"));
-            agente = this.repoAgentes.buscar(idAgente);
+            agente = this.repoAgentes.buscar(idAgente).get();
 
             parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
             parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
@@ -96,7 +90,7 @@ public class ReportesController {
             parametros.put("agente", agenteDTO);
             //todo quizas agregar reporte de agente (todas las organizaciones en uno)
             if(request.queryParams("org") != null)
-                parametros.put("organizacion", OrganizacionMapperHBS.toDTO(repoOrganizaciones.buscar(Integer.parseInt(request.queryParams("org")))));
+                parametros.put("organizacion", OrganizacionMapperHBS.toDTO(repoOrganizaciones.buscar(Integer.parseInt(request.queryParams("org"))).get()));
         }
 
         ReporteOrganizacion reporte = fachadaReportes.getReporteOrganizacion();
@@ -131,16 +125,16 @@ public class ReportesController {
         if(request.params("organizacion") != null) {
             int idOrg = Integer.parseInt(request.params("organizacion"));
 
-            organizacion = repoOrganizaciones.buscar(idOrg);
+            organizacion = repoOrganizaciones.buscar(idOrg).get();
             ruta = "/organizacion/"+organizacion.getId()+"/reporte#reporte";
         }
 
         if(request.params("agente") != null) {
             Integer idAgente = Integer.parseInt(request.params("agente"));
-            AgenteSectorial agente = this.repoAgentes.buscar(idAgente);
+            AgenteSectorial agente = this.repoAgentes.buscar(idAgente).get();
             int idOrg = Integer.parseInt(request.queryParams("f-organizacion"));
 
-            organizacion = repoOrganizaciones.buscar(idOrg);
+            organizacion = repoOrganizaciones.buscar(idOrg).get();
             ruta = "/agente/"+agente.getId()+"/reporte?org="+idOrg+"#reporte";
         }
         fachadaReportes.generarReporteOrganizacion(organizacion, periodo);
