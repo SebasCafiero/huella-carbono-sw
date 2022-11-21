@@ -8,11 +8,9 @@ import spark.Request;
 import java.util.Optional;
 
 public class FachadaUsuarios {
-//    private Repositorio<User> repositorio;
-    private RepoUsuarios repoUsuarios;
+    private final RepoUsuarios repoUsuarios;
 
     public FachadaUsuarios() {
-//        this.repositorio = FactoryRepositorio.get(User.class);
         this.repoUsuarios = (RepoUsuarios) FactoryRepositorio.get(User.class);
     }
 
@@ -35,6 +33,10 @@ public class FachadaUsuarios {
 
     public Optional<User> findById(Integer idUsuario) {
         return repoUsuarios.buscar(idUsuario);
+    }
+
+    public Optional<User> findByRolId(String rol, Integer idUsuario) {
+        return repoUsuarios.findByRolId(rol, idUsuario);
     }
 
     public boolean estaLogueado(Request request) {

@@ -75,6 +75,11 @@ public class DAOMemoria<T> implements DAO<T> {
                 invocarGetter(getId, unObjeto).equals(invocarGetter(getId, entidad)));
     }
 
+    @Override
+    public Optional<T> getReferenceById(Integer id) {
+        return this.buscar(id);
+    }
+
     private Method obtenerMetodo(String nombre) {
         Optional<Method> getterId = Arrays.stream(persistentClass.getMethods())
                 .filter(me -> me.getName().equals(nombre)).findFirst();

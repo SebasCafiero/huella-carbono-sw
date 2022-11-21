@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.controllers;
+package ar.edu.utn.frba.dds.interfaces.controllers;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.medibles.BatchMediciones;
@@ -7,6 +7,7 @@ import ar.edu.utn.frba.dds.interfaces.input.json.MedicionJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.input.json.BatchMedicionJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.interfaces.mappers.MedicionMapper;
+import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiHuellaApiException;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
 import spark.Response;
@@ -29,19 +30,17 @@ public class BatchMedicionController {
     }
 
     public List<MedicionJSONDTO> mostrarTodos(Request request, Response response) {
-        Organizacion organizacion = request.attribute("organizacion");
+        Organizacion organizacion = this.repoOrganizaciones.buscar(Integer.parseInt(request.params("id"))).get();
         return organizacion.getMediciones().stream()
                 .map(MedicionMapper::toDTO).collect(Collectors.toList());
     }
 
     public BatchMediciones obtener(Request request, Response response) {
-        Optional<BatchMediciones> batchMedicion = this.repoBatch.buscar(Integer.parseInt(request.params("batch")));
-        if (!batchMedicion.isPresent() || !batchMedicion.get().getOrganizacion().getId()
-                .equals(Integer.parseInt(request.params("id")))) {
-            throw new MiHuellaApiException("El batch " + request.params("batch") + " de la organizacion "
-                    + request.params("id") + " no existe");
-        }
-        return batchMedicion.get();
+        return this.repoBatch.buscar(Integer.parseInt(request.params("batch")))
+                .filter(batch -> batch.getOrganizacion().getId()
+                        .equals(Integer.parseInt(request.params("id"))))
+                .orElseThrow(() -> new MiHuellaApiException("El batch " + request.params("batch")
+                        + " de la organizacion " + request.params("id") + " no existe"));
     }
 
     public Object agregar(Request request, Response response) {
@@ -49,7 +48,7 @@ public class BatchMedicionController {
         List<Medicion> mediciones = requestDTO.getMediciones().stream()
                 .map(MedicionMapper::toEntity).collect(Collectors.toList());
 
-        Organizacion organizacion = request.attribute("organizacion");
+        Organizacion organizacion = this.repoOrganizaciones.buscar(Integer.parseInt(request.params("id"))).get();
         organizacion.agregarMediciones(mediciones);
 
         BatchMediciones batchMediciones = new BatchMediciones(mediciones);

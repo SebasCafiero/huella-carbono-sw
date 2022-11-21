@@ -55,6 +55,11 @@ public class RepositorioPersistente<T> implements Repositorio<T> {
         this.dao.modificar(unObjeto);
     }
 
+    @Override
+    public Optional<T> getReferenceById(Integer id) {
+        return this.dao.getReferenceById(id);
+    }
+
     public CriteriaBuilder criteriaBuilder(){
         return EntityManagerHelper.getEntityManager().getCriteriaBuilder();
     }

@@ -9,4 +9,7 @@ public interface DAO<T> {
     T agregar(T unObjeto);
     T modificar(T unObjeto);
     void eliminar(T unObjeto);
+
+    Optional<T> getReferenceById(Integer id);
 }
+

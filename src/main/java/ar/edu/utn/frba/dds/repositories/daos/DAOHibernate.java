@@ -56,4 +56,9 @@ public class DAOHibernate<T> implements DAO<T> {
         EntityManagerHelper.getEntityManager().remove(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();
     }
+
+    @Override
+    public Optional<T> getReferenceById(Integer id) {
+        return id == null ? Optional.empty() : Optional.ofNullable(EntityManagerHelper.getEntityManager().getReference(type, id));
+    }
 }

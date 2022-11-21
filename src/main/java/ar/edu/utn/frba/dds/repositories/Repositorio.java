@@ -13,4 +13,6 @@ public interface Repositorio<T> {
     Optional<T> buscar(Integer id);
 
     void modificar(Integer id,T unObjeto);
+
+    Optional<T> getReferenceById(Integer id);
 }

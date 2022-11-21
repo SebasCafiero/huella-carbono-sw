@@ -1,10 +1,11 @@
 package ar.edu.utn.frba.dds.server;
 
-import ar.edu.utn.frba.dds.controllers.*;
+import ar.edu.utn.frba.dds.interfaces.controllers.*;
 import ar.edu.utn.frba.dds.server.login.*;
 import ar.edu.utn.frba.dds.server.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.server.utils.HandlebarsTemplateEngineBuilder;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaUsuarios;
+import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiHuellaApiException;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.eclipse.jetty.http.HttpStatus;
@@ -55,14 +56,11 @@ public class Router {
             request.session().attribute("idUsuario", token);
         };
 
-        Function<Function<User, Boolean>, Filter> autorizarUsuario =
+        Function<String, Filter> autorizarUsuario =
                 tipoUsuario -> (Request request, Response response) -> {
-            User user = fachadaUsuarios.findById(request.session().attribute("idUsuario"))
-                    .filter(tipoUsuario::apply)
-                    .filter(u -> u.getIdRol().equals(Integer.parseInt(request.params("id"))))
+            fachadaUsuarios.findByRolId(tipoUsuario, Integer.parseInt(request.params("id")))
+                    .filter(u -> u.getId().equals(request.session().attribute("idUsuario")))
                     .orElseThrow(UnauthorizedException::new);
-
-            request.attribute(user.getRolName(), user.getRol());
         };
 
         Spark.path("/api", () -> {
@@ -76,8 +74,8 @@ public class Router {
                 Spark.get("", organizacionController::mostrarTodos);
 
                 Spark.path("/:id", () -> {
-                    Spark.before("", autorizarUsuario.apply(User::isOrganizacion));
-                    Spark.before("/*", autorizarUsuario.apply(User::isOrganizacion));
+                    Spark.before("", autorizarUsuario.apply("organizacion"));
+                    Spark.before("/*", autorizarUsuario.apply("organizacion"));
 
                     Spark.get("", organizacionController::obtener, gson::toJson);
                     Spark.put("", organizacionController::modificar);
@@ -108,8 +106,8 @@ public class Router {
                 Spark.post("", miembroController::agregar);
 
                 Spark.path("/:id", () -> {
-                    Spark.before("", autorizarUsuario.apply(User::isMiembro));
-                    Spark.before("/*", autorizarUsuario.apply(User::isMiembro));
+                    Spark.before("", autorizarUsuario.apply("miembro"));
+                    Spark.before("/*", autorizarUsuario.apply("miembro"));
 
                     Spark.get("", miembroController::obtener, engine);
                     Spark.delete("", miembroController::eliminar);
@@ -125,8 +123,8 @@ public class Router {
                 Spark.post("", agenteSectorialController::agregar);
 
                 Spark.path("/:id", () -> {
-                    Spark.before("", autorizarUsuario.apply(User::isAgenteSectorial));
-                    Spark.before("/*", autorizarUsuario.apply(User::isAgenteSectorial));
+                    Spark.before("", autorizarUsuario.apply("agente"));
+                    Spark.before("/*", autorizarUsuario.apply("agente"));
 
                     Spark.get("", agenteSectorialController::obtener);
                     Spark.delete("", agenteSectorialController::eliminar);
@@ -155,8 +153,8 @@ public class Router {
         Spark.get("/menu", genericController::menu, engine);
 
         Spark.path("/miembro/:id", () -> {
-            Spark.before("", autorizarUsuario.apply(User::isMiembro));
-            Spark.before("/*", autorizarUsuario.apply(User::isMiembro));
+            Spark.before("", autorizarUsuario.apply("miembro"));
+            Spark.before("/*", autorizarUsuario.apply("miembro"));
 
             Spark.path("/trayecto", () -> {
                 Spark.get("", trayectosController::mostrarTodosYCrear, engine);
@@ -171,16 +169,16 @@ public class Router {
         });
 
         Spark.path("/organizacion/:id", () -> {
-            Spark.before("", autorizarUsuario.apply(User::isOrganizacion));
-            Spark.before("/*", autorizarUsuario.apply(User::isOrganizacion));
+            Spark.before("", autorizarUsuario.apply("organizacion"));
+            Spark.before("/*", autorizarUsuario.apply("organzacion"));
 
             Spark.get("/reporte", reportesController::darAltaYMostrar, engine);
             Spark.post("/reporte", reportesController::generar);
         });
 
         Spark.path("/agente/:id", () -> {
-            Spark.before("", autorizarUsuario.apply(User::isAgenteSectorial));
-            Spark.before("/*", autorizarUsuario.apply(User::isAgenteSectorial));
+            Spark.before("", autorizarUsuario.apply("agente"));
+            Spark.before("/*", autorizarUsuario.apply("agente"));
 
             Spark.get("/organizacion", agenteSectorialController::mostrarOrganizaciones, engine);
             Spark.get("/reporte", reportesController::darAltaYMostrar, engine);

@@ -52,4 +52,9 @@ public class RepositorioMemoria<T> implements Repositorio<T> {
     public void modificar(Integer id, T unObjeto) {
         this.dao.modificar(id,unObjeto);
     }
+
+    @Override
+    public Optional<T> getReferenceById(Integer id) {
+        return this.dao.getReferenceById(id);
+    }
 }

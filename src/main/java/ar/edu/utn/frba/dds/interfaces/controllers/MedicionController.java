@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.controllers;
+package ar.edu.utn.frba.dds.interfaces.controllers;
 
 import ar.edu.utn.frba.dds.entities.medibles.Medicion;
 import ar.edu.utn.frba.dds.repositories.Repositorio;

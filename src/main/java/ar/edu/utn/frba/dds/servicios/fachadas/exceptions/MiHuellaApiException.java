@@ -1,4 +1,6 @@
-package ar.edu.utn.frba.dds.controllers;
+package ar.edu.utn.frba.dds.servicios.fachadas.exceptions;
+
+import ar.edu.utn.frba.dds.interfaces.input.ErrorDTO;
 
 public class MiHuellaApiException extends RuntimeException {
     private final ErrorDTO error;
