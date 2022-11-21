@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.servicios.fachadas;
 
 import ar.edu.utn.frba.dds.entities.lugares.Coordenada;
 import ar.edu.utn.frba.dds.entities.lugares.Direccion;
+import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.lugares.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.medibles.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
@@ -10,6 +11,10 @@ import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.entities.transportes.MedioDeTransporte;
 import ar.edu.utn.frba.dds.entities.medibles.Tramo;
 import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
+import ar.edu.utn.frba.dds.entities.transportes.Parada;
+import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
+import ar.edu.utn.frba.dds.interfaces.controllers.TramoSinDistanciaException;
+import ar.edu.utn.frba.dds.interfaces.controllers.TrayectoConMiembrosDeDistintaOrganizacionException;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.NoExisteMedioException;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.NoExisteTrayectoCompartidoException;
 import ar.edu.utn.frba.dds.interfaces.input.NuevoTrayectoDTO;
@@ -17,10 +22,17 @@ import ar.edu.utn.frba.dds.interfaces.input.TrayectoCompartidoDTO;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
+import spark.QueryParamsMap;
+import spark.Request;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FachadaTrayectos {
     private final RepoMiembros repoMiembros;
@@ -83,6 +95,35 @@ public class FachadaTrayectos {
         repoTrayectos.buscarTodos().forEach(System.out::println);
     }
 
+    public Trayecto cargarTrayectoActivo(Miembro miembro, QueryParamsMap queryMap) {
+        Periodo periodo = parsearPeriodo(queryMap.value("f-fecha"));
+        Trayecto trayecto = new Trayecto(periodo);
+        trayecto.setTramos(asignarTramos(queryMap)); //todo la fecha y tramos vacios son solo en este caso, asi que ver de ignorarlos al modificar trayecto
+
+        if(queryMap.value("f-transporte-nuevo") != null) {
+            trayecto.agregarTramo(asignarTramoNuevo(queryMap));
+        }
+
+        miembro.agregarTrayecto(trayecto);
+        trayecto.agregarMiembro(miembro);
+        return cargarTrayecto(trayecto);
+    }
+
+    public Trayecto cargarTrayectoPasivo(Miembro miembro, Integer idTrayecto) {
+        Trayecto trayecto = this.repoTrayectos.buscar(idTrayecto)
+                .orElseThrow(EntityNotFoundException::new);
+
+        trayecto.getMiembros().stream().limit(1) // Hago el limit para que busque solo en el primer miembro
+                .flatMap(mi -> mi.getOrganizaciones().stream())
+                .filter(org -> miembro.getOrganizaciones().stream().anyMatch(o -> o.equals(org)))
+                .findAny().orElseThrow(TrayectoConMiembrosDeDistintaOrganizacionException::new);
+
+        miembro.agregarTrayecto(trayecto);
+        trayecto.agregarMiembro(miembro);
+
+        return updateTrayecto(trayecto);
+    }
+
     public void cargarTrayectoActivo(NuevoTrayectoDTO trayectoDTO) {
         Miembro unMiembro = repoMiembros.findByDocumento(TipoDeDocumento.valueOf(trayectoDTO.getTipoDocumento()),
                         trayectoDTO.getMiembroDNI())
@@ -123,17 +164,83 @@ public class FachadaTrayectos {
 
     public void cargarTrayectoPasivo(TrayectoCompartidoDTO trayectoCompartidoDTO) {
         Miembro miembro = repoMiembros.findByDocumento(TipoDeDocumento.DNI, trayectoCompartidoDTO.getMiembroDNI())
-                .orElseThrow(() ->
-                    new NoSuchElementException("El miembro con DNI: "
-                            + trayectoCompartidoDTO.getMiembroDNI() + "no existe en el sistema")
-                );
+                .orElseThrow(() -> new EntityNotFoundException("El miembro con DNI: " +
+                        trayectoCompartidoDTO.getMiembroDNI() + "no existe en el sistema"));
 
-        // Si da error el get es porque se intentó referenciar con un trayecto que no existe
-        Trayecto trayecto = repoTrayectos.buscar(trayectoCompartidoDTO.getTrayectoReferencia())
-                .orElseThrow(() -> new NoExisteTrayectoCompartidoException(
-                        trayectoCompartidoDTO.getTrayectoReferencia()));
+        cargarTrayectoPasivo(miembro, trayectoCompartidoDTO.getTrayectoReferencia());
+    }
 
-        trayecto.agregarMiembro(miembro);
-        miembro.agregarTrayecto(trayecto);
+    private UbicacionGeografica obtenerUbicacion(QueryParamsMap map, MedioDeTransporte transporte, Boolean esInicial, Integer posicion) {
+        Function<String, Integer> paramToInt = param -> Integer.parseInt(map.value(param));
+        Function<String, Float> paramToFloat = param -> Float.parseFloat(map.value(param));
+
+        String pos = posicion == null ? "nueva" : posicion.toString();
+        String lugar = esInicial ? "inicial" : "final";
+
+        if(transporte instanceof TransportePublico) {
+            return ((TransportePublico) transporte).getParadas().stream()
+                    .filter(p -> p.getId().equals(paramToInt.apply("f-transporte-parada-" + lugar + "-" + pos)))
+                    .map(Parada::getUbicacion)
+                    .findFirst().get();
+        } else {
+            return new UbicacionGeografica(
+                    "Argentina",
+                    map.value("f-provincia-" + lugar + "-" + pos),
+                    map.value("f-municipio-" + lugar + "-" + pos),
+                    map.value("f-localidad-" + lugar + "-" + pos),
+                    map.value("f-calle-" + "-" + lugar + pos),
+                    paramToInt.apply("f-numero-" + lugar + "-" + pos),
+                    new Coordenada(paramToFloat.apply("f-lat-" + lugar + "-" + pos),
+                            paramToFloat.apply("f-lon-" + lugar + "-" + pos))
+            );
+        }
+    }
+
+    private List<Tramo> asignarTramos(QueryParamsMap map) {
+        Integer limit = Stream.iterate(0, i -> i + 1)
+                .filter(i -> map.value("f-transporte-"+i) == null)
+                .findFirst().orElse(0);
+
+        return Stream.iterate(0, i -> i + 1)
+                .limit(limit)
+                .map(i -> {
+//                    if((req.queryParams("f-transporte-parada-inicial-" + i) == null) && (req.queryParams("f-lat-inicial-"+i) == null)) {
+//                     //Cuando se deja sin modificar el tramo //TODO VER SI ENTRA ALGUNA VEZ, CREO QUE QUEDO VIEJO CUANDO ESTABA EL DISABLED
+//                        return trayecto.getTramos().get(i); //TODO orden de la lista (indice es cant?), o buscar id?
+//                    }
+
+                    MedioDeTransporte transporte = obtenerTransporte(Integer.parseInt(map.value("f-transporte-" + i))).get();
+
+                    Tramo tramo = new Tramo(transporte, obtenerUbicacion(map, transporte, true, i), obtenerUbicacion(map, transporte, false, i));
+
+                    if(tramo.getUbicacionInicial().getCoordenada().esIgualAOtraCoordenada(tramo.getUbicacionFinal().getCoordenada())) {
+                        throw new TramoSinDistanciaException();
+                    }
+
+                    tramo.setId(Integer.parseInt(map.value("f-tramo-id-"+i)));
+                    return tramo;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private Tramo asignarTramoNuevo(QueryParamsMap map) {
+        MedioDeTransporte transporte = obtenerTransporte(Integer.parseInt(map.value("f-transporte-nuevo"))).get();
+        return new Tramo(transporte, obtenerUbicacion(map, transporte, true, null), obtenerUbicacion(map, transporte, false, null));
+    }
+
+    private Periodo parsearPeriodo(String input) {
+        Periodo periodo;
+        if(input.matches("\\d+")) {
+            periodo = new Periodo(Integer.parseInt(input));
+        } else if(input.matches("\\d+/\\d+")) {
+            String[] fecha = input.split("/"); //todo validar
+            periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
+        } else {
+            LocalDate fecha = LocalDate.now();
+            periodo = new Periodo(fecha.getYear(), fecha.getMonthValue());
+        }
+//        String fechaActual = LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear();
+//        String[] fecha = req.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar
+        return periodo;
     }
 }
