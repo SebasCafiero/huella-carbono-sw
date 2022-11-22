@@ -40,7 +40,7 @@ public class MiembroController {
         }
         Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id"))).get();
 
-        model.put("descripcion", miembro.nombreCompleto());
+        model.put("descripcion", miembro.getNombreCompleto());
 
         return new ModelAndView(model, "mensaje.hbs");
     }

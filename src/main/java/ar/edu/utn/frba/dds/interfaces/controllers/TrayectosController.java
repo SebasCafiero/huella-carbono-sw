@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.interfaces.controllers;
 
+import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TramoHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TransporteHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TrayectoHBS;
@@ -13,9 +14,11 @@ import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.*;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaTrayectos;
 import spark.ModelAndView;
+import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.BiFunction;
@@ -80,81 +83,37 @@ public class TrayectosController {
     }
 
     public Response agregar(Request request, Response res) {
-        Trayecto trayecto = new Trayecto();
+        Miembro miembro = fachadaTrayectos.obtenerMiembro(Integer.parseInt(request.params("id")));
+        Trayecto trayecto;
 
         if(request.queryParams("f-trayecto-compartido-ack") != null) {
-            int idTrayecto = Integer.parseInt(request.queryParams("f-trayecto-id")); //todo validar
-            trayecto = this.fachadaTrayectos.obtenerTrayecto(idTrayecto);
+            try {
+                trayecto = this.fachadaTrayectos.cargarTrayectoPasivo(miembro,
+                        Integer.parseInt(request.queryParams("f-trayecto-id")));
+            } catch (EntityNotFoundException e) {
+                System.out.println("Creación de trayecto compartido rechazada. " +
+                        "Motivo: no existe el trayecto referenciado");
+                // TODO: Enviar una alerta porque no existe el trayecto referenciado
+                return null;
+            } catch (TrayectoConMiembrosDeDistintaOrganizacionException e) {
+                System.out.println("Creación de trayecto compartido rechazada. " +
+                        "Motivo: el trayecto seleccionado pertenece a un miembro de otra organizacion");
+                // TODO: Enviar una alerta porque el trayecto seleccionado pertenece a un miembro de otra organizacion
+                return null;
+            }
         } else {
-            Periodo periodo = parsearPeriodo(request.queryParams("f-fecha"));
-            trayecto.setPeriodo(periodo);
-            trayecto.setTramos(asignarTramos(request)); //todo la fecha y tramos vacios son solo en este caso, asi que ver de ignorarlos al modificar trayecto
-
-            if(request.queryParams("f-transporte-nuevo") != null) {
-                trayecto.agregarTramo(asignarTramoNuevo(request));
+            try {
+                trayecto = this.fachadaTrayectos.cargarTrayectoActivo(miembro, request.queryMap());
+            } catch (TramoSinDistanciaException e) {
+                System.out.println("Creación de trayecto rechazada. " +
+                        "Motivo: el trayecto seleccionado tiene la misma ubicacion inicial y final");
+                // TODO: Enviar una alerta porque el trayecto tiene la misma ubicacion inicial y final
+                return null;
             }
         }
 
-        Miembro miembro = fachadaTrayectos.obtenerMiembro(Integer.parseInt(request.params("id")));
-        miembro.agregarTrayecto(trayecto);
-        trayecto.agregarMiembro(miembro);
-        Trayecto trayectoResponse = this.fachadaTrayectos.updateTrayecto(trayecto);
-
-        res.redirect("/miembro/" + request.params("id") + "/trayecto/" + trayectoResponse.getId());
+        res.redirect("/miembro/" + request.params("id") + "/trayecto/" + trayecto.getId());
         return res;
-    }
-
-    private UbicacionGeografica obtenerUbicacion(Request req, MedioDeTransporte transporte, Boolean esInicial, Integer posicion) {
-        Function<String, Integer> paramToInt = param -> Integer.parseInt(req.queryParams(param));
-        Function<String, Float> paramToFloat = param -> Float.parseFloat(req.queryParams(param));
-
-        String pos = posicion == null ? "nueva" : posicion.toString();
-        String lugar = esInicial ? "inicial" : "final";
-
-        if(transporte instanceof TransportePublico) {
-            return ((TransportePublico) transporte).getParadas().stream()
-                    .filter(p -> p.getId().equals(paramToInt.apply("f-transporte-parada-" + lugar + "-" + pos)))
-                    .map(Parada::getUbicacion)
-                    .findFirst().get();
-        } else {
-            return new UbicacionGeografica(
-                    "Argentina",
-                    req.queryParams("f-provincia-" + lugar + "-" + pos),
-                    req.queryParams("f-municipio-" + lugar + "-" + pos),
-                    req.queryParams("f-localidad-" + lugar + "-" + pos),
-                    req.queryParams("f-calle-" + "-" + lugar + pos),
-                    paramToInt.apply("f-numero-" + lugar + "-" + pos),
-                    new Coordenada(paramToFloat.apply("f-lat-" + lugar + "-" + pos),
-                            paramToFloat.apply("f-lon-" + lugar + "-" + pos))
-            );
-        }
-    }
-
-    private List<Tramo> asignarTramos(Request req) {
-        Integer limit = Stream.iterate(0, i -> i + 1)
-                .filter(i -> req.queryParams("f-transporte-"+i) == null)
-                .findFirst().orElse(0);
-
-        return Stream.iterate(0, i -> i + 1)
-                .limit(limit)
-                .map(i -> {
-//                    if((req.queryParams("f-transporte-parada-inicial-" + i) == null) && (req.queryParams("f-lat-inicial-"+i) == null)) {
-//                     //Cuando se deja sin modificar el tramo //TODO VER SI ENTRA ALGUNA VEZ, CREO QUE QUEDO VIEJO CUANDO ESTABA EL DISABLED
-//                        return trayecto.getTramos().get(i); //TODO orden de la lista (indice es cant?), o buscar id?
-//                    }
-
-                    MedioDeTransporte transporte = fachadaTrayectos.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-" + i))).get();
-
-                    Tramo tramo = new Tramo(transporte, obtenerUbicacion(req, transporte, true, i), obtenerUbicacion(req, transporte, false, i));
-                    tramo.setId(Integer.parseInt(req.queryParams("f-tramo-id-"+i)));
-                    return tramo;
-                })
-                .collect(Collectors.toList());
-    }
-
-    private Tramo asignarTramoNuevo(Request req) {
-        MedioDeTransporte transporte = fachadaTrayectos.obtenerTransporte(Integer.parseInt(req.queryParams("f-transporte-nuevo"))).get();
-        return new Tramo(transporte, obtenerUbicacion(req, transporte, true, null), obtenerUbicacion(req, transporte, false, null));
     }
 
     public ModelAndView mostrarYEditar(Request request, Response response) {
@@ -379,7 +338,7 @@ public class TrayectosController {
         Integer idMiembro = Integer.parseInt(req.params("id"));
         Miembro miembro = fachadaTrayectos.obtenerMiembro(idMiembro);
         Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(idTrayecto);
-        trayecto.setTramos(asignarTramos(req));
+//        trayecto.setTramos(asignarTramos(req));
         fachadaTrayectos.modificarTrayecto(trayecto);
         res.redirect("/miembro/" + idMiembro + "/trayecto/" + idTrayecto);
         return res;

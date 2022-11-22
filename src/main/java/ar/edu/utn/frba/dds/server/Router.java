@@ -49,19 +49,18 @@ public class Router {
         Filter asegurarSesion = (Request request, Response response) -> {
             Integer token = Optional.ofNullable((Integer) request.session().attribute("idUsuario"))
                     .orElse(Optional.ofNullable(request.headers("Authorization"))
-                            .filter(value -> value.matches("\\d+"))
-                            .map(Integer::parseInt)
+                            .filter(value -> value.matches("\\d+")).map(Integer::parseInt)
                             .orElseThrow(NotLoggedException::new));
 
             request.session().attribute("idUsuario", token);
         };
 
-        Function<String, Filter> autorizarUsuario =
-                tipoUsuario -> (Request request, Response response) -> {
-            fachadaUsuarios.findByRolId(tipoUsuario, Integer.parseInt(request.params("id")))
-                    .filter(u -> u.getId().equals(request.session().attribute("idUsuario")))
-                    .orElseThrow(UnauthorizedException::new);
-        };
+        Function<String, Filter> autorizarUsuario = tipoUsuario -> (Request request, Response response) ->
+                Optional.ofNullable(request.params("id"))
+                        .filter(value -> value.matches("\\d+")).map(Integer::parseInt)
+                        .flatMap(id -> fachadaUsuarios.findByRolId(tipoUsuario, id))
+                        .filter(u -> u.getId().equals(request.session().attribute("idUsuario")))
+                        .orElseThrow(UnauthorizedException::new);
 
         Spark.path("/api", () -> {
             Spark.before("/*", (Request request, Response response) -> response.header("Content-Type", "application/json"));

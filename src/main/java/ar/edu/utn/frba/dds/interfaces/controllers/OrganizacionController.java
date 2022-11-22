@@ -11,7 +11,6 @@ import ar.edu.utn.frba.dds.interfaces.mappers.SectoresMapper;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.interfaces.input.json.MiembroIdentityRequest;
 import ar.edu.utn.frba.dds.interfaces.input.json.OrganizacionJSONDTO;
-import ar.edu.utn.frba.dds.interfaces.input.SectorResponse;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
