@@ -256,6 +256,10 @@ public class FachadaTrayectos {
 
         trayecto.setTramos(asignarTramos(queryMap));
 
+        if(queryMap.value("f-transporte-nuevo") != null) {
+            trayecto.agregarTramo(asignarTramoNuevo(queryMap));
+        }
+
         this.updateTrayecto(trayecto);
     }
 }
