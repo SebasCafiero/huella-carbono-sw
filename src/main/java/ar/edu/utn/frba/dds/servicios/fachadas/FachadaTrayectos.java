@@ -1,9 +1,8 @@
 package ar.edu.utn.frba.dds.servicios.fachadas;
 
-import ar.edu.utn.frba.dds.entities.lugares.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.Direccion;
-import ar.edu.utn.frba.dds.entities.lugares.Sector;
-import ar.edu.utn.frba.dds.entities.lugares.UbicacionGeografica;
+import ar.edu.utn.frba.dds.entities.exceptions.TrayectoConMiembroRepetidoException;
+import ar.edu.utn.frba.dds.entities.exceptions.TrayectoSinMiembrosException;
+import ar.edu.utn.frba.dds.entities.lugares.*;
 import ar.edu.utn.frba.dds.entities.medibles.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.exceptions.MiembroException;
@@ -30,6 +29,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -112,6 +112,10 @@ public class FachadaTrayectos {
     public Trayecto cargarTrayectoPasivo(Miembro miembro, Integer idTrayecto) {
         Trayecto trayecto = this.repoTrayectos.buscar(idTrayecto)
                 .orElseThrow(EntityNotFoundException::new);
+
+        if(trayecto.getMiembros().stream().map(Miembro::getId).anyMatch(mi -> mi.equals(miembro.getId()))) {
+            throw new TrayectoConMiembroRepetidoException();
+        }
 
         trayecto.getMiembros().stream().limit(1) // Hago el limit para que busque solo en el primer miembro
                 .flatMap(mi -> mi.getOrganizaciones().stream())

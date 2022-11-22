@@ -56,7 +56,8 @@ public class Router {
         };
 
         Function<String, Filter> autorizarUsuario = tipoUsuario -> (Request request, Response response) -> {
-            if(!request.params().keySet().stream().allMatch(p -> p.matches("\\d{1,9}"))) {
+            System.out.println(request.params().values());
+            if(!request.params().values().stream().allMatch(p -> p.matches("\\d{1,9}"))) {
                 throw new RequestInvalidoGuiException();
             }
 
@@ -238,11 +239,13 @@ public class Router {
         });
 
         Spark.exception(JsonSyntaxException.class, (exception, request, response) -> {
+            System.out.println("Request rechazado. " + exception.getMessage());
             response.status(HttpStatus.BAD_REQUEST_400);
             response.body(gson.toJson("Request inválido: " + exception.getMessage()));
         });
 
         Spark.exception(RequestInvalidoGuiException.class, (exception, request, response) -> {
+            System.out.println("Request rechazado. " + "Los parametros de ruta deben ser enteros");
             response.status(HttpStatus.BAD_REQUEST_400);
             response.redirect("/menu");
         });

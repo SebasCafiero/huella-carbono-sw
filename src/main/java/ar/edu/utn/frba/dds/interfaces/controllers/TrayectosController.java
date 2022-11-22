@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.interfaces.controllers;
 
+import ar.edu.utn.frba.dds.entities.exceptions.TrayectoConMiembroRepetidoException;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TramoHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TransporteHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TrayectoHBS;
@@ -93,6 +94,11 @@ public class TrayectosController {
                 System.out.println("Creación de trayecto compartido rechazada. " +
                         "Motivo: el trayecto seleccionado pertenece a un miembro de otra organizacion");
                 // TODO: Enviar una alerta porque el trayecto seleccionado pertenece a un miembro de otra organizacion
+                return null;
+            } catch (TrayectoConMiembroRepetidoException e) {
+                System.out.println("Creación de trayecto compartido rechazada. " +
+                        "Motivo: el trayecto seleccionado ya pertenecía al miembro");
+                // TODO: Enviar una alerta porque el trayecto seleccionado ya pertenecía al miembro
                 return null;
             }
         } else {
