@@ -233,14 +233,25 @@ public class FachadaTrayectos {
         if(input.matches("\\d+")) {
             periodo = new Periodo(Integer.parseInt(input));
         } else if(input.matches("\\d+/\\d+")) {
-            String[] fecha = input.split("/"); //todo validar
+            String[] fecha = input.split("/");
             periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
         } else {
             LocalDate fecha = LocalDate.now();
             periodo = new Periodo(fecha.getYear(), fecha.getMonthValue());
         }
-//        String fechaActual = LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear();
-//        String[] fecha = req.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar
         return periodo;
+    }
+
+    public void modificarTrayecto(Miembro miembro, int idTrayecto, QueryParamsMap queryMap) {
+        Trayecto trayecto = this.repoTrayectos.buscar(idTrayecto)
+                .orElseThrow(EntityNotFoundException::new);
+
+        if(trayecto.getMiembros().stream().noneMatch(m -> m.getId().equals(miembro.getId()))) {
+            throw new MiembroException();
+        }
+
+        trayecto.setTramos(asignarTramos(queryMap));
+
+        this.updateTrayecto(trayecto);
     }
 }

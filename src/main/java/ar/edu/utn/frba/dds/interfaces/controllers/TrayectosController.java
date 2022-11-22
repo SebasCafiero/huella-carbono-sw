@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.interfaces.controllers;
 
-import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TramoHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TransporteHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TrayectoHBS;
@@ -9,22 +8,17 @@ import ar.edu.utn.frba.dds.entities.lugares.UbicacionGeografica;
 import ar.edu.utn.frba.dds.entities.medibles.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.transportes.*;
-import ar.edu.utn.frba.dds.entities.medibles.Tramo;
 import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.*;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaTrayectos;
 import spark.ModelAndView;
-import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TrayectosController {
     private final FachadaTrayectos fachadaTrayectos;
@@ -334,13 +328,12 @@ public class TrayectosController {
     }
 
     public Response modificar(Request req, Response res) {
-        Integer idTrayecto = Integer.parseInt(req.params("trayecto"));
-        Integer idMiembro = Integer.parseInt(req.params("id"));
-        Miembro miembro = fachadaTrayectos.obtenerMiembro(idMiembro);
-        Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(idTrayecto);
-//        trayecto.setTramos(asignarTramos(req));
-        fachadaTrayectos.modificarTrayecto(trayecto);
-        res.redirect("/miembro/" + idMiembro + "/trayecto/" + idTrayecto);
+        Miembro miembro = fachadaTrayectos.obtenerMiembro(Integer.parseInt(req.params("id")));
+        int idTrayecto = Integer.parseInt(req.params("trayecto"));
+
+        fachadaTrayectos.modificarTrayecto(miembro, Integer.parseInt(req.params("trayecto")), req.queryMap());
+
+        res.redirect("/miembro/" + miembro.getId() + "/trayecto/" + idTrayecto);
         return res;
     }
 

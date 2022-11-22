@@ -49,18 +49,23 @@ public class Router {
         Filter asegurarSesion = (Request request, Response response) -> {
             Integer token = Optional.ofNullable((Integer) request.session().attribute("idUsuario"))
                     .orElse(Optional.ofNullable(request.headers("Authorization"))
-                            .filter(value -> value.matches("\\d+")).map(Integer::parseInt)
+                            .filter(value -> value.matches("\\d{1,9}")).map(Integer::parseInt)
                             .orElseThrow(NotLoggedException::new));
 
             request.session().attribute("idUsuario", token);
         };
 
-        Function<String, Filter> autorizarUsuario = tipoUsuario -> (Request request, Response response) ->
-                Optional.ofNullable(request.params("id"))
-                        .filter(value -> value.matches("\\d+")).map(Integer::parseInt)
-                        .flatMap(id -> fachadaUsuarios.findByRolId(tipoUsuario, id))
-                        .filter(u -> u.getId().equals(request.session().attribute("idUsuario")))
-                        .orElseThrow(UnauthorizedException::new);
+        Function<String, Filter> autorizarUsuario = tipoUsuario -> (Request request, Response response) -> {
+            if(!request.params().keySet().stream().allMatch(p -> p.matches("\\d{1,9}"))) {
+                throw new RequestInvalidoGuiException();
+            }
+
+            Optional.ofNullable(request.params("id"))
+                    .filter(value -> value.matches("\\d{1,9}")).map(Integer::parseInt)
+                    .flatMap(id -> fachadaUsuarios.findByRolId(tipoUsuario, id))
+                    .filter(u -> u.getId().equals(request.session().attribute("idUsuario")))
+                    .orElseThrow(UnauthorizedException::new);
+        };
 
         Spark.path("/api", () -> {
             Spark.before("/*", (Request request, Response response) -> response.header("Content-Type", "application/json"));
@@ -237,5 +242,9 @@ public class Router {
             response.body(gson.toJson("Request inválido: " + exception.getMessage()));
         });
 
+        Spark.exception(RequestInvalidoGuiException.class, (exception, request, response) -> {
+            response.status(HttpStatus.BAD_REQUEST_400);
+            response.redirect("/menu");
+        });
     }
 }
