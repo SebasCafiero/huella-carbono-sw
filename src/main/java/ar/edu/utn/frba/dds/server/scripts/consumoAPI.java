@@ -5,6 +5,8 @@ import ar.edu.utn.frba.dds.entities.lugares.Municipio;
 import ar.edu.utn.frba.dds.entities.lugares.Provincia;
 import ar.edu.utn.frba.dds.servicios.clients.calculadoraDistancias.ddstpa.AdaptadorServicioDDSTPA;
 
+import static java.lang.System.exit;
+
 public class consumoAPI {
     public static void main(String[] args) {
         AdaptadorServicioDDSTPA servicioExterno = new AdaptadorServicioDDSTPA();
@@ -28,6 +30,6 @@ public class consumoAPI {
         System.out.println("\n\nOBTENER ID LOCALIDAD La Boca (es 5346)");
         Municipio caba = new Municipio("Ciudad de Buenos Aires", new Provincia("Ciudad de Buenos Aires", "Argentina"));
         System.out.println(servicioExterno.obtenerIdLocalidad(new Direccion(caba, "La Boca", "Brandsen", 805)));
-
+        exit(0);
     }
 }

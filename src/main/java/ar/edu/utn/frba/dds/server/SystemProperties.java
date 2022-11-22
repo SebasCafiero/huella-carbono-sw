@@ -18,6 +18,7 @@ public class SystemProperties {
     static {
         Map<String, String> varEntorno = System.getenv();
         Properties propArchivo = cargarArchivoConfigurable();
+        System.out.println("aplication (entorno): " + varEntorno);
         jpa = varEntorno.getOrDefault("jpa", propArchivo.getProperty("jpa")).equals("true");
         delta = Float.parseFloat(
                 varEntorno.getOrDefault("coordenadas.precision.delta",
@@ -72,7 +73,6 @@ public class SystemProperties {
             FileReader file = new FileReader(path);
             propiedades.load(file);
 
-            System.out.println("aplication.properties: "+propiedades.stringPropertyNames());
             System.out.println("aplication.properties: "+propiedades);
 
             file.close();
