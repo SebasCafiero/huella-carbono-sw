@@ -60,26 +60,31 @@ public class ReportesController {
                 .generarReporteOrganizacion(organizacion, new Periodo(fecha.getYear(), fecha.getMonthValue()));
     }
 
+    public ModelAndView darAltaYMostrarOrg(Request request, Response response) {
+        return darAltaYMostrar(request, "organizacion");
+    }
 
+    public ModelAndView darAltaYMostrarAgente(Request request, Response response) {
+        return darAltaYMostrar(request, "agente");
+    }
 
-    public ModelAndView darAltaYMostrar(Request request, Response response) {
+    public ModelAndView darAltaYMostrar(Request request, String rol) {
         Map<String, Object> parametros = new HashMap<>();
 
         Organizacion org;
-        Integer idOrg;
-        if(request.params("organizacion") != null) {
-            idOrg = Integer.parseInt(request.params("organizacion"));
-            org = repoOrganizaciones.buscar(idOrg).get(); //deberia coincidir con los permisos del usuario
+        int id;
+        if(rol.equals("organizacion")) {
+            id = Integer.parseInt(request.params("id"));
+            org = repoOrganizaciones.buscar(id).get(); //deberia coincidir con los permisos del usuario
             parametros.put("rol", "ORGANIZACION");
             parametros.put("user", org.getRazonSocial());
             parametros.put("organizacion", OrganizacionMapperHBS.toDTO(org));
         }
 
-        Integer idAgente;
         AgenteSectorial agente;
-        if(request.params("agente") != null) {
-            idAgente = Integer.parseInt(request.params("agente"));
-            agente = this.repoAgentes.buscar(idAgente).get();
+        if(rol.equals("agente")) {
+            id = Integer.parseInt(request.params("id"));
+            agente = this.repoAgentes.buscar(id).get();
 
             parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
             parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
@@ -111,7 +116,15 @@ public class ReportesController {
         return new ModelAndView(parametros, "reporte.hbs");
     }
 
-    public Response generar(Request request, Response response) {
+    public Response generarOrg(Request request, Response response) {
+        return generar(request, response, "organizacion");
+    }
+
+    public Response generarAgente(Request request, Response response) {
+        return generar(request, response, "agente");
+    }
+
+    public Response generar(Request request, Response response, String rol) {
         String fechaActual = LocalDate.now().getMonthValue()+"/"+LocalDate.now().getYear();
         String[] fecha = request.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar fecha
         Periodo periodo;
@@ -122,16 +135,14 @@ public class ReportesController {
 
         Organizacion organizacion = null;
         String ruta = "";
-        if(request.params("organizacion") != null) {
-            int idOrg = Integer.parseInt(request.params("organizacion"));
-
-            organizacion = repoOrganizaciones.buscar(idOrg).get();
+        int id = Integer.parseInt(request.params("id"));
+        if(rol.equals("organizacion")) {
+            organizacion = repoOrganizaciones.buscar(id).get();
             ruta = "/organizacion/"+organizacion.getId()+"/reporte#reporte";
         }
 
-        if(request.params("agente") != null) {
-            Integer idAgente = Integer.parseInt(request.params("agente"));
-            AgenteSectorial agente = this.repoAgentes.buscar(idAgente).get();
+        if(rol.equals("agente")) {
+            AgenteSectorial agente = this.repoAgentes.buscar(id).get();
             int idOrg = Integer.parseInt(request.queryParams("f-organizacion"));
 
             organizacion = repoOrganizaciones.buscar(idOrg).get();

@@ -122,8 +122,8 @@ public class Router {
                 Spark.post("", agenteSectorialController::agregar);
 
                 Spark.path("/:id", () -> {
-                    Spark.before("", autorizarUsuario.apply("agente"));
-                    Spark.before("/*", autorizarUsuario.apply("agente"));
+                    Spark.before("", autorizarUsuario.apply("agenteSectorial"));
+                    Spark.before("/*", autorizarUsuario.apply("agenteSectorial"));
 
                     Spark.get("", agenteSectorialController::obtener);
                     Spark.delete("", agenteSectorialController::eliminar);
@@ -169,19 +169,19 @@ public class Router {
 
         Spark.path("/organizacion/:id", () -> {
             Spark.before("", autorizarUsuario.apply("organizacion"));
-            Spark.before("/*", autorizarUsuario.apply("organzacion"));
+            Spark.before("/*", autorizarUsuario.apply("organizacion"));
 
-            Spark.get("/reporte", reportesController::darAltaYMostrar, engine);
-            Spark.post("/reporte", reportesController::generar);
+            Spark.get("/reporte", reportesController::darAltaYMostrarOrg, engine);
+            Spark.post("/reporte", reportesController::generarOrg);
         });
 
         Spark.path("/agente/:id", () -> {
-            Spark.before("", autorizarUsuario.apply("agente"));
-            Spark.before("/*", autorizarUsuario.apply("agente"));
+            Spark.before("", autorizarUsuario.apply("agenteSectorial"));
+            Spark.before("/*", autorizarUsuario.apply("agenteSectorial"));
 
             Spark.get("/organizacion", agenteSectorialController::mostrarOrganizaciones, engine);
-            Spark.get("/reporte", reportesController::darAltaYMostrar, engine);
-            Spark.post("/reporte", reportesController::generar);
+            Spark.get("/reporte", reportesController::darAltaYMostrarAgente, engine);
+            Spark.post("/reporte", reportesController::generarAgente);
         });
 
         Spark.get("/*", ((request, response) -> {
