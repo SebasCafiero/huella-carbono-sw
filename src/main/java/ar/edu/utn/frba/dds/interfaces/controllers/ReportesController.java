@@ -154,7 +154,7 @@ public class ReportesController {
         }
         fachadaReportes.generarReporteOrganizacion(organizacion, periodo);
         documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion);
-        
+        System.out.println("DSP de documentar");
         response.redirect(ruta);
 
         return response;
