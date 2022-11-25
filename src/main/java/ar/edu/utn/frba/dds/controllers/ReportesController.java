@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
-import ar.edu.utn.frba.dds.interfaces.gui.dto.ReporteHBS;
+import ar.edu.utn.frba.dds.interfaces.gui.dto.AgenteHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.AgenteMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.OrganizacionMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.ReporteMapperHBS;
@@ -10,7 +10,6 @@ import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.lugares.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.medibles.Categoria;
 import ar.edu.utn.frba.dds.entities.medibles.Periodo;
-import ar.edu.utn.frba.dds.entities.medibles.ReporteAgente;
 import ar.edu.utn.frba.dds.entities.medibles.ReporteOrganizacion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
@@ -28,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReportesController {
     private final FachadaReportes fachadaReportes;
@@ -75,20 +75,7 @@ public class ReportesController {
         Integer idOrg;
         if(request.params("organizacion") != null) {
             idOrg = Integer.parseInt(request.params("organizacion"));
-            try {
-                org = repoOrganizaciones.buscar(idOrg); //deberia coincidir con los permisos del usuario
-            } catch (NullPointerException | SessionException e) {
-                response.status(400);
-                String errorDesc = "Organización de id " + idOrg + " inexistente";
-                if (e instanceof SessionException) {
-                    response.status(403);
-                    errorDesc = "Acceso no permitido";
-                }
-                parametros.put("codigo", response.status());
-                parametros.put("descripcion", errorDesc);
-                return new ErrorResponse(errorDesc).generarVista(parametros);
-            }
-
+            org = repoOrganizaciones.buscar(idOrg); //deberia coincidir con los permisos del usuario
             parametros.put("rol", "ORGANIZACION");
             parametros.put("user", org.getRazonSocial());
             parametros.put("organizacion", OrganizacionMapperHBS.toDTO(org));
@@ -102,8 +89,14 @@ public class ReportesController {
 
             parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
             parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
-            parametros.put("agente", AgenteMapperHBS.toDTO(agente));
+            AgenteHBS agenteDTO = AgenteMapperHBS.toDTO(agente);
+//            List<Organizacion> orgs = repoOrganizaciones.buscarTodos().stream().filter(o -> agente.getArea().getUbicaciones().contains(o.getUbicacion())).collect(Collectors.toList());
+            List<Organizacion> orgs = repoOrganizaciones.buscarTodos();
+            agenteDTO.setOrganizaciones(orgs.stream().map(OrganizacionMapperHBS::toDTO).collect(Collectors.toList()));
+            parametros.put("agente", agenteDTO);
             //todo quizas agregar reporte de agente (todas las organizaciones en uno)
+            if(request.queryParams("org") != null)
+                parametros.put("organizacion", OrganizacionMapperHBS.toDTO(repoOrganizaciones.buscar(Integer.parseInt(request.queryParams("org")))));
         }
 
         ReporteOrganizacion reporte = fachadaReportes.getReporteOrganizacion();
@@ -127,14 +120,19 @@ public class ReportesController {
     public Response generar(Request request, Response response) {
         String fechaActual = LocalDate.now().getMonthValue()+"/"+LocalDate.now().getYear();
         String[] fecha = request.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar fecha
-        Periodo periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
+        Periodo periodo;
+        if(fecha.length > 1)
+            periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
+        else
+            periodo = new Periodo(Integer.parseInt(fecha[0]));
+
         Organizacion organizacion = null;
         String ruta = "";
         if(request.params("organizacion") != null) {
             int idOrg = Integer.parseInt(request.params("organizacion"));
 
             organizacion = repoOrganizaciones.buscar(idOrg);
-            ruta = "/organizacion/"+organizacion.getId()+"/reporte";
+            ruta = "/organizacion/"+organizacion.getId()+"/reporte#reporte";
         }
 
         if(request.params("agente") != null) {
@@ -143,9 +141,9 @@ public class ReportesController {
             int idOrg = Integer.parseInt(request.queryParams("f-organizacion"));
 
             organizacion = repoOrganizaciones.buscar(idOrg);
-            ruta = "/agente/"+agente.getId()+"/reporte";
+            ruta = "/agente/"+agente.getId()+"/reporte?org="+idOrg+"#reporte";
         }
-        fachadaReportes.generarReporteOrganizacion2(organizacion, periodo);
+        fachadaReportes.generarReporteOrganizacion(organizacion, periodo);
         documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion); //todo no lo toma bien, agarra el viejo o ninguno
         response.redirect(ruta);
 

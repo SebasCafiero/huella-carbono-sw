@@ -23,7 +23,11 @@ table, th, td {
     padding: 8px;
 }
 
-td:last-child{
+td:last-child {
+    text-align: center;
+}
+
+th {
     text-align: center;
 }
 
