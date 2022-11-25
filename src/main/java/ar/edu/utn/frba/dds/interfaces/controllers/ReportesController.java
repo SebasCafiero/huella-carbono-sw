@@ -194,7 +194,7 @@ public class ReportesController {
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             System.out.println("No se pudo crear el archivo " + ruta);
 //            e.printStackTrace();
-            throw new ReporteException("No se pudo crear el archivo del reporte.");
+            //throw new ReporteException("No se pudo crear el archivo del reporte.");
         }
 
         return arch;
