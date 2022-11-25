@@ -34,14 +34,18 @@ public class Router {
         Router.initEngine();
         String relativeURL = "/public";
         String absoluteURL = System.getProperty("user.dir") + "/resources" + relativeURL;
-//        if(SystemProperties.getLocalhost())
-//        Spark.externalStaticFileLocation(absoluteURL); //Ruta absoluta -> auto-refresh
-        Spark.staticFileLocation(relativeURL); //Ruta relativa -> refresh
-        Router.configure();
+        if(SystemProperties.isLocalhost()) {
+            System.out.println("Static files en localhost: " + absoluteURL);
+            Spark.externalStaticFileLocation(absoluteURL); //Ruta absoluta -> auto-refresh
+        } else {
+            System.out.println("Static files en external host: " + relativeURL);
+            Spark.staticFileLocation(relativeURL); //Ruta relativa -> refresh
+        }
+        Router.configurePaths();
         Router.configureExceptions();
     }
 
-    private static void configure() {
+    private static void configurePaths() {
         FachadaUsuarios fachadaUsuarios = new FachadaUsuarios();
         MedicionController medicionController = new MedicionController();
         BatchMedicionController batchMedicionController = new BatchMedicionController();

@@ -167,10 +167,12 @@
         </table>
         <br />
       </div>
-      <div class="descargar"> <!-- VER SI AL GENERARLO Y GUARDARLO EN /public/docs SE ENVIA AL CLIENTE -->
+      {{#if file}}
+      <div class="descargar">
 <!--        <span><a href="/docs/#RAZONSOCIAL-#ANIOMESDIA" download>DESCARGAR</a></span>-->
-        <span><a href="/docs/{{file}}" download>DESCARGAR</a></span><i>(CHECK)</i>
+        <span><a href="{{file}}" download>DESCARGAR</a></span>
       </div>
+      {{/if}}
       {{/if}}
       <div class="volver">
         <br />
