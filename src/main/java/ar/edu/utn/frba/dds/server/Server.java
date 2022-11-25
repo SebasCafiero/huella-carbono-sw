@@ -40,6 +40,8 @@ public class Server {
                         .forEach(loca -> cacheLocalidades.put(loca.getNombre(),
                                 new CacheLocalidad(muni.getProvincia().getIdApiDistancias(), muni.getId(), loca.getId())));
             });
+        } else {
+            System.out.println("Cache api distancias deshabilitada.");
         }
 
     }
