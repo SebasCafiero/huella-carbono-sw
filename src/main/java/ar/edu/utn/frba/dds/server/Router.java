@@ -123,7 +123,7 @@ public class Router {
                     Spark.before("", autorizarUsuario.apply("miembro"));
                     Spark.before("/*", autorizarUsuario.apply("miembro"));
 
-                    Spark.get("", miembroController::obtener, engine);
+//                    Spark.get("", miembroController::obtener, engine); TODO
                     Spark.delete("", miembroController::eliminar);
                     Spark.put("", miembroController::modificar);
                 });
@@ -150,8 +150,7 @@ public class Router {
 
             Spark.path("/factorEmision", () -> {
                 Spark.get("", factorEmisionController::mostrarTodos);
-                Spark.put("/:id", factorEmisionController::modificar);
-
+                Spark.post("", factorEmisionController::modificar);
             });
 
             Spark.delete("trayecto/:id", trayectosController::borrar); //Para eliminar definitivamente el trayecto (admin)
@@ -227,7 +226,7 @@ public class Router {
             } else {
                 response.body(exception.getMessage());
             }
-            response.redirect("/home");
+            response.redirect("/menu");
         });
 
         Spark.exception(AuthenticationException.class, (exception, request, response) -> {
