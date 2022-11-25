@@ -28,8 +28,11 @@ public class Router {
     }
 
     public static void init() {
-        Router.initEngine(); //Para diseño web
-        Spark.staticFileLocation("/public"); //Para diseño web
+        Router.initEngine();
+        String staticURL = System.getProperty("user.dir") + "/resources/public";
+//        if(SystemProperties.getLocalhost())
+        Spark.externalStaticFileLocation(staticURL); //Ruta absoluta -> auto-refresh
+//        Spark.staticFileLocation("/public"); //Ruta relativa -> refresh
         Router.configure();
         Router.configureExceptions();
     }

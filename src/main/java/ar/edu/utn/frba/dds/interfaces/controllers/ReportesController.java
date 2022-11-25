@@ -13,9 +13,11 @@ import ar.edu.utn.frba.dds.entities.medibles.Periodo;
 import ar.edu.utn.frba.dds.entities.medibles.ReporteOrganizacion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
+import ar.edu.utn.frba.dds.repositories.utils.EntityManagerHelper;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaReportes;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
+import org.hibernate.Session;
 import org.hibernate.SessionException;
 import spark.ModelAndView;
 import spark.Request;
@@ -108,9 +110,6 @@ public class ReportesController {
 //            parametros.put("file", "reporte"+org.getId());
 
             fachadaReportes.quitarReporteOrganizacion();
-
-            //todo ver session.refresh(entity) o entityManager.refresh(entity) para no usar cache
-            //todo https://sparkjava.com/documentation#examples-and-faq
         }
 
         return new ModelAndView(parametros, "reporte.hbs");
@@ -150,6 +149,7 @@ public class ReportesController {
         }
         fachadaReportes.generarReporteOrganizacion(organizacion, periodo);
         documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion); //todo no lo toma bien, agarra el viejo o ninguno
+        
         response.redirect(ruta);
 
         return response;
@@ -162,20 +162,26 @@ public class ReportesController {
         try {
             PrintWriter writer = new PrintWriter("resources/public/docs/"+arch, "UTF-8");
             writer.println("Fecha de Creacion: " + reporte.getFechaCreacion());
-            writer.println("Periodo de Referencia: " + reporte.getPeriodoReferencia());
-            writer.println("Total : " + reporte.getConsumoTotal());
-            writer.println("Total mediciones : " + reporte.getConsumoMediciones());
+            String periodo = reporte.getPeriodoReferencia().getAnio().toString();
+            if(reporte.getPeriodoReferencia().getPeriodicidad() == 'M')
+                periodo += "-" + reporte.getPeriodoReferencia().getMes().toString();
+            writer.println("Periodo de Referencia: " + periodo);
+            writer.println("Consumo Total: " + reporte.getConsumoTotal());
+            writer.println("Consumo Mediciones: " + reporte.getConsumoMediciones());
+            writer.println("Consumo Trayectos: " + (reporte.getConsumoTotal() - reporte.getConsumoMediciones()));
+            writer.println("\n");
 
             for (Map.Entry<Miembro, Float> miembro : reporte.getConsumoPorMiembro().entrySet()) {
-                writer.println("Miembro : " + miembro.getKey().getNroDocumento() + " :-> " + miembro.getValue());
+                String info = miembro.getKey().getNombreCompleto() + " - " + miembro.getKey().getDocumento();
+                writer.println("Miembro: " + info + " -> " + miembro.getValue());
             }
 
             for (Map.Entry<Sector, Float> sector : reporte.getConsumoPorSector().entrySet()) {
-                writer.println("Sector : " + sector.getKey().getNombre() + " :-> " + sector.getValue());
+                writer.println("Sector: " + sector.getKey().getNombre() + " -> " + sector.getValue());
             }
 
             for(Map.Entry<Categoria, Float> categoria : reporte.getConsumoPorCategoria().entrySet()) {
-                writer.println("Categoria : " + categoria.getKey().toString() + " :-> " + categoria.getValue());
+                writer.println("Categoria: " + categoria.getKey().toString() + " -> " + categoria.getValue());
             }
 
             writer.close();

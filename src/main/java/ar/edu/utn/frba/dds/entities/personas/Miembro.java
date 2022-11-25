@@ -161,5 +161,9 @@ public class Miembro {
                 ", apellido='" + apellido + '\'' +
                 '}';
     }
+
+    public String getDocumento() {
+        return tipoDeDocumento + ": " + nroDocumento;
+    }
 }
 
