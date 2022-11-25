@@ -160,7 +160,10 @@ public class ReportesController {
         String arch = organizacion.getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
 
         try {
-            PrintWriter writer = new PrintWriter("resources/public/docs/"+arch, "UTF-8");
+            System.out.println("user.dir: " + System.getProperty("user.dir"));
+            System.out.println("env: " + System.getenv());
+//            PrintWriter writer = new PrintWriter("resources/public/docs/"+arch, "UTF-8");
+            PrintWriter writer = new PrintWriter("public/docs/"+arch, "UTF-8");
             writer.println("Fecha de Creacion: " + reporte.getFechaCreacion());
             String periodo = reporte.getPeriodoReferencia().getAnio().toString();
             if(reporte.getPeriodoReferencia().getPeriodicidad() == 'M')
