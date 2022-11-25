@@ -29,19 +29,18 @@ public class Server {
     }
 
     static void loadCache() {
-        if(!SystemProperties.isCalculadoraDistanciasCacheEnabled())
-            return;
+        if(SystemProperties.isCalculadoraDistanciasCacheEnabled()) {
+            System.out.println("Inicializando datos de api distancias por cache");
+            Cache<CacheLocalidad> cacheLocalidades = FactoryCache.get(CacheLocalidad.class);
 
-        System.out.println("Inicializando datos de api distancias por cache");
-        Cache<CacheLocalidad> cacheLocalidades = FactoryCache.get(CacheLocalidad.class);
+            AdaptadorServicioDDSTPA adapter = new AdaptadorServicioDDSTPA();
 
-        AdaptadorServicioDDSTPA adapter = new AdaptadorServicioDDSTPA();
-
-        FactoryRepositorio.get(Municipio.class).buscarTodos().forEach(muni -> {
-            adapter.obtenerLocalidades(muni.getIdApiDistancias())
-                    .forEach(loca -> cacheLocalidades.put(loca.getNombre(),
-                            new CacheLocalidad(muni.getProvincia().getIdApiDistancias(), muni.getId(), loca.getId())));
-        });
+            FactoryRepositorio.get(Municipio.class).buscarTodos().forEach(muni -> {
+                adapter.obtenerLocalidades(muni.getIdApiDistancias())
+                        .forEach(loca -> cacheLocalidades.put(loca.getNombre(),
+                                new CacheLocalidad(muni.getProvincia().getIdApiDistancias(), muni.getId(), loca.getId())));
+            });
+        }
 
     }
 
