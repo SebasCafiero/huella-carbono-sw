@@ -17,6 +17,7 @@ public class Server {
 
         Router.init();
 //        DebugScreen.enableDebugScreen();
+        System.out.println("Server corriendo...");
     }
 
     static int getHerokuAssignedPort() {

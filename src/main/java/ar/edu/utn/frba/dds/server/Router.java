@@ -39,6 +39,7 @@ public class Router {
     }
 
     private static void configure() {
+        System.out.println("Configuro Rutas.");
         FachadaUsuarios fachadaUsuarios = new FachadaUsuarios();
         MedicionController medicionController = new MedicionController();
         BatchMedicionController batchMedicionController = new BatchMedicionController();
@@ -202,6 +203,7 @@ public class Router {
     }
 
     private static void configureExceptions() {
+        System.out.println("Configuro Excepciones.");
         Spark.exception(NotLoggedException.class, (exception, request, response) -> {
             System.out.println("Request rechazado. " + exception.getMessage());
             System.out.println("Ip origen: " + request.ip());
