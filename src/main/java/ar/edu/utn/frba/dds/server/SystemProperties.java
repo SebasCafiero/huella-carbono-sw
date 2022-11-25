@@ -81,6 +81,7 @@ public class SystemProperties {
 //            System.out.println(archivo.getAbsolutePath());
 //            System.out.println(e.getMessage());
         } catch (IOException e) {
+            System.out.println("IO Excepcion!");
             throw new RuntimeException(e);
         }
         return propiedades;
