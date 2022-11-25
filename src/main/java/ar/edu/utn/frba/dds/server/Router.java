@@ -36,6 +36,7 @@ public class Router {
         String absoluteURL = System.getProperty("user.dir") + "/resources" + relativeURL;
         if(SystemProperties.isLocalhost()) {
             System.out.println("Static files en localhost: " + absoluteURL);
+            absoluteURL = System.getProperty("user.dir") + "/src/main/resources" + relativeURL;
             Spark.externalStaticFileLocation(absoluteURL); //Ruta absoluta -> auto-refresh
         } else {
             System.out.println("Static files en external host: " + relativeURL);
