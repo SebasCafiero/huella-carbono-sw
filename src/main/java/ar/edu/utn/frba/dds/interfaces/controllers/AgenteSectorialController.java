@@ -1,9 +1,12 @@
-package ar.edu.utn.frba.dds.controllers;
+package ar.edu.utn.frba.dds.interfaces.controllers;
 
 import ar.edu.utn.frba.dds.entities.lugares.AreaSectorial;
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
 import ar.edu.utn.frba.dds.entities.personas.ContactoTelefono;
+import ar.edu.utn.frba.dds.interfaces.gui.dto.AgenteHBS;
+import ar.edu.utn.frba.dds.interfaces.gui.dto.OrganizacionHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.AgenteMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.OrganizacionMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.input.json.AgenteSectorialJSONDTO;
@@ -14,6 +17,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +26,12 @@ import java.util.stream.Collectors;
 public class AgenteSectorialController {
     private Repositorio<AgenteSectorial> repoAgentes;
     private Repositorio<AreaSectorial> repoAreas;
-    private LoginController loginController;
+    private Repositorio<Organizacion> repoOrganizaciones;
 
     public AgenteSectorialController() {
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
-        loginController = new LoginController();
+        this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
     }
 
     public String mostrarTodos(Request request, Response response) {
@@ -38,20 +42,15 @@ public class AgenteSectorialController {
         return agentes.toString();
     }
 
-    public String obtener(Request request, Response response){
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }    Todo esto agregar una vez que tengamos la vista*/
-        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")));
-        return agenteSectorial.toString();
+    public AgenteSectorial obtener(Request request, Response response) {
+        return this.repoAgentes.buscar(Integer.parseInt(request.params("id")))
+                .orElseThrow(EntityNotFoundException::new);
     }
 
-    public Object agregar(Request request, Response response){
-        /*if (loginController.chequearValidezAcceso(request, response, true) != null){
-            return loginController.chequearValidezAcceso(request, response, true);
-        }    Todo esto agregar una vez que tengamos la vista*/
+    public Object agregar(Request request, Response response) {
         AgenteSectorialJSONDTO agenteDTO = new ParserJSON<>(AgenteSectorialJSONDTO.class).parseElement(request.body());
-        AreaSectorial area = this.repoAreas.buscar(agenteDTO.getArea());
+        AreaSectorial area = this.repoAreas.buscar(agenteDTO.getArea())
+                .orElseThrow(EntityNotFoundException::new);
 
         AgenteSectorial agenteSectorial = new AgenteSectorial(
                 area, new ContactoMail(agenteDTO.getContactoMail().direccionesEMail, agenteDTO.getContactoMail().password),
@@ -67,7 +66,8 @@ public class AgenteSectorialController {
         }    Todo esto agregar una vez que tengamos la vista*/
         AgenteSectorialJSONDTO agenteDTO = new ParserJSON<>(AgenteSectorialJSONDTO.class).parseElement(request.body());
 
-        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")));
+        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")))
+                .orElseThrow(EntityNotFoundException::new);
         agenteSectorial.setMail(new ContactoMail(agenteDTO.getContactoMail().direccionesEMail, agenteDTO.getContactoMail().password));
         agenteSectorial.setTelefono(new ContactoTelefono(agenteDTO.getTelefono()));
 
@@ -79,7 +79,8 @@ public class AgenteSectorialController {
         /*if (loginController.chequearValidezAcceso(request, response, true) != null){
             return loginController.chequearValidezAcceso(request, response, true);
         }    Todo esto agregar una vez que tengamos la vista*/
-        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")));
+        AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")))
+                .orElseThrow(EntityNotFoundException::new);
         this.repoAgentes.eliminar(agenteSectorial);
         return "Agente Sectorial eliminado correctamente";
     }
@@ -87,12 +88,17 @@ public class AgenteSectorialController {
     public ModelAndView mostrarOrganizaciones(Request request, Response response) {
         Map<String, Object> parametros = new HashMap<>();
         Integer idAgente = Integer.parseInt(request.params("id"));
-        AgenteSectorial agente = this.repoAgentes.buscar(idAgente);
+        AgenteSectorial agente = this.repoAgentes.buscar(idAgente)
+                .orElseThrow(EntityNotFoundException::new);
 
         parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
         parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
         parametros.put("agenteID", idAgente);
-        parametros.put("organizaciones", agente.getArea().getOrganizaciones().stream().map(OrganizacionMapperHBS::toDTOUbicacion).collect(Collectors.toList()));
+
+//        List<Organizacion> orgs = repoOrganizaciones.buscarTodos().stream().filter(o -> agente.getArea().getUbicaciones().contains(o.getUbicacion())).collect(Collectors.toList());
+        List<Organizacion> orgs = repoOrganizaciones.buscarTodos();
+        parametros.put("organizaciones", orgs.stream().map(OrganizacionMapperHBS::toDTOUbicacion).collect(Collectors.toList()));
+//        parametros.put("organizaciones", agente.getArea().getOrganizaciones().stream().map(OrganizacionMapperHBS::toDTOUbicacion).collect(Collectors.toList()));
         return new ModelAndView(parametros, "organizaciones.hbs");
     }
 }

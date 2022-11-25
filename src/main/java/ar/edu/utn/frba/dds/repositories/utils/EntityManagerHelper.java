@@ -97,26 +97,25 @@ public class EntityManagerHelper {
 
     private static Map<String, Object> seteoPropiedades() throws URISyntaxException {
         Map<String, String> varEntorno = System.getenv();
-        Map<String, String> varArchivo = cargarArchivoConfigurable();
+        Properties varArchivo = cargarArchivoConfigurable();
         Map<String, Object> configuraciones = new HashMap<String, Object>();
         final String motorDB = "jdbc:postgresql://";
 
         String[] keys = new String[]{
-                "DATABASE_URL",
-                "show_sql",
-                "ddlauto",
-                "driver"
-                //"javax.persistence.schema-generation.database.action"
+            "DATABASE_URL",
+            "show_sql",
+            "ddlauto",
+            "driver",
+            "format_sql",
+            "sql_comments"
+            //"javax.persistence.schema-generation.database.action"
         };
 
-        for (String key : keys) {
-            if (varEntorno.containsKey(key) || varArchivo.containsKey(key)) {
-                String value;
-                if(varEntorno.containsKey(key))
-                    value = varEntorno.get(key);
-                else
-                    value = varArchivo.get(key);
-
+        System.out.println("persistence (entorno): " + varEntorno);
+        for (String key : keys) { //Ver de poner como puse el default en SystemProperties
+            String value = varEntorno.getOrDefault(key, varArchivo.getProperty(key));
+            if(value != null && !value.trim().equals("")) {
+                System.out.println(key + " obtenida por entorno/archivo.");
                 if (key.equals("DATABASE_URL")) {
                     //postgres://<username>:<password>@<host>:<port>/<dbname>
                     URI dbUri = new URI(value);
@@ -128,44 +127,52 @@ public class EntityManagerHelper {
                     configuraciones.put("hibernate.connection.url", value);
 //                    configuraciones.put("javax.persistence.jdbc.url", value);
                     configuraciones.put("hibernate.connection.username", username);
-//                    configuraciones.put("javax.persistence.jdbc.user", value);
+//                    configuraciones.put("javax.persistence.jdbc.user", username);
                     configuraciones.put("hibernate.connection.password", password);
-//                    configuraciones.put("javax.persistence.jdbc.password", value);
+//                    configuraciones.put("javax.persistence.jdbc.password", password);
 //                    configOverrides.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-
                 }
                 if (key.equals("ddlauto")) {
                     configuraciones.put("hibernate.hbm2ddl.auto", value);
 //                    configuraciones.put("javax.persistence.schema-generation.database.action", value);
                 }
                 if (key.equals("show_sql")) {
-                    configuraciones.put("hibernate.show_sql", true);
+                    configuraciones.put("hibernate.show_sql", value);
                 }
                 if (key.equals("driver")) {
 //                    configOverrides.put("javax.persistence.jdbc.driver", value);
                     configuraciones.put("hibernate.connection.driver_class", value);
                 }
+                if (key.equals("format_sql")) {
+                    configuraciones.put("hibernate.format_sql", value);
+                }
+                if (key.equals("sql_comments")) {
+                    configuraciones.put("use_sql_comments", value);
+                }
 
+            } else {
+                System.out.println(key + " obtenida por XML.");
             }
+
         }
         return configuraciones;
     }
 
-    private static Map<String, String> cargarArchivoConfigurable() {
+    private static Properties cargarArchivoConfigurable() {
         Map<String, String> propiedadesMap = new HashMap<>();
         String path = "resources/persistence.properties";
+        Properties propiedades = new Properties();
         try {
-            Properties propiedades = new Properties();
 //            archivo = new File(path);
             FileReader file = new FileReader(path);
             propiedades.load(file);
-
-            List<?> propiedadesList = Collections.list(propiedades.propertyNames());
+            System.out.println("persistence.properties: " + propiedades);
+            /*List<?> propiedadesList = Collections.list(propiedades.propertyNames());
             System.out.println("persistence.properties: "+propiedadesList);
             propiedadesList.forEach(p -> {
                 String prop = p.toString();
                 propiedadesMap.put(prop, propiedades.getProperty(prop));
-            });
+            });*/
 
             file.close();
         } catch (FileNotFoundException e) {
@@ -174,7 +181,8 @@ public class EntityManagerHelper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return propiedadesMap;
+//        return propiedadesMap;
+        return propiedades;
     }
 
 }

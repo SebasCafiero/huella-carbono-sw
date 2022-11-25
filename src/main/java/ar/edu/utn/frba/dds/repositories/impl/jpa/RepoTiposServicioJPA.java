@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Optional;
 
 public class RepoTiposServicioJPA<T> extends RepositorioPersistente<TipoServicio> implements RepoTiposServicio {
 
@@ -16,9 +17,9 @@ public class RepoTiposServicioJPA<T> extends RepositorioPersistente<TipoServicio
     }
 
     @Override
-    public TipoServicio findByEquality(String nombre) {
+    public Optional<TipoServicio> findByEquality(String nombre) {
         return this.getDao().buscar(condicionCategoria(nombre)).stream()
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
     private CriteriaQuery<TipoServicio> condicionCategoria(String nombre) {

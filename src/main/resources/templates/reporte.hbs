@@ -42,7 +42,7 @@
       <div class="generar">
         <form {{#if agente}} action="/agente/{{agente.id}}/reporte" {{else}} action="/organizacion/{{organizacion.id}}/reporte" {{/if}} method="post">
           <div class="form-fecha">
-            <label for="fecha">Fecha de Referencia: </label><i>(CHECK)</i>
+            <label for="fecha">Fecha de Referencia: </label>
             <input id="fecha" type="text" name="f-fecha" value="MES/AÑO" required/>
           </div>
           <br />
@@ -65,10 +65,10 @@
       {{#if reporte}}
       <!-- VER DE REDIRIGIR A LA SECCION #reporte -->
       <!-- VER SI DESCARGA ADENTRO DE REPORTE -->
-      <div class="reporte">
+      <div id="reporte" class="reporte">
         <ul>
           <li>Organizacion: <i>{{organizacion.razonSocial}}</i></li>
-          <li>Fecha: <i>{{reporte.fechaCreacion}}</i></li>
+          <li>Fecha Creación: <i>{{reporte.fechaCreacion}}</i></li>
           <li>Fecha Referencia: <i>{{reporte.fechaReferencia}}</i></li>
           <br/>
           <li>Consumo Mediciones: <i>{{reporte.consumoMediciones}}</i></li>
@@ -112,6 +112,12 @@
             <td colspan="2"><i>SIN CATEGORIAS</i></td>
           </tr>
           {{/each}}
+          {{#if reporte.consumoPorCategoria}}
+          <tr>
+            <th>Total</th>
+            <td>{{reporte.consumoTotal}}</td>
+          </tr>
+          {{/if}}
         </table>
         <br />
         <table class="sectores">
@@ -129,6 +135,12 @@
             <td colspan="2"><i>SIN SECTORES</i></td>
           </tr>
           {{/each}}
+          {{#if reporte.consumoPorSector}}
+          <tr>
+            <th>Total</th>
+            <td>{{reporte.consumoTrayectos}}</td>
+          </tr>
+          {{/if}}
         </table>
         <br />
         <table class="miembros">
@@ -146,6 +158,12 @@
             <td colspan="2"><i>SIN MIEMBROS</i></td>
           </tr>
           {{/each}}
+          {{#if reporte.consumoPorMiembro}}
+          <tr>
+            <th>Total</th>
+            <td>{{reporte.consumoTrayectos}}</td>
+          </tr>
+          {{/if}}
         </table>
         <br />
       </div>

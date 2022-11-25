@@ -1,12 +1,12 @@
 package ar.edu.utn.frba.dds.interfaces.input;
 
-import ar.edu.utn.frba.dds.interfaces.input.csv.MiembroCSVDTO;
+import ar.edu.utn.frba.dds.interfaces.input.json.MiembroResponse;
 
 import java.util.List;
 
 public class SectorConMiembrosDTO {
     private String nombre;
-    private List<MiembroCSVDTO> miembros;
+    private List<MiembroResponse> miembros;
 
     public String getNombre() {
         return nombre;
@@ -16,11 +16,11 @@ public class SectorConMiembrosDTO {
         this.nombre = nombre;
     }
 
-    public List<MiembroCSVDTO> getMiembros() {
+    public List<MiembroResponse> getMiembros() {
         return miembros;
     }
 
-    public void setMiembros(List<MiembroCSVDTO> miembros) {
+    public void setMiembros(List<MiembroResponse> miembros) {
         this.miembros = miembros;
     }
 }

@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.interfaces.input.json;
 
-import ar.edu.utn.frba.dds.interfaces.input.SectorDTO;
+import ar.edu.utn.frba.dds.interfaces.SectorRequest;
+import ar.edu.utn.frba.dds.interfaces.input.SectorResponse;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class OrganizacionJSONDTO {
     private UbicacionJSONDTO ubicacion;
     private String clasificacion;
     private String tipo;
-    private List<SectorDTO> sectores;
+    private List<SectorRequest> sectores;
 
     public String getOrganizacion() {
         return organizacion;
@@ -43,11 +44,11 @@ public class OrganizacionJSONDTO {
         this.tipo = tipo;
     }
 
-    public List<SectorDTO> getSectores() {
+    public List<SectorRequest> getSectores() {
         return sectores;
     }
 
-    public void setSectores(List<SectorDTO> sectores) {
+    public void setSectores(List<SectorRequest> sectores) {
         this.sectores = sectores;
     }
 }

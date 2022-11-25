@@ -36,7 +36,7 @@ public class SetupInicialJPA {
     private final Repositorio<AreaSectorial> repoAreas;
     private final Repositorio<AgenteSectorial> repoAgentes;
     private final Repositorio<Contacto> repoContactos;
-    private final Repositorio<BatchMedicion> repoBatchMediciones;
+    private final Repositorio<BatchMediciones> repoBatchMediciones;
     private final Repositorio<User> repoUsuarios;
     private final Cache<CacheLocalidad> cacheLocalidades;
 
@@ -49,7 +49,7 @@ public class SetupInicialJPA {
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
         this.repoUsuarios = FactoryRepositorio.get(User.class);
         this.repoContactos = FactoryRepositorio.get(Contacto.class);
-        this.repoBatchMediciones = FactoryRepositorio.get(BatchMedicion.class);
+        this.repoBatchMediciones = FactoryRepositorio.get(BatchMediciones.class);
         this.cacheLocalidades = FactoryCache.get(CacheLocalidad.class);
     }
 
@@ -269,7 +269,7 @@ public class SetupInicialJPA {
 
         Sector tesoreriaUtnMedrano = new Sector("Tesoreria", orgUtnMedrano);
         Miembro laSaeta = new Miembro("Alfredo", "Di Stéfano", TipoDeDocumento.DNI, 2232122);
-        Miembro fitoPaez = new Miembro("Roberto", "Páez", TipoDeDocumento.DNI, 34432237);
+        Miembro fitoPaez = new Miembro("Rodolfo", "Páez", TipoDeDocumento.DNI, 34432237);
         Miembro charlyGarcia = new Miembro("Carlos", "Garcia", TipoDeDocumento.DNI, 34432233);
         tesoreriaUtnMedrano.agregarMiembro(laSaeta);
         tesoreriaUtnMedrano.agregarMiembro(fitoPaez);
@@ -399,7 +399,7 @@ public class SetupInicialJPA {
         };
 
 
-        BatchMedicion batchMediciones = new BatchMedicion(Arrays.asList(medicionesIniciales), LocalDate.now());
+        BatchMediciones batchMediciones = new BatchMediciones(Arrays.asList(medicionesIniciales), LocalDate.now());
         batchMediciones.setOrganizacion(orgUtnCampus);
         orgUtnCampus.agregarMediciones(medicionesIniciales);
 

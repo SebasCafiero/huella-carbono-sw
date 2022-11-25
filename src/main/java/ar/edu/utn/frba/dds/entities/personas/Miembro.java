@@ -31,13 +31,13 @@ public class Miembro {
     private int nroDocumento;
 
     @ManyToMany(mappedBy = "miembros", fetch = FetchType.LAZY)
-    private Set<Sector> sectoresDondeTrabaja;
+    private Set<Sector> sectores;
 
     @ManyToMany(mappedBy = "miembros")
     private List<Trayecto> trayectos;
 
     public Miembro() {
-        this.sectoresDondeTrabaja = new HashSet<>();
+        this.sectores = new HashSet<>();
         this.trayectos = new ArrayList<>();
     }
 
@@ -46,35 +46,35 @@ public class Miembro {
         this.apellido = apellido;
         this.tipoDeDocumento = tipoDeDocumento;
         this.nroDocumento = nroDocumento;
-        this.sectoresDondeTrabaja = new HashSet<>();
+        this.sectores = new HashSet<>();
         this.trayectos = new ArrayList<>();
     }
 
-    public Set<Sector> getSectoresDondeTrabaja() {
-        return this.sectoresDondeTrabaja;
+    public Set<Sector> getSectores() {
+        return this.sectores;
     }
 
-    public Set<Organizacion> organizacionesDondeTrabaja(){
-        return this.sectoresDondeTrabaja
+    public Set<Organizacion> getOrganizaciones(){
+        return this.sectores
                 .stream()
                 .map(Sector::getOrganizacion)
                 .collect(Collectors.toSet());
     }
 
-    public String nombreCompleto() {
+    public String getNombreCompleto() {
         return this.nombre + " " + this.apellido;
     }
 
     public void agregarSector(Sector sector) {
         if(this.trabajaEnSector(sector))
             throw new MiembroException("El miembro ya trabaja en ese sector");
-        this.sectoresDondeTrabaja.add(sector);
+        this.sectores.add(sector);
     }
 
     public void quitarSector(Sector sector) {
         if(!this.trabajaEnSector(sector))
             throw new MiembroException("El miembro no trabaja en ese sector");
-        this.sectoresDondeTrabaja.remove(sector);
+        this.sectores.remove(sector);
     }
 
     public void solicitarIngresoAlSector(Sector sector) {
@@ -82,15 +82,15 @@ public class Miembro {
     }
 
     public Integer cantidadDeSectoresDondeTrabaja() {
-        return this.getSectoresDondeTrabaja().size();
+        return this.getSectores().size();
     }
 
     public Integer cantidadDeOrganizacionesDondeTrabaja() {
-        return this.organizacionesDondeTrabaja().size();
+        return this.getOrganizaciones().size();
     }
 
     public boolean trabajaEnSector(Sector unSector) {
-        return this.sectoresDondeTrabaja.contains(unSector);
+        return this.sectores.contains(unSector);
     }
 
     public Integer getId() {
@@ -160,6 +160,10 @@ public class Miembro {
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 '}';
+    }
+
+    public String getDocumento() {
+        return tipoDeDocumento + ": " + nroDocumento;
     }
 }
 

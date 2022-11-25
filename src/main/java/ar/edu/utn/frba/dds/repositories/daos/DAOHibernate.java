@@ -25,10 +25,7 @@ public class DAOHibernate<T> implements DAO<T> {
 
     @Override
     public Optional<T> buscar(Integer id) {
-        if(id != null) //Porque Entity#find rompe al recibir null en la PK
-            return Optional.ofNullable(EntityManagerHelper.getEntityManager().find(type, id));
-        else
-            return Optional.empty();
+        return id == null ? Optional.empty() : Optional.ofNullable(EntityManagerHelper.getEntityManager().find(type, id));
     }
 
     public List<T> buscar(CriteriaQuery<T> condicion) {
@@ -46,10 +43,11 @@ public class DAOHibernate<T> implements DAO<T> {
     }
 
     @Override
-    public void modificar(T unObjeto) {
+    public T modificar(T unObjeto) {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
-        EntityManagerHelper.getEntityManager().merge(unObjeto);
+        T merged = EntityManagerHelper.getEntityManager().merge(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();
+        return merged;
     }
 
     @Override
@@ -57,5 +55,10 @@ public class DAOHibernate<T> implements DAO<T> {
         EntityManagerHelper.getEntityManager().getTransaction().begin();
         EntityManagerHelper.getEntityManager().remove(unObjeto);
         EntityManagerHelper.getEntityManager().getTransaction().commit();
+    }
+
+    @Override
+    public Optional<T> getReferenceById(Integer id) {
+        return id == null ? Optional.empty() : Optional.ofNullable(EntityManagerHelper.getEntityManager().getReference(type, id));
     }
 }

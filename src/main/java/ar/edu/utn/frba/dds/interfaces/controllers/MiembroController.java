@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.controllers;
+package ar.edu.utn.frba.dds.interfaces.controllers;
 
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
@@ -7,7 +7,7 @@ import ar.edu.utn.frba.dds.server.login.ForbiddenException;
 import ar.edu.utn.frba.dds.server.login.NotFoundException;
 import ar.edu.utn.frba.dds.server.login.UnauthorizedException;
 import ar.edu.utn.frba.dds.interfaces.mappers.MiembrosMapper;
-import ar.edu.utn.frba.dds.interfaces.input.csv.MiembroCSVDTO;
+import ar.edu.utn.frba.dds.interfaces.input.json.MiembroResponse;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
@@ -38,9 +38,9 @@ public class MiembroController {
 
             return new ErrorResponse().generarVista(model);
         }
-        Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id")));
+        Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id"))).get();
 
-        model.put("descripcion", miembro.nombreCompleto());
+        model.put("descripcion", miembro.getNombreCompleto());
 
         return new ModelAndView(model, "mensaje.hbs");
     }
@@ -50,7 +50,7 @@ public class MiembroController {
             return loginController.chequearValidezAcceso(request, response, true);
         }TODO todo esto agregar una vez que tengamos la vista*/
 
-        Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id")));
+        Miembro miembro = this.repoMiembros.buscar(Integer.parseInt(request.params("id"))).get();
 
         if(miembro == null) {
             response.status(400);
@@ -73,7 +73,7 @@ public class MiembroController {
             return loginController.chequearValidezAcceso(request, response, true);
         }TODO todo esto agregar una vez que tengamos la vista*/
 
-        MiembroCSVDTO miembroCSVDTO = new ParserJSON<>(MiembroCSVDTO.class).parseElement(request.body());
+        MiembroResponse miembroCSVDTO = new ParserJSON<>(MiembroResponse.class).parseElement(request.body());
 
         Miembro miembro = MiembrosMapper.toEntity(miembroCSVDTO);
 

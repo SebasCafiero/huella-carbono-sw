@@ -9,11 +9,14 @@ public class ReporteMapperHBS {
 
     public static ReporteHBS toDTO(ReporteOrganizacion reporte) {
         ReporteHBS reporteDTO = new ReporteHBS();
-        reporteDTO.setFechaCreacion(reporte.getFechaCreacion().toString()); //todo format
-        reporteDTO.setFechaReferencia(reporte.getPeriodoReferencia().getMes() + "-" + reporte.getPeriodoReferencia().getAnio());
+        reporteDTO.setFechaCreacion(reporte.getFechaCreacion().getMonthValue() + " / " + reporte.getFechaCreacion().getYear());
+        if(reporte.getPeriodoReferencia().getPeriodicidad() == 'A')
+            reporteDTO.setFechaReferencia(reporte.getPeriodoReferencia().getAnio().toString());
+        else
+            reporteDTO.setFechaReferencia(reporte.getPeriodoReferencia().getMes() + " / " + reporte.getPeriodoReferencia().getAnio());
         reporteDTO.setConsumoTotal(reporte.getConsumoTotal());
         reporteDTO.setConsumoMediciones(reporte.getConsumoMediciones());
-        reporteDTO.setConsumoTrayectos(reporte.getConsumoTotal()- reporteDTO.getConsumoMediciones());
+        reporteDTO.setConsumoTrayectos(reporte.getConsumoTotal() - reporte.getConsumoMediciones());
 
         reporteDTO.setConsumoPorCategoria(reporte.getConsumoPorCategoria().entrySet().stream().map(ConsumoMapperHBS::toDTOCategoria).collect(Collectors.toList()));
         reporteDTO.setConsumoPorSector(reporte.getConsumoPorSector().entrySet().stream().map(ConsumoMapperHBS::toDTOSector).collect(Collectors.toList()));

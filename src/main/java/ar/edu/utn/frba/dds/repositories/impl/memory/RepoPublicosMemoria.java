@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
 import ar.edu.utn.frba.dds.repositories.RepoPublicos;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class RepoPublicosMemoria<T> extends RepositorioMemoria<TransportePublico> implements RepoPublicos {
@@ -14,8 +15,8 @@ public class RepoPublicosMemoria<T> extends RepositorioMemoria<TransportePublico
     }
 
     @Override
-    public TransportePublico findByEquality(TipoTransportePublico tipo, String linea) {
-        return this.getDao().buscar(condicionTransporte(tipo, linea)).stream().findFirst().orElse(null);
+    public Optional<TransportePublico> findByEquality(TipoTransportePublico tipo, String linea) {
+        return this.getDao().buscar(condicionTransporte(tipo, linea)).stream().findFirst();
     }
 
     private Predicate<TransportePublico> condicionTransporte(TipoTransportePublico tipo, String linea) {

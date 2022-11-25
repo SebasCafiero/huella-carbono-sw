@@ -57,9 +57,9 @@ public class DAOMemoria<T> implements DAO<T> {
     }
 
     @Override
-    public void modificar(T unObjeto) {
+    public T modificar(T unObjeto) {
         eliminar(unObjeto);
-        agregar(unObjeto);
+        return agregar(unObjeto);
     }
 
     public void modificar(Integer id, T nuevoObjeto) {
@@ -70,7 +70,14 @@ public class DAOMemoria<T> implements DAO<T> {
 
     @Override
     public void eliminar(T unObjeto) {
-        this.entidades.remove(unObjeto);
+        Method getId = obtenerMetodo("getId");
+        this.entidades.removeIf(entidad ->
+                invocarGetter(getId, unObjeto).equals(invocarGetter(getId, entidad)));
+    }
+
+    @Override
+    public Optional<T> getReferenceById(Integer id) {
+        return this.buscar(id);
     }
 
     private Method obtenerMetodo(String nombre) {

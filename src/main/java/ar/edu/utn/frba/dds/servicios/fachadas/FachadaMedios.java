@@ -6,6 +6,9 @@ import ar.edu.utn.frba.dds.repositories.*;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 
+import java.util.List;
+import java.util.Optional;
+
 public class FachadaMedios {
     private final Repositorio<MedioDeTransporte> repoMedios;
     private final RepoEcologicos repoEcologicos;
@@ -23,7 +26,15 @@ public class FachadaMedios {
         this.repoParticulares = (RepoParticulares) FactoryRepositorio.get(VehiculoParticular.class);
     }
 
-    public MedioDeTransporte obtenerMedio(String tipo, String discriminante1, String discriminante2) {
+    public Optional<MedioDeTransporte> findById(Integer id) {
+        return repoMedios.buscar(id);
+    }
+
+    public List<MedioDeTransporte> findAll() {
+        return repoMedios.buscarTodos();
+    }
+
+    public Optional<? extends MedioDeTransporte> find(String tipo, String discriminante1, String discriminante2) {
         if(tipo.equals("contratado")) {
             return obtenerContratado(discriminante1);
         } else if(tipo.equals("publico")) {
@@ -37,34 +48,30 @@ public class FachadaMedios {
         throw new NoExisteMedioException(tipo);
     }
 
-    private VehiculoParticular obtenerParticular(String discriminante1, String discriminante2) {
+    private Optional<VehiculoParticular> obtenerParticular(String discriminante1, String discriminante2) {
         if(TipoVehiculo.hasValue(discriminante1) && TipoCombustible.hasValue(discriminante2)) {
             return this.repoParticulares.findByEquality(TipoVehiculo.valueOf(discriminante1), TipoCombustible.valueOf(discriminante2));
         }
-        return null;
+        return Optional.empty();
     }
 
-    private TransporteEcologico obtenerEcologico(String discriminante1) {
+    private Optional<TransporteEcologico> obtenerEcologico(String discriminante1) {
         if(TipoTransporteEcologico.hasValue(discriminante1)) {
             return this.repoEcologicos.findByEquality(TipoTransporteEcologico.valueOf(discriminante1));
         }
-        return null;
+        return Optional.empty();
     }
 
-    private TransportePublico obtenerPublico(String discriminante1, String discriminante2) {
+    private Optional<TransportePublico> obtenerPublico(String discriminante1, String discriminante2) {
         if(TipoTransportePublico.hasValue(discriminante1)) {
             return this.repoPublicos.findByEquality(TipoTransportePublico.valueOf(discriminante1), discriminante2);
         }
-        return null;
+        return Optional.empty();
     }
 
-    private ServicioContratado obtenerContratado(String discriminante1) {
-        TipoServicio tipoServicio = this.repoTiposServicio.findByEquality(discriminante1);
-
-        if(tipoServicio != null) {
-            return this.repoContratados.findByEquality(tipoServicio);
-        }
-        return null;
+    private Optional<ServicioContratado> obtenerContratado(String discriminante1) {
+        return repoTiposServicio.findByEquality(discriminante1)
+                .flatMap(repoContratados::findByEquality);
     }
 
 }

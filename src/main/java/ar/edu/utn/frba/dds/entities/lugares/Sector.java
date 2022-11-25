@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.entities.lugares;
 
-import ar.edu.utn.frba.dds.entities.exceptions.SectorException;
 import ar.edu.utn.frba.dds.entities.exceptions.MiembroException;
+import ar.edu.utn.frba.dds.entities.exceptions.SectorException;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
 import javax.persistence.*;
@@ -14,16 +14,21 @@ public class Sector {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "sector_id")
     private Integer id;
 
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "organizacion_id")
     private Organizacion organizacion;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "MIEMBRO_POR_SECTOR")
+    @JoinTable(name = "MIEMBRO_POR_SECTOR",
+            joinColumns = { @JoinColumn(name = "sector_id") },
+            inverseJoinColumns = { @JoinColumn(name = "miembro_id") }
+    )
     private Set<Miembro> miembros;
 
     public Sector(String nombre, Organizacion organizacion) throws SectorException {
@@ -43,7 +48,7 @@ public class Sector {
 
     public String getNombre() { return this.nombre; }
 
-    public Set<Miembro> getListaDeMiembros() {
+    public Set<Miembro> getMiembros() {
         return this.miembros;
     }
 
