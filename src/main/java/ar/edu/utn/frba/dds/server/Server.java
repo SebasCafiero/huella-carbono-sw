@@ -17,7 +17,6 @@ public class Server {
 
         Router.init();
 //        DebugScreen.enableDebugScreen();
-        System.out.println("Server corriendo...");
     }
 
     static int getHerokuAssignedPort() {
@@ -41,8 +40,6 @@ public class Server {
                         .forEach(loca -> cacheLocalidades.put(loca.getNombre(),
                                 new CacheLocalidad(muni.getProvincia().getIdApiDistancias(), muni.getId(), loca.getId())));
             });
-        } else {
-            System.out.println("Cache api distancias deshabilitada.");
         }
 
     }

@@ -14,6 +14,7 @@ public class SystemProperties {
     private static final Boolean calculadoraDistanciasCacheEnabled;
     private static final String calculadoraDistanciasUrl;
     private static final String calculadoraDistanciasToken;
+    private static final Boolean localhost;
 
     static {
         Map<String, String> varEntorno = System.getenv();
@@ -34,6 +35,7 @@ public class SystemProperties {
                 propArchivo.getProperty("client.calculadora.distancias.api.url", "https://ddstpa.com.ar/api/"));
         calculadoraDistanciasToken = varEntorno.getOrDefault("client.calculadora.distancias.api.token",
                 propArchivo.getProperty("client.calculadora.distancias.api.token", ""));
+        localhost = varEntorno.getOrDefault("localhost", propArchivo.getProperty("localhost", "true")).equals("true");
     }
 
     public static Boolean isJpa() {
@@ -62,6 +64,10 @@ public class SystemProperties {
 
     public static String getCalculadoraDistanciasToken() {
         return calculadoraDistanciasToken;
+    }
+
+    public static Boolean isLocalhost() {
+        return localhost;
     }
 
     private static Properties cargarArchivoConfigurable() {
