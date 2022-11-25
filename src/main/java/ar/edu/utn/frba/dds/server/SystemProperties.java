@@ -19,7 +19,7 @@ public class SystemProperties {
         Map<String, String> varEntorno = System.getenv();
         Properties propArchivo = cargarArchivoConfigurable();
         System.out.println("aplication (entorno): " + varEntorno);
-        jpa = varEntorno.getOrDefault("jpa", propArchivo.getProperty("jpa")).equals("true");
+        jpa = varEntorno.getOrDefault("jpa", propArchivo.getProperty("jpa", "true")).equals("true");
         delta = Float.parseFloat(
                 varEntorno.getOrDefault("coordenadas.precision.delta",
                         propArchivo.getProperty("coordenadas.precision.delta", "0.00001")));
@@ -27,9 +27,9 @@ public class SystemProperties {
                 varEntorno.getOrDefault("coordenadas.precision.equivalencia",
                         propArchivo.getProperty("coordenadas.precision.equivalencia", "111.10")));
         calculadoraDistanciasMockEnabled = varEntorno.getOrDefault("client.calculadora.distancias.mock-enabled",
-                propArchivo.getProperty("client.calculadora.distancias.mock-enabled")).equals("true");
+                propArchivo.getProperty("client.calculadora.distancias.mock-enabled", "true")).equals("true");
         calculadoraDistanciasCacheEnabled = varEntorno.getOrDefault("client.calculadora.distancias.cache-enabled",
-                propArchivo.getProperty("client.calculadora.distancias.cache-enabled")).equals("true");
+                propArchivo.getProperty("client.calculadora.distancias.cache-enabled", "false")).equals("true");
         calculadoraDistanciasUrl = varEntorno.getOrDefault("client.calculadora.distancias.api.url",
                 propArchivo.getProperty("client.calculadora.distancias.api.url", "https://ddstpa.com.ar/api/"));
         calculadoraDistanciasToken = varEntorno.getOrDefault("client.calculadora.distancias.api.token",
