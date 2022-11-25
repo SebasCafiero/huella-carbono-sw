@@ -106,7 +106,8 @@ public class ReportesController {
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
             String arch = reporte.getOrganizacion().getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato);
             String ruta = "/docs/" + arch + ".txt";
-            File file = new File(System.getProperty("user.dir") + "/resources/public" + ruta);
+//            File file = new File(System.getProperty("user.dir") + "/resources/public" + ruta);
+            File file = new File(System.getProperty("user.dir") + "/src/main/resources/public" + ruta);
             if(file.canRead()) {
                 System.out.println("Existe el archivo para descargar: " + file.getAbsolutePath());
                 parametros.put("file", ruta); //todo
@@ -154,7 +155,6 @@ public class ReportesController {
         }
         fachadaReportes.generarReporteOrganizacion(organizacion, periodo);
         documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion);
-        System.out.println("DSP de documentar");
         response.redirect(ruta);
 
         return response;
@@ -164,7 +164,8 @@ public class ReportesController {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
         String arch = organizacion.getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
 //        String ruta = "resources/public/docs/" + arch;
-        String ruta = "docs/" + arch;
+//        String ruta = "docs/" + arch;
+        String ruta = "src/main/resources/public/docs/" + arch;
         try {
             PrintWriter writer = new PrintWriter(ruta, "UTF-8");
             writer.println("Fecha de Creacion: " + reporte.getFechaCreacion());
