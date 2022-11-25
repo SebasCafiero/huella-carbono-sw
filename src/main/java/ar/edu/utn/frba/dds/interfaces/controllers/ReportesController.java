@@ -163,8 +163,8 @@ public class ReportesController {
     private String documentarReporte(ReporteOrganizacion reporte, Organizacion organizacion) {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
         String arch = organizacion.getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
-        String ruta = "resources/public/docs/" + arch;
-//        String ruta = "docs/" + arch;
+//        String ruta = "resources/public/docs/" + arch;
+        String ruta = "docs/" + arch;
         try {
             PrintWriter writer = new PrintWriter(ruta, "UTF-8");
             writer.println("Fecha de Creacion: " + reporte.getFechaCreacion());
@@ -193,7 +193,7 @@ public class ReportesController {
             writer.close();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             System.out.println("No se pudo crear el archivo " + ruta);
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new ReporteException("No se pudo crear el archivo del reporte.");
         }
 

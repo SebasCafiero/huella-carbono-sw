@@ -4,6 +4,7 @@ public class ReporteException extends RuntimeException {
     public ReporteException(String desc) {
         System.out.println(desc);
         printStackTrace();
+        System.out.println("DSP del StackTrace");
 //        super(desc);
     }
 }
