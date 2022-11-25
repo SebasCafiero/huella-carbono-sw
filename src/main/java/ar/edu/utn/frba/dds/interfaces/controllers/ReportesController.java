@@ -148,7 +148,7 @@ public class ReportesController {
             ruta = "/agente/"+agente.getId()+"/reporte?org="+idOrg+"#reporte";
         }
         fachadaReportes.generarReporteOrganizacion(organizacion, periodo);
-        documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion); //todo no lo toma bien, agarra el viejo o ninguno
+        documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion);
         
         response.redirect(ruta);
 
@@ -187,7 +187,7 @@ public class ReportesController {
             writer.close();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(); //todo si no puede crearse arch puede ser por la carpeta inexistente
         }
 
         return arch;

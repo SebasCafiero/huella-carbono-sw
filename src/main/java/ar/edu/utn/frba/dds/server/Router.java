@@ -29,10 +29,11 @@ public class Router {
 
     public static void init() {
         Router.initEngine();
-        String staticURL = System.getProperty("user.dir") + "/resources/public";
+        String relativeURL = "/public";
+        String absoluteURL = System.getProperty("user.dir") + "/resources" + relativeURL;
 //        if(SystemProperties.getLocalhost())
-        Spark.externalStaticFileLocation(staticURL); //Ruta absoluta -> auto-refresh
-//        Spark.staticFileLocation("/public"); //Ruta relativa -> refresh
+//        Spark.externalStaticFileLocation(absoluteURL); //Ruta absoluta -> auto-refresh
+        Spark.staticFileLocation(relativeURL); //Ruta relativa -> refresh
         Router.configure();
         Router.configureExceptions();
     }
