@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.dds.interfaces.controllers;
 
+import ar.edu.utn.frba.dds.entities.medibles.Categoria;
 import ar.edu.utn.frba.dds.entities.medibles.FactorEmision;
-import ar.edu.utn.frba.dds.interfaces.mappers.FactorEmisionMapper;
 import ar.edu.utn.frba.dds.interfaces.input.json.FactorEmisionJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
-import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.RepoFactores;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 
 import spark.Request;
@@ -13,20 +13,28 @@ import spark.Response;
 import java.util.List;
 
 public class FactorEmisionController {
-    private Repositorio<FactorEmision> repositorio;
+    private final RepoFactores repoFactores;
 
     public FactorEmisionController(){
-        this.repositorio = FactoryRepositorio.get(FactorEmision.class);
+        this.repoFactores = (RepoFactores) FactoryRepositorio.get(FactorEmision.class);
     }
 
     public Object modificar(Request request, Response response) {
-        FactorEmision factorEmision = FactorEmisionMapper.toEntity(new ParserJSON<>(FactorEmisionJSONDTO.class).parseElement(request.body()));
-        this.repositorio.modificar(Integer.parseInt(request.params("id")), factorEmision);
-        return "Factor de emision de id : " + request.params("id") + " modificado correctamente.";
+        FactorEmisionJSONDTO dto = new ParserJSON<>(FactorEmisionJSONDTO.class).parseElement(request.body());
+        Categoria categoria = new Categoria(dto.getCategoria().getActividad(), dto.getCategoria().getTipoConsumo());
+
+        FactorEmision factorEmision = this.repoFactores.findByCategoria(categoria)
+                        .stream().findFirst()
+                .orElse(new FactorEmision(categoria, dto.getUnidad(), dto.getValor()));
+
+        factorEmision.setUnidad(dto.getUnidad());
+        factorEmision.setValor(dto.getValor());
+
+        return this.repoFactores.modificar(factorEmision);
     }
 
     public String mostrarTodos(Request request, Response response) {
-        List<FactorEmision> factores = this.repositorio.buscarTodos();
+        List<FactorEmision> factores = this.repoFactores.buscarTodos();
         return factores.toString();
     }
 

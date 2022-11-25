@@ -1,9 +1,9 @@
 package ar.edu.utn.frba.dds.interfaces.input.json;
 
 public class FactorEmisionJSONDTO {
-    public CategoriaJSONDTO categoria;
-    public String unidad;
-    public Float valor;
+    private CategoriaJSONDTO categoria;
+    private String unidad;
+    private Float valor;
 
     public CategoriaJSONDTO getCategoria() {
         return categoria;

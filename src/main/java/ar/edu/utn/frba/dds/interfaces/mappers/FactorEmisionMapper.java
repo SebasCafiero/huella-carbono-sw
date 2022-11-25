@@ -15,8 +15,8 @@ public class FactorEmisionMapper {
     public static FactorEmision toEntity(FactorEmisionJSONDTO dto) {
         return new FactorEmision(
                 new Categoria(dto.getCategoria().getActividad(), dto.getCategoria().getTipoConsumo()),
-                dto.unidad,
-                dto.valor
+                dto.getUnidad(),
+                dto.getValor()
         );
     }
 
