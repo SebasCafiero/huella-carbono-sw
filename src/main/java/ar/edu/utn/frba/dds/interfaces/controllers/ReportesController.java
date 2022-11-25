@@ -14,6 +14,7 @@ import ar.edu.utn.frba.dds.entities.medibles.ReporteOrganizacion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
 import ar.edu.utn.frba.dds.repositories.utils.EntityManagerHelper;
+import ar.edu.utn.frba.dds.server.SystemProperties;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaReportes;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
@@ -107,7 +108,8 @@ public class ReportesController {
             String arch = reporte.getOrganizacion().getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato);
             String ruta = "/docs/" + arch + ".txt";
 //            File file = new File(System.getProperty("user.dir") + "/resources/public" + ruta);
-            File file = new File(System.getProperty("user.dir") + "/src/main/resources/public" + ruta);
+//            File file = new File(System.getProperty("user.dir") + "/src/main/resources/public" + ruta);
+            File file = new File(System.getProperty("user.dir") + SystemProperties.getStaticBasePath() + SystemProperties.getStaticRelativePath() + ruta);
             if(file.canRead()) {
                 System.out.println("Existe el archivo para descargar: " + file.getAbsolutePath());
                 parametros.put("file", ruta); //todo
@@ -165,7 +167,8 @@ public class ReportesController {
         String arch = organizacion.getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
 //        String ruta = "resources/public/docs/" + arch;
 //        String ruta = "docs/" + arch;
-        String ruta = "src/main/resources/public/docs/" + arch;
+//        String ruta = "src/main/resources/public/docs/" + arch;
+        String ruta = SystemProperties.getStaticAbsolutePath() + "/docs/" + arch;
         try {
             PrintWriter writer = new PrintWriter(ruta, "UTF-8");
             writer.println("Fecha de Creacion: " + reporte.getFechaCreacion());
