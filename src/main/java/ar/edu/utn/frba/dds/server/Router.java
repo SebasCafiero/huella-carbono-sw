@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.server;
 
+import ar.edu.utn.frba.dds.interfaces.RequestInvalidoApiException;
 import ar.edu.utn.frba.dds.interfaces.controllers.*;
 import ar.edu.utn.frba.dds.server.login.*;
 import ar.edu.utn.frba.dds.server.utils.BooleanHelper;
@@ -12,7 +13,9 @@ import org.eclipse.jetty.http.HttpStatus;
 import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class Router {
@@ -75,8 +78,8 @@ public class Router {
             Spark.path("/organizacion", () -> {
                 Spark.before("/*", asegurarSesion);
 
-                Spark.post("", organizacionController::agregar);
-                Spark.get("", organizacionController::mostrarTodos);
+                Spark.post("", organizacionController::agregar, gson::toJson);
+                Spark.get("", organizacionController::mostrarTodos, gson::toJson);
 
                 Spark.path("/:id", () -> {
                     Spark.before("", autorizarUsuario.apply("organizacion"));
@@ -100,6 +103,12 @@ public class Router {
                         Spark.get("/valor/:valor", medicionController::filtrarValor);
                     });
 
+                    Spark.path("/sector", () -> {
+                        Spark.path("/:sector", () -> {
+                            Spark.post("/miembro", organizacionController::agregarMiembro);
+                        });
+                    });
+
                     Spark.get("/reporte", reportesController::generarReporteOrganizacion);
                 });
             });
@@ -108,7 +117,7 @@ public class Router {
                 Spark.before("/*", asegurarSesion);
 
                 Spark.get("", miembroController::mostrarTodos);
-                Spark.post("", miembroController::agregar);
+                Spark.post("", miembroController::agregar, gson::toJson);
 
                 Spark.path("/:id", () -> {
                     Spark.before("", autorizarUsuario.apply("miembro"));
@@ -234,11 +243,11 @@ public class Router {
 
         Spark.exception(MiHuellaApiException.class, (exception, request, response) -> {
             System.out.println("Request rechazado. " + exception.getMessage());
-            response.status(HttpStatus.BAD_REQUEST_400);
+            response.status(HttpStatus.CONFLICT_409);
             response.body(gson.toJson(exception.getError()));
         });
 
-        Spark.exception(JsonSyntaxException.class, (exception, request, response) -> {
+        Spark.exception(RequestInvalidoApiException.class, (exception, request, response) -> {
             System.out.println("Request rechazado. " + exception.getMessage());
             response.status(HttpStatus.BAD_REQUEST_400);
             response.body(gson.toJson("Request inválido: " + exception.getMessage()));
