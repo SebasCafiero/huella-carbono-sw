@@ -61,7 +61,7 @@
 
           <div class="form-fecha">
             <label for="fecha">Fecha</label>
-            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.mes}}/{{trayecto.año}}" {{else}} value="{{fecha}}" {{/if}} required/>
+            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.fecha}}" {{else}} value="{{fecha}}" {{/if}} required/>
           </div>
           <br />
           <div class="form-tramos">
@@ -69,7 +69,7 @@
               {{#each trayecto.tramos}}
               <div id="tramo-{{@index}}" class="tramo">
                 <fieldset>
-                  <legend>Tramo {{id}}</legend>
+                  <legend>Tramo (id {{id}})</legend>
                   <input id="tramo-id-{{@index}}" type="hidden" name="f-tramo-id-{{@index}}" value="{{id}}"/>
                   <label for="transporte-{{@index}}">Transporte</label>
                   <select id="transporte-{{@index}}" name="f-transporte-{{@index}}" onchange="transporteCambiado()" required>

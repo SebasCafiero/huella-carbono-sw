@@ -192,7 +192,7 @@ public class FachadaTrayectos {
                     map.value("f-provincia-" + lugar + "-" + pos),
                     map.value("f-municipio-" + lugar + "-" + pos),
                     map.value("f-localidad-" + lugar + "-" + pos),
-                    map.value("f-calle-" + "-" + lugar + pos),
+                    map.value("f-calle-" + lugar + "-" + pos),
                     paramToInt.apply("f-numero-" + lugar + "-" + pos),
                     new Coordenada(paramToFloat.apply("f-lat-" + lugar + "-" + pos),
                             paramToFloat.apply("f-lon-" + lugar + "-" + pos))

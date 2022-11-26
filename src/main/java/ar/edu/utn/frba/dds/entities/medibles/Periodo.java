@@ -13,7 +13,7 @@ public class Periodo {
     public Periodo(Integer anio) {
         this.periodicidad = 'A';
         this.anio = anio;
-        this.mes = 0; //TODO principio isp
+        this.mes = 1; //TODO principio isp
     }
 
     public Periodo(Integer anio, Integer mes) {

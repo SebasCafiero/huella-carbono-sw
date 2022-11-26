@@ -29,7 +29,7 @@ public class ServicioContratado extends MedioDeTransporte {
 
     @Override
     public String getClasificacion() {
-        return tipo.toString();
+        return tipo.getNombre();
     }
 
     @Override

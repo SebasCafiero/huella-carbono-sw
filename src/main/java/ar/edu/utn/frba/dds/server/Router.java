@@ -210,7 +210,7 @@ public class Router {
         });
 
         Spark.get("/*", ((request, response) -> {
-            response.redirect("/home");
+            response.redirect("/menu");
             response.status(HttpStatus.NOT_FOUND_404);
             return response;
         }));

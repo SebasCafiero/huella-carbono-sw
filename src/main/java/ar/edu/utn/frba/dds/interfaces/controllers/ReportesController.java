@@ -131,14 +131,14 @@ public class ReportesController {
     }
 
     public Response generar(Request request, Response response, String rol) {
-        String fechaActual = LocalDate.now().getMonthValue()+"/"+LocalDate.now().getYear();
+        /*String fechaActual = LocalDate.now().getMonthValue()+"/"+LocalDate.now().getYear();
         String[] fecha = request.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar fecha
         Periodo periodo;
         if(fecha.length > 1)
             periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
         else
-            periodo = new Periodo(Integer.parseInt(fecha[0]));
-
+            periodo = new Periodo(Integer.parseInt(fecha[0]));*/
+        Periodo periodo = fachadaReportes.parsearPeriodo(request.queryParams("f-fecha"));
         Organizacion organizacion = null;
         String ruta = "";
         int id = Integer.parseInt(request.params("id"));

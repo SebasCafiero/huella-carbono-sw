@@ -143,7 +143,7 @@ public class TrayectosController {
         TramoHBS tramoHBS = null;
 
         if(request.queryParams("transporte-nuevo") != null) {
-            tramoHBS = mapTramoNuevo(request); //todo asegurar que parametros mantiene la referencia
+            tramoHBS = mapTramoNuevo(request);
         }
 
         List<TramoHBS> tramosDTO = new ArrayList<>();
@@ -159,8 +159,10 @@ public class TrayectosController {
                 : parsearPeriodo(request.queryParams("fecha"));
 
         TrayectoHBS trayectoDTO = new TrayectoHBS();
-        trayectoDTO.setMes(periodo.getMes());
-        trayectoDTO.setAño(periodo.getAnio());
+        if(periodo.getPeriodicidad() == 'M')
+            trayectoDTO.setFecha(periodo.getMes() + "/" + periodo.getAnio().toString());
+        else
+            trayectoDTO.setFecha(periodo.getAnio().toString());
         trayectoDTO.setMiembros(trayecto.getMiembros().stream().map(MiembroMapperHBS::toDTO).collect(Collectors.toList()));
         trayectoDTO.setId(trayecto.getId());
 
@@ -375,8 +377,6 @@ public class TrayectosController {
             LocalDate fecha = LocalDate.now();
             periodo = new Periodo(fecha.getYear(), fecha.getMonthValue());
         }
-//        String fechaActual = LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear();
-//        String[] fecha = req.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar
         return periodo;
     }
 }
