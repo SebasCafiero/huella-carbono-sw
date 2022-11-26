@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.server;
 
+import ar.edu.utn.frba.dds.interfaces.RequestInvalidoApiException;
 import ar.edu.utn.frba.dds.interfaces.controllers.*;
 import ar.edu.utn.frba.dds.server.login.*;
 import ar.edu.utn.frba.dds.server.utils.BooleanHelper;
@@ -12,7 +13,9 @@ import org.eclipse.jetty.http.HttpStatus;
 import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class Router {
@@ -29,16 +32,23 @@ public class Router {
 
     public static void init() {
         Router.initEngine();
-        String relativeURL = "/public";
-        String absoluteURL = System.getProperty("user.dir") + "/resources" + relativeURL;
-//        if(SystemProperties.getLocalhost())
-//        Spark.externalStaticFileLocation(absoluteURL); //Ruta absoluta -> auto-refresh
-        Spark.staticFileLocation(relativeURL); //Ruta relativa -> refresh
-        Router.configure();
+        Router.configureStaticFiles();
+        Router.configurePaths();
         Router.configureExceptions();
     }
 
-    private static void configure() {
+    private static void configureStaticFiles() {
+//        String absoluteURL = System.getProperty("user.dir") + "/resources" + relativeURL;
+        if(SystemProperties.isLocalhost()) {
+            System.out.println("Static files en localhost: " + SystemProperties.getStaticAbsolutePath());
+            Spark.externalStaticFileLocation(SystemProperties.getStaticAbsolutePath()); //Ruta absoluta -> auto-refresh
+        } else {
+            System.out.println("Static files en external host: " + SystemProperties.getStaticRelativePath());
+            Spark.staticFileLocation(SystemProperties.getStaticRelativePath()); //Ruta relativa -> sin auto refresh
+        }
+    }
+
+    private static void configurePaths() {
         FachadaUsuarios fachadaUsuarios = new FachadaUsuarios();
         MedicionController medicionController = new MedicionController();
         BatchMedicionController batchMedicionController = new BatchMedicionController();
@@ -79,8 +89,8 @@ public class Router {
             Spark.path("/organizacion", () -> {
                 Spark.before("/*", asegurarSesion);
 
-                Spark.post("", organizacionController::agregar);
-                Spark.get("", organizacionController::mostrarTodos);
+                Spark.post("", organizacionController::agregar, gson::toJson);
+                Spark.get("", organizacionController::mostrarTodos, gson::toJson);
 
                 Spark.path("/:id", () -> {
                     Spark.before("", autorizarUsuario.apply("organizacion"));
@@ -104,6 +114,12 @@ public class Router {
                         Spark.get("/valor/:valor", medicionController::filtrarValor);
                     });
 
+                    Spark.path("/sector", () -> {
+                        Spark.path("/:sector", () -> {
+                            Spark.post("/miembro", organizacionController::agregarMiembro);
+                        });
+                    });
+
                     Spark.get("/reporte", reportesController::generarReporteOrganizacion);
                 });
             });
@@ -112,13 +128,13 @@ public class Router {
                 Spark.before("/*", asegurarSesion);
 
                 Spark.get("", miembroController::mostrarTodos);
-                Spark.post("", miembroController::agregar);
+                Spark.post("", miembroController::agregar, gson::toJson);
 
                 Spark.path("/:id", () -> {
                     Spark.before("", autorizarUsuario.apply("miembro"));
                     Spark.before("/*", autorizarUsuario.apply("miembro"));
 
-                    Spark.get("", miembroController::obtener, engine);
+//                    Spark.get("", miembroController::obtener, engine); TODO
                     Spark.delete("", miembroController::eliminar);
                     Spark.put("", miembroController::modificar);
                 });
@@ -145,8 +161,7 @@ public class Router {
 
             Spark.path("/factorEmision", () -> {
                 Spark.get("", factorEmisionController::mostrarTodos);
-                Spark.put("/:id", factorEmisionController::modificar);
-
+                Spark.post("", factorEmisionController::modificar);
             });
 
             Spark.delete("trayecto/:id", trayectosController::borrar); //Para eliminar definitivamente el trayecto (admin)
@@ -222,7 +237,7 @@ public class Router {
             } else {
                 response.body(exception.getMessage());
             }
-            response.redirect("/home");
+            response.redirect("/menu");
         });
 
         Spark.exception(AuthenticationException.class, (exception, request, response) -> {
@@ -238,11 +253,11 @@ public class Router {
 
         Spark.exception(MiHuellaApiException.class, (exception, request, response) -> {
             System.out.println("Request rechazado. " + exception.getMessage());
-            response.status(HttpStatus.BAD_REQUEST_400);
+            response.status(HttpStatus.CONFLICT_409);
             response.body(gson.toJson(exception.getError()));
         });
 
-        Spark.exception(JsonSyntaxException.class, (exception, request, response) -> {
+        Spark.exception(RequestInvalidoApiException.class, (exception, request, response) -> {
             System.out.println("Request rechazado. " + exception.getMessage());
             response.status(HttpStatus.BAD_REQUEST_400);
             response.body(gson.toJson("Request inválido: " + exception.getMessage()));

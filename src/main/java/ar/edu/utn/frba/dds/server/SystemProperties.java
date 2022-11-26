@@ -14,6 +14,11 @@ public class SystemProperties {
     private static final Boolean calculadoraDistanciasCacheEnabled;
     private static final String calculadoraDistanciasUrl;
     private static final String calculadoraDistanciasToken;
+    private static final Boolean localhost;
+    private static final String staticRelativePath;
+    private static final String staticBasePath;
+    private static final String staticDomainPath;
+    private static final String staticAbsolutePath;
 
     static {
         Map<String, String> varEntorno = System.getenv();
@@ -34,6 +39,11 @@ public class SystemProperties {
                 propArchivo.getProperty("client.calculadora.distancias.api.url", "https://ddstpa.com.ar/api/"));
         calculadoraDistanciasToken = varEntorno.getOrDefault("client.calculadora.distancias.api.token",
                 propArchivo.getProperty("client.calculadora.distancias.api.token", ""));
+        localhost = varEntorno.getOrDefault("localhost", propArchivo.getProperty("localhost", "true")).equals("true");
+        staticRelativePath = varEntorno.getOrDefault("static-path.relative", propArchivo.getProperty("static-path.relative","/public"));
+        staticBasePath = varEntorno.getOrDefault("static-path.base", propArchivo.getProperty("static-path.base", "/src/main/resources"));
+        staticDomainPath = varEntorno.getOrDefault("static-path.domain", propArchivo.getProperty("static-path.domain", System.getProperty("user.dir")));
+        staticAbsolutePath = varEntorno.getOrDefault("static-path.absolute", propArchivo.getProperty("static-path.absolute", staticDomainPath + staticBasePath + staticRelativePath));
     }
 
     public static Boolean isJpa() {
@@ -62,6 +72,26 @@ public class SystemProperties {
 
     public static String getCalculadoraDistanciasToken() {
         return calculadoraDistanciasToken;
+    }
+
+    public static Boolean isLocalhost() {
+        return localhost;
+    }
+
+    public static String getStaticRelativePath() {
+        return staticRelativePath;
+    }
+
+    public static String getStaticAbsolutePath() {
+        return staticAbsolutePath;
+    }
+
+    public static String getStaticBasePath() {
+        return staticBasePath;
+    }
+
+    public static String getStaticDomainPath() {
+        return staticDomainPath;
     }
 
     private static Properties cargarArchivoConfigurable() {

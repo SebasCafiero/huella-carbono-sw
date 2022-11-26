@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.interfaces.input.json;
 
-public class MiembroResponse {
+public class NuevoMiembroRequest {
     private String nombre;
     private String apellido;
     private String tipoDocumento;
