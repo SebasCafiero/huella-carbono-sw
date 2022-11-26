@@ -32,17 +32,20 @@ public class Router {
 
     public static void init() {
         Router.initEngine();
-        String relativeURL = "/public";
-        String absoluteURL = System.getProperty("user.dir") + "/resources" + relativeURL;
-        if(SystemProperties.isLocalhost()) {
-            System.out.println("Static files en localhost: " + absoluteURL);
-            Spark.externalStaticFileLocation(absoluteURL); //Ruta absoluta -> auto-refresh
-        } else {
-            System.out.println("Static files en external host: " + relativeURL);
-            Spark.staticFileLocation(relativeURL); //Ruta relativa -> refresh
-        }
+        Router.configureStaticFiles();
         Router.configurePaths();
         Router.configureExceptions();
+    }
+
+    private static void configureStaticFiles() {
+//        String absoluteURL = System.getProperty("user.dir") + "/resources" + relativeURL;
+        if(SystemProperties.isLocalhost()) {
+            System.out.println("Static files en localhost: " + SystemProperties.getStaticAbsolutePath());
+            Spark.externalStaticFileLocation(SystemProperties.getStaticAbsolutePath()); //Ruta absoluta -> auto-refresh
+        } else {
+            System.out.println("Static files en external host: " + SystemProperties.getStaticRelativePath());
+            Spark.staticFileLocation(SystemProperties.getStaticRelativePath()); //Ruta relativa -> sin auto refresh
+        }
     }
 
     private static void configurePaths() {
