@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class OrganizacionMapper {
     public static Organizacion toEntity(OrganizacionJSONDTO orgDTO) {
         Organizacion entity = new Organizacion(
-                orgDTO.getOrganizacion(),
+                orgDTO.getNombre(),
                 TipoDeOrganizacionEnum.valueOf(orgDTO.getTipo().toUpperCase()),
                 new ClasificacionOrganizacion(orgDTO.getClasificacion()),
                 UbicacionMapper.toEntity(orgDTO.getUbicacion())

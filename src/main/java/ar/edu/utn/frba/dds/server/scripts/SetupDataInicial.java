@@ -36,12 +36,8 @@ public class SetupDataInicial {
 
         FachadaReportes fachadaReportes = new FachadaReportes();
 
-        Organizacion unaOrg = repoOrganizaciones.findByRazonSocial("UTN - Campus");
-
-        if(unaOrg == null) {
-            System.out.println("La org no existe");
-            exit(0);
-        }
+        Organizacion unaOrg = repoOrganizaciones.findByRazonSocial("UTN - Campus")
+                .orElseThrow(() -> new RuntimeException("La org no existe"));
 
         ReporteOrganizacion reporteOrganizacion = fachadaReportes.generarReporteOrganizacion(unaOrg, periodo);
 

@@ -10,6 +10,7 @@ import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
+import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiHuellaApiException;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
@@ -28,6 +29,10 @@ public class FachadaOrganizacionApi {
     }
 
     public Organizacion agregar(OrganizacionJSONDTO orgRequest) {
+        if (this.repoOrganizaciones.findByRazonSocial(orgRequest.getNombre()).isPresent()) {
+            throw new MiHuellaApiException("Ya existe una organización con esa razón social");
+        }
+
         ClasificacionOrganizacion clasificacion = this.repoClasificaciones.buscarTodos().stream()
                 .filter(cl -> cl.getNombre().equals(orgRequest.getClasificacion()))
                 .findFirst().orElse(new ClasificacionOrganizacion(orgRequest.getClasificacion()));
@@ -44,7 +49,7 @@ public class FachadaOrganizacionApi {
                         orgRequest.getUbicacion().getCoordenadas().getLatitud()));
 
         Organizacion organizacion = new Organizacion();
-        organizacion.setRazonSocial(orgRequest.getOrganizacion());
+        organizacion.setRazonSocial(orgRequest.getNombre());
         organizacion.setTipo(TipoDeOrganizacionEnum.valueOf(orgRequest.getTipo().toUpperCase()));
         organizacion.setClasificacionOrganizacion(clasificacion);
         organizacion.setUbicacion(ubicacion);

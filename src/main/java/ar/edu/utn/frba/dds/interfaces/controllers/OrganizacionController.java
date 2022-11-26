@@ -1,48 +1,39 @@
 package ar.edu.utn.frba.dds.interfaces.controllers;
 
-import ar.edu.utn.frba.dds.entities.exceptions.MiembroException;
-import ar.edu.utn.frba.dds.entities.exceptions.SectorException;
-import ar.edu.utn.frba.dds.entities.lugares.ClasificacionOrganizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.lugares.Sector;
-import ar.edu.utn.frba.dds.entities.lugares.TipoDeOrganizacionEnum;
-import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.personas.TipoDeDocumento;
 import ar.edu.utn.frba.dds.interfaces.RequestInvalidoApiException;
-import ar.edu.utn.frba.dds.interfaces.SectorRequest;
-import ar.edu.utn.frba.dds.interfaces.input.json.MiembroResponse;
-import ar.edu.utn.frba.dds.interfaces.input.json.OrganizacionResponse;
+import ar.edu.utn.frba.dds.interfaces.input.ErrorDTO;
+import ar.edu.utn.frba.dds.interfaces.input.json.*;
 import ar.edu.utn.frba.dds.interfaces.mappers.OrganizacionMapper;
-import ar.edu.utn.frba.dds.interfaces.mappers.SectoresMapper;
-import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
-import ar.edu.utn.frba.dds.interfaces.input.json.MiembroIdentityRequest;
-import ar.edu.utn.frba.dds.interfaces.input.json.OrganizacionJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
-import ar.edu.utn.frba.dds.interfaces.mappers.UbicacionMapper;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
+import ar.edu.utn.frba.dds.server.login.User;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaOrganizacionApi;
+import ar.edu.utn.frba.dds.servicios.fachadas.FachadaUsuarios;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiHuellaApiException;
-import com.google.gson.JsonSyntaxException;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
 import spark.Response;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 public class OrganizacionController {
     private final Repositorio<Organizacion> repoOrganizaciones;
     private final RepoMiembros repoMiembros;
     private final FachadaOrganizacionApi fachadaOrganizacion;
+    private final FachadaUsuarios fachadaUsuarios;
 
     public OrganizacionController() {
         this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
         this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
         this.fachadaOrganizacion = new FachadaOrganizacionApi();
+        this.fachadaUsuarios = new FachadaUsuarios();
     }
 
     public OrganizacionResponse obtener(Request request, Response response) {
@@ -62,25 +53,50 @@ public class OrganizacionController {
         return "Modificacion de organizaciones no está implementada";
     }
 
-    public Object agregar(Request request, Response response) {
-        OrganizacionJSONDTO orgRequest = new ParserJSON<>(OrganizacionJSONDTO.class)
+    public NuevaEntidadOrganizacionResponse agregar(Request request, Response response) {
+        NuevaEntidadOrganizacionResponse res = new NuevaEntidadOrganizacionResponse();
+
+        NuevaEntidadOrganizacionRequest orgRequest = new ParserJSON<>(NuevaEntidadOrganizacionRequest.class)
                 .parseElement(request.body());
+
+        if(orgRequest.getUsuario() == null ||
+                orgRequest.getUsuario().getUsername() == null ||
+                orgRequest.getUsuario().getPassword() == null) {
+            res.setEstado("ERROR");
+            res.setError(new ErrorDTO("ERROR_DE_REQUEST",
+                    "Debe proporcionar un usuario con su username y contraseña"));
+            return res;
+        }
+
+        if (this.fachadaUsuarios.existeUsuario(orgRequest.getUsuario().getUsername())) {
+            res.setEstado("ERROR");
+            res.setError(new ErrorDTO("ERROR_DE_DOMINIO", "Ya existe un usuario con ese nombre"));
+            return res;
+        }
 
         Organizacion organizacion;
         try {
-            organizacion = this.fachadaOrganizacion.agregar(orgRequest);
-        } catch (EntityNotFoundException e) {
+            organizacion = this.fachadaOrganizacion.agregar(orgRequest.getEntidad());
+        } catch (EntityNotFoundException | MiHuellaApiException e) {
             response.status(HttpStatus.CONFLICT_409);
-            throw new MiHuellaApiException(e.getMessage());
+            res.setEstado("ERROR");
+            res.setError(new ErrorDTO("ERROR_DE_DOMINIO", e.getMessage()));
+            return res;
         }
-        return organizacion;
+
+        User usuario = this.fachadaUsuarios.agregar(new User(orgRequest.getUsuario().getUsername(),
+                orgRequest.getUsuario().getPassword(), organizacion));
+
+        res.setEstado("OK");
+        res.setOrganizacion(organizacion.getId());
+        res.setUsuario(usuario.getId());
+        return res;
     }
 
     public String mostrarTodos(Request request, Response response){
         List<Organizacion> organizaciones = this.repoOrganizaciones.buscarTodos();
         return organizaciones.toString();
     }
-
 
     public Void agregarMiembro(Request request, Response response) {
         Organizacion organizacion = this.repoOrganizaciones.buscar(Integer.parseInt(request.params("id"))).get();
@@ -92,7 +108,7 @@ public class OrganizacionController {
         MiembroIdentityRequest miembroRequest = new ParserJSON<>(MiembroIdentityRequest.class)
                 .parseElement(request.body());
 
-        Miembro miembro = repoMiembros.findByDocumento(
+        Miembro miembro = this.repoMiembros.findByDocumento(
                 TipoDeDocumento.valueOf(miembroRequest.getTipoDocumento()), miembroRequest.getDocumento())
 //                .orElseThrow(MiembroException::new);
                 .orElseThrow(() -> new MiHuellaApiException("No existe el miembro de tipo de documento " +
