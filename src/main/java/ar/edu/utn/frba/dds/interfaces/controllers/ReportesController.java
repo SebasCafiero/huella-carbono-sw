@@ -13,17 +13,19 @@ import ar.edu.utn.frba.dds.entities.medibles.Periodo;
 import ar.edu.utn.frba.dds.entities.medibles.ReporteOrganizacion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.ErrorResponse;
+import ar.edu.utn.frba.dds.repositories.utils.EntityManagerHelper;
+import ar.edu.utn.frba.dds.server.SystemProperties;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaReportes;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.ReporteException;
+import org.hibernate.Session;
 import org.hibernate.SessionException;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -101,16 +103,20 @@ public class ReportesController {
         ReporteOrganizacion reporte = fachadaReportes.getReporteOrganizacion();
         if(reporte != null) {
             parametros.put("reporte", ReporteMapperHBS.toDTO(reporte));
+
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
-
-            String file = reporte.getOrganizacion().getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
-            parametros.put("file", file);
-//            parametros.put("file", "reporte"+org.getId());
-
+            String arch = reporte.getOrganizacion().getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato);
+            String ruta = "/docs/" + arch + ".txt";
+//            File file = new File(System.getProperty("user.dir") + SystemProperties.getStaticBasePath() + SystemProperties.getStaticRelativePath() + ruta);
+            File file = new File(SystemProperties.getStaticAbsolutePath() + ruta);
+            if(file.canRead()) {
+                System.out.println("Existe el archivo para descargar: " + file.getAbsolutePath());
+                parametros.put("file", ruta);
+            } else {
+                System.out.println("No Existe el archivo para descargar: " + file.getAbsolutePath());
+//                parametros.put("file", ruta);
+            }
             fachadaReportes.quitarReporteOrganizacion();
-
-            //todo ver session.refresh(entity) o entityManager.refresh(entity) para no usar cache
-            //todo https://sparkjava.com/documentation#examples-and-faq
         }
 
         return new ModelAndView(parametros, "reporte.hbs");
@@ -149,7 +155,7 @@ public class ReportesController {
             ruta = "/agente/"+agente.getId()+"/reporte?org="+idOrg+"#reporte";
         }
         fachadaReportes.generarReporteOrganizacion(organizacion, periodo);
-        documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion); //todo no lo toma bien, agarra el viejo o ninguno
+        documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion);
         response.redirect(ruta);
 
         return response;
@@ -158,30 +164,39 @@ public class ReportesController {
     private String documentarReporte(ReporteOrganizacion reporte, Organizacion organizacion) {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
         String arch = organizacion.getRazonSocial().toLowerCase().replaceAll("\\s","") + reporte.getFechaCreacion().format(formato) + ".txt";
-
+//        String ruta = "resources/public/docs/" + arch;
+//        String ruta = "src/main/resources/public/docs/" + arch;
+        String ruta = SystemProperties.getStaticAbsolutePath() + "/docs/" + arch;
         try {
-            PrintWriter writer = new PrintWriter("resources/public/docs/"+arch, "UTF-8");
+            PrintWriter writer = new PrintWriter(ruta, "UTF-8");
             writer.println("Fecha de Creacion: " + reporte.getFechaCreacion());
-            writer.println("Periodo de Referencia: " + reporte.getPeriodoReferencia());
-            writer.println("Total : " + reporte.getConsumoTotal());
-            writer.println("Total mediciones : " + reporte.getConsumoMediciones());
+            String periodo = reporte.getPeriodoReferencia().getAnio().toString();
+            if(reporte.getPeriodoReferencia().getPeriodicidad() == 'M')
+                periodo += "-" + reporte.getPeriodoReferencia().getMes().toString();
+            writer.println("Periodo de Referencia: " + periodo);
+            writer.println("Consumo Total: " + reporte.getConsumoTotal());
+            writer.println("Consumo Mediciones: " + reporte.getConsumoMediciones());
+            writer.println("Consumo Trayectos: " + (reporte.getConsumoTotal() - reporte.getConsumoMediciones()));
+            writer.println("\n");
 
             for (Map.Entry<Miembro, Float> miembro : reporte.getConsumoPorMiembro().entrySet()) {
-                writer.println("Miembro : " + miembro.getKey().getNroDocumento() + " :-> " + miembro.getValue());
+                String info = miembro.getKey().getNombreCompleto() + " - " + miembro.getKey().getDocumento();
+                writer.println("Miembro: " + info + " -> " + miembro.getValue());
             }
 
             for (Map.Entry<Sector, Float> sector : reporte.getConsumoPorSector().entrySet()) {
-                writer.println("Sector : " + sector.getKey().getNombre() + " :-> " + sector.getValue());
+                writer.println("Sector: " + sector.getKey().getNombre() + " -> " + sector.getValue());
             }
 
             for(Map.Entry<Categoria, Float> categoria : reporte.getConsumoPorCategoria().entrySet()) {
-                writer.println("Categoria : " + categoria.getKey().toString() + " :-> " + categoria.getValue());
+                writer.println("Categoria: " + categoria.getKey().toString() + " -> " + categoria.getValue());
             }
 
             writer.close();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            System.out.println("No se pudo crear el archivo " + ruta);
             e.printStackTrace();
-            throw new RuntimeException();
+            //throw new ReporteException("No se pudo crear el archivo del reporte.");
         }
 
         return arch;

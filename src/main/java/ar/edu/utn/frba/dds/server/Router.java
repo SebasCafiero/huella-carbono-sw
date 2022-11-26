@@ -31,13 +31,24 @@ public class Router {
     }
 
     public static void init() {
-        Router.initEngine(); //Para diseño web
-        Spark.staticFileLocation("/public"); //Para diseño web
-        Router.configure();
+        Router.initEngine();
+        Router.configureStaticFiles();
+        Router.configurePaths();
         Router.configureExceptions();
     }
 
-    private static void configure() {
+    private static void configureStaticFiles() {
+//        String absoluteURL = System.getProperty("user.dir") + "/resources" + relativeURL;
+        if(SystemProperties.isLocalhost()) {
+            System.out.println("Static files en localhost: " + SystemProperties.getStaticAbsolutePath());
+            Spark.externalStaticFileLocation(SystemProperties.getStaticAbsolutePath()); //Ruta absoluta -> auto-refresh
+        } else {
+            System.out.println("Static files en external host: " + SystemProperties.getStaticRelativePath());
+            Spark.staticFileLocation(SystemProperties.getStaticRelativePath()); //Ruta relativa -> sin auto refresh
+        }
+    }
+
+    private static void configurePaths() {
         FachadaUsuarios fachadaUsuarios = new FachadaUsuarios();
         MedicionController medicionController = new MedicionController();
         BatchMedicionController batchMedicionController = new BatchMedicionController();

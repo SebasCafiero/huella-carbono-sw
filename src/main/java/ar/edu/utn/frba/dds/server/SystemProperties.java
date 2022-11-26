@@ -14,12 +14,17 @@ public class SystemProperties {
     private static final Boolean calculadoraDistanciasCacheEnabled;
     private static final String calculadoraDistanciasUrl;
     private static final String calculadoraDistanciasToken;
+    private static final Boolean localhost;
+    private static final String staticRelativePath;
+    private static final String staticBasePath;
+    private static final String staticDomainPath;
+    private static final String staticAbsolutePath;
 
     static {
         Map<String, String> varEntorno = System.getenv();
         Properties propArchivo = cargarArchivoConfigurable();
         System.out.println("aplication (entorno): " + varEntorno);
-        jpa = varEntorno.getOrDefault("jpa", propArchivo.getProperty("jpa")).equals("true");
+        jpa = varEntorno.getOrDefault("jpa", propArchivo.getProperty("jpa", "true")).equals("true");
         delta = Float.parseFloat(
                 varEntorno.getOrDefault("coordenadas.precision.delta",
                         propArchivo.getProperty("coordenadas.precision.delta", "0.00001")));
@@ -27,13 +32,18 @@ public class SystemProperties {
                 varEntorno.getOrDefault("coordenadas.precision.equivalencia",
                         propArchivo.getProperty("coordenadas.precision.equivalencia", "111.10")));
         calculadoraDistanciasMockEnabled = varEntorno.getOrDefault("client.calculadora.distancias.mock-enabled",
-                propArchivo.getProperty("client.calculadora.distancias.mock-enabled")).equals("true");
+                propArchivo.getProperty("client.calculadora.distancias.mock-enabled", "true")).equals("true");
         calculadoraDistanciasCacheEnabled = varEntorno.getOrDefault("client.calculadora.distancias.cache-enabled",
-                propArchivo.getProperty("client.calculadora.distancias.cache-enabled")).equals("true");
+                propArchivo.getProperty("client.calculadora.distancias.cache-enabled", "false")).equals("true");
         calculadoraDistanciasUrl = varEntorno.getOrDefault("client.calculadora.distancias.api.url",
                 propArchivo.getProperty("client.calculadora.distancias.api.url", "https://ddstpa.com.ar/api/"));
         calculadoraDistanciasToken = varEntorno.getOrDefault("client.calculadora.distancias.api.token",
                 propArchivo.getProperty("client.calculadora.distancias.api.token", ""));
+        localhost = varEntorno.getOrDefault("localhost", propArchivo.getProperty("localhost", "true")).equals("true");
+        staticRelativePath = varEntorno.getOrDefault("static-path.relative", propArchivo.getProperty("static-path.relative","/public"));
+        staticBasePath = varEntorno.getOrDefault("static-path.base", propArchivo.getProperty("static-path.base", "/src/main/resources"));
+        staticDomainPath = varEntorno.getOrDefault("static-path.domain", propArchivo.getProperty("static-path.domain", System.getProperty("user.dir")));
+        staticAbsolutePath = varEntorno.getOrDefault("static-path.absolute", propArchivo.getProperty("static-path.absolute", staticDomainPath + staticBasePath + staticRelativePath));
     }
 
     public static Boolean isJpa() {
@@ -64,6 +74,26 @@ public class SystemProperties {
         return calculadoraDistanciasToken;
     }
 
+    public static Boolean isLocalhost() {
+        return localhost;
+    }
+
+    public static String getStaticRelativePath() {
+        return staticRelativePath;
+    }
+
+    public static String getStaticAbsolutePath() {
+        return staticAbsolutePath;
+    }
+
+    public static String getStaticBasePath() {
+        return staticBasePath;
+    }
+
+    public static String getStaticDomainPath() {
+        return staticDomainPath;
+    }
+
     private static Properties cargarArchivoConfigurable() {
         Properties propiedades = new Properties();
         String path = "resources/aplication.properties";
@@ -81,6 +111,7 @@ public class SystemProperties {
 //            System.out.println(archivo.getAbsolutePath());
 //            System.out.println(e.getMessage());
         } catch (IOException e) {
+            System.out.println("IO Excepcion!");
             throw new RuntimeException(e);
         }
         return propiedades;
