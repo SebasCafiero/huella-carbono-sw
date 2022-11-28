@@ -33,43 +33,22 @@ dichas mediciones, al menos 20, tienen que tener al menos 3 tipos distintos
     ```json
     {
         "mediciones": [{
-            "categoria": {
-                "actividad": "Combustion Fija",
-                "tipoConsumo": "Diesel"
-            },
+            "categoria": { "actividad": "Combustion Fija", "tipoConsumo": "Diesel" },
             "unidad": "lt",
             "valor": 1.2,
-            "periodo": {
-                "periodicidad" : "M",
-                "anio" : 2022,
-                "mes" : 9
-            }
+            "periodo": { "periodicidad" : "M", "anio" : 2022, "mes" : 9 }
         },
         {
-            "categoria": {
-                "actividad": "Electricidad",
-                "tipoConsumo": "Electricidad"
-            },
+            "categoria": { "actividad": "Electricidad", "tipoConsumo": "Electricidad" },
             "unidad": "kw",
             "valor": 2,
-            "periodo": {
-                "periodicidad" : "M",
-                "anio" : 2022,
-                "mes" : 10
-            }
+            "periodo": { "periodicidad" : "M", "anio" : 2022, "mes" : 10 }
         },
         {
-            "categoria": {
-                "actividad": "Combustion Movil",
-                "tipoConsumo": "Gasoil"
-            },
+            "categoria": { "actividad": "Combustion Movil", "tipoConsumo": "Gasoil" },
             "unidad": "lt",
             "valor": 3.2,
-            "periodo": {
-                "periodicidad" : "A",
-                "anio" : 2022,
-                "mes" : 11
-            }
+            "periodo": { "periodicidad" : "A", "anio" : 2022, "mes" : 11 }
         }]
     }
     ```
@@ -134,51 +113,28 @@ La respuesta del servidor contendrá el resultado de la solicitud. En caso de é
 En este punto se requiere agregar mediciones a la organización. Para poder autenticarse y que el servidor autorice la solicitud, se deberá pasar un header extra 'Authorization' con el id del usuario.
 ~~~
 POST -> /api/organizacion/:id_organizacion/batch
-Header: Authorization -> :id_usuario
+Header: Authorization -> :id_usuario (organización Coca Cola)
 ~~~
 ```json
 {
-    "mediciones": [
-        {
-            "categoria": {
-                "actividad": "Combustion Fija",
-                "tipoConsumo": "Diesel"
-            },
-            "unidad": "lt",
-            "valor": 1.2,
-            "periodo": {
-                "periodicidad": "M",
-                "anio": 2022,
-                "mes": 9
-            }
-        },
-        {
-            "categoria": {
-                "actividad": "Electricidad",
-                "tipoConsumo": "Electricidad"
-            },
-            "unidad": "kw",
-            "valor": 2,
-            "periodo": {
-                "periodicidad": "M",
-                "anio": 2022,
-                "mes": 10
-            }
-        },
-        {
-            "categoria": {
-                "actividad": "Combustion Movil",
-                "tipoConsumo": "Gasoil"
-            },
-            "unidad": "lt",
-            "valor": 3.2,
-            "periodo": {
-                "periodicidad": "A",
-                "anio": 2022,
-                "mes": 11
-            }
-        }
-    ]
+    "mediciones": [{
+        "categoria": { "actividad": "Combustion Fija", "tipoConsumo": "Diesel" },
+        "unidad": "lt",
+        "valor": 1.2,
+        "periodo": { "periodicidad" : "M", "anio" : 2022, "mes" : 9 }
+    },
+    {
+        "categoria": { "actividad": "Electricidad", "tipoConsumo": "Electricidad" },
+        "unidad": "kw",
+        "valor": 2,
+        "periodo": { "periodicidad" : "M", "anio" : 2022, "mes" : 10 }
+    },
+    {
+        "categoria": { "actividad": "Combustion Movil", "tipoConsumo": "Gasoil" },
+        "unidad": "lt",
+        "valor": 3.2,
+        "periodo": { "periodicidad" : "A", "anio" : 2022, "mes" : 11 }
+    }]
 }
 ```
 
@@ -213,7 +169,7 @@ POST -> /api/miembro
 
 ~~~
 POST -> /api/organizacion/:id_organizacion/sector/:id_sector/miembro
-Header: Authorization -> :id_usuario (organización)
+Header: Authorization -> :id_usuario (organización Coca Cola)
 ~~~
 
 ```json
@@ -225,7 +181,55 @@ Header: Authorization -> :id_usuario (organización)
 
 ### 3. A otra organizacion que ya tenga mediciones agregar un batch de mediciones, hacer consultas por la API y calcular huella de carbono
 
+Para este punto, se elige a la organización _UTN - Campus_ como víctima para agregar más mediciones.
+
+~~~
+POST -> /api/organizacion/:id_organizacion/batch
+Header: Authorization -> :id_usuario (organización UTN - Campus)
+~~~
+```json
+{
+    "mediciones": [{
+        "categoria": { "actividad": "Combustion Fija", "tipoConsumo": "Gas Natural" },
+        "unidad": "m3",
+        "valor": 5.2,
+        "periodo": { "periodicidad" : "M", "anio" : 2022, "mes" : 9 }
+    }, {
+        "categoria": { "actividad": "Electricidad", "tipoConsumo": "Electricidad" },
+        "unidad": "kw",
+        "valor": 3.6,
+        "periodo": { "periodicidad" : "M", "anio" : 2022, "mes" : 10 }
+    }, {
+        "categoria": { "actividad": "Combustion Fija", "tipoConsumo": "Diesel" },
+        "unidad": "kw",
+        "valor": 2.1,
+        "periodo": { "periodicidad" : "M", "anio" : 2022, "mes" : 10 }
+    }, {
+        "categoria": { "actividad": "Combustion Movil", "tipoConsumo": "Gasoil" },
+        "unidad": "lt",
+        "valor": 0.4,
+        "periodo": { "periodicidad" : "A", "anio" : 2022, "mes" : 11 }
+    }]
+}
+```
+
+La HC deberia dar 57,4(32,4 del batch anterior + 25 de este) 
+
 ### 4. Verificar que si una persona ya forma parte de la organización, si se agrega en otro sector, el sistema no lo permite
+
+Para graficar este ejemplo, se elije al miembro _fito_ que ya es empleado en _UTN - Medrano_ en el sector de Tesorería. Cuando se intente asignarle un trabajo nuevo a fito en el sector de _Administración_ en esa misma organización, el sistema no lo permitirá.
+
+~~~
+POST -> /api/organizacion/:id_organizacion/sector/:id_sector/miembro
+Header: Authorization -> :id_usuario (organización UTN - Medrano)
+~~~
+
+```json
+{
+    "tipoDocumento" : "DNI",
+    "documento" : 34432237
+}
+```
 
 ### 5. Modificar uno de los parámetros / pesos y ver cómo se modifica la huella de carbono
 
