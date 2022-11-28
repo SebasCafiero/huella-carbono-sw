@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Optional;
 
 public class RepoOrganizacionesJPA<T> extends RepositorioPersistente<Organizacion> implements RepoOrganizaciones {
 
@@ -16,8 +17,8 @@ public class RepoOrganizacionesJPA<T> extends RepositorioPersistente<Organizacio
     }
 
     @Override
-    public Organizacion findByRazonSocial(String razonSocial) {
-        return this.getDao().buscar(condicionRazonSocial(razonSocial)).stream().findFirst().orElse(null);
+    public Optional<Organizacion> findByRazonSocial(String razonSocial) {
+        return this.getDao().buscar(condicionRazonSocial(razonSocial)).stream().findFirst();
     }
 
     private CriteriaQuery<Organizacion> condicionRazonSocial(String razonSocial) {

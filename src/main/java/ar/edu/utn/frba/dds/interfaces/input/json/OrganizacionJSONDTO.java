@@ -1,23 +1,22 @@
 package ar.edu.utn.frba.dds.interfaces.input.json;
 
 import ar.edu.utn.frba.dds.interfaces.SectorRequest;
-import ar.edu.utn.frba.dds.interfaces.input.SectorResponse;
 
 import java.util.List;
 
 public class OrganizacionJSONDTO {
-    private String organizacion;
+    private String nombre;
     private UbicacionJSONDTO ubicacion;
     private String clasificacion;
     private String tipo;
     private List<SectorRequest> sectores;
 
-    public String getOrganizacion() {
-        return organizacion;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setOrganizacion(String organizacion) {
-        this.organizacion = organizacion;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public UbicacionJSONDTO getUbicacion() {

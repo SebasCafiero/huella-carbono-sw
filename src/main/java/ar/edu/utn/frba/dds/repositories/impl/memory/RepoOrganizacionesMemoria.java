@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.repositories.RepoOrganizaciones;
 import ar.edu.utn.frba.dds.repositories.daos.DAOMemoria;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class RepoOrganizacionesMemoria<T> extends RepositorioMemoria<Organizacion> implements RepoOrganizaciones {
@@ -14,8 +15,8 @@ public class RepoOrganizacionesMemoria<T> extends RepositorioMemoria<Organizacio
     }
 
     @Override
-    public Organizacion findByRazonSocial(String razonSocial) {
-        return this.getDao().buscar(condicionRazonSocial(razonSocial)).stream().findFirst().orElse(null);
+    public Optional<Organizacion> findByRazonSocial(String razonSocial) {
+        return this.getDao().buscar(condicionRazonSocial(razonSocial)).stream().findFirst();
     }
 
     private Predicate<Organizacion> condicionRazonSocial(String razonSocial) {

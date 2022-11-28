@@ -8,14 +8,11 @@ import ar.edu.utn.frba.dds.server.utils.HandlebarsTemplateEngineBuilder;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaUsuarios;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiHuellaApiException;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class Router {

@@ -18,6 +18,10 @@ public class FachadaUsuarios {
         return username.isEmpty() || password.isEmpty() || !buscarUsuarioEnRepo(username, password).isPresent();
     }
 
+    public Boolean existeUsuario(String username) {
+        return this.repoUsuarios.findByUsername(username).isPresent();
+    }
+
     public Optional<User> buscarUsuarioEnRepo(String username, String password) {
         Optional<User> mayBeUser = this.repoUsuarios.findByUsername(username);
 
@@ -27,8 +31,8 @@ public class FachadaUsuarios {
         return Optional.empty();
     }
 
-    public void agregar(User user){
-        this.repoUsuarios.agregar(user);
+    public User agregar(User user){
+        return this.repoUsuarios.agregar(user);
     }
 
     public Optional<User> findById(Integer idUsuario) {
