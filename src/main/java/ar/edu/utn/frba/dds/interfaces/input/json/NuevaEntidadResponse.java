@@ -2,11 +2,11 @@ package ar.edu.utn.frba.dds.interfaces.input.json;
 
 import ar.edu.utn.frba.dds.interfaces.input.ErrorDTO;
 
-public class NuevaEntidadOrganizacionResponse {
+public class NuevaEntidadResponse {
     private String estado;
     private ErrorDTO error;
     private Integer usuario;
-    private Integer organizacion;
+    private Integer entidad;
 
     public String getEstado() {
         return estado;
@@ -32,11 +32,11 @@ public class NuevaEntidadOrganizacionResponse {
         this.usuario = usuario;
     }
 
-    public Integer getOrganizacion() {
-        return organizacion;
+    public Integer getEntidad() {
+        return entidad;
     }
 
-    public void setOrganizacion(Integer organizacion) {
-        this.organizacion = organizacion;
+    public void setEntidad(Integer entidad) {
+        this.entidad = entidad;
     }
 }

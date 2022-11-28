@@ -53,24 +53,18 @@ public class OrganizacionController {
         return "Modificacion de organizaciones no está implementada";
     }
 
-    public NuevaEntidadOrganizacionResponse agregar(Request request, Response response) {
-        NuevaEntidadOrganizacionResponse res = new NuevaEntidadOrganizacionResponse();
+    public NuevaEntidadResponse agregar(Request request, Response response) {
+        NuevaEntidadResponse res = new NuevaEntidadResponse();
 
-        NuevaEntidadOrganizacionRequest orgRequest = new ParserJSON<>(NuevaEntidadOrganizacionRequest.class)
-                .parseElement(request.body());
+        NuevaEntidadGenericaRequest<OrganizacionJSONDTO> orgRequest =
+                new ParserJSON<>(NuevaEntidadGenericaRequest.class, OrganizacionJSONDTO.class)
+                        .parseBounded(request.body());
 
-        if(orgRequest.getUsuario() == null ||
-                orgRequest.getUsuario().getUsername() == null ||
-                orgRequest.getUsuario().getPassword() == null) {
+        try {
+            fachadaUsuarios.validarRequest(orgRequest.getUsuario());
+        } catch (MiHuellaApiException e) {
             res.setEstado("ERROR");
-            res.setError(new ErrorDTO("ERROR_DE_REQUEST",
-                    "Debe proporcionar un usuario con su username y contraseña"));
-            return res;
-        }
-
-        if (this.fachadaUsuarios.existeUsuario(orgRequest.getUsuario().getUsername())) {
-            res.setEstado("ERROR");
-            res.setError(new ErrorDTO("ERROR_DE_DOMINIO", "Ya existe un usuario con ese nombre"));
+            res.setError(e.getError());
             return res;
         }
 
@@ -88,7 +82,7 @@ public class OrganizacionController {
                 orgRequest.getUsuario().getPassword(), organizacion));
 
         res.setEstado("OK");
-        res.setOrganizacion(organizacion.getId());
+        res.setEntidad(organizacion.getId());
         res.setUsuario(usuario.getId());
         return res;
     }

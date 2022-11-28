@@ -1,8 +1,10 @@
 package ar.edu.utn.frba.dds.servicios.fachadas;
 
+import ar.edu.utn.frba.dds.interfaces.input.ErrorDTO;
 import ar.edu.utn.frba.dds.repositories.RepoUsuarios;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.server.login.User;
+import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiHuellaApiException;
 import spark.Request;
 
 import java.util.Optional;
@@ -47,4 +49,13 @@ public class FachadaUsuarios {
         return request.session().attribute("idUsuario") != null;
     }
 
+    public void validarRequest(User usuario) {
+        if(usuario == null || usuario.getUsername() == null || usuario.getPassword() == null)
+            throw new MiHuellaApiException(new ErrorDTO("ERROR_DE_REQUEST",
+                    "Debe proporcionar un usuario con su username y contraseña"));
+
+        if (existeUsuario(usuario.getUsername()))
+            throw new MiHuellaApiException(new ErrorDTO("ERROR_DE_DOMINIO",
+                    "Ya existe un usuario con ese nombre"));
+    }
 }

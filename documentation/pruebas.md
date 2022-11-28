@@ -215,7 +215,7 @@ Header: Authorization -> :id_usuario (organización UTN - Campus)
 
 La HC deberia dar 57,4(32,4 del batch anterior + 25 de este) 
 
-### 4. Verificar que si una persona ya forma parte de la organización, si se agrega en otro sector, el sistema no lo permite
+### 4. Verificar que si una persona ya forma parte de la organización y se intenta agregar en otro sector, el sistema expone el error
 
 Para graficar este ejemplo, se elije al miembro _fito_ que ya es empleado en _UTN - Medrano_ en el sector de Tesorería. Cuando se intente asignarle un trabajo nuevo a fito en el sector de _Administración_ en esa misma organización, el sistema no lo permitirá.
 
@@ -233,7 +233,26 @@ Header: Authorization -> :id_usuario (organización UTN - Medrano)
 
 ### 5. Modificar uno de los parámetros / pesos y ver cómo se modifica la huella de carbono
 
+En este caso, se elije cambiar el factor de emisión de un medible de tipo trayecto, en particular, el generado por los trasportes particulares que usan como combustible el Gasoil.
+
+```json
+{
+    "categoria": {
+        "actividad": "Traslado de Miembros",
+        "tipoConsumo": "Particular - GASOIL"
+    },
+    "unidad": "km",
+    "valor": 10
+}
+```
+
+Dentro de la organizacion _UTN - Campus_, lo usa Ginobili, por lo tanto impactará en la huella de carbono que este genera. A partir del cambio, su impacto en la HC de la organización pasará a ser 85.15201 REVISAR
+
 ### 6. Cambiar / agregar trayectos y ver cómo se modifica la huella de carbono
+
+Para la demostración, hay que seguir los siguientes pasos.
+
+Desde la aplicación web, hay que le agregarle a Manu un trayecto en colectivo con la línea 109 desde Av. Córdoba 1531 hasta Av. Córdoba 3800.
 
 ### 7. Hacer que 2 miembros que tenían un recorrido distinto, ahora compartan un trayecto
 

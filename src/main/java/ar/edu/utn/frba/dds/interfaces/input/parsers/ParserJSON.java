@@ -5,31 +5,45 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 
-public class ParserJSON<T> {
-    private final Class<T> type;
+public class ParserJSON<T, S> {
+    private final Type type;
+    private final Class<S> subtype;
 
-    public ParserJSON(Class<T> type) {
+    public ParserJSON(Class<T> type, Class<S> subtype) {
         this.type = type;
+        this.subtype = subtype;
     }
 
-    public T parseElement(String json) {
-        return new Gson().fromJson(json, type);
+    public ParserJSON(Class<S> subtype) {
+        this.type = List.class;
+        this.subtype = subtype;
     }
 
-    public List<T> parseCollection(String json) {
-        Type listType = TypeToken.getParameterized(List.class, type).getType();
+    public S parseElement(String json) {
+        return new Gson().fromJson(json, subtype);
+    }
+
+    public List<S> parseCollection(String json) {
+        Type listType = TypeToken.getParameterized(List.class, subtype).getType();
         return new Gson().fromJson(json, listType);
     }
 
-    public T parseFileToElement(String archivo) throws IOException {
-        return new Gson().fromJson(new FileReader(archivo), type);
+    public S parseFileToElement(String archivo) throws IOException {
+        return new Gson().fromJson(new FileReader(archivo), subtype);
     }
 
-    public List<T> parseFileToCollection(String archivo) throws IOException {
-        Type listType = TypeToken.getParameterized(List.class, type).getType();
+    public List<S> parseFileToCollection(String archivo) throws IOException {
+        Type listType = TypeToken.getParameterized(type, subtype).getType();
         return new Gson().fromJson(new FileReader(archivo), listType);
+    }
+
+    public <P> P parseBounded(String json) {
+        Type boundedType = TypeToken.getParameterized(type, subtype).getType();
+        return new Gson().fromJson(json, boundedType);
     }
 }
