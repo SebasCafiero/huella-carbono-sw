@@ -21,7 +21,7 @@ Se definieron un conjunto de datos iniciales a partir de los cuales se pueden de
     - uno que llegue solo en auto particular: Emanuel Ginobili.
     - uno que llegue en colectivo y caminando: Carlos García.
     - uno que llegue en auto y colectivo: Juan Pérez.
-    - dos grupos con trayectos compartidos. El primero de 2 miembros(Carlos Bianchi y Martín Palermo) y el segundo de 3 miembros (Walter White, Jesse Pinkman y Saul Goodman).
+    - dos grupos con trayectos compartidos. El primero de 2 miembros (Carlos Bianchi y Martín Palermo) y el segundo de 3 miembros (Walter White, Jesse Pinkman y Saul Goodman).
     - al menos 2 personas tienen que ser miembros de 2 organizaciones distintas.
         - Diego Maradona: sector _Administración_ de _UTN - Campus_ y sector _Administración_ de _UTN - Medrano_.
         - Albert Einstein: sector _Mantenimiento_ de _UTN - Medrano_ y sector _Administración_ de _McDonald's_.
@@ -250,9 +250,44 @@ Dentro de la organizacion _UTN - Campus_, lo usa Ginobili, por lo tanto impactar
 
 ### 6. Cambiar / agregar trayectos y ver cómo se modifica la huella de carbono
 
-Para la demostración, hay que seguir los siguientes pasos.
+Desde la aplicación web, hay que le agregarle a Manu un trayecto en el colectivo 109 desde Av. Córdoba 1531 hasta Av. Córdoba 3800. Entonces, si el medible se desarrollara en el mes de noviembre del 2022, por ejemplo, el impacto de la huella en Campus en el período anual del 2022 aumentaría.
 
-Desde la aplicación web, hay que le agregarle a Manu un trayecto en colectivo con la línea 109 desde Av. Córdoba 1531 hasta Av. Córdoba 3800.
+El valor de este trayecto se verá afectado por dos variables: el dato de la actividad y el factor de emisión. El factor de emisión está previamente cargado, pero el dato de actividad se obtiene desde la API Distacias que es externa. De está manera, el impacto real no se puede preveer y el correcto cálculo se validará en el momento.
+
+El cálculo de la API se debería realizar así, tomando el caso del período 2022:
+- `+` Impacto del trayecto de Juan Pérez
+    1. Viaje en auto: DA * 130
+    2. Viaje en colectivo: (Distancia = 0.6 + 1.3 + 0.95 + 1.1) 3.95 * 200 = 790
+    3. Viaje en subte: (Distancia = 1.3 + 1.5 + 0.6 + 0.5) 3.9 * 125 = 487.5
+    4. Viaje caminando: DA * 0 = 0
+    - Total: 1277.5 + (DA auto * 130)
+- `+` Impacto del trayecto anterior de Manu Ginobili:
+    1. Viaje en auto: DA * 130
+    - Total: (DA auto * 130)
+- `+` Impacto del trayecto del Papu Gómez:
+    1. Viaje en bici: DA * 0
+    - Total: 0
+- `+` Impacto de las mediciones:
+    1. Combustion Fija + Gas Natural    -> 3 * 1    = 3
+    2. Combustion Fija + Gas Natural    -> 5 * 1    = 3
+    3. Electricidad + Electricidad      -> 4.7 * 4  = 18.8
+    4. Electricidad + Electricidad      -> 10 * 4   = 40
+    5. Combustion Fija + Diesel         -> 4 * 2    = 8
+    6. Electricidad + Electricidad      -> 22 * 4   = 88
+    7. Combustion Movil + Gasoil        -> 2.2 * 3  = 6.6
+    8. Combustion Fija + Gas Natural    -> 4.6 * 1  = 4.6
+    9. Combustion Fija + Gas Natural    -> 2 * 1    = 2
+    10. Electricidad + Electricidad     -> 4 * 4    = 16
+    11. Electricidad + Electricidad     -> 14 * 4   = 56
+    12. Combustion Fija + Diesel        -> 4.7 * 2  = 9.4
+    13. Electricidad + Electricidad     -> 23.6 * 4 = 94.4
+    14. Combustion Movil + Gasoil       -> 24 * 3   = 72
+    - Total: 423.8
+- `+` Impacto del nuevo trayecto de Manu:
+    1. Viaje en colectivo: (Distancia = 1.2 + 0.5 + 0.6) 2.3 * 200 = 460.0
+    - Total: 460.0
+
+En resumen, el nuevo impacto es superior en 460 unidades.
 
 ### 7. Hacer que 2 miembros que tenían un recorrido distinto, ahora compartan un trayecto
 
