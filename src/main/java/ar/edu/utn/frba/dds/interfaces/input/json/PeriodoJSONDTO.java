@@ -9,9 +9,13 @@ public class PeriodoJSONDTO {
     }
 
     public PeriodoJSONDTO(Integer anio, Integer mes) {
-        this.periodicidad = 'M';
+        if (mes == null) {
+            this.periodicidad = 'A';
+        } else {
+            this.periodicidad = 'M';
+            this.mes = mes;
+        }
         this.anio = anio;
-        this.mes = mes;
     }
 
     public PeriodoJSONDTO(Integer anio) {

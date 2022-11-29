@@ -92,7 +92,7 @@ public class OrganizacionController {
         return organizaciones.toString();
     }
 
-    public Void agregarMiembro(Request request, Response response) {
+    public Response agregarMiembro(Request request, Response response) {
         Organizacion organizacion = this.repoOrganizaciones.buscar(Integer.parseInt(request.params("id"))).get();
 
         Sector sector = organizacion.getSectores().stream()
@@ -102,7 +102,7 @@ public class OrganizacionController {
         MiembroIdentityRequest miembroRequest = new ParserJSON<>(MiembroIdentityRequest.class)
                 .parseElement(request.body());
 
-        Miembro miembro = this.repoMiembros.findByDocumento(
+        Miembro miembro = this.repoMiembros.findByDocumento( //TODO validar body
                 TipoDeDocumento.valueOf(miembroRequest.getTipoDocumento()), miembroRequest.getDocumento())
 //                .orElseThrow(MiembroException::new);
                 .orElseThrow(() -> new MiHuellaApiException("No existe el miembro de tipo de documento " +
@@ -113,7 +113,8 @@ public class OrganizacionController {
         }
 
         sector.agregarMiembro(miembro);
+        this.repoOrganizaciones.agregar(organizacion);
         response.status(HttpStatus.CREATED_201);
-        return null;
+        return response;
     }
 }

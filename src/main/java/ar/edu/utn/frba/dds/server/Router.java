@@ -58,9 +58,9 @@ public class Router {
         TrayectosController trayectosController = new TrayectosController();
 
         Filter asegurarSesion = (Request request, Response response) -> {
-            Integer token = Optional.ofNullable((Integer) request.session().attribute("idUsuario"))
-                    .orElse(Optional.ofNullable(request.headers("Authorization"))
-                            .filter(value -> value.matches("\\d{1,9}")).map(Integer::parseInt)
+            Integer token = Optional.ofNullable(request.headers("Authorization"))
+                    .filter(value -> value.matches("\\d{1,9}")).map(Integer::parseInt)
+                    .orElseGet(() -> Optional.ofNullable(request.session().<Integer>attribute("idUsuario"))
                             .orElseThrow(NotLoggedException::new));
 
             request.session().attribute("idUsuario", token);
@@ -105,7 +105,7 @@ public class Router {
                     });
 
                     Spark.path("/medicion", () -> {
-                        Spark.get("", medicionController::mostrarTodos);
+                        Spark.get("", medicionController::mostrarTodos, gson::toJson);
                         Spark.get("/:id", medicionController::obtener);
                         Spark.get("/unidad/:unidad", medicionController::filtrarUnidad);
                         Spark.get("/valor/:valor", medicionController::filtrarValor);

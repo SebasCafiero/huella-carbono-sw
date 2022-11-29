@@ -3,9 +3,11 @@ package ar.edu.utn.frba.dds.interfaces.controllers;
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.medibles.BatchMediciones;
 import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.interfaces.input.json.BatchMedicionesResponse;
 import ar.edu.utn.frba.dds.interfaces.input.json.MedicionJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.input.json.BatchMedicionJSONDTO;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
+import ar.edu.utn.frba.dds.interfaces.mappers.BatchMedicionMapper;
 import ar.edu.utn.frba.dds.interfaces.mappers.MedicionMapper;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiHuellaApiException;
 import org.eclipse.jetty.http.HttpStatus;
@@ -29,18 +31,21 @@ public class BatchMedicionController {
         this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
     }
 
-    public List<MedicionJSONDTO> mostrarTodos(Request request, Response response) {
+    public List<BatchMedicionesResponse> mostrarTodos(Request request, Response response) {
+        List<BatchMediciones> batches = this.repoBatch.buscarTodos();
         Organizacion organizacion = this.repoOrganizaciones.buscar(Integer.parseInt(request.params("id"))).get();
-        return organizacion.getMediciones().stream()
-                .map(MedicionMapper::toDTO).collect(Collectors.toList());
+        return batches.stream()
+                .filter(b -> b.getOrganizacion().getId().equals(organizacion.getId()))
+                .map(BatchMedicionMapper::toDTOLazy).collect(Collectors.toList());
     }
 
-    public BatchMediciones obtener(Request request, Response response) {
-        return this.repoBatch.buscar(Integer.parseInt(request.params("batch")))
+    public BatchMedicionesResponse obtener(Request request, Response response) {
+        BatchMediciones batchMediciones = this.repoBatch.buscar(Integer.parseInt(request.params("batch")))
                 .filter(batch -> batch.getOrganizacion().getId()
                         .equals(Integer.parseInt(request.params("id"))))
                 .orElseThrow(() -> new MiHuellaApiException("El batch " + request.params("batch")
                         + " de la organizacion " + request.params("id") + " no existe"));
+        return BatchMedicionMapper.toDTO(batchMediciones);
     }
 
     public Object agregar(Request request, Response response) {
