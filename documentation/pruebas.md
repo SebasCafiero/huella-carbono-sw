@@ -160,10 +160,16 @@ POST -> /api/miembro
 
 ```json
 {
-    "nombre" : "Damián",
-    "apellido" : "Weigandt",
-    "tipoDocumento" : "DNI",
-    "documento" : 87644332
+    "usuario": {
+        "username": "nombre_usuario",
+        "password": "contraseña"
+    },
+    "entidad": {
+        "nombre" : "Damián",
+        "apellido" : "Weigandt",
+        "tipoDocumento" : "DNI",
+        "documento" : 87644332
+    }
 }
 ```
 
@@ -246,7 +252,7 @@ En este caso, se elije cambiar el factor de emisión de un medible de tipo traye
 }
 ```
 
-Dentro de la organizacion _UTN - Campus_, lo usa Ginobili, por lo tanto impactará en la huella de carbono que este genera. A partir del cambio, su impacto en la HC de la organización pasará a ser 85.15201 REVISAR
+Dentro de la organizacion _UTN - Campus_, lo usa Ginobili, por lo tanto impactará en la huella de carbono que este genera. A partir del cambio, su impacto se reducirá 8 veces, ya que pasa de 80 a 10 el valor del parámetro. El impacto el la HC de la organización pasará a ser 85.15201. REVISAR
 
 ### 6. Cambiar / agregar trayectos y ver cómo se modifica la huella de carbono
 
