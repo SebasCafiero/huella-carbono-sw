@@ -49,6 +49,7 @@ public class OrganizacionMapper {
             SectorResponse sectorResponse = new SectorResponse();
             sectorResponse.setNombre(sector.getNombre());
             sectorResponse.setMiembros(sector.getMiembros().stream().map(MiembrosMapper::toResponse).collect(Collectors.toList()));
+            sectorResponse.setId(sector.getId());
             return sectorResponse;
         }).collect(Collectors.toList()));
 

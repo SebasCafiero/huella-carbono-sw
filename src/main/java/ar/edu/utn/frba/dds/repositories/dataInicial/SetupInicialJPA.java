@@ -412,13 +412,14 @@ public class SetupInicialJPA {
         User usuarioMiembroCharly = new User("fito", "miembro", fitoPaez);
         User usuarioMiembroManu = new User("manu", "miembro", manuGinobili);
         User usuarioMiembroDiego = new User("diego", "miembro", elDiego);
+        User usuarioMiembroPapu = new User("papu", "miembro", papuGomez);
 
         User usuarioAgenteProv = new User("provcaba", "agente", carlos);
         User usuarioAgenteMuni = new User("municaba", "agente", esteban);
 
         this.repoUsuarios.agregar(usuarioOrganizacionCampus, usuarioOrganizacionMedrano, usuarioOrganizacionMc,
                 usuarioMiembroCharly, usuarioMiembroManu, usuarioMiembroDiego,
-                usuarioAgenteProv, usuarioAgenteMuni);
+                usuarioAgenteProv, usuarioAgenteMuni, usuarioMiembroPapu);
     }
 
     public void undoSetup() {

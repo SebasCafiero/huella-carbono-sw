@@ -296,5 +296,29 @@ El cálculo de la API se debería realizar así, tomando el caso del período 20
 En resumen, el nuevo impacto es superior en 460 unidades.
 
 ### 7. Hacer que 2 miembros que tenían un recorrido distinto, ahora compartan un trayecto
+En la organización Campus trabajan los miembros **Alejandro Gómez** (en Capital Humano) y **Emanuel Ginóbili** (en Sistemas) con trayectos del 2022 diferentes:
+- El trayecto de **Ginóbili** consta de un tramo con vehículo particular con Gasoil, cuyo DA es 8,52 y FE correspondiente es 6 (era 3 y tras la prueba 5 pasa a ser 6).
+- El trayecto de **Gómez** consta de un tramo con vehículo ecológico, cuyo DA es 2,27 y FE correspondiente es 0.
+
+Al loguearse con el usuario de la organización Campus, podemos generar un reporte y observar los impactos de cada miembro:
+- Impacto Ginóbili: FE particular-gasoil * DA trayecto id 1 = 6 * 8,5152 = 51,09
+- Impacto Gómez: FE ecológico * DA trayecto id 2 = 0 * 2,26659 = 0
+- Cada impacto se contempla en sus correspondientes sectores
+
+![Reporte previo](img/punto7-1.jpg "Reporte Previo")
+
+
+Al loguearse con el usuario de Ginóbili (_Manu_) podemos obtener el id del trayecto (1 en el ejemplo default).
+
+Al loguearso con el usuario de Gómez (_Papu_), seleccionamos la opción de cargar un nuevo trayecto e ingresamos dicho id obtenido.
+
+- Podremos observar que ahora la información del trayecto indica a ambos miembros como partícipes del mismo.
+
+Al loguearse nuevamente con el usuario de la organización Campus, podemos generar un reporte y observar el impacto antes correspondiente a Ginóbili se reparte con Gómez:
+- Impacto Ginóbili: 6 * 8,5152/2 = 25,546
+- Impacto Gómez: 6 * 8,5152/2 = 25,546
+- Además se contempla la misma diferencia en sus sectores correspondientes
+
+![Reporte posterior](img/punto7-2.jpg "Reporte Posterior")
 
 

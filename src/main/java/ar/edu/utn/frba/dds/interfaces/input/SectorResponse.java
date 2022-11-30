@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.interfaces.input.json.MiembroResponse;
 import java.util.List;
 
 public class SectorResponse {
+    private Integer id;
     private String nombre;
     private List<MiembroResponse> miembros;
 
@@ -22,5 +23,13 @@ public class SectorResponse {
 
     public void setMiembros(List<MiembroResponse> miembros) {
         this.miembros = miembros;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
