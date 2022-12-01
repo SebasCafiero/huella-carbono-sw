@@ -68,8 +68,9 @@ function transporteCambiado() {
     var accion = "?action=" + new URLSearchParams(window.location.search).get("action");
 
     var fecha = "";
-    if(document.getElementById("fecha").value != null && document.getElementById("fecha").value != "")
-        fecha = "&fecha=" + document.getElementById("fecha").value;
+    var input_fecha = document.getElementById("fecha");
+    if(input_fecha != null && input_fecha.value != null && input_fecha.value != "")
+        fecha = "&fecha=" + input_fecha.value;
 
     var transportes = "";
     var paradas = "";
