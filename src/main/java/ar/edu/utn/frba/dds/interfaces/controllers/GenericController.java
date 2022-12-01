@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.interfaces.controllers;
 
+import ar.edu.utn.frba.dds.interfaces.gui.GuiUtils;
 import ar.edu.utn.frba.dds.server.login.AuthenticationException;
 import ar.edu.utn.frba.dds.server.login.User;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaUsuarios;
@@ -21,17 +22,7 @@ public class GenericController {
     }
 
     public ModelAndView menu(Request request, Response response) {
-        User realUser = new FachadaUsuarios().findById(request.session().attribute("idUsuario"))
-                .orElseThrow(AuthenticationException::new);
-
-        HashMap<String, Object> user = new HashMap<>();
-        user.put("user", realUser.getUsername());
-        user.put("rol", realUser.getRolName());
-        user.put("miembro", realUser.getMiembro() != null ? realUser.getMiembro().getId() : null);
-        user.put("organizacion", realUser.getOrganizacion() != null ? realUser.getOrganizacion().getId() : null);
-        user.put("agente", realUser.getAgenteSectorial() != null ? realUser.getAgenteSectorial().getId() : null);
-
-        return new ModelAndView(user, "menu.hbs");
+        return new ModelAndView(GuiUtils.dtoMenu(request), "menu.hbs");
     }
 
     public Response iniciarSesion(Request request, Response response) {

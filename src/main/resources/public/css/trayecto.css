@@ -37,6 +37,10 @@ table.particular {
     border: 0px solid;
 }
 
+.particular .ubicaciones th {
+    border-width: 2px 0px 0px 0px;
+}
+
 .particular .miembros {
     margin: auto;
     border-spacing: 3px 10px;

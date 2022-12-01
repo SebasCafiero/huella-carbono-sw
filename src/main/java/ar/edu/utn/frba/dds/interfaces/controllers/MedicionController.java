@@ -1,6 +1,9 @@
 package ar.edu.utn.frba.dds.interfaces.controllers;
 
+import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.medibles.Medicion;
+import ar.edu.utn.frba.dds.interfaces.input.json.MedicionJSONDTO;
+import ar.edu.utn.frba.dds.interfaces.mappers.MedicionMapper;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import spark.Request;
@@ -11,24 +14,27 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MedicionController {
-    private Repositorio<Medicion> repositorio;
+    private Repositorio<Medicion> repoMediciones;
+    private Repositorio<Organizacion> repoOrganizaciones;
 
     public MedicionController(){
-        this.repositorio = FactoryRepositorio.get(Medicion.class);
+        this.repoMediciones = FactoryRepositorio.get(Medicion.class);
+        this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
     }
 
     public String obtener(Request request, Response response) {
-        Medicion medicion = this.repositorio.buscar(Integer.parseInt(request.params("id"))).get();
+        Medicion medicion = this.repoMediciones.buscar(Integer.parseInt(request.params("id"))).get();
         return medicion.toString();
     }
 
-    public String mostrarTodos(Request request, Response response) {
-        List<Medicion> mediciones = this.repositorio.buscarTodos();
-        return mediciones.toString();
+    public List<MedicionJSONDTO> mostrarTodos(Request request, Response response) {
+        Organizacion organizacion = this.repoOrganizaciones.buscar(Integer.parseInt(request.params("id"))).get();
+        return organizacion.getMediciones().stream()
+                .map(MedicionMapper::toDTO).collect(Collectors.toList());
     }
 
     public String filtrarUnidad(Request request, Response response) {
-        List<Medicion> mediciones = this.repositorio.buscarTodos();
+        List<Medicion> mediciones = this.repoMediciones.buscarTodos();
         return  mediciones
                 .stream()
                 .filter(m -> Objects.equals(m.getUnidad(), String.valueOf(request.params("unidad"))))
@@ -37,7 +43,7 @@ public class MedicionController {
     }
 
     public String filtrarValor(Request request, Response response) {
-        List<Medicion> mediciones = this.repositorio.buscarTodos();
+        List<Medicion> mediciones = this.repoMediciones.buscarTodos();
         return  mediciones
                 .stream()
                 .filter(m -> Objects.equals(m.getValor(), Float.valueOf(request.params("valor"))))

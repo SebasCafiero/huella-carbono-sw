@@ -5,14 +5,18 @@ import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
 import ar.edu.utn.frba.dds.entities.personas.ContactoTelefono;
-import ar.edu.utn.frba.dds.interfaces.gui.dto.AgenteHBS;
-import ar.edu.utn.frba.dds.interfaces.gui.dto.OrganizacionHBS;
-import ar.edu.utn.frba.dds.interfaces.gui.mappers.AgenteMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.OrganizacionMapperHBS;
+import ar.edu.utn.frba.dds.interfaces.input.ErrorDTO;
 import ar.edu.utn.frba.dds.interfaces.input.json.AgenteSectorialJSONDTO;
+import ar.edu.utn.frba.dds.interfaces.input.json.NuevaEntidadGenericaRequest;
+import ar.edu.utn.frba.dds.interfaces.input.json.NuevaEntidadResponse;
 import ar.edu.utn.frba.dds.interfaces.input.parsers.ParserJSON;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.server.login.User;
+import ar.edu.utn.frba.dds.servicios.fachadas.FachadaUsuarios;
+import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiHuellaApiException;
+import org.eclipse.jetty.http.HttpStatus;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -24,14 +28,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AgenteSectorialController {
-    private Repositorio<AgenteSectorial> repoAgentes;
-    private Repositorio<AreaSectorial> repoAreas;
-    private Repositorio<Organizacion> repoOrganizaciones;
+    private final Repositorio<AgenteSectorial> repoAgentes;
+    private final Repositorio<AreaSectorial> repoAreas;
+    private final Repositorio<Organizacion> repoOrganizaciones;
+    private final FachadaUsuarios fachadaUsuarios;
 
     public AgenteSectorialController() {
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
         this.repoOrganizaciones = FactoryRepositorio.get(Organizacion.class);
+        this.fachadaUsuarios = new FachadaUsuarios();
     }
 
     public String mostrarTodos(Request request, Response response) {
@@ -48,16 +54,45 @@ public class AgenteSectorialController {
     }
 
     public Object agregar(Request request, Response response) {
-        AgenteSectorialJSONDTO agenteDTO = new ParserJSON<>(AgenteSectorialJSONDTO.class).parseElement(request.body());
-        AreaSectorial area = this.repoAreas.buscar(agenteDTO.getArea())
-                .orElseThrow(EntityNotFoundException::new);
+        NuevaEntidadResponse res = new NuevaEntidadResponse();
 
-        AgenteSectorial agenteSectorial = new AgenteSectorial(
-                area, new ContactoMail(agenteDTO.getContactoMail().direccionesEMail, agenteDTO.getContactoMail().password),
-                new ContactoTelefono(agenteDTO.getTelefono()));
+        NuevaEntidadGenericaRequest<AgenteSectorialJSONDTO> agenteDTO =
+                new ParserJSON<>(NuevaEntidadGenericaRequest.class, AgenteSectorialJSONDTO.class)
+                        .parseBounded(request.body());
+
+        try {
+            fachadaUsuarios.validarRequest(agenteDTO.getUsuario());
+        } catch (MiHuellaApiException e) {
+            res.setEstado("ERROR");
+            res.setError(e.getError());
+            return res;
+        }
+
+        AreaSectorial area;
+        try {
+            area = this.repoAreas.buscar(agenteDTO.getEntidad().getArea())
+                    .orElseThrow(EntityNotFoundException::new);
+        } catch (EntityNotFoundException e) {
+            response.status(HttpStatus.CONFLICT_409);
+            res.setEstado("ERROR");
+            res.setError(new ErrorDTO("ERROR_DE_DOMINIO", "Ne existe el área sectorial mencionada"));
+            return res;
+        }
+
+        AgenteSectorial agenteSectorial = new AgenteSectorial(area,
+                new ContactoMail(agenteDTO.getEntidad().getContactoMail().getDireccionesEMail(),
+                        agenteDTO.getEntidad().getContactoMail().getPassword()),
+                new ContactoTelefono(agenteDTO.getEntidad().getTelefono()));
 
         this.repoAgentes.agregar(agenteSectorial);
-        return "Agente Sectorial agregado correctamente";
+
+        User usuario = this.fachadaUsuarios.agregar(new User(agenteDTO.getUsuario().getUsername(),
+                agenteDTO.getUsuario().getPassword(), agenteSectorial));
+
+        res.setEstado("OK");
+        res.setEntidad(agenteSectorial.getId());
+        res.setUsuario(usuario.getId());
+        return res;
     }
 
     public Object modificar(Request request, Response response){
@@ -68,7 +103,7 @@ public class AgenteSectorialController {
 
         AgenteSectorial agenteSectorial = this.repoAgentes.buscar(Integer.parseInt(request.params("id")))
                 .orElseThrow(EntityNotFoundException::new);
-        agenteSectorial.setMail(new ContactoMail(agenteDTO.getContactoMail().direccionesEMail, agenteDTO.getContactoMail().password));
+        agenteSectorial.setMail(new ContactoMail(agenteDTO.getContactoMail().getDireccionesEMail(), agenteDTO.getContactoMail().getPassword()));
         agenteSectorial.setTelefono(new ContactoTelefono(agenteDTO.getTelefono()));
 
         this.repoAgentes.modificar(Integer.parseInt(request.params("id")),agenteSectorial);

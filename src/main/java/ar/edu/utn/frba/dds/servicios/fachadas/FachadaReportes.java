@@ -109,6 +109,20 @@ public class FachadaReportes {
         this.reporteOrganizacion = null;
     }
 
+    public Periodo parsearPeriodo(String input) {
+        Periodo periodo;
+        if(input.matches("\\d+")) {
+            periodo = new Periodo(Integer.parseInt(input));
+        } else if(input.matches("\\d+/\\d+")) {
+            String[] fecha = input.split("/");
+            periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
+        } else {
+            LocalDate fecha = LocalDate.now();
+            periodo = new Periodo(fecha.getYear(), fecha.getMonthValue());
+        }
+        return periodo;
+    }
+
 }
 
 // Implementing collectors

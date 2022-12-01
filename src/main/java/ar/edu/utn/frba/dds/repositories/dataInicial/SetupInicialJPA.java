@@ -35,6 +35,7 @@ public class SetupInicialJPA {
     private final Repositorio<Trayecto> repoTrayectos;
     private final Repositorio<AreaSectorial> repoAreas;
     private final Repositorio<AgenteSectorial> repoAgentes;
+    private final Repositorio<Miembro> repoMiembros;
     private final Repositorio<Contacto> repoContactos;
     private final Repositorio<BatchMediciones> repoBatchMediciones;
     private final Repositorio<User> repoUsuarios;
@@ -47,6 +48,7 @@ public class SetupInicialJPA {
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
         this.repoAreas = FactoryRepositorio.get(AreaSectorial.class);
         this.repoAgentes = FactoryRepositorio.get(AgenteSectorial.class);
+        this.repoMiembros = FactoryRepositorio.get(Miembro.class);
         this.repoUsuarios = FactoryRepositorio.get(User.class);
         this.repoContactos = FactoryRepositorio.get(Contacto.class);
         this.repoBatchMediciones = FactoryRepositorio.get(BatchMediciones.class);
@@ -92,7 +94,7 @@ public class SetupInicialJPA {
                                 new CacheLocalidad(muni.getProvincia().getId(), muni.getId(), loca.getId()));
                     });
                 }
-            };
+            }
 
             this.repoAreas.agregar(provincia);
         }
@@ -101,9 +103,6 @@ public class SetupInicialJPA {
         ContactoTelefono con2 = new ContactoTelefono("1155443322");
         ContactoMail con3 = new ContactoMail("otrocontacto@gmail.com", "321");
         ContactoTelefono con4 = new ContactoTelefono("1122334455");
-
-        AgenteSectorial carlos = new AgenteSectorial(cabaProvincia, con1, con2);
-        AgenteSectorial esteban = new AgenteSectorial(cabaMunicipio, con3, con4);
 
         String almagro = "ALMAGRO";
         String mataderos = "MATADEROS";
@@ -166,9 +165,14 @@ public class SetupInicialJPA {
                 new Direccion(cabaMunicipio, flores, "Guatemala",1425),
                 new Coordenada(-34.587201f,-58.423048f));//Guatemala 1425
 
-        this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano,cordobaY9deJulio,cordobaYEcuador,cordobaYMedrano,casaDePapuGomez,casaDeManu,casaDeWalter,estacionamientoDeWalter);
-        this.repoAreas.agregar(cabaProvincia, cabaMunicipio);
+        AgenteSectorial carlos = new AgenteSectorial(cabaProvincia, con1, con2);
+        AgenteSectorial esteban = new AgenteSectorial(cabaMunicipio, con3, con4);
         this.repoAgentes.agregar(carlos, esteban);
+
+        this.repoUbicaciones.agregar(ubicacionUtnCampus, mirallaAlberdi, sanPedrito, castroBarros, ubicacionUtnMedrano,
+                cordobaY9deJulio, cordobaYEcuador, cordobaYMedrano, casaDePapuGomez, casaDeManu, casaDeWalter,
+                estacionamientoDeWalter);
+
 //        this.repoContactos.agregar(con1, con2, con3, con4);
 
         MedioDeTransporte fitito = new ServicioContratado(new TipoServicio("Taxi"));
@@ -316,9 +320,15 @@ public class SetupInicialJPA {
         limpiezaMc.agregarMiembro(jessePinkman);
         limpiezaMc.agregarMiembro(saulGoodman);
 
-        this.repoOrganizaciones.agregar(orgUtnCampus);
-        this.repoOrganizaciones.agregar(orgUtnMedrano);
-        this.repoOrganizaciones.agregar(orgMcObelisco);
+//        ubicacion.getDireccion().getMunicipio().agregarOrganizacion(this);
+//        ubicacion.getDireccion().getMunicipio().getProvincia().agregarOrganizacion(this);
+        this.repoOrganizaciones.agregar(orgUtnCampus, orgUtnMedrano, orgMcObelisco);
+
+        Stream.of(orgUtnMedrano, orgUtnCampus, orgMcObelisco)
+                .forEach(org -> {
+                    org.getUbicacion().getDireccion().getMunicipio().agregarOrganizacion(org);
+                    org.getUbicacion().getDireccion().getMunicipio().getProvincia().agregarOrganizacion(org);
+                });
 
         // Tramos y trayectos
 
@@ -398,7 +408,6 @@ public class SetupInicialJPA {
                 //la huella de carbono de todas estas mediciones tendria que dar 548.1
         };
 
-
         BatchMediciones batchMediciones = new BatchMediciones(Arrays.asList(medicionesIniciales), LocalDate.now());
         batchMediciones.setOrganizacion(orgUtnCampus);
         orgUtnCampus.agregarMediciones(medicionesIniciales);
@@ -412,37 +421,29 @@ public class SetupInicialJPA {
         User usuarioMiembroCharly = new User("fito", "miembro", fitoPaez);
         User usuarioMiembroManu = new User("manu", "miembro", manuGinobili);
         User usuarioMiembroDiego = new User("diego", "miembro", elDiego);
+        User usuarioMiembroPapu = new User("papu", "miembro", papuGomez);
 
         User usuarioAgenteProv = new User("provcaba", "agente", carlos);
         User usuarioAgenteMuni = new User("municaba", "agente", esteban);
 
         this.repoUsuarios.agregar(usuarioOrganizacionCampus, usuarioOrganizacionMedrano, usuarioOrganizacionMc,
                 usuarioMiembroCharly, usuarioMiembroManu, usuarioMiembroDiego,
-                usuarioAgenteProv, usuarioAgenteMuni);
+                usuarioAgenteProv, usuarioAgenteMuni, usuarioMiembroPapu);
     }
 
     public void undoSetup() {
-        Field campo = null;
-        try {
-            campo = FactoryRepositorio.class.getDeclaredField("repos");
-            campo.setAccessible(true);
-            HashMap<String, Repositorio> repos = (HashMap<String, Repositorio>) campo.get(null);
-            repos.forEach((clase, repo) -> {
-                repo.buscarTodos().forEach(repo::eliminar);
-            });
-            System.out.println(repos.size());
-        } catch(NoSuchFieldException | IllegalAccessException e) {
-            System.out.println(e.getMessage());
-            return;
-        } finally {
-            if(campo != null) {
-                campo.setAccessible(false);
-            }
-        }
-
-//        this.repoMedios.buscarTodos().forEach(this.repoMedios::eliminar);
-//        this.repoOrganizaciones.buscarTodos().forEach(this.repoOrganizaciones::eliminar);
-//        this.repoUbicaciones.buscarTodos().forEach(this.repoUbicaciones::eliminar);
+        RepoFactores repoFactores = (RepoFactores) FactoryRepositorio.get(FactorEmision.class);
+        this.repoUsuarios.buscarTodos().forEach(this.repoUsuarios::eliminar);
+        this.repoTrayectos.buscarTodos().forEach(this.repoTrayectos::eliminar);
+        this.repoMedios.buscarTodos().forEach(this.repoMedios::eliminar);
+        this.repoBatchMediciones.buscarTodos().forEach(this.repoBatchMediciones::eliminar);
+        this.repoOrganizaciones.buscarTodos().forEach(this.repoOrganizaciones::eliminar);
+        this.repoUbicaciones.buscarTodos().forEach(this.repoUbicaciones::eliminar);
+        this.repoAreas.buscarTodos().forEach(this.repoAreas::eliminar);
+        this.repoAgentes.buscarTodos().forEach(this.repoAgentes::eliminar);
+        this.repoMiembros.buscarTodos().forEach(this.repoMiembros::eliminar);
+        this.repoContactos.buscarTodos().forEach(this.repoContactos::eliminar);
+        repoFactores.buscarTodos().forEach(repoFactores::eliminar);
     }
 
     private void inicializarFactores() {

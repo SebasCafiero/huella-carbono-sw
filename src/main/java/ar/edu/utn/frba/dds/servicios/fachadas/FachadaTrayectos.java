@@ -52,11 +52,11 @@ public class FachadaTrayectos {
     }
 
     public Trayecto cargarTrayecto(Trayecto unTrayecto) {
-        return this.repoTrayectos.agregar(unTrayecto); //TODO ver si validar que los demas repos tengan los datos del trayecto (miembros por ej)
+        return this.repoTrayectos.agregar(unTrayecto);
     }
 
     public Trayecto updateTrayecto(Trayecto unTrayecto) {
-        return this.repoTrayectos.modificar(unTrayecto); //TODO ver si validar que los demas repos tengan los datos del trayecto (miembros por ej)
+        return this.repoTrayectos.modificar(unTrayecto);
     }
 
     public List<Trayecto> obtenerTrayectos() {
@@ -192,7 +192,7 @@ public class FachadaTrayectos {
                     map.value("f-provincia-" + lugar + "-" + pos),
                     map.value("f-municipio-" + lugar + "-" + pos),
                     map.value("f-localidad-" + lugar + "-" + pos),
-                    map.value("f-calle-" + "-" + lugar + pos),
+                    map.value("f-calle-" + lugar + "-" + pos),
                     paramToInt.apply("f-numero-" + lugar + "-" + pos),
                     new Coordenada(paramToFloat.apply("f-lat-" + lugar + "-" + pos),
                             paramToFloat.apply("f-lon-" + lugar + "-" + pos))

@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.interfaces.controllers;
 
 import ar.edu.utn.frba.dds.entities.exceptions.TrayectoConMiembroRepetidoException;
+import ar.edu.utn.frba.dds.interfaces.gui.GuiUtils;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TramoHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TransporteHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.TrayectoHBS;
@@ -38,9 +39,7 @@ public class TrayectosController {
     public ModelAndView mostrarTodos(Request request, Response res) {
         Miembro miembro = fachadaTrayectos.obtenerMiembro(Integer.parseInt(request.params("id")));
 
-        Map<String, Object> parametros = new HashMap<>();
-        parametros.put("rol", "MIEMBRO");
-        parametros.put("user", miembro.getNombre() + " " + miembro.getApellido());
+        Map<String, Object> parametros = GuiUtils.dtoHeader(request);
         parametros.put("miembroID", miembro.getId());
         parametros.put("trayectos", miembro.getTrayectos().stream().map(TrayectoMapperHBS::toDTOLazy).collect(Collectors.toList()));
         return new ModelAndView(parametros, "trayectos.hbs");
@@ -49,9 +48,7 @@ public class TrayectosController {
     public ModelAndView darAlta(Request request, Response res) {
         Miembro miembro = fachadaTrayectos.obtenerMiembro(Integer.parseInt(request.params("id")));
 
-        Map<String, Object> parametros = new HashMap<>();
-        parametros.put("rol", "MIEMBRO");
-        parametros.put("user", miembro.getNombre() + " " + miembro.getApellido());
+        Map<String, Object> parametros = GuiUtils.dtoHeader(request);
         parametros.put("miembroID", miembro.getId());
         parametros.put("miembroLogueado", MiembroMapperHBS.toDTO(miembro));
         parametros.put("transportesTotales", generarMapeoTransportesTipos());
@@ -127,9 +124,7 @@ public class TrayectosController {
         Miembro miembro = fachadaTrayectos.obtenerMiembro(Integer.parseInt(request.params("id")));
         Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(Integer.parseInt(request.params("trayecto")));
 
-        Map<String, Object> parametros = new HashMap<>();
-        parametros.put("rol", "miembro");
-        parametros.put("user", miembro.getNombre() + " " + miembro.getApellido());
+        Map<String, Object> parametros = GuiUtils.dtoHeader(request);
         parametros.put("trayecto", TrayectoMapperHBS.toDTO(trayecto));
         parametros.put("miembroID", miembro.getId());
 
@@ -143,7 +138,7 @@ public class TrayectosController {
         TramoHBS tramoHBS = null;
 
         if(request.queryParams("transporte-nuevo") != null) {
-            tramoHBS = mapTramoNuevo(request); //todo asegurar que parametros mantiene la referencia
+            tramoHBS = mapTramoNuevo(request);
         }
 
         List<TramoHBS> tramosDTO = new ArrayList<>();
@@ -159,8 +154,10 @@ public class TrayectosController {
                 : parsearPeriodo(request.queryParams("fecha"));
 
         TrayectoHBS trayectoDTO = new TrayectoHBS();
-        trayectoDTO.setMes(periodo.getMes());
-        trayectoDTO.setAño(periodo.getAnio());
+        if(periodo.getPeriodicidad() == 'M')
+            trayectoDTO.setFecha(periodo.getMes() + "/" + periodo.getAnio().toString());
+        else
+            trayectoDTO.setFecha(periodo.getAnio().toString());
         trayectoDTO.setMiembros(trayecto.getMiembros().stream().map(MiembroMapperHBS::toDTO).collect(Collectors.toList()));
         trayectoDTO.setId(trayecto.getId());
 
@@ -170,9 +167,7 @@ public class TrayectosController {
             trayectoDTO.setTramos(tramosDTO);
         }
 
-        Map<String, Object> parametros = new HashMap<>();
-        parametros.put("rol", "miembro");
-        parametros.put("user", miembro.getNombre() + " " + miembro.getApellido());
+        Map<String, Object> parametros = GuiUtils.dtoHeader(request);
         parametros.put("miembroID", miembro.getId());
         parametros.put("miembros", trayecto.getMiembros().stream().map(MiembroMapperHBS::toDTO).collect(Collectors.toList()));
         parametros.put("transportesTotales", generarMapeoTransportesTipos());
@@ -354,7 +349,6 @@ public class TrayectosController {
         return res;
     }
 
-
     public Response borrar(Request req, Response res) { //Elimino del sistema
         Integer idTrayecto = Integer.parseInt(req.params("id"));
         Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(idTrayecto);
@@ -375,8 +369,6 @@ public class TrayectosController {
             LocalDate fecha = LocalDate.now();
             periodo = new Periodo(fecha.getYear(), fecha.getMonthValue());
         }
-//        String fechaActual = LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear();
-//        String[] fecha = req.queryParamOrDefault("f-fecha", fechaActual).split("/"); //todo validar
         return periodo;
     }
 }

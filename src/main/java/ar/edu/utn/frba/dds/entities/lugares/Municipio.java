@@ -7,7 +7,7 @@ import java.util.HashSet;
 @Table(name = "MUNICIPIO")
 public class Municipio extends AreaSectorial {
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.PERSIST)
     private Provincia provincia;
 
     public Municipio() {

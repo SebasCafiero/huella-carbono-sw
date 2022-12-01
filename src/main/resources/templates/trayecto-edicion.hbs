@@ -40,6 +40,7 @@
           <li>{{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</li>
           {{/each}}
         </ul>
+        <span>Fecha: {{trayecto.fecha}}</span><br />
         {{/if}}
         {{#with miembroLogueado}}
         <span>Miembro: {{nombre}} {{apellido}} - {{tipoDeDocumento}}: {{nroDocumento}}</span>
@@ -57,19 +58,19 @@
             <label for="trayecto-id">Ingrese el ID del trayecto compartido: </label>
             <input id="trayecto-id" type="text" name="f-trayecto-id" value="" disabled/><br/><br/>
           </div>
-          {{/unless}}
 
           <div class="form-fecha">
             <label for="fecha">Fecha</label>
-            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.mes}}/{{trayecto.año}}" {{else}} value="{{fecha}}" {{/if}} required/>
+            <input id="fecha" type="text" name="f-fecha" {{#if trayecto}} value="{{trayecto.fecha}}" {{else}} value="{{fecha}}" {{/if}} required/>
           </div>
+          {{/unless}}
           <br />
           <div class="form-tramos">
             <div id="tramos-editables">
               {{#each trayecto.tramos}}
               <div id="tramo-{{@index}}" class="tramo">
                 <fieldset>
-                  <legend>Tramo {{id}}</legend>
+                  <legend>Tramo (id {{id}})</legend>
                   <input id="tramo-id-{{@index}}" type="hidden" name="f-tramo-id-{{@index}}" value="{{id}}"/>
                   <label for="transporte-{{@index}}">Transporte</label>
                   <select id="transporte-{{@index}}" name="f-transporte-{{@index}}" onchange="transporteCambiado()" required>

@@ -2,20 +2,18 @@ package ar.edu.utn.frba.dds.server;
 
 import ar.edu.utn.frba.dds.interfaces.RequestInvalidoApiException;
 import ar.edu.utn.frba.dds.interfaces.controllers.*;
+import ar.edu.utn.frba.dds.repositories.dataInicial.SetupInicialJPA;
 import ar.edu.utn.frba.dds.server.login.*;
 import ar.edu.utn.frba.dds.server.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.server.utils.HandlebarsTemplateEngineBuilder;
 import ar.edu.utn.frba.dds.servicios.fachadas.FachadaUsuarios;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiHuellaApiException;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.*;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class Router {
@@ -61,9 +59,9 @@ public class Router {
         TrayectosController trayectosController = new TrayectosController();
 
         Filter asegurarSesion = (Request request, Response response) -> {
-            Integer token = Optional.ofNullable((Integer) request.session().attribute("idUsuario"))
-                    .orElse(Optional.ofNullable(request.headers("Authorization"))
-                            .filter(value -> value.matches("\\d{1,9}")).map(Integer::parseInt)
+            Integer token = Optional.ofNullable(request.headers("Authorization"))
+                    .filter(value -> value.matches("\\d{1,9}")).map(Integer::parseInt)
+                    .orElseGet(() -> Optional.ofNullable(request.session().<Integer>attribute("idUsuario"))
                             .orElseThrow(NotLoggedException::new));
 
             request.session().attribute("idUsuario", token);
@@ -108,7 +106,7 @@ public class Router {
                     });
 
                     Spark.path("/medicion", () -> {
-                        Spark.get("", medicionController::mostrarTodos);
+                        Spark.get("", medicionController::mostrarTodos, gson::toJson);
                         Spark.get("/:id", medicionController::obtener);
                         Spark.get("/unidad/:unidad", medicionController::filtrarUnidad);
                         Spark.get("/valor/:valor", medicionController::filtrarValor);
@@ -165,6 +163,18 @@ public class Router {
             });
 
             Spark.delete("trayecto/:id", trayectosController::borrar); //Para eliminar definitivamente el trayecto (admin)
+
+            Spark.post("/doSetup", (Request request, Response response) -> {
+                SetupInicialJPA setupInicialJPA = new SetupInicialJPA();
+                setupInicialJPA.doSetup();
+                return response;
+            });
+
+            Spark.post("/undoSetup", (Request request, Response response) -> {
+                SetupInicialJPA setupInicialJPA = new SetupInicialJPA();
+                setupInicialJPA.undoSetup();
+                return response;
+            });
         });
 
 
@@ -210,7 +220,7 @@ public class Router {
         });
 
         Spark.get("/*", ((request, response) -> {
-            response.redirect("/home");
+            response.redirect("/menu");
             response.status(HttpStatus.NOT_FOUND_404);
             return response;
         }));

@@ -28,7 +28,7 @@ public class Organizacion {
     @Enumerated(EnumType.STRING)
     private TipoDeOrganizacionEnum tipo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ubicacion_id", referencedColumnName = "ubicacion_id")
     private UbicacionGeografica ubicacion;
 
@@ -36,7 +36,7 @@ public class Organizacion {
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private ClasificacionOrganizacion clasificacionOrganizacion;
 
-    @OneToMany(mappedBy = "organizacion", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "organizacion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Sector> sectores;
 
     @OneToMany(fetch = FetchType.LAZY)
@@ -73,6 +73,8 @@ public class Organizacion {
         this.contactosMail = new ArrayList<>();
         this.contactosTelefono = new ArrayList<>();
         this.reportes = new ArrayList<>();
+//        ubicacion.getDireccion().getMunicipio().agregarOrganizacion(this);
+//        ubicacion.getDireccion().getMunicipio().getProvincia().agregarOrganizacion(this);
     }
 
     public Integer getId() {

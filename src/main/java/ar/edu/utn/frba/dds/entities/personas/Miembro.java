@@ -33,7 +33,7 @@ public class Miembro {
     @ManyToMany(mappedBy = "miembros", fetch = FetchType.LAZY)
     private Set<Sector> sectores;
 
-    @ManyToMany(mappedBy = "miembros")
+    @ManyToMany(mappedBy = "miembros", cascade = CascadeType.ALL)
     private List<Trayecto> trayectos;
 
     public Miembro() {

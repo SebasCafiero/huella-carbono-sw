@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class OrganizacionMapper {
     public static Organizacion toEntity(OrganizacionJSONDTO orgDTO) {
         Organizacion entity = new Organizacion(
-                orgDTO.getOrganizacion(),
+                orgDTO.getNombre(),
                 TipoDeOrganizacionEnum.valueOf(orgDTO.getTipo().toUpperCase()),
                 new ClasificacionOrganizacion(orgDTO.getClasificacion()),
                 UbicacionMapper.toEntity(orgDTO.getUbicacion())
@@ -49,6 +49,7 @@ public class OrganizacionMapper {
             SectorResponse sectorResponse = new SectorResponse();
             sectorResponse.setNombre(sector.getNombre());
             sectorResponse.setMiembros(sector.getMiembros().stream().map(MiembrosMapper::toResponse).collect(Collectors.toList()));
+            sectorResponse.setId(sector.getId());
             return sectorResponse;
         }).collect(Collectors.toList()));
 
