@@ -73,8 +73,7 @@ public class Organizacion {
         this.contactosMail = new ArrayList<>();
         this.contactosTelefono = new ArrayList<>();
         this.reportes = new ArrayList<>();
-//        ubicacion.getDireccion().getMunicipio().agregarOrganizacion(this);
-//        ubicacion.getDireccion().getMunicipio().getProvincia().agregarOrganizacion(this);
+        ubicacion.getDireccion().getMunicipio().agregarOrganizacion(this);
     }
 
     public Integer getId() {

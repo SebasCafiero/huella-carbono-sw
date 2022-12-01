@@ -320,15 +320,7 @@ public class SetupInicialJPA {
         limpiezaMc.agregarMiembro(jessePinkman);
         limpiezaMc.agregarMiembro(saulGoodman);
 
-//        ubicacion.getDireccion().getMunicipio().agregarOrganizacion(this);
-//        ubicacion.getDireccion().getMunicipio().getProvincia().agregarOrganizacion(this);
         this.repoOrganizaciones.agregar(orgUtnCampus, orgUtnMedrano, orgMcObelisco);
-
-        Stream.of(orgUtnMedrano, orgUtnCampus, orgMcObelisco)
-                .forEach(org -> {
-                    org.getUbicacion().getDireccion().getMunicipio().agregarOrganizacion(org);
-                    org.getUbicacion().getDireccion().getMunicipio().getProvincia().agregarOrganizacion(org);
-                });
 
         // Tramos y trayectos
 
@@ -379,7 +371,6 @@ public class SetupInicialJPA {
         Arrays.stream(trayectos).flatMap(trayecto -> trayecto.getTramos().stream()).forEach(Tramo::setValor);
 
         this.repoTrayectos.agregar(trayectos);
-
 
         // Mediciones
 
