@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.interfaces.controllers;
 
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
+import ar.edu.utn.frba.dds.interfaces.gui.GuiUtils;
 import ar.edu.utn.frba.dds.interfaces.gui.dto.AgenteHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.AgenteMapperHBS;
 import ar.edu.utn.frba.dds.interfaces.gui.mappers.OrganizacionMapperHBS;
@@ -71,15 +72,15 @@ public class ReportesController {
     }
 
     public ModelAndView darAltaYMostrar(Request request, String rol) {
-        Map<String, Object> parametros = new HashMap<>();
+        Map<String, Object> parametros = GuiUtils.dtoHeader(request);
 
         Organizacion org;
         int id;
         if(rol.equals("organizacion")) {
             id = Integer.parseInt(request.params("id"));
             org = repoOrganizaciones.buscar(id).get(); //deberia coincidir con los permisos del usuario
-            parametros.put("rol", "ORGANIZACION");
-            parametros.put("user", org.getRazonSocial());
+//            parametros.put("rol", "ORGANIZACION");
+//            parametros.put("user", org.getRazonSocial());
             parametros.put("organizacion", OrganizacionMapperHBS.toDTO(org));
         }
 
@@ -88,8 +89,8 @@ public class ReportesController {
             id = Integer.parseInt(request.params("id"));
             agente = this.repoAgentes.buscar(id).get();
 
-            parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
-            parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
+//            parametros.put("rol", "AGENTE"); //todo ver si poner como el menu
+//            parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
             AgenteHBS agenteDTO = AgenteMapperHBS.toDTO(agente);
 //            List<Organizacion> orgs = repoOrganizaciones.buscarTodos().stream().filter(o -> agente.getArea().getUbicaciones().contains(o.getUbicacion())).collect(Collectors.toList());
             Set<Organizacion> orgs = agente.getArea().getOrganizaciones();

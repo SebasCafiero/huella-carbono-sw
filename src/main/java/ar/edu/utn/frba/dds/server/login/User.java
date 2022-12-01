@@ -100,15 +100,15 @@ public class User {
 
     public String getRolName() {
         if (isMiembro())
-            return "miembro";
+            return "MIEMBRO";
 
         if (isAgenteSectorial())
-            return "agenteSectorial";
+            return "AGENTE SECTORIAL";
 
         if (isOrganizacion())
-            return "organizacion";
+            return "ORGANIZACIÓN";
 
-        return "admin";
+        return "ADMIN";
     }
 
     public Object getRol() {
