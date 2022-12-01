@@ -66,7 +66,7 @@ public class SetupInicialJPA {
 
         Provincia cabaProvincia = new Provincia("CIUDAD DE BUENOS AIRES", "ARGENTINA");
         Municipio cabaMunicipio = new Municipio("CIUDAD DE BUENOS AIRES", cabaProvincia);
-        
+
         List<ProvinciaGson> provinciasGson = adapter.obtenerPaises().stream()
                 .filter(pais -> pais.getNombre().equals("ARGENTINA"))
                 .flatMap(pais -> adapter.obtenerProvincias(pais.getId()).stream())

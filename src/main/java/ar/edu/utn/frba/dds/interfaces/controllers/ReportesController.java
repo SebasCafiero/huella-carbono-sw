@@ -92,7 +92,7 @@ public class ReportesController {
             parametros.put("user", agente.getMail().getDireccion()); //todo agregar nombre en agente?
             AgenteHBS agenteDTO = AgenteMapperHBS.toDTO(agente);
 //            List<Organizacion> orgs = repoOrganizaciones.buscarTodos().stream().filter(o -> agente.getArea().getUbicaciones().contains(o.getUbicacion())).collect(Collectors.toList());
-            List<Organizacion> orgs = repoOrganizaciones.buscarTodos();
+            Set<Organizacion> orgs = agente.getArea().getOrganizaciones();
             agenteDTO.setOrganizaciones(orgs.stream().map(OrganizacionMapperHBS::toDTO).collect(Collectors.toList()));
             parametros.put("agente", agenteDTO);
             //todo quizas agregar reporte de agente (todas las organizaciones en uno)
