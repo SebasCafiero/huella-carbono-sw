@@ -17,10 +17,11 @@ public abstract class AreaSectorial {
     @Column(name = "nombre")
     protected String nombre;
 
-    @Transient
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "area_id")
     protected Set<Organizacion> organizaciones;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, optional = true)
     @JoinColumn(name = "agente_id", referencedColumnName = "agente_id")
     protected AgenteSectorial agente;
 

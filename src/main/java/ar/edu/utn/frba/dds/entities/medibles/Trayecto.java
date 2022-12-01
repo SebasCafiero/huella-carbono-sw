@@ -20,7 +20,7 @@ public class Trayecto {
     @OrderColumn(name = "posicion")
     private List<Tramo> tramos;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany//(cascade = CascadeType.ALL)
     @JoinTable(
             name = "MIEMBRO_POR_TRAYECTO",
             joinColumns = { @JoinColumn(name = "trayecto_id") },

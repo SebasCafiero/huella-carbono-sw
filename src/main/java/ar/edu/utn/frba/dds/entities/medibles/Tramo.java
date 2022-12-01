@@ -15,15 +15,15 @@ public class Tramo implements Medible {
     @Column(name = "tramo_id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER) // No debe haber cascada
     @JoinColumn(name = "medio_id", nullable = false)
     private MedioDeTransporte medioDeTransporte;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ubicacion_inicial", referencedColumnName = "ubicacion_id", nullable = false)
     private UbicacionGeografica ubicacionInicial;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ubicacion_final", referencedColumnName = "ubicacion_id", nullable = false)
     private UbicacionGeografica ubicacionFinal;
 

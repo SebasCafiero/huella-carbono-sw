@@ -14,7 +14,7 @@ public class Direccion {
     @Column(name = "localidad")
     private String localidad;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "municipio_id", nullable = false)
     private Municipio municipio;
 

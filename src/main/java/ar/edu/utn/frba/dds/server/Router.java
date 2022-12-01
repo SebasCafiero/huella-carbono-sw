@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.server;
 
 import ar.edu.utn.frba.dds.interfaces.RequestInvalidoApiException;
 import ar.edu.utn.frba.dds.interfaces.controllers.*;
+import ar.edu.utn.frba.dds.repositories.dataInicial.SetupInicialJPA;
 import ar.edu.utn.frba.dds.server.login.*;
 import ar.edu.utn.frba.dds.server.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.server.utils.HandlebarsTemplateEngineBuilder;
@@ -162,6 +163,18 @@ public class Router {
             });
 
             Spark.delete("trayecto/:id", trayectosController::borrar); //Para eliminar definitivamente el trayecto (admin)
+
+            Spark.post("/doSetup", (Request request, Response response) -> {
+                SetupInicialJPA setupInicialJPA = new SetupInicialJPA();
+                setupInicialJPA.doSetup();
+                return response;
+            });
+
+            Spark.post("/undoSetup", (Request request, Response response) -> {
+                SetupInicialJPA setupInicialJPA = new SetupInicialJPA();
+                setupInicialJPA.undoSetup();
+                return response;
+            });
         });
 
 

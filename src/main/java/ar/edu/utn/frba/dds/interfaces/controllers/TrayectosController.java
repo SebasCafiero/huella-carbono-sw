@@ -356,7 +356,6 @@ public class TrayectosController {
         return res;
     }
 
-
     public Response borrar(Request req, Response res) { //Elimino del sistema
         Integer idTrayecto = Integer.parseInt(req.params("id"));
         Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(idTrayecto);

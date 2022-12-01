@@ -15,7 +15,7 @@ public class AgenteSectorial {
     @Column(name = "agente_id")
     private Integer id;
 
-    @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "agente", optional = false)
     private AreaSectorial area;
 
     @OneToOne(mappedBy = "agente", cascade = CascadeType.ALL)

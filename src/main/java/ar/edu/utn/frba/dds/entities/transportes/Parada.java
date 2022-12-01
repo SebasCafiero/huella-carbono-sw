@@ -14,7 +14,7 @@ public class Parada {
     @Column(name = "parada_id")
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ubicacion_id", referencedColumnName = "ubicacion_id")
     private UbicacionGeografica ubicacion;
 
