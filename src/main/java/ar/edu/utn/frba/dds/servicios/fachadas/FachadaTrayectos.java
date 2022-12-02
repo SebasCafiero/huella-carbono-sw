@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -178,6 +179,11 @@ public class FachadaTrayectos {
         Function<String, Integer> paramToInt = param -> Integer.parseInt(map.value(param));
         Function<String, Float> paramToFloat = param -> Float.parseFloat(map.value(param));
 
+        BiFunction<String, String, Municipio> getMunicipio = (muni, prov) ->
+                new FachadaUbicaciones().getMunicipio(muni, prov)
+                        .orElseThrow(() -> new EntityNotFoundException("No existe la ubicación de municipio " + muni +
+                                " y provincia " + prov));
+
         String pos = posicion == null ? "nueva" : posicion.toString();
         String lugar = esInicial ? "inicial" : "final";
 
@@ -188,9 +194,8 @@ public class FachadaTrayectos {
                     .findFirst().get();
         } else {
             return new UbicacionGeografica(
-                    "Argentina",
-                    map.value("f-provincia-" + lugar + "-" + pos),
-                    map.value("f-municipio-" + lugar + "-" + pos),
+                    getMunicipio.apply(map.value("f-municipio-" + lugar + "-" + pos),
+                            map.value("f-provincia-" + lugar + "-" + pos)),
                     map.value("f-localidad-" + lugar + "-" + pos),
                     map.value("f-calle-" + lugar + "-" + pos),
                     paramToInt.apply("f-numero-" + lugar + "-" + pos),
