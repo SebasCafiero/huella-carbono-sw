@@ -61,7 +61,7 @@ public class TrayectosController {
             parametros.put("tramoNuevo", tramoDTO);
             parametros.put("fecha", request.queryParams("fecha"));
         }
-        return new ModelAndView(parametros, "/trayecto-edicion.hbs");
+        return new ModelAndView(parametros, "trayecto-edicion.hbs");
     }
 
     private List<Object> generarMapeoTransportesTipos() {
@@ -132,207 +132,42 @@ public class TrayectosController {
     }
 
     public ModelAndView editar(Request request, Response response) {
-        Miembro miembro = fachadaTrayectos.obtenerMiembro(Integer.parseInt(request.params("id")));
         Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(Integer.parseInt(request.params("trayecto")));
 
-        TramoHBS tramoHBS = null;
-
+        TramoHBS tramoNuevoDTO = null;
         if(request.queryParams("transporte-nuevo") != null) {
-            tramoHBS = mapTramoNuevo(request);
+            MedioDeTransporte transporteNuevo = fachadaTrayectos.obtenerTransporte(Integer.parseInt(request.queryParams("transporte-nuevo"))).get();
+            tramoNuevoDTO = TramoMapperHBS.toDTONuevoEditable(transporteNuevo, request);
         }
 
+        TrayectoHBS trayectoDTO = TrayectoMapperHBS.toDTOEditable(trayecto, request);
         List<TramoHBS> tramosDTO = new ArrayList<>();
         int cant = 0;
         while(request.queryParams("transporte"+cant) != null) {
-            tramosDTO.add(mapTramoEditable(cant, request));
+            MedioDeTransporte transporte = fachadaTrayectos.obtenerTransporte(Integer.parseInt(request.queryParams("transporte"+cant))).get();
+            tramosDTO.add(TramoMapperHBS.toDTOEditado(transporte, cant, request));
             cant++;
         }
-
-//        String fechaActual = trayecto.getPeriodo().getMes() + "/" + trayecto.getPeriodo().getAnio();
-//        String[] fecha = request.queryParamOrDefault("fecha", fechaActual).split("/");
-        Periodo periodo = request.queryParams("fecha") == null ? trayecto.getPeriodo()
-                : parsearPeriodo(request.queryParams("fecha"));
-
-        TrayectoHBS trayectoDTO = new TrayectoHBS();
-        if(periodo.getPeriodicidad() == 'M')
-            trayectoDTO.setFecha(periodo.getMes() + "/" + periodo.getAnio().toString());
-        else
-            trayectoDTO.setFecha(periodo.getAnio().toString());
-        trayectoDTO.setMiembros(trayecto.getMiembros().stream().map(MiembroMapperHBS::toDTO).collect(Collectors.toList()));
-        trayectoDTO.setId(trayecto.getId());
-
-        if(tramosDTO.isEmpty()) {
+        if(tramosDTO.isEmpty()) //No hubo modificaciones intermedias
             trayectoDTO.setTramos(trayecto.getTramos().stream().map(TramoMapperHBS::toDTO).collect(Collectors.toList()));
-        } else {
+        else
             trayectoDTO.setTramos(tramosDTO);
-        }
 
         Map<String, Object> parametros = GuiUtils.dtoHeader(request);
-        parametros.put("miembroID", miembro.getId());
+        parametros.put("miembroID", Integer.parseInt(request.params("id")));
         parametros.put("miembros", trayecto.getMiembros().stream().map(MiembroMapperHBS::toDTO).collect(Collectors.toList()));
         parametros.put("transportesTotales", generarMapeoTransportesTipos());
         parametros.put("trayecto", trayectoDTO);
-        parametros.put("tramoNuevo", tramoHBS);
+        parametros.put("tramoNuevo", tramoNuevoDTO);
 
         return new ModelAndView(parametros, "trayecto-edicion.hbs");
-    }
-
-    private TramoHBS mapTramoEditable(Integer cant, Request req) {
-        MedioDeTransporte transporte = fachadaTrayectos.obtenerTransporte(Integer.parseInt(req.queryParams("transporte"+cant))).get();
-        TransporteHBS transporteDTO = TransporteMapperHBS.toDTOLazy(transporte); //deberia sacarlo xq no lo uso casi
-        TramoHBS tramoDTO = new TramoHBS();
-        UbicacionGeografica ubicacionInicial = null;
-        UbicacionGeografica ubicacionFinal = null;
-        if(transporteDTO.getEsPublico()) {
-            if (req.queryParams("parada-inicial" + cant) != null && req.queryParams("parada-final" + cant) != null) {
-                int idParadaInicial = Integer.parseInt(req.queryParams("parada-inicial" + cant));
-                int idParadaFinal = Integer.parseInt(req.queryParams("parada-final" + cant));
-                Optional<Parada> op_paradaInicial = ((TransportePublico) transporte).getParadas().stream().filter(p -> p.getId() == idParadaInicial).findFirst();
-                Optional<Parada> op_paradaFinal = ((TransportePublico) transporte).getParadas().stream().filter(p -> p.getId() == idParadaFinal).findFirst();
-
-                if (op_paradaInicial.isPresent() && op_paradaFinal.isPresent()) {
-                    Parada paradaInicial = op_paradaInicial.get();
-                    Parada paradaFinal = op_paradaFinal.get();
-
-                    ubicacionInicial = paradaInicial.getUbicacion();
-                    ubicacionFinal = paradaFinal.getUbicacion();
-
-                    tramoDTO.setIdParadaInicial(idParadaInicial);
-                    tramoDTO.setIdParadaFinal(idParadaFinal);
-                }
-            }
-        } else {
-            if(req.queryParams("lat-inicial"+cant) != null
-                && req.queryParams("lat-final"+cant) != null
-                && req.queryParams("prov-inicial"+cant) != null
-                && req.queryParams("prov-final"+cant) != null) { //uso los primeros de coord y de direc, pero quizas validar todos
-
-                Coordenada coorInicial = new Coordenada(
-                    Float.parseFloat(req.queryParams("lat-inicial"+cant)),
-                    Float.parseFloat(req.queryParams("lon-inicial"+cant)));
-                Coordenada coorFinal = new Coordenada(
-                    Float.parseFloat(req.queryParams("lat-final"+cant)),
-                    Float.parseFloat(req.queryParams("lon-final"+cant)));
-
-                ubicacionInicial = new UbicacionGeografica(
-                    "Argentina",
-                    req.queryParams("prov-inicial"+cant),
-                    req.queryParams("mun-inicial"+cant),
-                    req.queryParams("loc-inicial"+cant),
-                    req.queryParams("calle-inicial"+cant),
-                    Integer.parseInt(req.queryParams("num-inicial"+cant)),
-                    coorInicial
-                );
-
-                ubicacionFinal = new UbicacionGeografica(
-                    "Argentina",
-                    req.queryParams("prov-final"+cant),
-                    req.queryParams("mun-final"+cant),
-                    req.queryParams("loc-final"+cant),
-                    req.queryParams("calle-final"+cant),
-                    Integer.parseInt(req.queryParams("num-final"+cant)),
-                    coorFinal
-                );
-            }
-        }
-        if(ubicacionInicial != null)
-            tramoDTO.setUbicacionInicial(UbicacionMapperHBS.toDTO(ubicacionInicial));
-        else
-            tramoDTO.setUbicacionInicial(null);
-
-        if(ubicacionFinal != null)
-            tramoDTO.setUbicacionFinal(UbicacionMapperHBS.toDTO(ubicacionFinal));
-        else
-            tramoDTO.setUbicacionFinal(null);
-
-        if(req.queryParams("tramo-id"+cant) != null)
-            tramoDTO.setId(Integer.parseInt(req.queryParams("tramo-id"+cant)));
-
-        tramoDTO.setTransporte(TransporteMapperHBS.toDTO(transporte));
-        return tramoDTO;
-    }
-
-    private TramoHBS mapTramoNuevo(Request req) {
-
-        MedioDeTransporte transporteNuevo = fachadaTrayectos.obtenerTransporte(Integer.parseInt(req.queryParams("transporte-nuevo"))).get();
-        TramoHBS tramoDTO = new TramoHBS();
-        UbicacionGeografica ubicacionInicial = null;
-        UbicacionGeografica ubicacionFinal = null;
-        if(transporteNuevo instanceof TransportePublico) {
-            if (req.queryParams("parada-inicial-nueva") != null && req.queryParams("parada-final-nueva") != null) {
-                int idParadaInicial = Integer.parseInt(req.queryParams("parada-inicial-nueva"));
-                int idParadaFinal = Integer.parseInt(req.queryParams("parada-final-nueva"));
-
-                Optional<Parada> op_paradaInicial = ((TransportePublico) transporteNuevo).getParadas().stream().filter(p -> p.getId() == idParadaInicial).findFirst();
-                Optional<Parada> op_paradaFinal = ((TransportePublico) transporteNuevo).getParadas().stream().filter(p -> p.getId() == idParadaFinal).findFirst();
-
-                if (op_paradaInicial.isPresent() && op_paradaFinal.isPresent()) {
-                    Parada paradaInicial = op_paradaInicial.get();
-                    Parada paradaFinal = op_paradaFinal.get();
-
-                    ubicacionInicial = paradaInicial.getUbicacion();
-                    ubicacionFinal = paradaFinal.getUbicacion();
-
-                    tramoDTO.setIdParadaInicial(idParadaInicial);
-                    tramoDTO.setIdParadaFinal(idParadaFinal);
-                }
-            }
-        } else {
-            if(req.queryParams("lat-inicial-nueva") != null
-                    && req.queryParams("lat-final-nueva") != null
-                    && req.queryParams("prov-inicial-nueva") != null
-                    && req.queryParams("prov-final-nueva") != null) { //uso los primeros de coord y de direc, pero quizas validar todos
-
-                Coordenada coorInicial = new Coordenada(
-                        Float.parseFloat(req.queryParams("lat-inicial-nueva")),
-                        Float.parseFloat(req.queryParams("lon-inicial-nueva")));
-                Coordenada coorFinal = new Coordenada(
-                        Float.parseFloat(req.queryParams("lat-final-nueva")),
-                        Float.parseFloat(req.queryParams("lon-final-nueva")));
-
-                ubicacionInicial = new UbicacionGeografica(
-                        "Argentina",
-                        req.queryParams("prov-inicial-nueva"),
-                        req.queryParams("mun-inicial-nueva"),
-                        req.queryParams("loc-inicial-nueva"),
-                        req.queryParams("calle-inicial-nueva"),
-                        Integer.parseInt(req.queryParams("num-inicial-nueva")),
-                        coorInicial
-                );
-
-                ubicacionFinal = new UbicacionGeografica(
-                        "Argentina",
-                        req.queryParams("prov-final-nueva"),
-                        req.queryParams("mun-final-nueva"),
-                        req.queryParams("loc-final-nueva"),
-                        req.queryParams("calle-final-nueva"),
-                        Integer.parseInt(req.queryParams("num-final-nueva")),
-                        coorFinal
-                );
-            }
-        }
-        if(ubicacionInicial != null)
-            tramoDTO.setUbicacionInicial(UbicacionMapperHBS.toDTO(ubicacionInicial));
-        else
-            tramoDTO.setUbicacionInicial(null);
-
-        if(ubicacionFinal != null)
-            tramoDTO.setUbicacionFinal(UbicacionMapperHBS.toDTO(ubicacionFinal));
-        else
-            tramoDTO.setUbicacionFinal(null);
-
-        tramoDTO.setTransporte(TransporteMapperHBS.toDTO(transporteNuevo));
-
-//        parametros.put("tramoNuevo", tramoDTO);
-        return tramoDTO;
-
     }
 
     public Response modificar(Request req, Response res) {
         Miembro miembro = fachadaTrayectos.obtenerMiembro(Integer.parseInt(req.params("id")));
         int idTrayecto = Integer.parseInt(req.params("trayecto"));
 
-        fachadaTrayectos.modificarTrayecto(miembro, Integer.parseInt(req.params("trayecto")), req.queryMap());
+        fachadaTrayectos.modificarTrayecto(miembro, idTrayecto, req.queryMap());
 
         res.redirect("/miembro/" + miembro.getId() + "/trayecto/" + idTrayecto);
         return res;
@@ -355,17 +190,5 @@ public class TrayectosController {
         return res;
     }
 
-    private Periodo parsearPeriodo(String input) {
-        Periodo periodo;
-        if(input.matches("\\d+")) {
-            periodo = new Periodo(Integer.parseInt(input));
-        } else if(input.matches("\\d+/\\d+")) {
-            String[] fecha = input.split("/"); //todo validar
-            periodo = new Periodo(Integer.parseInt(fecha[1]), Integer.parseInt(fecha[0]));
-        } else {
-            LocalDate fecha = LocalDate.now();
-            periodo = new Periodo(fecha.getYear(), fecha.getMonthValue());
-        }
-        return periodo;
-    }
+
 }

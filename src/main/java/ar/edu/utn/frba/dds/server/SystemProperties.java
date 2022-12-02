@@ -19,6 +19,7 @@ public class SystemProperties {
     private static final String staticBasePath;
     private static final String staticDomainPath;
     private static final String staticAbsolutePath;
+    private static final String apiUrl;
 
     static {
         Map<String, String> varEntorno = System.getenv();
@@ -44,6 +45,7 @@ public class SystemProperties {
         staticBasePath = varEntorno.getOrDefault("static-path.base", propArchivo.getProperty("static-path.base", "/src/main/resources"));
         staticDomainPath = varEntorno.getOrDefault("static-path.domain", propArchivo.getProperty("static-path.domain", System.getProperty("user.dir")));
         staticAbsolutePath = varEntorno.getOrDefault("static-path.absolute", propArchivo.getProperty("static-path.absolute", staticDomainPath + staticBasePath + staticRelativePath));
+        apiUrl = varEntorno.getOrDefault("api-url", propArchivo.getProperty("api-url", "https://app.swaggerhub.com/apis-docs/SebasCafiero/dds-mano-g06/2.0"));
     }
 
     public static Boolean isJpa() {
@@ -92,6 +94,10 @@ public class SystemProperties {
 
     public static String getStaticDomainPath() {
         return staticDomainPath;
+    }
+
+    public static String getApiUrl() {
+        return apiUrl;
     }
 
     private static Properties cargarArchivoConfigurable() {

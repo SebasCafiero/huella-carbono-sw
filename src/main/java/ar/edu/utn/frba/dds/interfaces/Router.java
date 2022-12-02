@@ -183,8 +183,14 @@ public class Router {
         Spark.post("/login", genericController::iniciarSesion);
         Spark.post("/logout", genericController::cerrarSesion);
         Spark.post("/user", genericController::altaUsuario); //todo
-        Spark.get("/home", genericController::inicio, engine);
-        Spark.get("/menu", genericController::menu, engine);
+        Spark.path("/home", () -> {
+            Spark.get("", genericController::inicio, engine);
+            Spark.get("/", genericController::inicio, engine);
+        });
+        Spark.path("/menu", () -> {
+            Spark.get("", genericController::menu, engine);
+            Spark.get("/", genericController::menu, engine);
+        });
 
         Spark.path("/miembro/:id", () -> {
             Spark.before("", autorizarUsuario.apply("miembro"));
@@ -217,6 +223,11 @@ public class Router {
             Spark.get("/organizacion", agenteSectorialController::mostrarOrganizaciones, engine);
             Spark.get("/reporte", reportesController::darAltaYMostrarAgente, engine);
             Spark.post("/reporte", reportesController::generarAgente);
+        });
+
+        Spark.get("/docs", (request, response) -> {
+            response.redirect(SystemProperties.getApiUrl());
+            return response;
         });
 
         Spark.get("/*", ((request, response) -> {

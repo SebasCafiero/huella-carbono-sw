@@ -4,7 +4,7 @@ info:
   title: DDS TP Carbono TPA - G06
   description: Gestión de Organizaciones y el cálculo de la Huella de Carbono
 servers:
-  - url: https://api.ddsg06.com #cambiar
+  - url: https://dds-mano-g06.herokuapp.com
 paths:
   /api/organizacion:
     get:

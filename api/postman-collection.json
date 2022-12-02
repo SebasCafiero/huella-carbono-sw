@@ -1,0 +1,1281 @@
+{
+	"info": {
+		"_postman_id": "aebfbd0a-b18d-4c34-9c19-42c37c4bb58d",
+		"name": "TP - Diseño",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21930196"
+	},
+	"item": [
+		{
+			"name": "local",
+			"item": [
+				{
+					"name": "Organizaciones",
+					"item": [
+						{
+							"name": "Crear Organización",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "14965",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\": {\r\n        \"username\": \"tres\",\r\n        \"password\": \"dos\"\r\n    },\r\n    \"entidad\": {\r\n        \"nombre\": \"Coca Cola\",\r\n        \"ubicacion\": {\r\n            \"direccion\": {\r\n                \"municipio\": \"CIUDAD DE BUENOS AIRES\",\r\n                \"localidad\": \"VILLA CRESPO\",\r\n                \"calle\": \"Maestro Marcelo Lopez\",\r\n                \"numero\": 10\r\n            },\r\n            \"coordenadas\": {\r\n                \"latitud\": 201.4123,\r\n                \"longitud\": 201.4323\r\n            }\r\n        },\r\n        \"clasificacion\": \"Empresa\",\r\n        \"tipo\": \"EMPRESA\",\r\n        \"sectores\": [\r\n            {\r\n                \"nombre\": \"Entretenimiento\",\r\n                \"miembros\": [\r\n                    {\r\n                        \"tipoDocumento\": \"DNI\",\r\n                        \"documento\": 34432237\r\n                    }\r\n                ]\r\n            }\r\n        ]\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local-domain}}/api/organizacion",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener Organizacion",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{local-domain}}/api/organizacion/11190",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Agregar miembro",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tipoDocumento\": \"DNI\",\r\n    \"documento\": 55551111\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local-domain}}/api/organizacion/11190/sector/11193/miembro",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"sector",
+										"11193",
+										"miembro"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Mediciones",
+					"item": [
+						{
+							"name": "Crear Batch",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"mediciones\": [\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Combustion Fija\",\r\n                \"tipoConsumo\": \"Diesel\"\r\n            },\r\n            \"unidad\": \"lt\",\r\n            \"valor\": 1.2,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"M\",\r\n                \"anio\": 2022,\r\n                \"mes\": 9\r\n            }\r\n        },\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Electricidad\",\r\n                \"tipoConsumo\": \"Electricidad\"\r\n            },\r\n            \"unidad\": \"kw\",\r\n            \"valor\": 2,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"M\",\r\n                \"anio\": 2022,\r\n                \"mes\": 10\r\n            }\r\n        },\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Combustion Movil\",\r\n                \"tipoConsumo\": \"Gasoil\"\r\n            },\r\n            \"unidad\": \"lt\",\r\n            \"valor\": 3.2,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"A\",\r\n                \"anio\": 2022\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local-domain}}/api/organizacion/11190/batch",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"batch"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crear Batch 2",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "11182",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"mediciones\": [\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Combustion Fija\",\r\n                \"tipoConsumo\": \"Gas Natural\"\r\n            },\r\n            \"unidad\": \"m3\",\r\n            \"valor\": 5.2,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"M\",\r\n                \"anio\": 2022,\r\n                \"mes\": 9\r\n            }\r\n        },\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Electricidad\",\r\n                \"tipoConsumo\": \"Electricidad\"\r\n            },\r\n            \"unidad\": \"kw\",\r\n            \"valor\": 3.6,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"M\",\r\n                \"anio\": 2022,\r\n                \"mes\": 10\r\n            }\r\n        },\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Combustion Fija\",\r\n                \"tipoConsumo\": \"Diesel\"\r\n            },\r\n            \"unidad\": \"kw\",\r\n            \"valor\": 2.1,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"M\",\r\n                \"anio\": 2022,\r\n                \"mes\": 10\r\n            }\r\n        },\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Combustion Movil\",\r\n                \"tipoConsumo\": \"Gasoil\"\r\n            },\r\n            \"unidad\": \"lt\",\r\n            \"valor\": 0.4,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"A\",\r\n                \"anio\": 2022,\r\n                \"mes\": 11\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local-domain}}/api/organizacion/11118/batch",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11118",
+										"batch"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Eliminar batch",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{local-domain}}/batchMedicion/5",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"batchMedicion",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ver todos los batch",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0"
+									},
+									{
+										"key": "Accept",
+										"value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "es-AR,es;q=0.8,en-US;q=0.5,en;q=0.3"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate, br"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive"
+									},
+									{
+										"key": "Referer",
+										"value": "http://localhost:8080/menu"
+									},
+									{
+										"key": "Cookie",
+										"value": "Idea-ed44d5a5=12d76909-815d-46f5-a40d-f06a4eba4151; JSESSIONID=node040x4tjsgemvi60ssd0bmhsbe0.node0"
+									},
+									{
+										"key": "Upgrade-Insecure-Requests",
+										"value": "1"
+									},
+									{
+										"key": "Sec-Fetch-Dest",
+										"value": "document"
+									},
+									{
+										"key": "Sec-Fetch-Mode",
+										"value": "navigate"
+									},
+									{
+										"key": "Sec-Fetch-Site",
+										"value": "same-origin"
+									},
+									{
+										"key": "Sec-Fetch-User",
+										"value": "?1"
+									},
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{local-domain}}/api/organizacion/11190/batch",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"batch"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ver batch",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{local-domain}}/api/organizacion/11190/batch/11195",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"batch",
+										"11195"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ver mediciones",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{local-domain}}/api/organizacion/11190/medicion",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"medicion"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reportes",
+					"item": [
+						{
+							"name": "Crear Reporte Organización",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"TODO\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local-domain}}/reportes/organizacion/1",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"reportes",
+										"organizacion",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Api Login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0"
+									},
+									{
+										"key": "Accept",
+										"value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "es-AR,es;q=0.8,en-US;q=0.5,en;q=0.3"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate, br"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Origin",
+										"value": "http://localhost:8080"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive"
+									},
+									{
+										"key": "Referer",
+										"value": "http://localhost:8080/home"
+									},
+									{
+										"key": "Cookie",
+										"value": "Idea-ed44d5a5=12d76909-815d-46f5-a40d-f06a4eba4151; JSESSIONID=node040x4tjsgemvi60ssd0bmhsbe0.node0"
+									},
+									{
+										"key": "Upgrade-Insecure-Requests",
+										"value": "1"
+									},
+									{
+										"key": "Sec-Fetch-Dest",
+										"value": "document"
+									},
+									{
+										"key": "Sec-Fetch-Mode",
+										"value": "navigate"
+									},
+									{
+										"key": "Sec-Fetch-Site",
+										"value": "same-origin"
+									},
+									{
+										"key": "Sec-Fetch-User",
+										"value": "?1"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "campus",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "org",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local-domain}}/api/login",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Miembros",
+					"item": [
+						{
+							"name": "Obtener Miembro",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "14967",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{local-domain}}/api/miembro/14920",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"miembro",
+										"14920"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crear Miembro",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Autho",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{   \r\n    \"usuario\": {\r\n        \"username\": \"cuatro\",\r\n        \"password\": \"uno\"\r\n    },\r\n    \"entidad\": {\r\n        \"nombre\": \"Damián\",\r\n        \"apellido\": \"Weigandt\",\r\n        \"tipoDocumento\": \"DNI\",\r\n        \"documento\": 55551111\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local-domain}}/api/miembro",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"miembro"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Factores de Emisión",
+					"item": [
+						{
+							"name": "Crear/Actualizar Factor",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"categoria\": {\r\n        \"actividad\": \"Combustion Movil\",\r\n        \"tipoConsumo\": \"Gasoil\"\r\n    },\r\n    \"unidad\": \"km\",\r\n    \"valor\": 6\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local-domain}}/api/factorEmision",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"factorEmision"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DB",
+					"item": [
+						{
+							"name": "Vaciar DB",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "1",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{local-domain}}/api/undoSetup",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"undoSetup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cargar DB",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "1",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{local-domain}}/api/doSetup",
+									"host": [
+										"{{local-domain}}"
+									],
+									"path": [
+										"api",
+										"doSetup"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "deploy",
+			"item": [
+				{
+					"name": "Organizaciones",
+					"item": [
+						{
+							"name": "Crear Organización",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "14965",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\": {\r\n        \"username\": \"tres\",\r\n        \"password\": \"dos\"\r\n    },\r\n    \"entidad\": {\r\n        \"nombre\": \"Coca Cola\",\r\n        \"ubicacion\": {\r\n            \"direccion\": {\r\n                \"municipio\": \"CIUDAD DE BUENOS AIRES\",\r\n                \"localidad\": \"VILLA CRESPO\",\r\n                \"calle\": \"Maestro Marcelo Lopez\",\r\n                \"numero\": 10\r\n            },\r\n            \"coordenadas\": {\r\n                \"latitud\": 201.4123,\r\n                \"longitud\": 201.4323\r\n            }\r\n        },\r\n        \"clasificacion\": \"Empresa\",\r\n        \"tipo\": \"EMPRESA\",\r\n        \"sectores\": [\r\n            {\r\n                \"nombre\": \"Entretenimiento\",\r\n                \"miembros\": [\r\n                    {\r\n                        \"tipoDocumento\": \"DNI\",\r\n                        \"documento\": 34432237\r\n                    }\r\n                ]\r\n            }\r\n        ]\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{deploy-domain}}/api/organizacion",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener Organizacion",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{deploy-domain}}/api/organizacion",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Agregar miembro",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tipoDocumento\": \"DNI\",\r\n    \"documento\": 55551111\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{deploy-domain}}/api/organizacion/11190/sector/11193/miembro",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"sector",
+										"11193",
+										"miembro"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Mediciones",
+					"item": [
+						{
+							"name": "Crear Batch",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"mediciones\": [\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Combustion Fija\",\r\n                \"tipoConsumo\": \"Diesel\"\r\n            },\r\n            \"unidad\": \"lt\",\r\n            \"valor\": 1.2,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"M\",\r\n                \"anio\": 2022,\r\n                \"mes\": 9\r\n            }\r\n        },\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Electricidad\",\r\n                \"tipoConsumo\": \"Electricidad\"\r\n            },\r\n            \"unidad\": \"kw\",\r\n            \"valor\": 2,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"M\",\r\n                \"anio\": 2022,\r\n                \"mes\": 10\r\n            }\r\n        },\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Combustion Movil\",\r\n                \"tipoConsumo\": \"Gasoil\"\r\n            },\r\n            \"unidad\": \"lt\",\r\n            \"valor\": 3.2,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"A\",\r\n                \"anio\": 2022,\r\n                \"mes\": 11\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{deploy-domain}}/api/organizacion/11190/batch",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"batch"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crear Batch 2",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"mediciones\": [\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Combustion Fija\",\r\n                \"tipoConsumo\": \"Gas Natural\"\r\n            },\r\n            \"unidad\": \"m3\",\r\n            \"valor\": 5.2,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"M\",\r\n                \"anio\": 2022,\r\n                \"mes\": 9\r\n            }\r\n        },\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Electricidad\",\r\n                \"tipoConsumo\": \"Electricidad\"\r\n            },\r\n            \"unidad\": \"kw\",\r\n            \"valor\": 3.6,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"M\",\r\n                \"anio\": 2022,\r\n                \"mes\": 10\r\n            }\r\n        },\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Combustion Fija\",\r\n                \"tipoConsumo\": \"Diesel\"\r\n            },\r\n            \"unidad\": \"kw\",\r\n            \"valor\": 2.1,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"M\",\r\n                \"anio\": 2022,\r\n                \"mes\": 10\r\n            }\r\n        },\r\n        {\r\n            \"categoria\": {\r\n                \"actividad\": \"Combustion Movil\",\r\n                \"tipoConsumo\": \"Gasoil\"\r\n            },\r\n            \"unidad\": \"lt\",\r\n            \"valor\": 0.4,\r\n            \"periodo\": {\r\n                \"periodicidad\": \"A\",\r\n                \"anio\": 2022,\r\n                \"mes\": 11\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{deploy-domain}}/api/organizacion/11190/batch",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"batch"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Eliminar batch",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{deploy-domain}}/batchMedicion/5",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"batchMedicion",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ver todos los batch",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0"
+									},
+									{
+										"key": "Accept",
+										"value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "es-AR,es;q=0.8,en-US;q=0.5,en;q=0.3"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate, br"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive"
+									},
+									{
+										"key": "Referer",
+										"value": "http://localhost:8080/menu"
+									},
+									{
+										"key": "Cookie",
+										"value": "Idea-ed44d5a5=12d76909-815d-46f5-a40d-f06a4eba4151; JSESSIONID=node040x4tjsgemvi60ssd0bmhsbe0.node0"
+									},
+									{
+										"key": "Upgrade-Insecure-Requests",
+										"value": "1"
+									},
+									{
+										"key": "Sec-Fetch-Dest",
+										"value": "document"
+									},
+									{
+										"key": "Sec-Fetch-Mode",
+										"value": "navigate"
+									},
+									{
+										"key": "Sec-Fetch-Site",
+										"value": "same-origin"
+									},
+									{
+										"key": "Sec-Fetch-User",
+										"value": "?1"
+									},
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{deploy-domain}}/api/organizacion/11190/batch",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"batch"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ver batch",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "11194",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{deploy-domain}}/api/organizacion/11190/batch/11195",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"batch",
+										"11195"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ver mediciones",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "456",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{deploy-domain}}/api/organizacion/11190/medicion",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"organizacion",
+										"11190",
+										"medicion"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reportes",
+					"item": [
+						{
+							"name": "Crear Reporte Organización",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"TODO\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{deploy-domain}}/reportes/organizacion/1",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"reportes",
+										"organizacion",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Api Login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0"
+									},
+									{
+										"key": "Accept",
+										"value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "es-AR,es;q=0.8,en-US;q=0.5,en;q=0.3"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate, br"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Origin",
+										"value": "http://localhost:8080"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive"
+									},
+									{
+										"key": "Referer",
+										"value": "http://localhost:8080/home"
+									},
+									{
+										"key": "Cookie",
+										"value": "Idea-ed44d5a5=12d76909-815d-46f5-a40d-f06a4eba4151; JSESSIONID=node040x4tjsgemvi60ssd0bmhsbe0.node0"
+									},
+									{
+										"key": "Upgrade-Insecure-Requests",
+										"value": "1"
+									},
+									{
+										"key": "Sec-Fetch-Dest",
+										"value": "document"
+									},
+									{
+										"key": "Sec-Fetch-Mode",
+										"value": "navigate"
+									},
+									{
+										"key": "Sec-Fetch-Site",
+										"value": "same-origin"
+									},
+									{
+										"key": "Sec-Fetch-User",
+										"value": "?1"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "campus",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "org",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{deploy-domain}}/api/login",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Miembros",
+					"item": [
+						{
+							"name": "Obtener Miembro",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "14967",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{deploy-domain}}/api/miembro/14920",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"miembro",
+										"14920"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crear Miembro",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Autho",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nombre\": \"Damián\",\r\n    \"apellido\": \"Weigandt\",\r\n    \"tipoDocumento\": \"DNI\",\r\n    \"documento\": 55551111\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{deploy-domain}}/api/miembro",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"miembro"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Factores de Emisión",
+					"item": [
+						{
+							"name": "Crear/Actualizar Factor",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"categoria\": {\r\n        \"actividad\": \"tres\",\r\n        \"tipoConsumo\": \"cuatro\"\r\n    },\r\n    \"unidad\": \"km\",\r\n    \"valor\": 40\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{deploy-domain}}/api/factorEmision",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"factorEmision"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DB",
+					"item": [
+						{
+							"name": "Vaciar DB",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "1",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{deploy-domain}}/api/undoSetup",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"undoSetup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cargar DB",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "1",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{deploy-domain}}/api/doSetup",
+									"host": [
+										"{{deploy-domain}}"
+									],
+									"path": [
+										"api",
+										"doSetup"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "deploy-domain",
+			"value": "https://dds-mano-g06.herokuapp.com",
+			"type": "string"
+		},
+		{
+			"key": "local-domain",
+			"value": "localhost:8080",
+			"type": "string"
+		}
+	]
+}
