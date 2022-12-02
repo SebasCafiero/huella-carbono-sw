@@ -191,7 +191,7 @@ public class SetupInicialJPA {
                 new Parada(cordobaYEcuador, 1.2f, 0.5f), //av cordoba y ecuador
                 new Parada(new Direccion(cabaMunicipio, palermo, "Av. Córdoba", 2100),
                         new Coordenada(-34.597935f, -58.413103f), 0.5f, 0.6f), //av cordoba y bustamante
-                new Parada(cordobaYMedrano, 0.6f, 0f)//av cordoba y av medrano
+                new Parada(cordobaYMedrano, 0.6f, 0f) //av cordoba y av medrano
         );
 
         TransportePublico colectivo63 = new TransportePublico(TipoTransportePublico.COLECTIVO, "63");
@@ -250,7 +250,6 @@ public class SetupInicialJPA {
         sistemasUtnCampus.agregarMiembro(juanPerez);//llega con auto,bondi,sube y a pata
         sistemasUtnCampus.agregarMiembro(guillermoCoppola);
         sistemasUtnCampus.agregarMiembro(manuGinobili);///llega en auto particular
-
 
         Sector rrhhUtnCampus = new Sector("Capital Humano", orgUtnCampus);
         Miembro sebaSosa = new Miembro("Sebastián", "Sosa", TipoDeDocumento.DNI, 11233223);

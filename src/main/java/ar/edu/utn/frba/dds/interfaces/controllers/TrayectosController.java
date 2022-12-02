@@ -341,10 +341,7 @@ public class TrayectosController {
     public Response eliminar(Request req, Response res) { //Elimino del trayecto, no del sistema
         Integer idTrayecto = Integer.parseInt(req.params("trayecto"));
         Integer idMiembro = Integer.parseInt(req.params("id"));
-        Miembro miembro = fachadaTrayectos.obtenerMiembro(idMiembro);
-        Trayecto trayecto = fachadaTrayectos.obtenerTrayecto(idTrayecto);
-        miembro.quitarTrayecto(trayecto);
-        trayecto.quitarMiembro(miembro);
+        this.fachadaTrayectos.quitarTrayectoDeMiembro(idMiembro, idTrayecto);
 //        res.redirect("/miembro/" + idMiembro + "/trayecto?action=list"); //redirijo desde JS
         return res;
     }

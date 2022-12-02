@@ -262,4 +262,14 @@ public class FachadaTrayectos {
 
         this.updateTrayecto(trayecto);
     }
+
+    public void quitarTrayectoDeMiembro(Integer idMiembro, Integer idTrayecto) {
+        Miembro miembro = obtenerMiembro(idMiembro);
+        Trayecto trayecto = obtenerTrayecto(idTrayecto);
+        miembro.quitarTrayecto(trayecto);
+        trayecto.quitarMiembro(miembro);
+
+        this.repoMiembros.modificar(miembro);
+        this.repoTrayectos.modificar(trayecto);
+    }
 }

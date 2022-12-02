@@ -1,8 +1,8 @@
-package ar.edu.utn.frba.dds.server;
+package ar.edu.utn.frba.dds.interfaces;
 
-import ar.edu.utn.frba.dds.interfaces.RequestInvalidoApiException;
 import ar.edu.utn.frba.dds.interfaces.controllers.*;
 import ar.edu.utn.frba.dds.repositories.dataInicial.SetupInicialJPA;
+import ar.edu.utn.frba.dds.server.SystemProperties;
 import ar.edu.utn.frba.dds.server.login.*;
 import ar.edu.utn.frba.dds.server.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.server.utils.HandlebarsTemplateEngineBuilder;
@@ -158,8 +158,8 @@ public class Router {
             });
 
             Spark.path("/factorEmision", () -> {
-                Spark.get("", factorEmisionController::mostrarTodos);
-                Spark.post("", factorEmisionController::modificar);
+                Spark.get("", factorEmisionController::mostrarTodos, gson::toJson);
+                Spark.post("", factorEmisionController::modificar, gson::toJson);
             });
 
             Spark.delete("trayecto/:id", trayectosController::borrar); //Para eliminar definitivamente el trayecto (admin)

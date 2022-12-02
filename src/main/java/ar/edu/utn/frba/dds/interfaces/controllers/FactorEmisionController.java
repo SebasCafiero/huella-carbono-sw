@@ -19,7 +19,7 @@ public class FactorEmisionController {
         this.repoFactores = (RepoFactores) FactoryRepositorio.get(FactorEmision.class);
     }
 
-    public Object modificar(Request request, Response response) {
+    public FactorEmision modificar(Request request, Response response) {
         FactorEmisionJSONDTO dto = new ParserJSON<>(FactorEmisionJSONDTO.class).parseElement(request.body());
         Categoria categoria = new Categoria(dto.getCategoria().getActividad(), dto.getCategoria().getTipoConsumo());
 

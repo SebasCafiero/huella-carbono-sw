@@ -2,6 +2,7 @@
 
 Este documento sirve para mostrar el set de pruebas correspondientes a la entrega del TP Mi Huella de la asignatura Diseño de Sistemas.
 
+---
 ## Datos Iniciales
 
 Se definieron un conjunto de datos iniciales a partir de los cuales se pueden desarrollar las pruebas. Estos contienen:
@@ -54,9 +55,10 @@ dichas mediciones, al menos 20, tienen que tener al menos 3 tipos distintos
     ```
 
 ## Pruebas Dinámicas
-
+---
 ### 1. Seguridad
 
+---
 ### 2.1. Creación y asignación de organizaciones y miembros
 
 Se crea una organización Coca Cola. El objeto JSON que se envía a través del boby tiene dos partes:
@@ -145,14 +147,22 @@ A diferencia de los pasos anteriores, esta prueba se desarrolla a través de las
 Para el período anual 2022, el resultado esperado del cálculo es:
 - Medición 1: DA: 1.2 y FE: 2.0 => Consumo: 2.4
 - Medición 2. DA: 2.0 y FE: 4.0 => Consumo: 8.0
-- Medición 3: DA: 3.2. FE: 3. => Consumo: 9.6
+- Medición 3: DA: 3.2 y FE: 3.0 => Consumo: 9.6
 
-Total: 20.0
+__Total para el año 2022: 20.0__
 
-Para los períodos mensuales 9/2022, 10/2022 y 11/2022, el valor es igual al consumo de huella en de la medición que corresponda. Para los períodos que no contienen mediciones, el consumo de huella vale 0.
+Para los períodos mensuales 9/2022 y 10/2022, el valor es igual al consumo de huella de la medición mensual que corresponde más el proporcional de la anual. Para los períodos que no contienen mediciones, el consumo de huella vale 0.
+
+HC 9/2022 -> 9.6/12 + 2.4 = 3.2
+
+HC 10/2022 -> 9.6/12 + 8.0 = 8.8
+
+HC 11/2022 -> 9.6/12 = 0.8
+
+HC 1/2023 -> 0
  
 ### 2.3. A esa a esa misma organización agregarle una persona
-Por último, se agrega otro miembro a la organización. Esto se hace por API. Para mostrar que puede realizarse todo desde 0, vamos a asignarle un miembro nuevo. Por eso, realizamos un request previo que sirve para crear ese miembro.
+Por último, se agrega otro miembro a la organización. Esto se hace por API. Para mostrar que puede realizarse todo desde 0, vamos a asignarle un miembro nuevo. Por eso, disparamos un request que sirve para crear ese miembro.
 
 ~~~
 POST -> /api/miembro
@@ -185,6 +195,7 @@ Header: Authorization -> :id_usuario (organización Coca Cola)
 }
 ```
 
+---
 ### 3. A otra organizacion que ya tenga mediciones agregar un batch de mediciones, hacer consultas por la API y calcular huella de carbono
 
 Para este punto, se elige a la organización _UTN - Campus_ como víctima para agregar más mediciones.
@@ -219,8 +230,28 @@ Header: Authorization -> :id_usuario (organización UTN - Campus)
 }
 ```
 
-La HC deberia dar 57,4(32,4 del batch anterior + 25 de este) 
+La HC del nuevo batch es:
 
+- Medición 1: DA: 5.2 y FE: 1.0 => Consumo: 5.2
+- Medición 2. DA: 3.6 y FE: 4.0 => Consumo: 14.4
+- Medición 3: DA: 2.1 y FE: 2.0 => Consumo: 4.2
+- Medición 4: DA: 0.4 y FE: 3.0 => Consumo: 1.2
+
+__Total para el año 2022: 25.0__
+
+Algunos ejemplos de agregados interesantes:
+
+HC 9/2022 -> 1.2/12 + 5.2 = 5.3
+
+HC 10/2022 -> 1.2/12 + 14.4 + 4.2 = 18.7
+
+HC 11/2022 -> 1.2/12 = 0.8
+
+HC 1/2023 -> 0
+
+__Nota:__ Estos valores no necesariamente son totales considerando que hay mediciones previas cargadas en la organización; estos deben considerarse como el agregado respecto de los anteriores.
+
+---
 ### 4. Verificar que si una persona ya forma parte de la organización y se intenta agregar en otro sector, el sistema expone el error
 
 Para graficar este ejemplo, se elije al miembro _fito_ que ya es empleado en _UTN - Medrano_ en el sector de Tesorería. Cuando se intente asignarle un trabajo nuevo a fito en el sector de _Administración_ en esa misma organización, el sistema no lo permitirá.
@@ -237,6 +268,7 @@ Header: Authorization -> :id_usuario (organización UTN - Medrano)
 }
 ```
 
+---
 ### 5. Modificar uno de los parámetros / pesos y ver cómo se modifica la huella de carbono
 
 En este caso, se elije cambiar el factor de emisión de un medible de tipo trayecto, en particular, el generado por los trasportes particulares que usan como combustible el Gasoil.
@@ -252,13 +284,14 @@ En este caso, se elije cambiar el factor de emisión de un medible de tipo traye
 }
 ```
 
-Dentro de la organizacion _UTN - Campus_, lo usa Ginobili, por lo tanto impactará en la huella de carbono que este genera. A partir del cambio, su impacto se reducirá 8 veces, ya que pasa de 80 a 10 el valor del parámetro. El impacto el la HC de la organización pasará a ser 85.15201. REVISAR
+Dentro de la organizacion _UTN - Campus_ lo usa Ginobili, por lo tanto impactará en la huella de carbono que este genera. A partir del cambio, su impacto se reducirá 8 veces, ya que pasa de 80 a 10 el valor del parámetro. Como el dato de actividad depende de la API Distancias, no se puede precalcular el dato y es necesario guardar el valor anterior para notar la diferencia.
 
+---
 ### 6. Cambiar / agregar trayectos y ver cómo se modifica la huella de carbono
 
 Desde la aplicación web, hay que le agregarle a Manu un trayecto en el colectivo 109 desde Av. Córdoba 1531 hasta Av. Córdoba 3800. Entonces, si el medible se desarrollara en el mes de noviembre del 2022, por ejemplo, el impacto de la huella en Campus en el período anual del 2022 aumentaría.
 
-El valor de este trayecto se verá afectado por dos variables: el dato de la actividad y el factor de emisión. El factor de emisión está previamente cargado, pero el dato de actividad se obtiene desde la API Distacias que es externa. De está manera, el impacto real no se puede preveer y el correcto cálculo se validará en el momento.
+El valor de este trayecto se verá afectado por dos variables: el dato de la actividad y el factor de emisión. El factor de emisión está previamente cargado y el dato da actividad, es decir, la distancia, se puede precalcular porque los transportes públicos no consumen ningún servicio externo. De todas formas, el cálculo que sigue necesita información de la API Distancias para algunos trayectos, por lo que el impacto real no se puede preveer y el correcto cálculo se validará en el momento.
 
 El cálculo de la API se debería realizar así, tomando el caso del período 2022:
 - `+` Impacto del trayecto de Juan Pérez
@@ -266,13 +299,13 @@ El cálculo de la API se debería realizar así, tomando el caso del período 20
     2. Viaje en colectivo: (Distancia = 0.6 + 1.3 + 0.95 + 1.1) 3.95 * 200 = 790
     3. Viaje en subte: (Distancia = 1.3 + 1.5 + 0.6 + 0.5) 3.9 * 125 = 487.5
     4. Viaje caminando: DA * 0 = 0
-    - Total: 1277.5 + (DA auto * 130)
+    - _Total: 1277.5 + (DA auto * 130)_
 - `+` Impacto del trayecto anterior de Manu Ginobili:
     1. Viaje en auto: DA * 130
-    - Total: (DA auto * 130)
+    - _Total: (DA auto * 130)_
 - `+` Impacto del trayecto del Papu Gómez:
     1. Viaje en bici: DA * 0
-    - Total: 0
+    - _Total: 0_
 - `+` Impacto de las mediciones:
     1. Combustion Fija + Gas Natural    -> 3 * 1    = 3
     2. Combustion Fija + Gas Natural    -> 5 * 1    = 3
@@ -288,16 +321,17 @@ El cálculo de la API se debería realizar así, tomando el caso del período 20
     12. Combustion Fija + Diesel        -> 4.7 * 2  = 9.4
     13. Electricidad + Electricidad     -> 23.6 * 4 = 94.4
     14. Combustion Movil + Gasoil       -> 24 * 3   = 72
-    - Total: 423.8
+    - _Total: 423.8_
 - `+` Impacto del nuevo trayecto de Manu:
     1. Viaje en colectivo: (Distancia = 1.2 + 0.5 + 0.6) 2.3 * 200 = 460.0
-    - Total: 460.0
+    - _Total: 460.0_
 
 En resumen, el nuevo impacto es superior en 460 unidades.
 
+---
 ### 7. Hacer que 2 miembros que tenían un recorrido distinto, ahora compartan un trayecto
 En la organización Campus trabajan los miembros **Alejandro Gómez** (en Capital Humano) y **Emanuel Ginóbili** (en Sistemas) con trayectos del 2022 diferentes:
-- El trayecto de **Ginóbili** consta de un tramo con vehículo particular con Gasoil, cuyo DA es 8,52 y FE correspondiente es 6 (era 3 y tras la prueba 5 pasa a ser 6).
+- El trayecto de **Ginóbili** consta de un tramo con vehículo particular con Gasoil, cuyo DA no puede ser obtenido estáticamente y cuyo FE correspondiente es 10 (antes de la prueba 5 era 80).
 - El trayecto de **Gómez** consta de un tramo con vehículo ecológico, cuyo DA es 2,27 y FE correspondiente es 0.
 
 Al loguearse con el usuario de la organización Campus, podemos generar un reporte y observar los impactos de cada miembro:
@@ -307,17 +341,18 @@ Al loguearse con el usuario de la organización Campus, podemos generar un repor
 
 ![Reporte previo](img/punto7-1.jpg "Reporte Previo")
 
+Ahora el objetivo es agregar un trayecto compartido entre estos dos personajes. En particular, lo conseguiremos haciendo que _Manu_ comparta su trayecto con el _Papu_. La razón podría ser que se hicieron amigos y el primero lo empezó a alcanzar al trabajo.
 
-Al loguearse con el usuario de Ginóbili (_Manu_) podemos obtener el id del trayecto (1 en el ejemplo default).
+Para lograr esto, iniciamos sesión con el usuario de Ginóbili (_Manu_) para obtener el id del trayecto (1 en el ejemplo default). Luego, desde el perfil del usuario de Gómez (_Papu_), seleccionamos la opción de cargar un nuevo trayecto compartido e ingresamos dicho id que nos facilitó _Manu_.
 
-Al loguearso con el usuario de Gómez (_Papu_), seleccionamos la opción de cargar un nuevo trayecto e ingresamos dicho id obtenido.
+__Importante:__ Podremos observar que a partir de ahora la información del trayecto indicará siempre a ambos miembros como partícipes del mismo, no importa desde qué usuario hagamos la consulta.
 
-- Podremos observar que ahora la información del trayecto indica a ambos miembros como partícipes del mismo.
+Finalmente, si nos loggeamos nuevamente con el usuario de la organización Campus, podemos generar un reporte y observar el impacto antes correspondiente a Ginóbili se reparte con Gómez:
 
-Al loguearse nuevamente con el usuario de la organización Campus, podemos generar un reporte y observar el impacto antes correspondiente a Ginóbili se reparte con Gómez:
 - Impacto Ginóbili: 6 * 8,5152/2 = 25,546
 - Impacto Gómez: 6 * 8,5152/2 = 25,546
-- Además se contempla la misma diferencia en sus sectores correspondientes
+
+Además se contempla el mismo cambio en sus sectores correspondientes.
 
 ![Reporte posterior](img/punto7-2.jpg "Reporte Posterior")
 
