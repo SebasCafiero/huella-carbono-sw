@@ -15,4 +15,6 @@ public interface Repositorio<T> {
     void modificar(Integer id,T unObjeto);
 
     Optional<T> getReferenceById(Integer id);
+
+    void sync(T entity);
 }

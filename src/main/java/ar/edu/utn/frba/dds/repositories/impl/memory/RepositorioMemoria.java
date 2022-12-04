@@ -57,4 +57,8 @@ public class RepositorioMemoria<T> implements Repositorio<T> {
     public Optional<T> getReferenceById(Integer id) {
         return this.dao.getReferenceById(id);
     }
+
+    @Override
+    public void sync(T entity) { //todo en memoria no se necesita sincronizar
+    }
 }

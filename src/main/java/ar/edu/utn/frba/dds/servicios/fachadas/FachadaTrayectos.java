@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.servicios.fachadas;
 
 import ar.edu.utn.frba.dds.entities.exceptions.TrayectoConMiembroRepetidoException;
-import ar.edu.utn.frba.dds.entities.exceptions.TrayectoSinMiembrosException;
 import ar.edu.utn.frba.dds.entities.lugares.*;
 import ar.edu.utn.frba.dds.entities.medibles.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
@@ -15,21 +14,17 @@ import ar.edu.utn.frba.dds.entities.transportes.TransportePublico;
 import ar.edu.utn.frba.dds.interfaces.controllers.TramoSinDistanciaException;
 import ar.edu.utn.frba.dds.interfaces.controllers.TrayectoConMiembrosDeDistintaOrganizacionException;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.NoExisteMedioException;
-import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.NoExisteTrayectoCompartidoException;
 import ar.edu.utn.frba.dds.interfaces.input.NuevoTrayectoDTO;
 import ar.edu.utn.frba.dds.interfaces.input.TrayectoCompartidoDTO;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import spark.QueryParamsMap;
-import spark.Request;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -60,24 +55,22 @@ public class FachadaTrayectos {
         return this.repoTrayectos.modificar(unTrayecto);
     }
 
-    public List<Trayecto> obtenerTrayectos() {
-        return this.repoTrayectos.buscarTodos();
-    }
-
     public Trayecto obtenerTrayecto(Integer id) {
-        return this.repoTrayectos.buscar(id).get();
+        Trayecto trayecto = this.repoTrayectos.buscar(id)
+                .orElseThrow(EntityNotFoundException::new);
+        this.repoTrayectos.sync(trayecto); //Sincronizo porque el trayecto pudo ya haber sido cargado y modificado por los miembros
+        return trayecto;
     }
 
     public void eliminarTrayecto(Trayecto trayecto) {
         repoTrayectos.eliminar(trayecto);
     }
 
-    public List<Miembro> obtenerMiembros() {
-        return this.repoMiembros.buscarTodos();
-    }
-
     public Miembro obtenerMiembro(Integer id) {
-        return this.repoMiembros.buscar(id).get();
+        Miembro miembro = this.repoMiembros.buscar(id)
+                .orElseThrow(EntityNotFoundException::new);
+        this.repoMiembros.sync(miembro); //Sincronizo porque el miembro pudo ya haber sido cargado y modificado por los trayectos
+        return miembro;
     }
 
     public List<MedioDeTransporte> obtenerTransportes() {
@@ -88,18 +81,18 @@ public class FachadaTrayectos {
         return this.fachadaMedios.findById(id);
     }
 
-    public void modificarTrayecto(Trayecto trayecto) {
-        this.repoTrayectos.modificar(trayecto.getId(),trayecto);
-    }
-
     public void mostrarTrayectos() {
-        repoTrayectos.buscarTodos().forEach(System.out::println);
+        List<Trayecto> trayectos = this.repoTrayectos.buscarTodos();
+        trayectos.forEach(t -> {
+            this.repoTrayectos.sync(t);
+            System.out.println(t);
+        });
     }
 
     public Trayecto cargarTrayectoActivo(Miembro miembro, QueryParamsMap queryMap) {
         Periodo periodo = parsearPeriodo(queryMap.value("f-fecha"));
         Trayecto trayecto = new Trayecto(periodo);
-        trayecto.setTramos(asignarTramos(queryMap)); //todo la fecha y tramos vacios son solo en este caso, asi que ver de ignorarlos al modificar trayecto
+        trayecto.setTramos(asignarTramos(queryMap));
 
         if(queryMap.value("f-transporte-nuevo") != null) {
             trayecto.agregarTramo(asignarTramoNuevo(queryMap));
@@ -111,8 +104,7 @@ public class FachadaTrayectos {
     }
 
     public Trayecto cargarTrayectoPasivo(Miembro miembro, Integer idTrayecto) {
-        Trayecto trayecto = this.repoTrayectos.buscar(idTrayecto)
-                .orElseThrow(EntityNotFoundException::new);
+        Trayecto trayecto = obtenerTrayecto(idTrayecto);
 
         if(trayecto.getMiembros().stream().map(Miembro::getId).anyMatch(mi -> mi.equals(miembro.getId()))) {
             throw new TrayectoConMiembroRepetidoException();
@@ -134,7 +126,7 @@ public class FachadaTrayectos {
                         trayectoDTO.getMiembroDNI())
                 .orElseThrow(MiembroException::new);
 
-        Trayecto trayecto = repoTrayectos.buscarTodos().stream()
+        Trayecto trayecto = repoTrayectos.buscarTodos().stream()//todo falta el sync
                 .filter(tr -> tr.getId().equals(trayectoDTO.getTrayectoId()))
                 .findFirst().orElseGet(() -> {
                     Periodo periodo = trayectoDTO.getPeriodicidad().equals('A')
@@ -252,8 +244,7 @@ public class FachadaTrayectos {
     }
 
     public void modificarTrayecto(Miembro miembro, int idTrayecto, QueryParamsMap queryMap) {
-        Trayecto trayecto = this.repoTrayectos.buscar(idTrayecto)
-                .orElseThrow(EntityNotFoundException::new);
+        Trayecto trayecto = obtenerTrayecto(idTrayecto);
 
         if(trayecto.getMiembros().stream().noneMatch(m -> m.getId().equals(miembro.getId()))) {
             throw new MiembroException();
