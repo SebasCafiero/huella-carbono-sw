@@ -65,6 +65,15 @@ public class Direccion {
         return municipio;
     }
 
+    public Boolean esIgualAOtraDireccion(Direccion otraDireccion) {
+        return this.municipio.getProvincia().getNombrePais().equals(otraDireccion.getMunicipio().getProvincia().getNombrePais())
+                && this.municipio.getProvincia().getNombre().equals(otraDireccion.getMunicipio().getProvincia().getNombre())
+                && this.municipio.getNombre().equals(otraDireccion.getMunicipio().getNombre())
+                && this.localidad.equals(otraDireccion.getLocalidad())
+                && this.calle.equals(otraDireccion.getCalle())
+                && this.numero.equals(otraDireccion.getNumero());
+    }
+
     @Override
     public String toString() {
         return "Direccion{" +

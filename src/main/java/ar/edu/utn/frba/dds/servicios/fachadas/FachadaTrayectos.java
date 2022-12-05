@@ -19,6 +19,7 @@ import ar.edu.utn.frba.dds.interfaces.input.TrayectoCompartidoDTO;
 import ar.edu.utn.frba.dds.repositories.RepoMiembros;
 import ar.edu.utn.frba.dds.repositories.utils.FactoryRepositorio;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.NoExisteUbicacionException;
 import spark.QueryParamsMap;
 
 import javax.persistence.EntityNotFoundException;
@@ -34,17 +35,20 @@ public class FachadaTrayectos {
     private final RepoMiembros repoMiembros;
     private final Repositorio<Trayecto> repoTrayectos;
     private final FachadaMedios fachadaMedios;
+    private final FachadaUbicaciones fachadaUbicaciones;
 
     public FachadaTrayectos() {
         this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
         this.repoTrayectos = FactoryRepositorio.get(Trayecto.class);
         this.fachadaMedios = new FachadaMedios();
+        this.fachadaUbicaciones = new FachadaUbicaciones();
     }
 
     public FachadaTrayectos(RepoMiembros repoMiembros, Repositorio<Trayecto> repoTrayectos, Repositorio<MedioDeTransporte> repoMedios) {
         this.repoMiembros = repoMiembros;
         this.repoTrayectos = repoTrayectos;
         this.fachadaMedios = new FachadaMedios();
+        this.fachadaUbicaciones = new FachadaUbicaciones();
     }
 
     public Trayecto cargarTrayecto(Trayecto unTrayecto) {
@@ -121,7 +125,7 @@ public class FachadaTrayectos {
         return updateTrayecto(trayecto);
     }
 
-    public void cargarTrayectoActivo(NuevoTrayectoDTO trayectoDTO) {
+    public void cargarTrayectoActivo(NuevoTrayectoDTO trayectoDTO) { //todo quedo viejo
         Miembro unMiembro = repoMiembros.findByDocumento(TipoDeDocumento.valueOf(trayectoDTO.getTipoDocumento()),
                         trayectoDTO.getMiembroDNI())
                 .orElseThrow(MiembroException::new);
@@ -171,29 +175,24 @@ public class FachadaTrayectos {
         Function<String, Integer> paramToInt = param -> Integer.parseInt(map.value(param));
         Function<String, Float> paramToFloat = param -> Float.parseFloat(map.value(param));
 
-        BiFunction<String, String, Municipio> getMunicipio = (muni, prov) ->
-                new FachadaUbicaciones().getMunicipio(muni, prov)
-                        .orElseThrow(() -> new EntityNotFoundException("No existe la ubicación de municipio " + muni +
-                                " y provincia " + prov));
-
         String pos = posicion == null ? "nueva" : posicion.toString();
         String lugar = esInicial ? "inicial" : "final";
 
         if(transporte instanceof TransportePublico) {
-            return ((TransportePublico) transporte).getParadas().stream()
-                    .filter(p -> p.getId().equals(paramToInt.apply("f-transporte-parada-" + lugar + "-" + pos)))
-                    .map(Parada::getUbicacion)
-                    .findFirst().get();
+            Integer paradaId = paramToInt.apply("f-transporte-parada-" + lugar + "-" + pos);
+            return fachadaUbicaciones.getParada((TransportePublico) transporte, paradaId)
+                    .orElseThrow(() -> new NoExisteUbicacionException("No existe la parada indicada"))
+                    .getUbicacion();
         } else {
-            return new UbicacionGeografica(
-                    getMunicipio.apply(map.value("f-municipio-" + lugar + "-" + pos),
-                            map.value("f-provincia-" + lugar + "-" + pos)),
-                    map.value("f-localidad-" + lugar + "-" + pos),
-                    map.value("f-calle-" + lugar + "-" + pos),
-                    paramToInt.apply("f-numero-" + lugar + "-" + pos),
-                    new Coordenada(paramToFloat.apply("f-lat-" + lugar + "-" + pos),
-                            paramToFloat.apply("f-lon-" + lugar + "-" + pos))
-            );
+            String pais = "ARGENTINA";
+            String provincia = map.value("f-provincia-" + lugar + "-" + pos);
+            String municipio = map.value("f-municipio-" + lugar + "-" + pos);
+            String localidad = map.value("f-localidad-" + lugar + "-" + pos);
+            String calle = map.value("f-calle-" + lugar + "-" + pos);
+            Integer numero = paramToInt.apply("f-numero-" + lugar + "-" + pos);
+            Float latitud = paramToFloat.apply("f-lat-" + lugar + "-" + pos);
+            Float longitud = paramToFloat.apply("f-lon-" + lugar + "-" + pos);
+            return fachadaUbicaciones.getUbicacion(pais, provincia, municipio, localidad, calle, numero, latitud, longitud);
         }
     }
 
