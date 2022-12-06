@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/img/logo.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+
+    <title>Trayecto {{trayecto.id}}</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="/js/trayecto.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/trayecto.css">
+  </head>
+  <body>
+    <header>
+      <div id="header">
+        <div class="user">
+          <span>Usuario: </span>
+          <i>{{rol}} - {{user}}</i>
+        </div>
+        <div class="logout">
+          <form action="/logout" method="post">
+            <input type="submit" value="Desconectar">
+          </form>
+        </div>
+        <div class="titulo">
+          <h1>TRAYECTOS</h1>
+        </div>
+      </div>
+    </header>
+
+    <div id="map"></div>
+
+    <div class="content">
+      <div class="volver">
+        <span><a href="/miembro/{{miembroID}}/trayecto?action=list">VOLVER A TRAYECTOS</a></span>
+      </div>
+      {{#with trayecto}}
+      <div class="trayecto">
+        <table class="particular">
+      	  <tr>
+            <th>ID</th>
+            <td><i>{{id}}</i></td>
+          </tr>
+          <tr>
+            <th>FECHA</th>
+            <td><i>{{fecha}}</i></td>
+          </tr>
+          <tr>
+            <th>TRAMOS</th>
+            <td>
+              <table class="tramos">
+                <tr>
+                  <th>TRANSPORTE</th>
+                  <th>UBICACION INICIAL</th>
+                  <th>UBICACION FINAL</th>
+                </tr>
+                {{#each tramos}}
+                <tr>
+                  <td><i>{{transporte.info}}</i></td>
+                  <td>
+                    <table class="ubicaciones">
+                      {{#if idParadaInicial}}<tr><th colspan="2">PARADA / ESTACIÓN</th></tr>{{/if}}
+                      <tr><td>CALLE</td><td><i>{{ubicacionInicial.calle}} {{ubicacionInicial.numero}}</i></td></tr>
+                      <tr><td>LOCALIDAD</td><td><i>{{ubicacionInicial.localidad}}</i></td></tr>
+                      <tr><td>MUNICIPIO</td><td><i>{{ubicacionInicial.municipio}}</i></td></tr>
+                      <tr><td>PROVINCIA</td><td><i>{{ubicacionInicial.provincia}}</i></td></tr>
+                    </table>
+                  </td>
+                  <td>
+                    <table class="ubicaciones">
+                      {{#if idParadaFinal}}<tr><th colspan="2">PARADA / ESTACIÓN</th></tr>{{/if}}
+                      <tr><td>CALLE</td><td><i>{{ubicacionFinal.calle}} {{ubicacionFinal.numero}}</i></td></tr>
+                      <tr><td>LOCALIDAD</td><td><i>{{ubicacionFinal.localidad}}</i></td></tr>
+                      <tr><td>MUNICIPIO</td><td><i>{{ubicacionFinal.municipio}}</i></td></tr>
+                      <tr><td>PROVINCIA</td><td><i>{{ubicacionFinal.provincia}}</i></td></tr>
+                    </table>
+                  </td>
+                </tr>
+                {{/each}}
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th>MIEMBROS</th>
+            <td>
+          	  <table class="miembros">
+                <tr><th>NOMBRE</th><th>APELLIDO</th><th>DOCUMENTO</th></tr>
+                {{#each miembros}}
+                <tr>
+                  <td><i>{{nombre}}</i></td>
+                  <td><i>{{apellido}}</i></td>
+                  <td><i>{{tipoDeDocumento}} - {{nroDocumento}}</i></td>
+                </tr>
+                {{/each}}
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="editar">
+        <span><a href="/miembro/{{../miembroID}}/trayecto/{{id}}?action=edit">EDITAR</a></span>
+<!--        <span><a href="?mode=edit">EDITAR</a></span>-->
+      </div>
+      <br />
+      <div class="borrar"><!-- JS: DELETE /miembro/#miembro/trayecto/#id -->
+        <span><button onclick="borrarTrayecto({{../miembroID}}, {{id}})">BORRAR</button></span>
+      </div>
+      <div class="confirmar" id="confirmacion" style="display: none">
+        <div class="confirmar-botones">
+          <div class="confirmar-texto">
+<!--            <span><label>¿Confirmar borrado de trayecto?</label></span>-->
+            <span><label>¿CONFIRMAR BORRADO DEL TRAYECTO?</label></span>
+          </div>
+          <span><button id="accion-borrado" onclick="">CONFIRMAR</button></span>
+          <span><button onclick="cancelarBorradoTrayecto()">CANCELAR</button></span>
+        </div>
+      </div>
+      {{/with}}
+    </div>
+  </body>
+</html>

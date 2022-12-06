@@ -74,6 +74,22 @@ public class Direccion {
                 && this.numero.equals(otraDireccion.getNumero());
     }
 
+    public void setNumero(Integer numero) {
+        this.numero = numero;
+    }
+
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
+    }
+
+    public void setMunicipio(Municipio municipio) {
+        this.municipio = municipio;
+    }
+
     @Override
     public String toString() {
         return "Direccion{" +

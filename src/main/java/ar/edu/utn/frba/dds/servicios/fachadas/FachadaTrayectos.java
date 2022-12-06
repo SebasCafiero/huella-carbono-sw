@@ -192,7 +192,8 @@ public class FachadaTrayectos {
             Integer numero = paramToInt.apply("f-numero-" + lugar + "-" + pos);
             Float latitud = paramToFloat.apply("f-lat-" + lugar + "-" + pos);
             Float longitud = paramToFloat.apply("f-lon-" + lugar + "-" + pos);
-            return fachadaUbicaciones.getUbicacion(pais, provincia, municipio, localidad, calle, numero, latitud, longitud);
+//            return fachadaUbicaciones.getUbicacion(pais, provincia, municipio, localidad, calle, numero, latitud, longitud);
+            return fachadaUbicaciones.getUbicacion(pais, provincia, municipio, localidad, calle, numero);
         }
     }
 
