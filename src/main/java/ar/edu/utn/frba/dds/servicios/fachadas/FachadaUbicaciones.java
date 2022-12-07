@@ -61,7 +61,7 @@ public class FachadaUbicaciones {
 
         return this.repoUbicaciones.buscarTodos()
                 .stream()
-                .filter(u -> u.getCoordenada().esIgualAOtraCoordenada(ubicacion.getCoordenada())) //todo check la igualacion de direcciones
+                .filter(u -> u.getCoordenada().esIgualAOtraCoordenada(ubicacion.getCoordenada())) // todo check la igualacion de direcciones
                 .findFirst()
                 .orElse(ubicacion);
     }

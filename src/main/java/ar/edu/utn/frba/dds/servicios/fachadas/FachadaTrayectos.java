@@ -180,8 +180,8 @@ public class FachadaTrayectos {
 
         if(transporte instanceof TransportePublico) {
             Integer paradaId = paramToInt.apply("f-transporte-parada-" + lugar + "-" + pos);
-            return fachadaUbicaciones.getParada((TransportePublico) transporte, paradaId)
-                    .orElseThrow(() -> new NoExisteUbicacionException("No existe la parada indicada"))
+            return ((TransportePublico) transporte).getParada(paradaId)
+                    .orElseThrow(() -> new NoExisteUbicacionException("El transporte público no conoce la parada " + lugar))
                     .getUbicacion();
         } else {
             String pais = "ARGENTINA";
@@ -190,9 +190,7 @@ public class FachadaTrayectos {
             String localidad = map.value("f-localidad-" + lugar + "-" + pos);
             String calle = map.value("f-calle-" + lugar + "-" + pos);
             Integer numero = paramToInt.apply("f-numero-" + lugar + "-" + pos);
-            Float latitud = paramToFloat.apply("f-lat-" + lugar + "-" + pos);
-            Float longitud = paramToFloat.apply("f-lon-" + lugar + "-" + pos);
-//            return fachadaUbicaciones.getUbicacion(pais, provincia, municipio, localidad, calle, numero, latitud, longitud);
+
             return fachadaUbicaciones.getUbicacion(pais, provincia, municipio, localidad, calle, numero);
         }
     }
@@ -205,11 +203,6 @@ public class FachadaTrayectos {
         return Stream.iterate(0, i -> i + 1)
                 .limit(limit)
                 .map(i -> {
-//                    if((req.queryParams("f-transporte-parada-inicial-" + i) == null) && (req.queryParams("f-lat-inicial-"+i) == null)) {
-//                     //Cuando se deja sin modificar el tramo //TODO VER SI ENTRA ALGUNA VEZ, CREO QUE QUEDO VIEJO CUANDO ESTABA EL DISABLED
-//                        return trayecto.getTramos().get(i); //TODO orden de la lista (indice es cant?), o buscar id?
-//                    }
-
                     MedioDeTransporte transporte = obtenerTransporte(Integer.parseInt(map.value("f-transporte-" + i))).get();
 
                     Tramo tramo = new Tramo(transporte, obtenerUbicacion(map, transporte, true, i), obtenerUbicacion(map, transporte, false, i));

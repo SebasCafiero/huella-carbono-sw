@@ -2,8 +2,8 @@ package ar.edu.utn.frba.dds.entities.transportes;
 
 import ar.edu.utn.frba.dds.entities.exceptions.TransportePublicoSinParadaException;
 import ar.edu.utn.frba.dds.entities.lugares.Coordenada;
-import ar.edu.utn.frba.dds.entities.lugares.Direccion;
 import ar.edu.utn.frba.dds.entities.medibles.Tramo;
+import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.NoExisteUbicacionException;
 
 import javax.persistence.*;
 import java.util.*;
@@ -47,14 +47,12 @@ public class TransportePublico extends MedioDeTransporte {
 
     @Override
     public Float calcularDistancia(Tramo tramo) {
-        Parada paradaInicial = buscarParada(tramo.getUbicacionInicial().getCoordenada());
-        Parada paradaFinal = buscarParada(tramo.getUbicacionFinal().getCoordenada());
-//        if (paradaInicial == null || paradaFinal == null) {
-//            throw new TransportePublicoSinParadaException();
-//        }
-        if (paradaInicial.getCoordenada().getLatitud().equals(0F) || paradaFinal.getCoordenada().getLatitud().equals(0F)) {
-            throw new TransportePublicoSinParadaException();
-        }
+        Parada paradaInicial = getParada(tramo.getUbicacionInicial().getCoordenada())
+                .orElseThrow(() -> new TransportePublicoSinParadaException("No existe la parada de coordenada " +
+                        tramo.getUbicacionInicial().getCoordenada().toString()));
+        Parada paradaFinal = getParada(tramo.getUbicacionFinal().getCoordenada())
+                .orElseThrow(() -> new TransportePublicoSinParadaException("No existe la parada de coordenada " +
+                        tramo.getUbicacionInicial().getCoordenada().toString()));
 
         int nroParadaInicial = paradas.indexOf(paradaInicial);
         int nroParadaFinal = paradas.indexOf(paradaFinal);
@@ -82,13 +80,13 @@ public class TransportePublico extends MedioDeTransporte {
         return Objects.hash(getTipo(), getLinea());
     }
 
-    public Parada buscarParada(Coordenada coordenada) {
-        Parada paradaRandom = new Parada(new Direccion(), new Coordenada(0F, 0F), 0F, 0F);
-        return this.paradas.stream()
-                .filter(parada -> parada.getCoordenada().esIgualAOtraCoordenada(coordenada))
-                .findFirst()
-                .orElse(paradaRandom);
-        // TODO lo puse para pruebas web, si afecta a otra cosa sacarlo -> Esto está feo, lo dejo cambiando algo mio para que no rompa
+    public Optional<Parada> getParada(Coordenada coordenada) {
+        return this.paradas.stream().filter(parada -> parada.getCoordenada().esIgualAOtraCoordenada(coordenada))
+                .findFirst();
+    }
+
+    public Optional<Parada> getParada(Integer numeroParada) {
+        return Optional.ofNullable(numeroParada < this.paradas.size() ? this.paradas.get(numeroParada) : null);
     }
 
     @Override

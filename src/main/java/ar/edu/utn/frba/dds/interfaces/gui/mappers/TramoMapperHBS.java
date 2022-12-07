@@ -24,8 +24,8 @@ public class TramoMapperHBS {
         Integer idParadaInicial = null;
         Integer idParadaFinal = null;
         if(tramo.getMedioDeTransporte() instanceof TransportePublico) { //todo check busqueda de idParada
-            idParadaInicial = ((TransportePublico) tramo.getMedioDeTransporte()).buscarParada(tramo.getUbicacionInicial().getCoordenada()).getId();
-            idParadaFinal = ((TransportePublico) tramo.getMedioDeTransporte()).buscarParada(tramo.getUbicacionFinal().getCoordenada()).getId();
+            idParadaInicial = ((TransportePublico) tramo.getMedioDeTransporte()).getParada(tramo.getUbicacionInicial().getCoordenada()).getId();
+            idParadaFinal = ((TransportePublico) tramo.getMedioDeTransporte()).getParada(tramo.getUbicacionFinal().getCoordenada()).getId();
         }
 
         TramoHBS tramoDTO = new TramoHBS();
