@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.entities.medibles;
 
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
 public class Periodo {
@@ -34,13 +35,17 @@ public class Periodo {
         return mes;
     }
 
-    public boolean incluye(Integer anio, Integer mes) {
-        if(this.periodicidad.equals('A')) {
-            return this.anio.equals(anio);
-        } else if(this.periodicidad.equals('M')) {
-            return this.anio.equals(anio) && this.mes.equals(mes);
-        }
-        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Periodo)) return false;
+        Periodo periodo = (Periodo) o;
+        return getPeriodicidad().equals(periodo.getPeriodicidad()) && getAnio().equals(periodo.getAnio()) && Objects.equals(getMes(), periodo.getMes());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPeriodicidad(), getAnio(), getMes());
     }
 
     @Override

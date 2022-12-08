@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.entities.personas;
 
 import ar.edu.utn.frba.dds.entities.lugares.AreaSectorial;
-import ar.edu.utn.frba.dds.entities.medibles.ReporteAgente;
+import ar.edu.utn.frba.dds.entities.medibles.ReporteArea;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class AgenteSectorial {
     private ContactoTelefono telefono;
 
     @Transient
-    private List<ReporteAgente> reportes;
+    private List<ReporteArea> reportes;
 
     public AgenteSectorial() {
         this.reportes = new ArrayList<>();
@@ -70,7 +70,7 @@ public class AgenteSectorial {
         this.telefono = telefono;
     }
 
-    public List<ReporteAgente> getReportes() {
+    public List<ReporteArea> getReportes() {
         return reportes;
     }
 
@@ -78,15 +78,15 @@ public class AgenteSectorial {
         this.area = area;
     }
 
-    public void agregarReporte(ReporteAgente reporte) {
+    public void agregarReporte(ReporteArea reporte) {
         this.reportes.add(reporte);
     }
 
-    public void quitarReporte(ReporteAgente reporte) {
+    public void quitarReporte(ReporteArea reporte) {
         this.reportes.remove(reporte);
     }
 
-    public void setReportes(List<ReporteAgente> reportes) {
+    public void setReportes(List<ReporteArea> reportes) {
         this.reportes = reportes;
     }
 

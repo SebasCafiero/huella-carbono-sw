@@ -6,13 +6,13 @@ import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
 import java.time.LocalDate;
 import java.util.*;
 
-public class ReporteAgente {
+public class ReporteArea {
     private Map<Organizacion, Float> hcOrganizaciones;
     private AreaSectorial area;
     private Float hcTotal;
     private LocalDate fechaCreacion;
 
-    public ReporteAgente(Map<Organizacion, Float> hcOrganizaciones,
+    public ReporteArea(Map<Organizacion, Float> hcOrganizaciones,
                          AreaSectorial area, Float hcTotal) {
         this.hcOrganizaciones = hcOrganizaciones;
         this.area = area;

@@ -93,10 +93,21 @@ public class Organizacion {
     }
 
     public void agregarSector(Sector sector) {
-        if (this.sectores.contains(sector)) {
-            throw new SectorException("El sector ya pertenece a la organización.");
-        }
+        if (this.sectores.contains(sector))
+            throw new SectorException("El sector ya pertenece a la organización");
         sectores.add(sector);
+    }
+
+    public void quitarSector(Sector sector) {
+        if (!this.sectores.contains(sector))
+            throw new SectorException("El sector no pertenece a la organización");
+
+
+        if (!sector.getMiembros().isEmpty()) {
+            throw new SectorException("No puede eliminarse un sector que tiene empleados");
+        }
+
+        this.sectores.remove(sector);
     }
 
     public HashSet<Sector> getListaDeSectores() {
@@ -196,4 +207,5 @@ public class Organizacion {
     public List<ReporteOrganizacion> getReportes() {
         return reportes;
     }
+
 }

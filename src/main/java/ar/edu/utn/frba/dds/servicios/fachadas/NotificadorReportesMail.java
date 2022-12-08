@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.servicios.fachadas;
 
 import ar.edu.utn.frba.dds.entities.lugares.Organizacion;
-import ar.edu.utn.frba.dds.entities.medibles.ReporteAgente;
+import ar.edu.utn.frba.dds.entities.medibles.ReporteArea;
 import ar.edu.utn.frba.dds.entities.personas.AgenteSectorial;
 import ar.edu.utn.frba.dds.entities.personas.ContactoMail;
 
@@ -21,7 +21,7 @@ public class NotificadorReportesMail implements NotificadorReportes {
     private ContactoMail contactoSistema;
 
     @Override
-    public void notificarReporte(AgenteSectorial agente, ReporteAgente reporte) {
+    public void notificarReporte(AgenteSectorial agente, ReporteArea reporte) {
         String asunto = "ReporteAgente periódico de consumo de Huella de Carbono";
 
         String saludo = "Hola:\nSe informan por este medio los resultados del informe periódico "

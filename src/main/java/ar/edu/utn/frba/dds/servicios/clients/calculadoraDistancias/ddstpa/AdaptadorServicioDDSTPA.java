@@ -121,7 +121,7 @@ public class AdaptadorServicioDDSTPA implements CalculadoraDistancias {
 
     public int obtenerIdPais(Direccion direccion) {
         String nombrePais = direccion.getMunicipio().getProvincia().getNombrePais();
-        PaisGson pais = obtenerPaises().stream().filter(p-> p.getNombre().equals(nombrePais.toUpperCase())).findFirst().get();
+        PaisGson pais = obtenerPaises().stream().filter(p -> p.getNombre().equals(nombrePais.toUpperCase())).findFirst().get();
         System.out.println("PAIS ENCONTRADO: " + pais.getId() + "| " + pais.getNombre());
         return pais.getId();
         //return obtenerPaises().stream().filter(p->p.nombre.equals(nombrePais)).findFirst().map(p->p.id).orElse(9); //Defecto Argentina

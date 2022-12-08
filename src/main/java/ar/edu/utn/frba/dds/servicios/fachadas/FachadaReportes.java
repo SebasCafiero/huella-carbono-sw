@@ -5,7 +5,7 @@ import ar.edu.utn.frba.dds.entities.lugares.Sector;
 import ar.edu.utn.frba.dds.entities.lugares.AreaSectorial;
 import ar.edu.utn.frba.dds.entities.medibles.Categoria;
 import ar.edu.utn.frba.dds.entities.medibles.Periodo;
-import ar.edu.utn.frba.dds.entities.medibles.ReporteAgente;
+import ar.edu.utn.frba.dds.entities.medibles.ReporteArea;
 import ar.edu.utn.frba.dds.entities.medibles.ReporteOrganizacion;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 
@@ -30,7 +30,7 @@ public class FachadaReportes {
         this.notificadorReportes.notificarReporte(area.getAgente(), generarReporteAgente(area, anio, mes));
     }
 
-    public ReporteAgente generarReporteAgente(AreaSectorial area, Integer anio, Integer mes) {
+    public ReporteArea generarReporteAgente(AreaSectorial area, Integer anio, Integer mes) {
         HashMap<Organizacion, Float> mapaConsumos = new HashMap<>();
         area.getOrganizaciones().forEach((organizacion -> {
             mapaConsumos.put(organizacion, fachadaOrganizacion
@@ -39,7 +39,7 @@ public class FachadaReportes {
 
         Float total = mapaConsumos.values().stream().reduce(Float::sum).orElse(0F);
 
-        ReporteAgente reporte = new ReporteAgente(mapaConsumos, area, total);
+        ReporteArea reporte = new ReporteArea(mapaConsumos, area, total);
 
         if(area.getAgente() != null) {
             area.getAgente().agregarReporte(reporte);

@@ -11,6 +11,7 @@ import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
 import ar.edu.utn.frba.dds.repositories.Repositorio;
 import ar.edu.utn.frba.dds.repositories.utils.EntityManagerHelper;
+import ar.edu.utn.frba.dds.server.SystemProperties;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiembroSinOrganizacionesException;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
@@ -146,9 +147,11 @@ public class FachadaOrganizacion implements FachadaOrg {
     private float getValorAndUpdateRow(Medible medible) {
         Float datoActividad = medible.getValor();
 
-        EntityManagerHelper.getEntityManager().getTransaction().begin();
-        EntityManagerHelper.getEntityManager().persist(medible);
-        EntityManagerHelper.getEntityManager().getTransaction().commit();
+        if (SystemProperties.isJpa()) {
+            EntityManagerHelper.getEntityManager().getTransaction().begin();
+            EntityManagerHelper.getEntityManager().persist(medible);
+            EntityManagerHelper.getEntityManager().getTransaction().commit();
+        }
 
         return datoActividad;
     }

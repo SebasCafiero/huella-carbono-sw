@@ -122,10 +122,6 @@ public class Trayecto {
         return miembros.size();
     }
 
-    public boolean perteneceAPeriodo(Integer anio, Integer mes) {
-        return periodo.incluye(anio, mes);
-    }
-
     @Override
     public String toString() {
         return "\nTrayecto{" +
