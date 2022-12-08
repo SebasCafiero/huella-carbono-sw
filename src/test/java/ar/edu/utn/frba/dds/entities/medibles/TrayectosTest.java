@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.entities.lugares.trayectos;
+package ar.edu.utn.frba.dds.entities.medibles;
 
 import org.junit.jupiter.api.BeforeEach;
 

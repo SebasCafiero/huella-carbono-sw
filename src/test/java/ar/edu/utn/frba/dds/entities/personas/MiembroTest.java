@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.entities.lugares.personas;
+package ar.edu.utn.frba.dds.entities.personas;
 
 public class MiembroTest {
 

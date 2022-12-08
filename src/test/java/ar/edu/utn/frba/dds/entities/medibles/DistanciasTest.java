@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.entities.lugares.trayectos;
+package ar.edu.utn.frba.dds.entities.medibles;
 
 import ar.edu.utn.frba.dds.entities.lugares.*;
 import ar.edu.utn.frba.dds.entities.transportes.*;
@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 public class DistanciasTest {
-
 
     private VehiculoParticular unVehiculoParticular;
     private ServicioContratado unUber;

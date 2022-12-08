@@ -19,11 +19,6 @@ public class ReporteAgente {
         this.hcTotal = hcTotal;
     }
 
-    public ReporteAgente(AreaSectorial area, Float hcTotal) {
-        this.area = area;
-        this.hcTotal = hcTotal;
-    }
-
     public Set<Organizacion> getOrganizaciones() {
         return hcOrganizaciones.keySet();
     }
