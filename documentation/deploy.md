@@ -24,6 +24,8 @@ Host [hosturi]
 
 Finalmente, hay que asociar los push de la rama deploy con los disparadores de despliegue. Para esto, utilizamos:
 
-```powershell
-git remote add dokku ....
+```console
+git remote add dokku dokku@[hosturi:myapp]
 ```
+
+[myapp]: para el caso de nuestro TP es `equipo6`
