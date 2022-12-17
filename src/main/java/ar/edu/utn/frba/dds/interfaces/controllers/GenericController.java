@@ -39,8 +39,8 @@ public class GenericController {
                 .orElseThrow(AuthenticationException::new);
 
         HashMap<String, Integer> respuesta = new HashMap<>();
-        respuesta.put("idUsuario", realUser.getIdRol());
-        request.session().attribute("idUsuario", realUser.getId());
+        respuesta.put("user", realUser.getId());
+        respuesta.put("entity", realUser.getIdRol());
         return respuesta;
     }
 

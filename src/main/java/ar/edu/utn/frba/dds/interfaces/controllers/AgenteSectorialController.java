@@ -25,6 +25,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AgenteSectorialController {
@@ -131,7 +132,8 @@ public class AgenteSectorialController {
         parametros.put("agenteID", idAgente);
 
 //        List<Organizacion> orgs = repoOrganizaciones.buscarTodos().stream().filter(o -> agente.getArea().getUbicaciones().contains(o.getUbicacion())).collect(Collectors.toList());
-        List<Organizacion> orgs = repoOrganizaciones.buscarTodos();
+//        List<Organizacion> orgs = repoOrganizaciones.buscarTodos();
+        Set<Organizacion> orgs = agente.getArea().getOrganizaciones();
         parametros.put("organizaciones", orgs.stream().map(OrganizacionMapperHBS::toDTOUbicacion).collect(Collectors.toList()));
 //        parametros.put("organizaciones", agente.getArea().getOrganizaciones().stream().map(OrganizacionMapperHBS::toDTOUbicacion).collect(Collectors.toList()));
         return new ModelAndView(parametros, "organizaciones.hbs");

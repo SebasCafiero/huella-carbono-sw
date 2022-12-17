@@ -61,4 +61,10 @@ public class DAOHibernate<T> implements DAO<T> {
     public Optional<T> getReferenceById(Integer id) {
         return id == null ? Optional.empty() : Optional.ofNullable(EntityManagerHelper.getEntityManager().getReference(type, id));
     }
+
+    public void sync(T entity) {
+        EntityManagerHelper.getEntityManager().getTransaction().begin();
+        EntityManagerHelper.getEntityManager().refresh(entity);
+        EntityManagerHelper.getEntityManager().getTransaction().commit();
+    }
 }

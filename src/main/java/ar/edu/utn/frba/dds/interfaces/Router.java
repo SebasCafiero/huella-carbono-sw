@@ -1,8 +1,8 @@
-package ar.edu.utn.frba.dds.server;
+package ar.edu.utn.frba.dds.interfaces;
 
-import ar.edu.utn.frba.dds.interfaces.RequestInvalidoApiException;
 import ar.edu.utn.frba.dds.interfaces.controllers.*;
 import ar.edu.utn.frba.dds.repositories.dataInicial.SetupInicialJPA;
+import ar.edu.utn.frba.dds.server.SystemProperties;
 import ar.edu.utn.frba.dds.server.login.*;
 import ar.edu.utn.frba.dds.server.utils.BooleanHelper;
 import ar.edu.utn.frba.dds.server.utils.HandlebarsTemplateEngineBuilder;
@@ -158,8 +158,8 @@ public class Router {
             });
 
             Spark.path("/factorEmision", () -> {
-                Spark.get("", factorEmisionController::mostrarTodos);
-                Spark.post("", factorEmisionController::modificar);
+                Spark.get("", factorEmisionController::mostrarTodos, gson::toJson);
+                Spark.post("", factorEmisionController::modificar, gson::toJson);
             });
 
             Spark.delete("trayecto/:id", trayectosController::borrar); //Para eliminar definitivamente el trayecto (admin)
@@ -183,8 +183,14 @@ public class Router {
         Spark.post("/login", genericController::iniciarSesion);
         Spark.post("/logout", genericController::cerrarSesion);
         Spark.post("/user", genericController::altaUsuario); //todo
-        Spark.get("/home", genericController::inicio, engine);
-        Spark.get("/menu", genericController::menu, engine);
+        Spark.path("/home", () -> {
+            Spark.get("", genericController::inicio, engine);
+            Spark.get("/", genericController::inicio, engine);
+        });
+        Spark.path("/menu", () -> {
+            Spark.get("", genericController::menu, engine);
+            Spark.get("/", genericController::menu, engine);
+        });
 
         Spark.path("/miembro/:id", () -> {
             Spark.before("", autorizarUsuario.apply("miembro"));
@@ -217,6 +223,11 @@ public class Router {
             Spark.get("/organizacion", agenteSectorialController::mostrarOrganizaciones, engine);
             Spark.get("/reporte", reportesController::darAltaYMostrarAgente, engine);
             Spark.post("/reporte", reportesController::generarAgente);
+        });
+
+        Spark.get("/docs", (request, response) -> {
+            response.redirect(SystemProperties.getApiUrl());
+            return response;
         });
 
         Spark.get("/*", ((request, response) -> {

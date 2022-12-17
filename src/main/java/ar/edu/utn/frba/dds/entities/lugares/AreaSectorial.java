@@ -17,10 +17,6 @@ public abstract class AreaSectorial {
     @Column(name = "nombre")
     protected String nombre;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "area_id")
-    protected Set<Organizacion> organizaciones;
-
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, optional = true)
     @JoinColumn(name = "agente_id", referencedColumnName = "agente_id")
     protected AgenteSectorial agente;
@@ -36,16 +32,10 @@ public abstract class AreaSectorial {
         this.id = id;
     }
 
-    public Set<Organizacion> getOrganizaciones() {
-        return this.organizaciones;
-    }
-
-    public void agregarOrganizacion(Organizacion unaOrganizacion) {
-        this.organizaciones.add(unaOrganizacion);
-    }
+    public abstract Set<Organizacion> getOrganizaciones();
 
     public Set<UbicacionGeografica> getUbicaciones() {
-        return this.organizaciones.stream()
+        return getOrganizaciones().stream()
                 .map(Organizacion::getUbicacion).collect(Collectors.toSet());
     }
 
@@ -63,10 +53,6 @@ public abstract class AreaSectorial {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public void setOrganizaciones(Set<Organizacion> organizaciones) {
-        this.organizaciones = organizaciones;
     }
 
     public Integer getIdApiDistancias() {

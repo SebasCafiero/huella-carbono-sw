@@ -63,4 +63,9 @@ public class RepositorioPersistente<T> implements Repositorio<T> {
     public CriteriaBuilder criteriaBuilder(){
         return EntityManagerHelper.getEntityManager().getCriteriaBuilder();
     }
+
+    @Override
+    public void sync(T entity) {
+        this.dao.sync(entity);
+    }
 }

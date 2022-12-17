@@ -9,6 +9,8 @@ import ar.edu.utn.frba.dds.entities.medibles.Medible;
 import ar.edu.utn.frba.dds.entities.medibles.Periodo;
 import ar.edu.utn.frba.dds.entities.personas.Miembro;
 import ar.edu.utn.frba.dds.entities.medibles.Trayecto;
+import ar.edu.utn.frba.dds.repositories.Repositorio;
+import ar.edu.utn.frba.dds.repositories.utils.EntityManagerHelper;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MedicionSinFactorEmisionException;
 import ar.edu.utn.frba.dds.servicios.fachadas.exceptions.MiembroSinOrganizacionesException;
 import ar.edu.utn.frba.dds.repositories.RepoFactores;
@@ -38,7 +40,7 @@ public class FachadaOrganizacion implements FachadaOrg {
             String[] subCategoria = medible.getCategoria().split("-", 2);
             Categoria categoria = new Categoria(subCategoria[0].trim(), subCategoria[1].trim());
 
-            return medible.getValor() * repoFactores.findByCategoria(categoria).stream().findFirst()
+            return getValorAndUpdateRow(medible) * repoFactores.findByCategoria(categoria).stream().findFirst()
                     .orElseThrow(() -> new MedicionSinFactorEmisionException(medible.getCategoria()))
                     .getValor();
         }).reduce(0, Double::sum);
@@ -139,5 +141,15 @@ public class FachadaOrganizacion implements FachadaOrg {
             throw new MiembroSinOrganizacionesException(miembro);
 
         return 1F / miembro.cantidadDeOrganizacionesDondeTrabaja();
+    }
+
+    private float getValorAndUpdateRow(Medible medible) {
+        Float datoActividad = medible.getValor();
+
+        EntityManagerHelper.getEntityManager().getTransaction().begin();
+        EntityManagerHelper.getEntityManager().persist(medible);
+        EntityManagerHelper.getEntityManager().getTransaction().commit();
+
+        return datoActividad;
     }
 }

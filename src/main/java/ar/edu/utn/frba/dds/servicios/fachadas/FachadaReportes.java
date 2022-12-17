@@ -55,6 +55,27 @@ public class FachadaReportes {
         Map<Sector, Float> consumoPorSector = new HashMap<>();
         Map<Miembro, Float> consumoPorMiembro = new HashMap<>();
 
+//        Float totalTrayectos = organizacion.getSectores().stream().map(sector -> {
+//            Float consumoSector = sector.getMiembros().stream().map(miembro -> {
+//                Float consumoMiembro = miembro.getTrayectos().stream()
+//                        .flatMap(trayecto -> trayecto.getTramos().stream()).map(tramo -> {
+//                            final float consumoTramo = fachadaOrganizacion.obtenerHU(Collections.singletonList(tramo)) *
+//                                    fachadaOrganizacion.factorProporcionalTrayecto(tramo.getTrayecto(), miembro, periodo);
+//
+//                            consumoPorCategoria.putIfAbsent(tramo.getMiCategoria(), 0F);
+////                            if(Float.isFinite(consumoTramo))
+//                                consumoPorCategoria.compute(tramo.getMiCategoria(), (categoria, anterior) -> anterior+consumoTramo);
+//
+////                            return Float.isFinite(consumoTramo) ? consumoTramo : 0F;
+//                            return consumoTramo;
+//                        }).reduce(Float::sum).orElse(0F);
+//                consumoPorMiembro.put(miembro, consumoMiembro);
+//                return consumoMiembro;
+//            }).reduce(Float::sum).orElse(0F);
+//            consumoPorSector.put(sector, consumoSector);
+//            return consumoSector;
+//        }).reduce(Float::sum).orElse(0F);
+
         Float totalTrayectos = organizacion.getSectores().stream().map(sector -> {
             Float consumoSector = sector.getMiembros().stream().map(miembro -> {
                 Float consumoMiembro = miembro.getTrayectos().stream()
@@ -64,7 +85,7 @@ public class FachadaReportes {
 
                             consumoPorCategoria.putIfAbsent(tramo.getMiCategoria(), 0F);
 //                            if(Float.isFinite(consumoTramo))
-                                consumoPorCategoria.compute(tramo.getMiCategoria(), (categoria, anterior) -> anterior+consumoTramo);
+                            consumoPorCategoria.compute(tramo.getMiCategoria(), (categoria, anterior) -> anterior+consumoTramo);
 
 //                            return Float.isFinite(consumoTramo) ? consumoTramo : 0F;
                             return consumoTramo;

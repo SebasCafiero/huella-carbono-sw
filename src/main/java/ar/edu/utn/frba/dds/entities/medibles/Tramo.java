@@ -19,11 +19,11 @@ public class Tramo implements Medible {
     @JoinColumn(name = "medio_id", nullable = false)
     private MedioDeTransporte medioDeTransporte;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "ubicacion_inicial", referencedColumnName = "ubicacion_id", nullable = false)
     private UbicacionGeografica ubicacionInicial;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "ubicacion_final", referencedColumnName = "ubicacion_id", nullable = false)
     private UbicacionGeografica ubicacionFinal;
 

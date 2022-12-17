@@ -90,8 +90,8 @@ public class EnviadorReportes {
         organizaciones.get(0).agregarContactoMail(new ContactoMail("cuentaejemplodds2@gmail.com"));
         organizaciones.get(1).agregarContactoMail(new ContactoMail("rumplestilskink@gmail.com"));
 
-        areaReporte.agregarOrganizacion(organizaciones.get(0));
-        areaReporte.agregarOrganizacion(organizaciones.get(1));
+//        areaReporte.agregarOrganizacion(organizaciones.get(0));
+//        areaReporte.agregarOrganizacion(organizaciones.get(1));
 
         AgenteSectorial agente = new AgenteSectorial(areaReporte);
         areaReporte.setAgente(agente);

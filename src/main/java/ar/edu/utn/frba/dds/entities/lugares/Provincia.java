@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.entities.lugares;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "PROVINCIA")
@@ -15,14 +16,12 @@ public class Provincia extends AreaSectorial {
     private Set<Municipio> municipios;
 
     public Provincia() {
-        this.organizaciones = new HashSet<>();
         this.municipios = new HashSet<>();
     }
 
     public Provincia(String nombre, String pais) {
         this.nombre = nombre;
         this.nombrePais = pais;
-        this.organizaciones = new HashSet<>();
         this.municipios = new HashSet<>();
     }
 
@@ -44,6 +43,10 @@ public class Provincia extends AreaSectorial {
 
     public void setMunicipios(Set<Municipio> municipios) {
         this.municipios = municipios;
+    }
+
+    public Set<Organizacion> getOrganizaciones() {
+        return getMunicipios().stream().flatMap(m -> m.getOrganizaciones().stream()).collect(Collectors.toSet());
     }
 
     @Override
