@@ -27,25 +27,25 @@ public class SystemProperties {
         System.out.println("aplication (entorno): " + varEntorno);
         jpa = varEntorno.getOrDefault("jpa", propArchivo.getProperty("jpa", "true")).equals("true");
         delta = Float.parseFloat(
-                varEntorno.getOrDefault("coordenadas.precision.delta",
-                        propArchivo.getProperty("coordenadas.precision.delta", "0.00001")));
+                varEntorno.getOrDefault("coordenadas_precision_delta",
+                        propArchivo.getProperty("coordenadas_precision_delta", "0.00001")));
         coeficienteGradoKm = Float.parseFloat(
-                varEntorno.getOrDefault("coordenadas.precision.equivalencia",
-                        propArchivo.getProperty("coordenadas.precision.equivalencia", "111.10")));
-        calculadoraDistanciasMockEnabled = varEntorno.getOrDefault("client.calculadora.distancias.mock-enabled",
-                propArchivo.getProperty("client.calculadora.distancias.mock-enabled", "true")).equals("true");
-        calculadoraDistanciasCacheEnabled = varEntorno.getOrDefault("client.calculadora.distancias.cache-enabled",
-                propArchivo.getProperty("client.calculadora.distancias.cache-enabled", "false")).equals("true");
-        calculadoraDistanciasUrl = varEntorno.getOrDefault("client.calculadora.distancias.api.url",
-                propArchivo.getProperty("client.calculadora.distancias.api.url", "https://ddstpa.com.ar/api/"));
-        calculadoraDistanciasToken = varEntorno.getOrDefault("client.calculadora.distancias.api.token",
-                propArchivo.getProperty("client.calculadora.distancias.api.token", ""));
+                varEntorno.getOrDefault("coordenadas_precision_equivalencia",
+                        propArchivo.getProperty("coordenadas_precision_equivalencia", "111.10")));
+        calculadoraDistanciasMockEnabled = varEntorno.getOrDefault("client_calculadora_distancias_mock_enabled",
+                propArchivo.getProperty("client_calculadora_distancias_mock_enabled", "true")).equals("true");
+        calculadoraDistanciasCacheEnabled = varEntorno.getOrDefault("client_calculadora_distancias_cache_enabled",
+                propArchivo.getProperty("client_calculadora_distancias_cache_enabled", "false")).equals("true");
+        calculadoraDistanciasUrl = varEntorno.getOrDefault("client_calculadora_distancias_api_url",
+                propArchivo.getProperty("client_calculadora_distancias_api_url", "https://ddstpa.com.ar/api/"));
+        calculadoraDistanciasToken = varEntorno.getOrDefault("client_calculadora_distancias_api_token",
+                propArchivo.getProperty("client_calculadora_distancias_api_token", ""));
         localhost = varEntorno.getOrDefault("localhost", propArchivo.getProperty("localhost", "true")).equals("true");
-        staticRelativePath = varEntorno.getOrDefault("static-path.relative", propArchivo.getProperty("static-path.relative","/public"));
-        staticBasePath = varEntorno.getOrDefault("static-path.base", propArchivo.getProperty("static-path.base", "/src/main/resources"));
-        staticDomainPath = varEntorno.getOrDefault("static-path.domain", propArchivo.getProperty("static-path.domain", System.getProperty("user.dir")));
-        staticAbsolutePath = varEntorno.getOrDefault("static-path.absolute", propArchivo.getProperty("static-path.absolute", staticDomainPath + staticBasePath + staticRelativePath));
-        apiUrl = varEntorno.getOrDefault("api-url", propArchivo.getProperty("api-url", "https://app.swaggerhub.com/apis-docs/SebasCafiero/dds-mano-g06/2.0"));
+        staticRelativePath = varEntorno.getOrDefault("static_path_relative", propArchivo.getProperty("static_path_relative","/public"));
+        staticBasePath = varEntorno.getOrDefault("static_path_base", propArchivo.getProperty("static_path_base", "/src/main/resources"));
+        staticDomainPath = varEntorno.getOrDefault("static_path_domain", propArchivo.getProperty("static_path_domain", System.getProperty("user.dir")));
+        staticAbsolutePath = varEntorno.getOrDefault("static_path_absolute", propArchivo.getProperty("static_path_absolute", staticDomainPath + staticBasePath + staticRelativePath));
+        apiUrl = varEntorno.getOrDefault("api_url", propArchivo.getProperty("api_url", "https://app.swaggerhub.com/apis-docs/SebasCafiero/dds-mano-g06/2.0"));
     }
 
     public static Boolean isJpa() {
@@ -123,15 +123,3 @@ public class SystemProperties {
         return propiedades;
     }
 }
-/*
-  jpa = Objects.equals(propiedades.getProperty("jpa"), "true");
-          delta = Float.parseFloat(
-          propiedades.getProperty("coordenadas.precision.delta", "0.00001"));
-          coeficienteGradoKm = Float.parseFloat(
-          propiedades.getProperty("coordenadas.precision.equivalencia", "111.10"));
-          calculadoraDistanciasMockEnabled = Objects.equals(
-          propiedades.getProperty("client.calculadora.distancias.mock-enabled"), "true");
-          calculadoraDistanciasCacheEnabled = Objects.equals(
-          propiedades.getProperty("client.calculadora.distancias.cache-enabled"), "true");
-          calculadoraDistanciasUrl = propiedades.getProperty("client.calculadora.distancias.api.url");
-          calculadoraDistanciasToken = propiedades.getProperty("client.calculadora.distancias.api.token");*/
