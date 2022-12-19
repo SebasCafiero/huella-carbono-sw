@@ -18,12 +18,12 @@ import java.util.*;
 public class FachadaOrganizacionApi {
     private final Repositorio<ClasificacionOrganizacion> repoClasificaciones;
     private final RepoOrganizaciones repoOrganizaciones;
-    private final Repositorio<Municipio> repoAreas;
+    private final Repositorio<Municipio> repoMunicipios;
     private final RepoMiembros repoMiembros;
 
     public FachadaOrganizacionApi() {
         this.repoClasificaciones = FactoryRepositorio.get(ClasificacionOrganizacion.class);
-        this.repoAreas = FactoryRepositorio.get(Municipio.class);
+        this.repoMunicipios = FactoryRepositorio.get(Municipio.class);
         this.repoMiembros = (RepoMiembros) FactoryRepositorio.get(Miembro.class);
         this.repoOrganizaciones = (RepoOrganizaciones) FactoryRepositorio.get(Organizacion.class);
     }
@@ -37,7 +37,7 @@ public class FachadaOrganizacionApi {
                 .filter(cl -> cl.getNombre().equals(orgRequest.getClasificacion()))
                 .findFirst().orElse(new ClasificacionOrganizacion(orgRequest.getClasificacion()));
 
-        Municipio area = this.repoAreas.buscarTodos().stream()
+        Municipio area = this.repoMunicipios.buscarTodos().stream()
                 .filter(cl -> cl.getNombre().equals(orgRequest.getUbicacion().getDireccion().getMunicipio()))
                 .findFirst().orElseThrow(() -> new EntityNotFoundException("El municipio indicado no existe"));
 
@@ -48,11 +48,11 @@ public class FachadaOrganizacionApi {
                 new Coordenada(orgRequest.getUbicacion().getCoordenadas().getLatitud(),
                         orgRequest.getUbicacion().getCoordenadas().getLatitud()));
 
-        Organizacion organizacion = new Organizacion();
-        organizacion.setRazonSocial(orgRequest.getNombre());
-        organizacion.setTipo(TipoDeOrganizacionEnum.valueOf(orgRequest.getTipo().toUpperCase()));
-        organizacion.setClasificacionOrganizacion(clasificacion);
-        organizacion.setUbicacion(ubicacion);
+        Organizacion organizacion = new Organizacion(
+                orgRequest.getNombre(),
+                TipoDeOrganizacionEnum.valueOf(orgRequest.getTipo().toUpperCase()),
+                clasificacion,
+                ubicacion);
 
         for(SectorRequest sectorRequest : orgRequest.getSectores()) {
             Sector sector = new Sector(sectorRequest.getNombre(), organizacion);
