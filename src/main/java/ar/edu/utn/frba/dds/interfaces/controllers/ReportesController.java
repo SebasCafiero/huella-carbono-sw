@@ -150,6 +150,8 @@ public class ReportesController {
             organizacion = repoOrganizaciones.buscar(idOrg).get();
             ruta = "/agente/"+agente.getId()+"/reporte?org="+idOrg+"#reporte";
         }
+
+        repoOrganizaciones.sync(organizacion);
         fachadaReportes.generarReporteOrganizacion(organizacion, periodo);
         documentarReporte(fachadaReportes.getReporteOrganizacion(), organizacion);
         response.redirect(ruta);

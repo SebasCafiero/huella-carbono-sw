@@ -24,7 +24,7 @@ public class Sector {
     @JoinColumn(name = "organizacion_id")
     private Organizacion organizacion;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "MIEMBRO_POR_SECTOR",
             joinColumns = { @JoinColumn(name = "sector_id") },
             inverseJoinColumns = { @JoinColumn(name = "miembro_id") }
